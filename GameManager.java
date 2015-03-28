@@ -25,20 +25,22 @@ public class GameManager {
             for(int i = 0; i < players; i++) 
                 players[i] = new Player(roundNumber);
         }
-        public void runRound() {
+        public int[] runRound(int[] originalScores) {
             //do...
+            //uses mutableDeck to draw cards from
         }
     }
     public GameManager(int players) {
         this.players = players;
         this.scores = new int[players];
-        //Initialize the deck...
+        for(int i = 0; i < 52; i++)
+            deck.add(Card.cardFactory());
     }
     
     public void runGame() {
         int maxCards = 0;
         while(maxCards < 52) {
-            //run rounds
+            scores = new RoundManager().runRound(scores);
             
             maxCards = players * roundNumber;
         }
