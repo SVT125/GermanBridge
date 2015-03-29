@@ -1,4 +1,4 @@
-package cardClass;
+package germanbridge;
 
 import java.util.*;
 
