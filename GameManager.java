@@ -18,7 +18,6 @@ public class GameManager {
     
     class RoundManager {
         Set<Card> mutableDeck = deck;
-        int handSize;
         Player[] players;
         Card pot, trumpCard;
         public RoundManager() {
@@ -26,6 +25,21 @@ public class GameManager {
                 players[i] = new Player(roundNumber);
         }
         public int[] runRound(int[] originalScores) {
+            String input = null;
+            
+            //Extract guesses...
+            for(Player player : players) {
+                input = //...
+                player.setGuess(Integer.toString(input));
+            }
+            
+            trumpCard = Card.cardFactory(); //Check for collisions of cards
+            
+            //Cycle through each player and retrieve their card inputs...
+            for(Player player : players) {
+                input = //...
+                pot = //... retrieve the index from hand, check for validity
+            }
             //do...
             //uses mutableDeck to draw cards from
         }
@@ -41,7 +55,6 @@ public class GameManager {
         int maxCards = 0;
         while(maxCards < 52) {
             scores = new RoundManager().runRound(scores);
-            
             maxCards = players * roundNumber;
         }
     }
