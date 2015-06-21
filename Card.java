@@ -1,4 +1,4 @@
-package germanbridge;
+package cardsuite;
 
 import java.util.*;
 
@@ -10,8 +10,7 @@ public class Card {
 	private static final List<Suit> suitList = 
 			Arrays.asList(Suit.values());
 	private static final int SIZE = suitList.size();
-	private static final int numRange = 12;
-	private static final int numGap = 2;
+	private static final int numRange = 13;
 	
 	public Card(int cardNumber, Suit suit) {
 		this.cardNumber = cardNumber;
@@ -30,8 +29,8 @@ public class Card {
 		return 1;
 	}
 	
-	public Card cardFactory() {
-		int num = RANDOM.nextInt(numRange) + numGap;
+	public static Card cardFactory() {
+		int num = RANDOM.nextInt(numRange) + 1;
 		return new Card(num, suitList.get(RANDOM.nextInt(SIZE)));
 	}
 	
@@ -42,4 +41,5 @@ public class Card {
 	public Suit getSuit() {
 		return this.suit;
 	}
+	
 }
