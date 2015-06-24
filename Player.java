@@ -10,5 +10,6 @@ public abstract class Player {
 	
 	public abstract void fillHand();
 	public abstract void scoreChange();
+	public abstract void organize();
 	
 }
