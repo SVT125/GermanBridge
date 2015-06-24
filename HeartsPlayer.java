@@ -19,7 +19,7 @@ public class HeartsPlayer extends Player {
 		Collections.sort(hand, new CardComparator());
 	}
 	
-	public class CardComparator implements Comparator<Card> {
+	private class CardComparator implements Comparator<Card> {
 		
 		@Override
 		public int compare(Card a, Card b) {
