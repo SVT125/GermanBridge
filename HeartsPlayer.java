@@ -15,4 +15,19 @@ public class HeartsPlayer extends Player {
 		return deck;
 	}
 	
+	public void organize() {
+		Collections.sort(hand, new CardComparator());
+	}
+	
+	public class CardComparator implements Comparator<Card> {
+		
+		@Override
+		public int compare(Card a, Card b) {
+			if (a.getSuit().equals(b.getSuit())) {
+				return a.getCardNumber() - b.getCardNumber();
+			}
+			return a.getSuit().compareTo(b.getSuit());	
+		}
+		
+	}
 }
