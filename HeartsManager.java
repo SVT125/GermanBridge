@@ -30,19 +30,21 @@ public class HeartsManager {
 		HeartsManager manager = new HeartsManager();
 		
 		int swapRound = manager.roundCount % 4;
-		if (swapRound != 3) {
-			List<Card> chosen = new ArrayList<Card>();
-			for (int i = 0; i < 3; i++) {
-				int chose = scanner.nextInt();
-				System.out.println(chose);
+		for(int playerNum = 0; playerNum < 4; playerNum++)
+			if (swapRound != 3) {
+				List<Card> chosen = new ArrayList<Card>();
+				for (int i = 0; i < 3; i++) {
+					int chose = scanner.nextInt();
+					System.out.println("Chosen card: " + chose);
+					chosen.add(manager.players[playerNum].hand.get(chose));
+					manager.swapCards(chosen, playerNum, swapRound);
+				}
 			}
-		}
 
 		
 	}
 	
 	public void swapCards(Collection<?> chosen, int playerNum, int swapRound) {
-		
 		// player 2 is to the left of player 1
 		// might have a few errors
 		switch (swapRound) {
@@ -75,8 +77,6 @@ public class HeartsManager {
 					players[playerNum].hand.removeAll(chosen);
 					players[playerNum - 2].hand.addAll((Collection<? extends Card>) chosen);
 				}
-				break;
-			case 3:
 				break;
 		}
 	}

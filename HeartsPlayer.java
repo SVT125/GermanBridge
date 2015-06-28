@@ -15,6 +15,10 @@ public class HeartsPlayer extends Player {
 		return deck;
 	}
 	
+	public void scoreChange() {
+		//Todo...
+	}
+	
 	public void organize() {
 		Collections.sort(hand, new CardComparator());
 	}
