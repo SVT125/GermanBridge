@@ -6,7 +6,8 @@ public class HeartsManager {
 	private ArrayList<Card> deck = new ArrayList<Card>();
 	private Random random = new Random();
 	private int roundCount;
-	private HeartsPlayer[] players;
+	private HeartsPlayer[] players = new HeartsPlayer[4];
+	private static Scanner scanner = new Scanner(System.in);
 	
 	public HeartsManager() {
 		this.roundCount = 1;
@@ -26,13 +27,25 @@ public class HeartsManager {
 	
 	public static void main (String args[]) {
 		
+		HeartsManager manager = new HeartsManager();
+		
+		int swapRound = manager.roundCount % 4;
+		if (swapRound != 3) {
+			List<Card> chosen = new ArrayList<Card>();
+			for (int i = 0; i < 3; i++) {
+				int chose = scanner.nextInt();
+				System.out.println(chose);
+			}
+		}
+
+		
 	}
 	
-	public void swapCards(Player[] players, Collection<?> chosen, int playerNum) {
+	public void swapCards(Collection<?> chosen, int playerNum, int swapRound) {
 		
 		// player 2 is to the left of player 1
 		// might have a few errors
-		switch (roundCount % 4) {
+		switch (swapRound) {
 			case 0:
 				if (playerNum != 3) {
 					players[playerNum].hand.removeAll(chosen);
