@@ -6,8 +6,11 @@ public class HeartsManager {
 	private ArrayList<Card> deck = new ArrayList<Card>();
 	private Random random = new Random();
 	private int roundCount;
-	private HeartsPlayer[] players = new HeartsPlayer[4];
+	private final int playerCount = 4;
+	private HeartsPlayer[] players = new HeartsPlayer[playerCount];
 	private static Scanner scanner = new Scanner(System.in);
+	private int startPlayer;
+	private 
 	
 	public HeartsManager() {
 		this.roundCount = 1;
@@ -29,56 +32,71 @@ public class HeartsManager {
 		
 		HeartsManager manager = new HeartsManager();
 		
+		// choose and swap portion
 		int swapRound = manager.roundCount % 4;
-		for(int playerNum = 0; playerNum < 4; playerNum++)
-			if (swapRound != 3) {
-				List<Card> chosen = new ArrayList<Card>();
-				for (int i = 0; i < 3; i++) {
-					int chose = scanner.nextInt();
-					System.out.println("Chosen card: " + chose);
-					chosen.add(manager.players[playerNum].hand.get(chose));
-					manager.swapCards(chosen, playerNum, swapRound);
+		if (swapRound != 3) {
+			
+			List<List<Card>> chosenLists = new ArrayList<List<Card>>();
+			
+			for (int i = 0; i < 4; i++) {
+				chosenLists.add(manager.chooseCards(i));
+			}
+			for (int i = 0; i < 4; i++) {
+				manager.swapCards(chosenLists.get(i), i, swapRound);
+			}
+		}
+		
+		// find player with 2 of clubs
+		outer: for (int j = 0; j < 4; j++) {
+			for (int i = 0; i < manager.players[j].hand.size(); i++) {
+				if (manager.players[j].hand.get(i).compareTo(new Card(2, Card.Suit.CLUBS)) == 0) {
+					manager.startPlayer = j;
+					break outer;
 				}
 			}
-
+		}
+		
+		
 		
 	}
 	
+	public List<Card> chooseCards(int playerNum) {
+		
+		List<Card> chosen = new ArrayList<Card>();
+		while (chosen.size() < 4) {
+			int chose = scanner.nextInt();					
+			Card chosenCard = this.players[playerNum].hand.get(chose);
+			System.out.println("Chose card: " + chose);
+		try {
+			if (chosen.contains(chosenCard))
+				chosen.remove(chosenCard);
+			else {
+				chosen.add(chosenCard);
+			}
+		}
+		catch (NullPointerException e) {
+			System.out.println("Card out of bounds!");
+			}
+		}
+		return chosen;
+	}
+	
 	public void swapCards(Collection<?> chosen, int playerNum, int swapRound) {
-		// player 2 is to the left of player 1
-		// might have a few errors
+		// The convention is that greater array indices means players to the left.
+		players[playerNum].hand.removeAll(chosen);
+		int otherPlayer = 0; //default initialized
 		switch (swapRound) {
 			case 0:
-				if (playerNum != 3) {
-					players[playerNum].hand.removeAll(chosen);
-					players[playerNum + 1].hand.addAll((Collection<? extends Card>) chosen);
-				}
-				else {
-					players[playerNum].hand.removeAll(chosen);
-					players[0].hand.addAll((Collection<? extends Card>) chosen);
-				}
+				otherPlayer = playerNum != 3 ? playerNum + 1 : 0;
 				break;
 			case 1:
-				if (playerNum != 0) {
-					players[playerNum].hand.removeAll(chosen);
-					players[playerNum - 1].hand.addAll((Collection<? extends Card>) chosen);
-				}
-				else {
-					players[playerNum].hand.removeAll(chosen);
-					players[3].hand.addAll((Collection<? extends Card>) chosen);
-				}
+				otherPlayer = playerNum != 0 ? playerNum - 1 : 3;
 				break;
 			case 2:
-				if (playerNum == 0 || playerNum == 1) {
-					players[playerNum].hand.removeAll(chosen);
-					players[playerNum + 2].hand.addAll((Collection<? extends Card>) chosen);
-				}
-				else {
-					players[playerNum].hand.removeAll(chosen);
-					players[playerNum - 2].hand.addAll((Collection<? extends Card>) chosen);
-				}
+				otherPlayer = (playerNum == 0 || playerNum == 1) ? playerNum + 2 : playerNum - 2;
 				break;
 		}
+		players[otherPlayer].hand.addAll((Collection<? extends Card>)chosen);
 	}
 	
 }
