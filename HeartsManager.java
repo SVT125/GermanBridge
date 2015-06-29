@@ -10,7 +10,6 @@ public class HeartsManager {
 	private HeartsPlayer[] players = new HeartsPlayer[playerCount];
 	private static Scanner scanner = new Scanner(System.in);
 	private int startPlayer;
-	private 
 	
 	public HeartsManager() {
 		this.roundCount = 1;
