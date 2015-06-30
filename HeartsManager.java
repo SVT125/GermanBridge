@@ -82,7 +82,7 @@ public class HeartsManager {
 	}
 	
 	public int findStartPlayer() {
-		outer: for (int j = 0; j < 4; j++) {
+		for (int j = 0; j < 4; j++) {
 			for (int i = 0; i < players[j].hand.size(); i++) {
 				if (players[j].hand.get(i).compareTo(new Card(2, Card.Suit.CLUBS)) == 0) {
 					return j;
