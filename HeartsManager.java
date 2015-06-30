@@ -10,6 +10,8 @@ public class HeartsManager {
 	private HeartsPlayer[] players = new HeartsPlayer[playerCount];
 	private static Scanner scanner = new Scanner(System.in);
 	private int startPlayer;
+	private List<Card> pot;
+	private Card.Suit startSuit;
 	
 	public HeartsManager() {
 		this.roundCount = 1;
@@ -46,17 +48,48 @@ public class HeartsManager {
 		}
 		
 		// find player with 2 of clubs
+		int startPlayer = manager.findStartPlayer();
+		
+		// handles the pot stuff
+		manager.potHandle(startPlayer);
+		
+	}
+	
+	public void potHandle(int startPlayer) {
+		
+		// first move by first player
+		if (players[startPlayer].hand.size() == 13) {
+		
+			int select = scanner.nextInt();
+			Card startCard = players[startPlayer].hand.get(select);
+			while (startCard.compareTo(new Card(2, Card.Suit.CLUBS)) != 0) {
+				select = scanner.nextInt();
+				startCard = players[startPlayer].hand.get(select);
+			}
+			pot.add(startCard);
+			startSuit = startCard.getSuit();
+			
+			// TODO
+		
+		}
+		
+		else {
+			
+			// TODO
+			
+		}
+		
+	}
+	
+	public int findStartPlayer() {
 		outer: for (int j = 0; j < 4; j++) {
-			for (int i = 0; i < manager.players[j].hand.size(); i++) {
-				if (manager.players[j].hand.get(i).compareTo(new Card(2, Card.Suit.CLUBS)) == 0) {
-					manager.startPlayer = j;
-					break outer;
+			for (int i = 0; i < players[j].hand.size(); i++) {
+				if (players[j].hand.get(i).compareTo(new Card(2, Card.Suit.CLUBS)) == 0) {
+					return j;
 				}
 			}
 		}
-		
-		
-		
+		return 0;
 	}
 	
 	public List<Card> chooseCards(int playerNum) {
