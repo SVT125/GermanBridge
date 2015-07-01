@@ -26,11 +26,15 @@ public class Card {
 				compare.getSuit() != this.getSuit()) {
 			return -1;
 		}
+		if (compare.getCardNumber() == this.getCardNumber() ||
+				compare.getSuit() == this.getSuit()) {
+			return 0;
+		}
 		return 1;
 	}
 	
 	public static Card cardFactory() {
-		int num = RANDOM.nextInt(numRange) + 1;
+		int num = RANDOM.nextInt(numRange) + 2;
 		return new Card(num, suitList.get(RANDOM.nextInt(SIZE)));
 	}
 	
