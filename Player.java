@@ -1,7 +1,6 @@
 package cardsuite;
-import java.util.*;
 
-// UNFINISHED
+import java.util.*;
 
 public abstract class Player {
 	
@@ -11,5 +10,6 @@ public abstract class Player {
 	public abstract ArrayList<Card> fillHand(ArrayList<Card> deck, Random random);
 	public abstract void scoreChange();
 	public abstract void organize();
+	public abstract boolean hasSuit(Card.Suit suit);
 	
 }
