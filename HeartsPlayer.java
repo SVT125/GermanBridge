@@ -3,6 +3,9 @@ import java.util.*;
 
 public class HeartsPlayer extends Player {
 	
+	// added endPile to count scores of each player at the end of every round
+	protected List<Card> endPile;
+	
 	public HeartsPlayer() {
 		hand = new ArrayList<Card>();
 		this.score = 0;
@@ -15,15 +18,20 @@ public class HeartsPlayer extends Player {
 		return deck;
 	}
 	
-	public void scoreChange() {
-		//Todo...
-	}
-	
 	public void organize() {
 		Collections.sort(hand, new CardComparator());
 	}
 	
-	private class CardComparator implements Comparator<Card> {
+	public boolean hasSuit(Card.Suit suit) {
+		for (Card card : hand) {
+			if (card.getSuit() == suit) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public class CardComparator implements Comparator<Card> {
 		
 		@Override
 		public int compare(Card a, Card b) {
