@@ -10,7 +10,6 @@ public class HeartsManager {
 	private final int playerCount = 4;
 	private HeartsPlayer[] players = new HeartsPlayer[playerCount];
 	private static Scanner scanner = new Scanner(System.in);
-	private int startPlayer;
 	private Map<Card, Integer> pot;
 	private Card.Suit startSuit;
 	private boolean heartsBroken;
@@ -18,7 +17,8 @@ public class HeartsManager {
 	public HeartsManager() {
 		this.roundCount = 1;
 		
-		for (int i = 1; i < 14; i++) {
+		// an ace is 14 because it is higher than all of the other cards
+		for (int i = 2; i < 15; i++) {
 			for (Card.Suit suits : Card.Suit.values()) {
 				deck.add(new Card(i, suits));
 			}
@@ -57,6 +57,26 @@ public class HeartsManager {
 			startPlayer = manager.potHandle(startPlayer);
 		}
 		
+		for (HeartsPlayer player : manager.players) {
+			player.scoreChange();
+		}
+		
+		// reshuffles deck and increments round count for next round
+		manager.reset();
+		
+	}
+	
+	public void reset() {
+		this.roundCount++;
+		this.heartsBroken = false;
+		for (int i = 2; i < 15; i++) {
+			for (Card.Suit suits : Card.Suit.values()) {
+				deck.add(new Card(i, suits));
+			}
+		}
+		for (int i = 0; i < 4; i++) {
+			deck = players[i].fillHand(deck, random);
+		}
 	}
 	
 	public int potHandle(int startPlayer) {
@@ -127,7 +147,10 @@ public class HeartsManager {
 		}
 		
 		startPlayer = potAnalyze(startSuit);
+		players[startPlayer].endPile.addAll((Collection<? extends Card>) pot);
+		this.pot.clear();
 		
+		return startPlayer;
 	}
 	
 	public int potAnalyze(Card.Suit startSuit) {
@@ -145,6 +168,7 @@ public class HeartsManager {
 				}
 			}
 		}
+		return winner;
 	}
 	
 	public int findStartPlayer() {
