@@ -11,6 +11,18 @@ public class HeartsPlayer extends Player {
 		this.score = 0;
 	}
 	
+	public void scoreChange() {
+		for (Card card : endPile) {
+			if (card.getSuit() == Card.Suit.HEARTS) {
+				this.score++;
+			}
+			else if (card.compareTo(new Card(12, Card.Suit.SPADES)) == 0) {
+				this.score = score + 13;
+			}
+		}
+		endPile.clear();
+	}
+	
 	public ArrayList<Card> fillHand(ArrayList<Card> deck, Random random) {
 		for (int i = 0; i < 13; i++) {
 			hand.add(deck.remove(random.nextInt(deck.size())));
