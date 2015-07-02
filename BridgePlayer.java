@@ -21,6 +21,8 @@ public class BridgePlayer extends Player {
 			int difference = Math.abs(guess - obtained);
 			score = score - (int)Math.pow(2, difference);
 		}
+		guess = 0;
+		obtained = 0;
 	}
 	
 }
