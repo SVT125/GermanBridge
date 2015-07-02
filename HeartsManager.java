@@ -2,20 +2,14 @@ package cardsuite;
 import java.util.*;
 import java.util.Map.Entry;
 
-public class HeartsManager {
+public class HeartsManager extends Manager {
 	
-	private ArrayList<Card> deck = new ArrayList<Card>();
-	private Random random = new Random();
-	private int roundCount;
-	private final int playerCount = 4;
-	private HeartsPlayer[] players = new HeartsPlayer[playerCount];
-	private static Scanner scanner = new Scanner(System.in);
-	private Map<Card, Integer> pot;
-	private Card.Suit startSuit;
 	private boolean heartsBroken;
+	private HeartsPlayer[] players;
 	
 	public HeartsManager() {
-		this.roundCount = 1;
+		playerCount = 4;
+		players = new HeartsPlayer[playerCount];
 		
 		// an ace is 14 because it is higher than all of the other cards
 		for (int i = 2; i < 15; i++) {
@@ -26,7 +20,7 @@ public class HeartsManager {
 		
 		for (int i = 0; i < 4; i++) {
 			players[i] = new HeartsPlayer();
-			deck = players[i].fillHand(deck, random);
+			deck = players[i].fillHand(deck, random, 13);
 		}
 		
 	}
@@ -50,11 +44,11 @@ public class HeartsManager {
 		}
 		
 		// find player with 2 of clubs
-		int startPlayer = manager.findStartPlayer();
+		manager.findStartPlayer();
 		
 		// handles the pot stuff
 		for (int i = 0; i < 13; i++) {
-			startPlayer = manager.potHandle(startPlayer);
+			manager.potHandle();
 		}
 		
 		for (HeartsPlayer player : manager.players) {
@@ -74,12 +68,12 @@ public class HeartsManager {
 				deck.add(new Card(i, suits));
 			}
 		}
-		for (int i = 0; i < 4; i++) {
-			deck = players[i].fillHand(deck, random);
+		for (int i = 0; i < playerCount; i++) {
+			deck = players[i].fillHand(deck, random, 13);
 		}
 	}
 	
-	public int potHandle(int startPlayer) {
+	public void potHandle() {
 		
 		int select;
 		Card startCard;
@@ -120,10 +114,10 @@ public class HeartsManager {
 		}
 		
 		// after first move, other three players place their cards down
-		int currentPlayer;
+		int currentPlayer = startPlayer;
 		Card selectCard;
-		for (int i = 0; i < 3; i++) {
-			currentPlayer = startPlayer++;
+		for (int i = 0; i < playerCount - 1; i++) {
+			currentPlayer++;
 			// cleanup please
 			if (currentPlayer == 4) {
 				currentPlayer = 0;
@@ -146,40 +140,36 @@ public class HeartsManager {
 			
 		}
 		
-		startPlayer = potAnalyze(startSuit);
+		potAnalyze();
 		players[startPlayer].endPile.addAll((Collection<? extends Card>) pot);
 		this.pot.clear();
 		
-		return startPlayer;
 	}
 	
-	public int potAnalyze(Card.Suit startSuit) {
-		int winner = 0;
+	public void potAnalyze() {
 		Card winCard = null;
 		for (Entry<Card, Integer> entry : pot.entrySet()) {
 			if (entry.getKey().getSuit() == startSuit) {
 				if (winCard == null) {
 					winCard = entry.getKey();
-					winner = entry.getValue();
+					startPlayer = entry.getValue();
 				}
 				else if (entry.getKey().getCardNumber() > winCard.getCardNumber()){
 					winCard = entry.getKey();
-					winner = entry.getValue();
+					startPlayer = entry.getValue();
 				}
 			}
 		}
-		return winner;
 	}
 	
-	public int findStartPlayer() {
-		for (int j = 0; j < 4; j++) {
+	public void findStartPlayer() {
+		for (int j = 0; j < playerCount; j++) {
 			for (int i = 0; i < players[j].hand.size(); i++) {
 				if (players[j].hand.get(i).compareTo(new Card(2, Card.Suit.CLUBS)) == 0) {
-					return j;
+					this.startPlayer = j;
 				}
 			}
 		}
-		return 0;
 	}
 	
 	public List<Card> chooseCards(int playerNum) {
