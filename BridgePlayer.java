@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class BridgePlayer extends Player {
+	
+	protected int guess;
+	protected int obtained;
 
 	public BridgePlayer() {
 		hand = new ArrayList<Card>();
@@ -11,7 +14,13 @@ public class BridgePlayer extends Player {
 	}
 	
 	public void scoreChange() {
-		
+		if (guess == obtained) {
+			score = score + 10 + (int)Math.pow(2, obtained);
+		}
+		else {
+			int difference = Math.abs(guess - obtained);
+			score = score - (int)Math.pow(2, difference);
+		}
 	}
 	
 }
