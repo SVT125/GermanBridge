@@ -23,35 +23,5 @@ public class HeartsPlayer extends Player {
 		endPile.clear();
 	}
 	
-	public ArrayList<Card> fillHand(ArrayList<Card> deck, Random random) {
-		for (int i = 0; i < 13; i++) {
-			hand.add(deck.remove(random.nextInt(deck.size())));
-		}
-		return deck;
-	}
 	
-	public void organize() {
-		Collections.sort(hand, new CardComparator());
-	}
-	
-	public boolean hasSuit(Card.Suit suit) {
-		for (Card card : hand) {
-			if (card.getSuit() == suit) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	public class CardComparator implements Comparator<Card> {
-		
-		@Override
-		public int compare(Card a, Card b) {
-			if (a.getSuit().equals(b.getSuit())) {
-				return a.getCardNumber() - b.getCardNumber();
-			}
-			return a.getSuit().compareTo(b.getSuit());	
-		}
-		
-	}
 }
