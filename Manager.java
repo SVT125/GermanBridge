@@ -11,13 +11,13 @@ public abstract class Manager {
 	protected Random random = new Random();
 	protected int playerCount;
 	protected int roundCount = 1;
-	protected HeartsPlayer[] players;
 	protected static Scanner scanner = new Scanner(System.in);
 	protected Map<Card, Integer> pot;
 	protected Card.Suit startSuit;
+	protected int startPlayer;
 	
-	public abstract int potHandle(int startPlayer);
-	public abstract int potAnalyze(Card.Suit startSuit);
+	public abstract void potHandle();
+	public abstract void potAnalyze();
 	public abstract void reset();
 	
 }
