@@ -131,6 +131,15 @@ public class HeartsManager extends Manager {
 				} while (startCard.getSuit() != startSuit);
 				players[startPlayer].hand.remove(select);
 			}
+			
+			// otherwise if hand is 13, can play anything other than hearts
+			else if (players[currentPlayer].hand.size() == 13) {
+				do {
+					select = scanner.nextInt();
+					selectCard = players[startPlayer].hand.get(select);
+				} while (startCard.getSuit() == Card.Suit.HEARTS);
+			}
+			
 			// if player does not have the same suit he can place anything
 			else {
 				select = scanner.nextInt();
