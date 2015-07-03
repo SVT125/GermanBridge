@@ -156,7 +156,7 @@ public class BridgeManager extends Manager {
 			else {
 				do {
 					guess = scanner.nextInt();
-				} while (guess < roundCount && guess > 0);
+				} while (guess < roundCount && guess > -1);
 			}
 			
 			addedGuesses = addedGuesses + guess;
