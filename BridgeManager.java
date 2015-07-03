@@ -74,8 +74,8 @@ public class BridgeManager extends Manager {
 		
 		// ignoring out of bounds errors because we will take care of this in android studio
 		// just don't guess out of bounds when we are testing
-		pot.put(players[startPlayer].hand.get(chosen), startPlayer);
 		startSuit = players[startPlayer].hand.get(chosen).getSuit();
+		pot.put(players[startPlayer].hand.remove(chosen), startPlayer);
 		
 		int currentPlayer = startPlayer;
 		
@@ -98,7 +98,7 @@ public class BridgeManager extends Manager {
 				chosen = scanner.nextInt();
 			}
 			
-			pot.put(players[currentPlayer].hand.get(chosen), currentPlayer);
+			pot.put(players[currentPlayer].hand.remove(chosen), currentPlayer);
 		}
 		
 		potAnalyze();
