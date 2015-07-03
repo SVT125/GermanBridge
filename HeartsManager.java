@@ -103,7 +103,7 @@ public class HeartsManager extends Manager {
 				do {
 					select = scanner.nextInt();
 					startCard = players[startPlayer].hand.get(select);
-				} while (startCard.getSuit() != Card.Suit.HEARTS || startCard.compareTo(new Card(12,Card.Suit.SPADES)) != 0);
+				} while (startCard.getSuit() == Card.Suit.HEARTS || startCard.compareTo(new Card(12,Card.Suit.SPADES)) == 0);
 			}
 			
 			pot.put(startCard, startPlayer);
