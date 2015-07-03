@@ -144,7 +144,8 @@ public class HeartsManager extends Manager {
 			else {
 				select = scanner.nextInt();
 				selectCard = players[startPlayer].hand.remove(select);
-				if (selectCard.getSuit() == Card.Suit.HEARTS && heartsBroken == false) {
+				if (selectCard.getSuit() == Card.Suit.HEARTS || 
+					selectCard.compareTo(new Card(12, Card.Suit.SPADES)) == 0 && heartsBroken == false) {
 					heartsBroken = true;
 				}
 			}
