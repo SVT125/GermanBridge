@@ -4,7 +4,7 @@ import java.util.Map.Entry;
 
 public class HeartsManager extends Manager {
 	
-	private boolean heartsBroken;
+	private boolean heartsBroken = false;
 	private HeartsPlayer[] players;
 	
 	public HeartsManager() {
@@ -80,8 +80,6 @@ public class HeartsManager extends Manager {
 		
 		// first move by first player
 		if (players[startPlayer].hand.size() == 13) {
-			
-			this.heartsBroken = false;
 			
 			// not handling null pointer exception because this would not appear in the android app
 			do {
