@@ -123,7 +123,7 @@ public class BridgeManager extends Manager {
 			
 			// if a trump card exists it wins/gets compared to other trump cards
 			else if (entry.getKey().getSuit() == trumpSuit) {
-				if (winCard == null) {
+				if (winCard == null || winCard.getSuit() != trumpSuit) {
 					winCard = entry.getKey();
 					startPlayer = entry.getValue();
 				}
