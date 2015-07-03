@@ -84,12 +84,13 @@ public class HeartsManager extends Manager {
 			// not handling null pointer exception because this would not appear in the android app
 			do {
 				select = scanner.nextInt();
-				startCard = players[startPlayer].hand.get(select);
-			} while (startCard.compareTo(new Card(2, Card.Suit.CLUBS)) != 0);
+				
+			} while (players[startPlayer].hand.get(select).compareTo(new Card(2, Card.Suit.CLUBS)) != 0);
 			
+			startCard = players[startPlayer].hand.remove(select);
 			pot.put(startCard, startPlayer);
 			startSuit = startCard.getSuit();
-			
+
 		}
 		
 		else {
@@ -97,13 +98,14 @@ public class HeartsManager extends Manager {
 			// if hearts is not broken, card cannot be hearts or queen of spades
 			if (heartsBroken) {
 				select = scanner.nextInt();
-				startCard = players[startPlayer].hand.get(select);
+				startCard = players[startPlayer].hand.remove(select);
 			}
 			else {
 				do {
 					select = scanner.nextInt();
 					startCard = players[startPlayer].hand.get(select);
 				} while (startCard.getSuit() == Card.Suit.HEARTS || startCard.compareTo(new Card(12,Card.Suit.SPADES)) == 0);
+				players[startPlayer].hand.remove(select);
 			}
 			
 			pot.put(startCard, startPlayer);
@@ -127,11 +129,15 @@ public class HeartsManager extends Manager {
 					select = scanner.nextInt();
 					selectCard = players[startPlayer].hand.get(select);
 				} while (startCard.getSuit() != startSuit);
+				players[startPlayer].hand.remove(select);
 			}
 			// if player does not have the same suit he can place anything
 			else {
 				select = scanner.nextInt();
-				selectCard = players[startPlayer].hand.get(select);
+				selectCard = players[startPlayer].hand.remove(select);
+				if (selectCard.getSuit() == Card.Suit.HEARTS && heartsBroken == false) {
+					heartsBroken = true;
+				}
 			}
 			
 			pot.put(selectCard, currentPlayer);
