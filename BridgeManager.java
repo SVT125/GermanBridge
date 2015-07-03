@@ -7,6 +7,7 @@ public class BridgeManager extends Manager {
 	private BridgePlayer players[];
 	private int addedGuesses = 0;
 	private Card.Suit trumpSuit;
+	private Card trumpCard;
 	
 	public BridgeManager() {
 		playerCount = 4;
@@ -27,7 +28,8 @@ public class BridgeManager extends Manager {
 		}
 		
 		// find a trumpCard
-		trumpSuit = deck.remove(random.nextInt(deck.size())).getSuit();
+		trumpCard = deck.remove(random.nextInt(deck.size()));
+		trumpSuit = trumpCard.getSuit();
 	}
 	
 	public static void main(String args[]) {
