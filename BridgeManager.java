@@ -149,14 +149,14 @@ public class BridgeManager extends Manager {
 			if (i == playerCount - 1) {
 				do {
 					guess = scanner.nextInt();
-				} while (guess < roundCount && (guess != roundCount - addedGuesses) && guess > 0);
+				} while (guess >= roundCount && (guess == roundCount - addedGuesses) && guess < 0);
 			}
 			
 			// other players can select any positive number lower than the max
 			else {
 				do {
 					guess = scanner.nextInt();
-				} while (guess < roundCount && guess > -1);
+				} while (guess >= roundCount && guess < 0);
 			}
 			
 			addedGuesses = addedGuesses + guess;
