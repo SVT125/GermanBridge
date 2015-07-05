@@ -34,6 +34,33 @@ public class SpadesManager extends Manager {
 		
 		manager.bid();
 		
+		for (int i = 0; i < manager.roundCount; i++) {
+			manager.potHandle();
+		}
+		
+		for (SpadesPlayer player : manager.players) {
+			player.scoreChange();
+		}
+		
+		manager.reset();
+		
+	}
+	
+	public void reset() {
+		roundCount++;
+		spadesBroken = false;
+		// make deck
+		for (int i = 2; i < 15; i++) {
+			for (Card.Suit suits : Card.Suit.values()) {
+				deck.add(new Card(i, suits));
+			}
+		}
+				
+		// give players cards via fillHand method
+		for (int i = 0; i < playerCount; i++) {
+			players[i] = new SpadesPlayer();
+			deck = players[i].fillHand(deck, random, 13);
+		}
 	}
 	
 	public void potHandle() {
@@ -111,6 +138,7 @@ public class SpadesManager extends Manager {
 				}
 			}
 		}
+		players[startPlayer].obtained++;
 	}
 	
 	public void bid() {
