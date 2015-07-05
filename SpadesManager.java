@@ -138,7 +138,15 @@ public class SpadesManager extends Manager {
 				}
 			}
 		}
+		// CONDENSE SOMEHOW PLS
 		players[startPlayer].obtained++;
+		players[startPlayer].totalObtained++;
+		if (startPlayer > 2) {
+			players[startPlayer - 2].totalObtained++;
+		}
+		else {
+			players[startPlayer + 2].totalObtained++;
+		}
 	}
 	
 	public void bid() {
@@ -161,10 +169,10 @@ public class SpadesManager extends Manager {
 		}
 		
 		// total bids added up for partners.. neaten up this code please
-		players[0].partnerBid = players[0].bid + players[2].bid;
-		players[1].partnerBid = players[1].bid + players[3].bid;
-		players[2].partnerBid = players[0].bid + players[2].bid;
-		players[3].partnerBid = players[1].bid + players[3].bid;
+		players[0].partnerBid = players[2].bid;
+		players[1].partnerBid = players[3].bid;
+		players[2].partnerBid = players[0].bid;
+		players[3].partnerBid = players[1].bid;
 		
 	}
 	
