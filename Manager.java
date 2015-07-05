@@ -15,6 +15,7 @@ public abstract class Manager {
 	protected Map<Card, Integer> pot;
 	protected Card.Suit startSuit;
 	protected int startPlayer;
+	protected Player[] players;
 	
 	public abstract void potHandle();
 	public abstract void potAnalyze();
