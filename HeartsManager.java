@@ -23,7 +23,8 @@ public class HeartsManager extends Manager {
 		}
 		
 	}
-	
+
+	//Resets the state of the manager object for the next round.
 	public void reset() {
 		this.roundCount++;
 		this.heartsBroken = false;
@@ -38,7 +39,7 @@ public class HeartsManager extends Manager {
 	}
 
 	//Called to handle every player's chosen card in the pot and analyzes the pot once all cards are put.
-	//This method is only used for console testing, won't apply to the Android app.
+	//This method is only used for console testing, won't apply to the Android app - don't input out of bounds.
 	public void potHandle() {
 		int select;
 		Card startCard;
