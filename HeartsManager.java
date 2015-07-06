@@ -5,6 +5,7 @@ import java.util.Map.Entry;
 public class HeartsManager extends Manager {
 	
 	private boolean heartsBroken = false;
+	private HeartsPlayer[] players;
 	
 	public HeartsManager() {
 		playerCount = 4;
@@ -23,8 +24,45 @@ public class HeartsManager extends Manager {
 		}
 		
 	}
-
-	//Resets the state of the manager object for the next round.
+	
+	public static void main (String args[]) {
+		
+		HeartsManager manager = new HeartsManager();
+		
+		// choose and swap portion
+		int swapRound = manager.roundCount % 4;
+		if (swapRound != 3) {
+			
+			List<List<Card>> chosenLists = new ArrayList<List<Card>>();
+			
+			for (int i = 0; i < 4; i++) {
+				chosenLists.add(manager.chooseCards(i));
+			}
+			for (int i = 0; i < 4; i++) {
+				manager.swapCards(chosenLists.get(i), i, swapRound);
+			}
+		}
+		
+		// find player with 2 of clubs
+		manager.findStartPlayer();
+		
+		// handles the pot stuff
+		for (int i = 0; i < 13; i++) {
+			manager.potHandle();
+			toString();
+		}
+		
+		for (HeartsPlayer player : manager.players) {
+			player.scoreChange();
+			printScore();
+			
+		}
+		
+		// reshuffles deck and increments round count for next round
+		manager.reset();
+		
+	}
+	
 	public void reset() {
 		this.roundCount++;
 		this.heartsBroken = false;
@@ -37,63 +75,69 @@ public class HeartsManager extends Manager {
 			deck = players[i].fillHand(deck, random, 13);
 		}
 	}
-
-	//Called to handle every player's chosen card in the pot and analyzes the pot once all cards are put.
-	//This method is only used for console testing, won't apply to the Android app - don't input out of bounds.
+	
 	public void potHandle() {
+		
 		int select;
 		Card startCard;
 		
 		// first move by first player
 		if (players[startPlayer].hand.size() == 13) {
-			//Have the start player select the 2 of clubs, keep prompting for selection until they do.
+			
+			// not handling null pointer exception because this would not appear in the android app
 			do {
-				System.out.println("Select the card to put in the pot, indexes 0 - " + players[startPlayer].hand.size()-1 + ": " );
 				select = scanner.nextInt();
+				
 			} while (players[startPlayer].hand.get(select).compareTo(new Card(2, Card.Suit.CLUBS)) != 0);
-
+			
 			startCard = players[startPlayer].hand.remove(select);
+			pot.put(startCard, startPlayer);
+			startSuit = startCard.getSuit();
+
 		}
+		
 		else {
+			
 			// if hearts is not broken, card cannot be hearts or queen of spades
 			if (heartsBroken) {
-				System.out.println("Select the card to put in the pot, indexes 0 - " + players[startPlayer].hand.size()-1 + ": " );
 				select = scanner.nextInt();
 				startCard = players[startPlayer].hand.remove(select);
 			}
 			else {
 				do {
-					System.out.println("Select the card to put in the pot, indexes 0 - " + players[startPlayer].hand.size()-1 + ": " );
 					select = scanner.nextInt();
 					startCard = players[startPlayer].hand.get(select);
 				} while (startCard.getSuit() == Card.Suit.HEARTS || startCard.compareTo(new Card(12,Card.Suit.SPADES)) == 0);
 				players[startPlayer].hand.remove(select);
 			}
+			
+			pot.put(startCard, startPlayer);
+			startSuit = startCard.getSuit();
+			
 		}
-		//Remove the chosen card and put it in the pot
-		pot.put(startCard, startPlayer);
-		startSuit = startCard.getSuit();
 		
 		// after first move, other three players place their cards down
 		int currentPlayer = startPlayer;
 		Card selectCard;
 		for (int i = 0; i < playerCount - 1; i++) {
-			currentPlayer = (currentPlayer+1) % 4;
+			currentPlayer++;
+			// cleanup please
+			if (currentPlayer == 4) {
+				currentPlayer = 0;
+			}
 			
 			// if player has a card of the same suit
 			if (players[currentPlayer].hasSuit(startSuit)) {
 				do {
-					System.out.println("Select the card to put in the pot, indexes 0 - " + players[startPlayer].hand.size()-1 + ": " );
 					select = scanner.nextInt();
 					selectCard = players[startPlayer].hand.get(select);
 				} while (startCard.getSuit() != startSuit);
 				players[startPlayer].hand.remove(select);
 			}
-
+			
 			// otherwise if hand is 13, can play anything other than hearts
 			else if (players[currentPlayer].hand.size() == 13) {
 				do {
-					System.out.println("Select the card to put in the pot, indexes 0 - " + players[startPlayer].hand.size()-1 + ": " );
 					select = scanner.nextInt();
 					selectCard = players[startPlayer].hand.get(select);
 				} while (startCard.getSuit() == Card.Suit.HEARTS);
@@ -101,7 +145,6 @@ public class HeartsManager extends Manager {
 			
 			// if player does not have the same suit he can place anything
 			else {
-				System.out.println("Select the card to put in the pot, indexes 0 - " + players[startPlayer].hand.size()-1 + ": " );
 				select = scanner.nextInt();
 				selectCard = players[startPlayer].hand.remove(select);
 				if (selectCard.getSuit() == Card.Suit.HEARTS || 
@@ -111,27 +154,31 @@ public class HeartsManager extends Manager {
 			}
 			
 			pot.put(selectCard, currentPlayer);
+			
 		}
 		
 		potAnalyze();
 		players[startPlayer].endPile.addAll((Collection<? extends Card>) pot);
 		this.pot.clear();
+		
 	}
-
-	//Analyzes the pot and determines the winning card and start player for the next round.
+	
 	public void potAnalyze() {
 		Card winCard = null;
 		for (Entry<Card, Integer> entry : pot.entrySet()) {
 			if (entry.getKey().getSuit() == startSuit) {
-				if (winCard == null || entry.getKey().getCardNumber() > winCard.getCardNumber()) {
+				if (winCard == null) {
+					winCard = entry.getKey();
+					startPlayer = entry.getValue();
+				}
+				else if (entry.getKey().getCardNumber() > winCard.getCardNumber()){
 					winCard = entry.getKey();
 					startPlayer = entry.getValue();
 				}
 			}
 		}
 	}
-
-	//Determines the start player for the first round.
+	
 	public void findStartPlayer() {
 		for (int j = 0; j < playerCount; j++) {
 			for (int i = 0; i < players[j].hand.size(); i++) {
@@ -141,8 +188,7 @@ public class HeartsManager extends Manager {
 			}
 		}
 	}
-
-	//Called for the swapping part of the round, alongside swapCards - returns the cards chosen of player index playerNum.
+	
 	public List<Card> chooseCards(int playerNum) {
 		
 		List<Card> chosen = new ArrayList<Card>();
@@ -150,21 +196,20 @@ public class HeartsManager extends Manager {
 			int chose = scanner.nextInt();					
 			Card chosenCard = this.players[playerNum].hand.get(chose);
 			System.out.println("Chose card: " + chose);
-			try {
-				if (chosen.contains(chosenCard))
-					chosen.remove(chosenCard);
-				else {
-					chosen.add(chosenCard);
-				}
+		try {
+			if (chosen.contains(chosenCard))
+				chosen.remove(chosenCard);
+			else {
+				chosen.add(chosenCard);
 			}
-			catch (NullPointerException e) {
-				System.out.println("Card out of bounds!");
+		}
+		catch (NullPointerException e) {
+			System.out.println("Card out of bounds!");
 			}
 		}
 		return chosen;
 	}
-
-	//Called for the swapping part of the round, alongside swapCards - swaps the given cards for players.
+	
 	public void swapCards(Collection<?> chosen, int playerNum, int swapRound) {
 		// The convention is that greater array indices means players to the left.
 		players[playerNum].hand.removeAll(chosen);
@@ -182,39 +227,78 @@ public class HeartsManager extends Manager {
 		}
 		players[otherPlayer].hand.addAll((Collection<? extends Card>)chosen);
 	}
-
-	public static void main (String args[]) {
-
-		HeartsManager manager = new HeartsManager();
-
-		// choose and swap portion
-		int swapRound = manager.roundCount % 4;
-		if (swapRound != 3) {
-
-			List<List<Card>> chosenLists = new ArrayList<List<Card>>();
-
-			for (int i = 0; i < 4; i++) {
-				chosenLists.add(manager.chooseCards(i));
-			}
-			for (int i = 0; i < 4; i++) {
-				manager.swapCards(chosenLists.get(i), i, swapRound);
-			}
+	
+	public static String printScore(){
+		String s = "Scores:";
+		s = s + "\n";
+		for(HeartsPlayer p: players){
+			int i = 1;
+			s = s + "Player " + i + ": " + p.getScore(); + "\n";
+			i++;
 		}
-
-		// find player with 2 of clubs - we do this here because the card may be swapped.
-		manager.findStartPlayer();
-
-		// handles the pot stuff
-		for (int i = 0; i < 13; i++) {
-			manager.potHandle();
-		}
-
-		for (HeartsPlayer player : manager.players) {
-			player.scoreChange();
-		}
-
-		// reshuffles deck and increments round count for next round
-		manager.reset();
-
+		
+		return s;
 	}
+	
+	public static String toString(){
+		String s1 = "";
+		String s2 = "";
+		
+		for(Card c: players[0].getHand()){
+			String card = Integer.toString(c.getCardNumber()) + c.getSuit();
+			s1 = s1 + card + " ";
+		}
+		
+		for(Card c: players[1].getHand()){
+			String card = Integer.toString(c.getCardNumber()) + c.getSuit();
+			s2 = s2 + card + " ";
+		}
+		
+		s1 = s1.substring(0, s1.length()-1);
+		s2 = s1.substring(0, s2.length()-1);
+		
+		String space = "";
+		for(int i = 0; i < 58; i++){
+			space = space + " ";
+		}
+		
+		int h1size = s1.length();
+		int h2size = s2.length();
+		int count = (60 - h1size)/2;
+		int count2 = (60 - h2size)/2;
+		int count3 = (58 - top.length())/2;
+		String dashes1 = "";
+		String dashes2 = "";
+		
+		for(int i = 0; i < count3; i++){
+			spaces = spaces + " ";
+		}
+		
+		for(int i = 0; i < count; i++){
+			dashes1 = dashes1 + "-";
+		}
+		
+		for(int i = 0; i < count2; i++){
+			dashes2 = dashes2 + "-";
+		}
+		
+		s = s + dashes1 + s1 + dashes1 + "\n";
+		s = s + "|" + spaces + "|" + "\n";
+		s = s + "|" + spaces + "|" + "\n";
+		s = s + "|" + spaces + "|" + "\n";
+		
+		for(int i = 0; i < players[2].getHand().size(); i++){
+			List<Card> h1 = players[2].getHand();
+			List<Card> h2 = players[3].getHand();
+			s = s + h1[i] + spaces + h2[i] + "\n";
+		}
+		
+		s = s + "|" + spaces + "|" + "\n";
+		s = s + "|" + spaces + "|" + "\n";
+		s = s + "|" + spaces + "|" + "\n";
+		s = s + dashes1 + s2 + dashes1 + "\n";
+		
+		return s;
+	}
+
 }
