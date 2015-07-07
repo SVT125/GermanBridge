@@ -298,7 +298,21 @@ public class HeartsManager extends Manager {
 		s = s + "|" + spaces + "|" + "\n";
 		s = s + dashes1 + s2 + dashes1 + "\n";
 		
-		return s;
+		
+		ArrayList pKeys = new ArrayList<Card>(pot.keySet());
+		ArrayList potp = new ArrayList<Card> ();
+		for(Card c: pkeys){
+			int num = pot.get(c)
+			potp.put(c, num)
+		}
+		
+		s = s + "Pot: "
+		for(Card c: potp){
+			String card = Integer.toString(c.getCardNumber()) + c.getSuit();
+			s = s + card + " "
+		}
+		
+		return s
 	}
 
 }
