@@ -4,7 +4,7 @@ import java.util.*;
 public class HeartsPlayer extends Player {
 	
 	// added endPile to count scores of each player at the end of every round
-	protected List<Card> endPile;
+	protected List<Card> endPile = new ArrayList<Card>();
 	
 	public HeartsPlayer() {
 		hand = new ArrayList<Card>();
