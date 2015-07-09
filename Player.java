@@ -34,7 +34,7 @@ public abstract class Player {
 	
 	public boolean hasSuit(Card.Suit suit) {
 		for (Card card : hand) {
-			if (card.getSuit() == suit) {
+			if (card.getSuit().equals(suit)) {
 				return true;
 			}
 		}
