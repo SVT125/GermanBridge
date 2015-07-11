@@ -1,6 +1,7 @@
 package cardsuite;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
@@ -12,10 +13,9 @@ public abstract class Manager {
 	protected int playerCount;
 	protected int roundCount = 1;
 	protected static Scanner scanner = new Scanner(System.in);
-	protected Map<Card, Integer> pot;
+	protected Map<Card, Integer> pot = new HashMap<Card,Integer>();
 	protected Card.Suit startSuit;
 	protected int startPlayer;
-	protected Player[] players;
 	
 	public abstract void potHandle();
 	public abstract void potAnalyze();
