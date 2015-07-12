@@ -1,4 +1,4 @@
-package cardsuite;
+package com.example.james.cardsuite;
 
 import java.util.*;
 
@@ -34,7 +34,7 @@ public abstract class Player {
 	
 	public boolean hasSuit(Card.Suit suit) {
 		for (Card card : hand) {
-			if (card.getSuit().equals(suit)) {
+			if (card.getSuit() == suit) {
 				return true;
 			}
 		}

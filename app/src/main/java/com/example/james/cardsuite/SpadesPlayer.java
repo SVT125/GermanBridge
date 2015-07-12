@@ -1,4 +1,4 @@
-package cardsuite;
+package com.example.james.cardsuite;
 
 import java.util.ArrayList;
 
