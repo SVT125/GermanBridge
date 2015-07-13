@@ -1,9 +1,12 @@
 package com.example.james.cardsuite;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 
 public class MainActivity extends Activity {
@@ -12,6 +15,13 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+    }
+
+    public void startClick(View v) {
+        //Add bundle content as needed
+        Intent intent = new Intent(MainActivity.this,GameActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     @Override

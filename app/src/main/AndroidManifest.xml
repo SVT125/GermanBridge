@@ -18,7 +18,9 @@
         </activity>
         <activity
             android:name=".GameActivity"
-            android:label="@string/title_activity_game" >
+            android:label="@string/title_activity_game"
+            android:screenOrientation="landscape"
+            android:configChanges="orientation|keyboardHidden">
         </activity>
     </application>
 

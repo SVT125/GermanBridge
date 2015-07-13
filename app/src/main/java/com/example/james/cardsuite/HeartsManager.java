@@ -165,13 +165,11 @@ public class HeartsManager extends Manager {
 	}
 
 	//Called for the swapping part of the round, alongside swapCards - returns the cards chosen of player index playerNum.
-	public List<Card> chooseCards(int playerNum) {
+	public List<Card> chooseCards(int playerNum, int chose) throws NullPointerException {
 		
 		List<Card> chosen = new ArrayList<Card>();
 		while (chosen.size() < 4) {
-			int chose = scanner.nextInt();					
 			Card chosenCard = this.players[playerNum].hand.get(chose);
-			System.out.println("Chose card: " + chose);
 			try {
 				if (chosen.contains(chosenCard))
 					chosen.remove(chosenCard);
@@ -180,7 +178,7 @@ public class HeartsManager extends Manager {
 				}
 			}
 			catch (NullPointerException e) {
-				System.out.println("Card out of bounds!");
+				throw e;
 			}
 		}
 		return chosen;
@@ -206,7 +204,7 @@ public class HeartsManager extends Manager {
 	}
 
 	public static void main (String args[]) {
-
+		/*
 		HeartsManager manager = new HeartsManager();
 
 		while(!(manager.isGameOver())) {
@@ -240,5 +238,6 @@ public class HeartsManager extends Manager {
 			manager.reset();
 		}
 		System.out.println("The winner is player " + manager.findWinner());
+		*/
 	}
 }
