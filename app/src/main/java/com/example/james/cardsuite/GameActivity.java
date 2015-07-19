@@ -32,7 +32,7 @@ public class GameActivity extends Activity {
                 List<List<Card>> chosenLists = new ArrayList<List<Card>>();
 
                 for (int i = 0; i < 4; i++) {
-                    consoleOutput.setText("Player card chosen: " + i);
+                    consoleOutput.setText("Player " + Integer.toString(i) + " choose:");
                     int chosen = Integer.parseInt(consoleInput.getText().toString());
                     chosenLists.add(manager.chooseCards(i,chosen));
                 }
