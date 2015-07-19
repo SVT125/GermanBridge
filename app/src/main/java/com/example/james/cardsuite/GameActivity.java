@@ -1,6 +1,7 @@
 package com.example.james.cardsuite;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,6 +17,9 @@ public class GameActivity extends Activity {
     private HeartsManager manager;
     private TextView consoleOutput;
     private EditText consoleInput;
+    private int currentPlayerInteracting = 0, currentPotTurn = 0;
+    private boolean foundStartPlayer = false;
+    private List<List<Card>> chosenLists = new ArrayList<List<Card>>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,29 +28,41 @@ public class GameActivity extends Activity {
 
         consoleOutput = (TextView)findViewById(R.id.consoleOutput);
         consoleInput = (EditText)findViewById(R.id.consoleInput);
+    }
 
-        while(!(manager.isGameOver())) {
+    //This should be removed, only for testing - processes the state of the game manager.
+    public void confirmClick(View v) {
+        if(!(manager.isGameOver())) {
             // choose and swap portion
-            int swapRound = manager.roundCount % 4;
-            if (swapRound != 3) {
-                List<List<Card>> chosenLists = new ArrayList<List<Card>>();
+            int swapRound = manager.getRoundCount() % 4;
+            if (swapRound != 3 && currentPlayerInteracting != 4) {
+                consoleOutput.setText("Player " + Integer.toString(currentPlayerInteracting) + " choose:");
+                int chosen = Integer.parseInt(consoleInput.getText().toString());
+                chosenLists.add(manager.chooseCards(currentPlayerInteracting,chosen));
+                currentPlayerInteracting++;
 
-                for (int i = 0; i < 4; i++) {
-                    consoleOutput.setText("Player " + Integer.toString(i) + " choose:");
-                    int chosen = Integer.parseInt(consoleInput.getText().toString());
-                    chosenLists.add(manager.chooseCards(i,chosen));
-                }
-                for (int i = 0; i < 4; i++) {
-                    manager.swapCards(chosenLists.get(i), i, swapRound);
-                }
+                if(currentPlayerInteracting == 4) {
+                    for (int i = 0; i < 4; i++) {
+                        manager.swapCards(chosenLists.get(i), i, swapRound);
+                    }
+                } else
+                    return;
             }
 
-            // find player with 2 of clubs - we do this here because the card may be swapped.
-            manager.findStartPlayer();
+            // Done swapping by this point - this should only be called once, the turn directly when we're done swapping.
+            // Find player with 2 of clubs - we do this here because the card may be swapped.
+            if(!foundStartPlayer) {
+                manager.findStartPlayer();
+                foundStartPlayer = true;
+            }
 
-            // handles the pot stuff
-            for (int i = 0; i < 13; i++) {
+            //FIRST ROUGH DRAFT - ALL CODE AFTER THIS UNCONVERTED
+
+            // Handles the pot stuff
+            if(currentPotTurn != 13) {
                 manager.potHandle();
+                currentPotTurn++;
+                return;
             }
 
             for (Player player : manager.players) {
@@ -55,13 +71,13 @@ public class GameActivity extends Activity {
 
             // reshuffles deck and increments round count for next round
             manager.reset();
+            //RESET ALL VARIABLES FOR INCREMENTING THE GAME e.g. currentTurn, etc.
         }
+
         consoleOutput.setText("The winner is player " + manager.findWinner());
-    }
-
-    //This should be removed, only for testing.
-    public void confirmClick(View v) {
-
+        Intent intent = new Intent(GameActivity.this,ResultsActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     @Override

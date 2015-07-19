@@ -20,5 +20,7 @@ public abstract class Manager {
 	public abstract void potHandle();
 	public abstract void potAnalyze();
 	public abstract void reset();
-	
+	public int getRoundCount() {
+		return this.roundCount;
+	}
 }
