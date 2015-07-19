@@ -1,9 +1,12 @@
 package com.example.james.cardsuite;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 
 public class ResultsActivity extends Activity {
@@ -12,6 +15,18 @@ public class ResultsActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_results);
+
+        Intent intent = getIntent();
+        HeartsManager manager = (HeartsManager)intent.getSerializableExtra("manager");
+        TextView resultsView = (TextView)findViewById(R.id.resultsView);
+        resultsView.setText("Player " + manager.findWinner() + " won the game!");
+    }
+
+    // Starts a new game when clicked - goes to the main activity again.
+    public void newGameClick(View v) {
+        Intent intent = new Intent(ResultsActivity.this,MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     @Override

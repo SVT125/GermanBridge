@@ -28,18 +28,23 @@ public class GameActivity extends Activity {
 
         consoleOutput = (TextView)findViewById(R.id.consoleOutput);
         consoleInput = (EditText)findViewById(R.id.consoleInput);
+
+        consoleOutput.setText("Player 0 choose:");
     }
 
     //This should be removed, only for testing - processes the state of the game manager.
     public void confirmClick(View v) {
         if(!(manager.isGameOver())) {
-            // choose and swap portion
+            // Part 1 - Swap the cards between players.
             int swapRound = manager.getRoundCount() % 4;
-            if (swapRound != 3 && currentPlayerInteracting != 4) {
-                consoleOutput.setText("Player " + Integer.toString(currentPlayerInteracting) + " choose:");
+            if(currentPlayerInteracting != 4) {
                 int chosen = Integer.parseInt(consoleInput.getText().toString());
-                chosenLists.add(manager.chooseCards(currentPlayerInteracting,chosen));
+                chosenLists.add(manager.chooseCards(currentPlayerInteracting, chosen));
+            }
+
+            if (swapRound != 3 && currentPlayerInteracting != 4) {
                 currentPlayerInteracting++;
+                consoleOutput.setText("Player " + Integer.toString(currentPlayerInteracting) + " choose:");
 
                 if(currentPlayerInteracting == 4) {
                     for (int i = 0; i < 4; i++) {
@@ -50,7 +55,7 @@ public class GameActivity extends Activity {
             }
 
             // Done swapping by this point - this should only be called once, the turn directly when we're done swapping.
-            // Find player with 2 of clubs - we do this here because the card may be swapped.
+            // Part 2 - Find player with 2 of clubs, we do this here because the card may be swapped.
             if(!foundStartPlayer) {
                 manager.findStartPlayer();
                 foundStartPlayer = true;
@@ -58,13 +63,14 @@ public class GameActivity extends Activity {
 
             //FIRST ROUGH DRAFT - ALL CODE AFTER THIS UNCONVERTED
 
-            // Handles the pot stuff
+            // Part 3 - handle cards being tossed in the pot until all cards are gone (13 turns).
             if(currentPotTurn != 13) {
                 manager.potHandle();
                 currentPotTurn++;
                 return;
             }
 
+            // Part 4 - The round is done, update the score and reset the manager for the next round.
             for (Player player : manager.players) {
                 ((HeartsPlayer) player).scoreChange();
             }
@@ -74,8 +80,10 @@ public class GameActivity extends Activity {
             //RESET ALL VARIABLES FOR INCREMENTING THE GAME e.g. currentTurn, etc.
         }
 
+        // The game is done.
         consoleOutput.setText("The winner is player " + manager.findWinner());
         Intent intent = new Intent(GameActivity.this,ResultsActivity.class);
+        intent.putExtra("manager",manager);
         startActivity(intent);
         finish();
     }

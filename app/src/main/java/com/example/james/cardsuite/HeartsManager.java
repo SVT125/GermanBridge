@@ -1,8 +1,9 @@
 package com.example.james.cardsuite;
+import java.io.Serializable;
 import java.util.*;
 import java.util.Map.Entry;
 
-public class HeartsManager extends Manager {
+public class HeartsManager extends Manager implements Serializable {
 	
 	private boolean heartsBroken = false;
 	
@@ -201,43 +202,5 @@ public class HeartsManager extends Manager {
 				break;
 		}
 		players[otherPlayer].hand.addAll((Collection<? extends Card>)chosen);
-	}
-
-	public static void main (String args[]) {
-		/*
-		HeartsManager manager = new HeartsManager();
-
-		while(!(manager.isGameOver())) {
-			// choose and swap portion
-			int swapRound = manager.roundCount % 4;
-			if (swapRound != 3) {
-
-				List<List<Card>> chosenLists = new ArrayList<List<Card>>();
-
-				for (int i = 0; i < 4; i++) {
-					chosenLists.add(manager.chooseCards(i));
-				}
-				for (int i = 0; i < 4; i++) {
-					manager.swapCards(chosenLists.get(i), i, swapRound);
-				}
-			}
-
-			// find player with 2 of clubs - we do this here because the card may be swapped.
-			manager.findStartPlayer();
-
-			// handles the pot stuff
-			for (int i = 0; i < 13; i++) {
-				manager.potHandle();
-			}
-
-			for (Player player : manager.players) {
-				((HeartsPlayer) player).scoreChange();
-			}
-
-			// reshuffles deck and increments round count for next round
-			manager.reset();
-		}
-		System.out.println("The winner is player " + manager.findWinner());
-		*/
 	}
 }
