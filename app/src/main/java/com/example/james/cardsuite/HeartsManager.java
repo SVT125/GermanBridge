@@ -75,16 +75,13 @@ public class HeartsManager extends Manager implements Serializable {
 			// not handling null pointer exception because this would not appear in the android app
 			do {
 				select = scanner.nextInt();
-
 			} while (players[startPlayer].hand.get(select).compareTo(new Card(2, Card.Suit.CLUBS)) != 0);
 
 			startCard = players[startPlayer].hand.remove(select);
 			pot.put(startCard, startPlayer);
 			startSuit = startCard.getSuit();
 
-		}
-
-		else {
+		} else {
 
 			// if hearts is not broken, card cannot be hearts or queen of spades
 			if (heartsBroken) {
@@ -110,11 +107,7 @@ public class HeartsManager extends Manager implements Serializable {
 		int currentPlayer = startPlayer;
 		Card selectCard;
 		for (int i = 0; i < playerCount - 1; i++) {
-			currentPlayer++;
-			// cleanup please
-			if (currentPlayer == 4) {
-				currentPlayer = 0;
-			}
+			currentPlayer = (currentPlayer + 1) % 4;
 
 			System.out.println("Player " + Integer.toString(currentPlayer + 1) + ": place card pls");
 

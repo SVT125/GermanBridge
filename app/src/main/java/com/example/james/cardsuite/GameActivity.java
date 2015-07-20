@@ -41,11 +41,11 @@ public class GameActivity extends Activity {
             if(currentPlayerInteracting != 4) {
                 //Assume for now input will only be "card1,card2,card3"
                 String[] chosen = consoleInput.getText().toString().split(",");
-                int[] chosenIntegers = new int[]{Integer.parseInt(chosen[0]),
+                int[] chosenIndices = new int[]{Integer.parseInt(chosen[0]),
                     Integer.parseInt(chosen[1]),
                     Integer.parseInt(chosen[2])};
 
-                List<Card> chosenCards = manager.chooseCards(currentPlayerInteracting, chosenIntegers);
+                List<Card> chosenCards = manager.chooseCards(currentPlayerInteracting, chosenIndices);
                 chosenLists.add(chosenCards);
             }
 
