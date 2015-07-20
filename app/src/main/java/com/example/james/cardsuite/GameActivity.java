@@ -3,6 +3,7 @@ package com.example.james.cardsuite;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,7 +30,7 @@ public class GameActivity extends Activity {
         consoleOutput = (TextView)findViewById(R.id.consoleOutput);
         consoleInput = (EditText)findViewById(R.id.consoleInput);
 
-        consoleOutput.setText("Player 0 choose:");
+        consoleOutput.setText("Player 1 choose:");
     }
 
     //This should be removed, only for testing - processes the state of the game manager.
@@ -38,17 +39,24 @@ public class GameActivity extends Activity {
             // Part 1 - Swap the cards between players.
             int swapRound = manager.getRoundCount() % 4;
             if(currentPlayerInteracting != 4) {
-                int chosen = Integer.parseInt(consoleInput.getText().toString());
-                chosenLists.add(manager.chooseCards(currentPlayerInteracting, chosen));
+                //Assume for now input will only be "card1,card2,card3"
+                String[] chosen = consoleInput.getText().toString().split(",");
+                int[] chosenIntegers = new int[]{Integer.parseInt(chosen[0]),
+                    Integer.parseInt(chosen[1]),
+                    Integer.parseInt(chosen[2])};
+
+                List<Card> chosenCards = manager.chooseCards(currentPlayerInteracting, chosenIntegers);
+                chosenLists.add(chosenCards);
             }
 
             if (swapRound != 3 && currentPlayerInteracting != 4) {
                 currentPlayerInteracting++;
-                consoleOutput.setText("Player " + Integer.toString(currentPlayerInteracting) + " choose:");
+                consoleOutput.setText("Player " + Integer.toString(currentPlayerInteracting)+1 + " choose:");
 
                 if(currentPlayerInteracting == 4) {
                     for (int i = 0; i < 4; i++) {
                         manager.swapCards(chosenLists.get(i), i, swapRound);
+                        manager.players[i].organize();
                     }
                 } else
                     return;
