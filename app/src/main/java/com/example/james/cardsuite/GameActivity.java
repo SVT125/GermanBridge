@@ -2,12 +2,15 @@ package com.example.james.cardsuite;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -17,7 +20,6 @@ import java.util.List;
 public class GameActivity extends Activity {
     private HeartsManager manager;
     private TextView consoleOutput;
-    private EditText consoleInput;
     private int currentPlayerInteracting = 0, currentPotTurn = 0;
     private boolean foundStartPlayer = false;
     private List<List<Card>> chosenLists = new ArrayList<List<Card>>();
@@ -28,12 +30,16 @@ public class GameActivity extends Activity {
         manager = new HeartsManager();
 
         consoleOutput = (TextView)findViewById(R.id.consoleOutput);
-        consoleInput = (EditText)findViewById(R.id.consoleInput);
 
+        //Set the instruction text
         consoleOutput.setText("Player 1 choose:");
+
+        //Display the image buttons
+        displayHands();
     }
 
     //This should be removed, only for testing - processes the state of the game manager.
+    /*
     public void confirmClick(View v) {
         if(!(manager.isGameOver())) {
             // Part 1 - Swap the cards between players.
@@ -94,6 +100,31 @@ public class GameActivity extends Activity {
         intent.putExtra("manager",manager);
         startActivity(intent);
         finish();
+    }
+    */
+
+    //Call when the hands have been updated and need be redisplayed.
+    public void displayHands() {
+        //Display the player's cards as buttons
+        ImageButton firstCard = new ImageButton(this), last = firstCard;
+        firstCard.setBackgroundResource(Resources.getSystem().getIdentifier(manager.players[0].hand.get(0).getAddress(),"drawable","android"));
+        firstCard.setPadding(0,0,10,0);
+
+        //Display the rest of the hand's cards
+        for(int i = 1; i < manager.players[0].hand.size(); i++) {
+            ImageButton cardButton = new ImageButton(this);
+            cardButton.setBackgroundResource(Resources.getSystem().getIdentifier(manager.players[0].hand.get(i).getAddress(),"drawable","android"));
+            cardButton.setPadding(0, 0, 10, 0);
+            cardButton.setRight(last.getId());
+            last = cardButton;
+        }
+
+        //Display the rest of the cards as mere images
+        for(int i = 1; i < 3; i++) {
+            for(int j = 0; j < manager.players[i].hand.size(); j++) {
+
+            }
+        }
     }
 
     @Override
