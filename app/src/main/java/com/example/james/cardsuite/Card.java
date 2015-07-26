@@ -37,6 +37,12 @@ public class Card {
 		int num = RANDOM.nextInt(numRange) + 2;
 		return new Card(num, suitList.get(RANDOM.nextInt(SIZE)));
 	}
+
+	public String getAddress() {
+		int num = this.cardNumber;
+		if (num == 14) { num = 1; }
+		return (Integer.toString(num) + this.suit);
+	}
 	
 	public int getCardNumber() {
 		return this.cardNumber;
