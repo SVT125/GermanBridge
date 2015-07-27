@@ -39,9 +39,8 @@ public class Card {
 	}
 
 	public String getAddress() {
-		int num = this.cardNumber;
-		if (num == 14) { num = 1; }
-		return (Integer.toString(num) + this.suit);
+		int num = this.cardNumber % 13;
+		return (this.suit.toString() + num);
 	}
 	
 	public int getCardNumber() {

@@ -105,24 +105,39 @@ public class GameActivity extends Activity {
 
     //Call when the hands have been updated and need be redisplayed.
     public void displayHands() {
+        RelativeLayout rl = (RelativeLayout)findViewById(R.id.gameLayout);
+
         //Display the player's cards as buttons
         ImageButton firstCard = new ImageButton(this), last = firstCard;
         firstCard.setBackgroundResource(Resources.getSystem().getIdentifier(manager.players[0].hand.get(0).getAddress(),"drawable","android"));
-        firstCard.setPadding(0,0,10,0);
+        firstCard.setPadding(0, 0, 10, 0);
+        rl.addView(firstCard);
 
-        //Display the rest of the hand's cards
+        //Display the rest of the hand
         for(int i = 1; i < manager.players[0].hand.size(); i++) {
             ImageButton cardButton = new ImageButton(this);
             cardButton.setBackgroundResource(Resources.getSystem().getIdentifier(manager.players[0].hand.get(i).getAddress(),"drawable","android"));
             cardButton.setPadding(0, 0, 10, 0);
             cardButton.setRight(last.getId());
             last = cardButton;
+            rl.addView(cardButton);
         }
 
-        //Display the rest of the cards as mere images
+        //Display the rest of the players' hands as mere images
         for(int i = 1; i < 3; i++) {
-            for(int j = 0; j < manager.players[i].hand.size(); j++) {
+            firstCard = new ImageButton(this);
+            last = firstCard;
+            firstCard.setBackgroundResource(Resources.getSystem().getIdentifier(manager.players[i].hand.get(0).getAddress(),"drawable","android"));
+            firstCard.setPadding(0,0,10,0);
 
+            //Display the rest of the hand
+            for(int j = 1; j < manager.players[i].hand.size(); j++) {
+                ImageButton cardButton = new ImageButton(this);
+                cardButton.setBackgroundResource(Resources.getSystem().getIdentifier(manager.players[i].hand.get(j).getAddress(),"drawable","android"));
+                cardButton.setPadding(0, 0, 10, 0);
+                cardButton.setRight(last.getId());
+                last = cardButton;
+                rl.addView(cardButton);
             }
         }
     }

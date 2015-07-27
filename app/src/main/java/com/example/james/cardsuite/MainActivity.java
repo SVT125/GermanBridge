@@ -19,6 +19,7 @@ public class MainActivity extends Activity {
 
     public void startClick(View v) {
         //Add bundle content as needed
+        Log.i("Clicked","");
         Intent intent = new Intent(MainActivity.this,GameActivity.class);
         startActivity(intent);
         finish();
