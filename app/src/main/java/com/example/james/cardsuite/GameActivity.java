@@ -35,7 +35,7 @@ public class GameActivity extends Activity {
         consoleOutput.setText("Player 1 choose:");
 
         //Display the image buttons
-        displayHands();
+        displayHands(0);
     }
 
     //This should be removed, only for testing - processes the state of the game manager.
@@ -104,42 +104,53 @@ public class GameActivity extends Activity {
     */
 
     //Call when the hands have been updated and need be redisplayed.
-    public void displayHands() {
+    public void displayHands(int player) {
         RelativeLayout rl = (RelativeLayout)findViewById(R.id.gameLayout);
 
         //Display the player's cards as buttons
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
+        params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM,RelativeLayout.TRUE);
+
         ImageButton firstCard = new ImageButton(this), last = firstCard;
-        firstCard.setBackgroundResource(Resources.getSystem().getIdentifier(manager.players[0].hand.get(0).getAddress(),"drawable","android"));
+        firstCard.setBackgroundResource(getResources().getIdentifier(manager.players[player].hand.get(0).getAddress(), "drawable", getPackageName()));
         firstCard.setPadding(0, 0, 10, 0);
+        firstCard.setLayoutParams(params);
+
         rl.addView(firstCard);
 
         //Display the rest of the hand
-        for(int i = 1; i < manager.players[0].hand.size(); i++) {
+        for(int i = 1; i < manager.players[player].hand.size(); i++) {
             ImageButton cardButton = new ImageButton(this);
-            cardButton.setBackgroundResource(Resources.getSystem().getIdentifier(manager.players[0].hand.get(i).getAddress(),"drawable","android"));
+            cardButton.setBackgroundResource(getResources().getIdentifier(manager.players[player].hand.get(i).getAddress(), "drawable", getPackageName()));
             cardButton.setPadding(0, 0, 10, 0);
             cardButton.setRight(last.getId());
             last = cardButton;
+            cardButton.setLayoutParams(params);
+
             rl.addView(cardButton);
         }
 
+        /*
         //Display the rest of the players' hands as mere images
-        for(int i = 1; i < 3; i++) {
-            firstCard = new ImageButton(this);
-            last = firstCard;
-            firstCard.setBackgroundResource(Resources.getSystem().getIdentifier(manager.players[i].hand.get(0).getAddress(),"drawable","android"));
-            firstCard.setPadding(0,0,10,0);
+        for(int i = 0; i < 4; i++) {
+            if(i != player) {
+                firstCard = new ImageButton(this);
+                last = firstCard;
+                firstCard.setBackgroundResource(getResources().getIdentifier(manager.players[i].hand.get(0).getAddress(), "drawable", getPackageName()));
+                firstCard.setPadding(0, 0, 10, 0);
 
-            //Display the rest of the hand
-            for(int j = 1; j < manager.players[i].hand.size(); j++) {
-                ImageButton cardButton = new ImageButton(this);
-                cardButton.setBackgroundResource(Resources.getSystem().getIdentifier(manager.players[i].hand.get(j).getAddress(),"drawable","android"));
-                cardButton.setPadding(0, 0, 10, 0);
-                cardButton.setRight(last.getId());
-                last = cardButton;
-                rl.addView(cardButton);
+                //Display the rest of the hand
+                for (int j = 1; j < manager.players[i].hand.size(); j++) {
+                    ImageButton cardButton = new ImageButton(this);
+                    cardButton.setBackgroundResource(getResources().getIdentifier(manager.players[i].hand.get(j).getAddress(), "drawable", getPackageName()));
+                    cardButton.setPadding(0, 0, 10, 0);
+                    cardButton.setRight(last.getId());
+                    last = cardButton;
+                    rl.addView(cardButton);
+                }
             }
         }
+        */
     }
 
     @Override
