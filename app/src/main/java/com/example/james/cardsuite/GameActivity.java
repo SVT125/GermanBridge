@@ -114,21 +114,19 @@ public class GameActivity extends Activity {
 
         ImageButton firstCard = new ImageButton(this), last = firstCard;
         firstCard.setBackgroundResource(getResources().getIdentifier(manager.players[player].hand.get(0).getAddress(), "drawable", getPackageName()));
-        firstCard.setPadding(0, 0, 10, 0);
-        firstCard.setLayoutParams(params);
 
-        rl.addView(firstCard);
+        rl.addView(firstCard, params);
 
         //Display the rest of the hand
         for(int i = 1; i < manager.players[player].hand.size(); i++) {
+            RelativeLayout.LayoutParams restParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
+            restParams.addRule(RelativeLayout.END_OF,last.getId());
+            restParams.addRule(RelativeLayout.ALIGN_TOP,last.getId());
             ImageButton cardButton = new ImageButton(this);
             cardButton.setBackgroundResource(getResources().getIdentifier(manager.players[player].hand.get(i).getAddress(), "drawable", getPackageName()));
-            cardButton.setPadding(0, 0, 10, 0);
-            cardButton.setRight(last.getId());
             last = cardButton;
-            cardButton.setLayoutParams(params);
 
-            rl.addView(cardButton);
+            rl.addView(cardButton,restParams);
         }
 
         /*
