@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
@@ -23,6 +24,7 @@ public class GameActivity extends Activity {
     private int currentPlayerInteracting = 0, currentPotTurn = 0;
     private boolean foundStartPlayer = false;
     private List<List<Card>> chosenLists = new ArrayList<List<Card>>();
+    private boolean buttonsPresent = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,51 +107,58 @@ public class GameActivity extends Activity {
 
     //Call when the hands have been updated and need be redisplayed.
     public void displayHands(int player) {
+        //Remove all old cards first
+        if(buttonsPresent)
+            for(int i = 0; i < 52; i++) {
+                View view = findViewById(i);
+                ((ViewGroup) view.getParent()).removeView(view);
+                buttonsPresent = true;
+            }
+
+        int temporaryID = 0; //Temporary ID to be assigned to each card, to be reused.
         RelativeLayout rl = (RelativeLayout)findViewById(R.id.gameLayout);
 
-        //Display the player's cards as buttons
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
-        params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM,RelativeLayout.TRUE);
-        params.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
-
-        ImageButton firstCard = new ImageButton(this), last = firstCard;
-        firstCard.setBackgroundResource(getResources().getIdentifier(manager.players[player].hand.get(0).getAddress(), "drawable", getPackageName()));
-
-        rl.addView(firstCard, params);
-
-        //Display the rest of the hand
-        for(int i = 1; i < manager.players[player].hand.size(); i++) {
-            RelativeLayout.LayoutParams restParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
-            restParams.addRule(RelativeLayout.END_OF,last.getId());
-            restParams.addRule(RelativeLayout.ALIGN_TOP,last.getId());
-            ImageButton cardButton = new ImageButton(this);
-            cardButton.setBackgroundResource(getResources().getIdentifier(manager.players[player].hand.get(i).getAddress(), "drawable", getPackageName()));
-            last = cardButton;
-
-            rl.addView(cardButton,restParams);
-        }
-
-        /*
-        //Display the rest of the players' hands as mere images
+        //Now create the imagebuttons for each of the players
         for(int i = 0; i < 4; i++) {
-            if(i != player) {
-                firstCard = new ImageButton(this);
-                last = firstCard;
-                firstCard.setBackgroundResource(getResources().getIdentifier(manager.players[i].hand.get(0).getAddress(), "drawable", getPackageName()));
-                firstCard.setPadding(0, 0, 10, 0);
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
+            //Add specific rules which dictate the location of each player's cards, 0 - 4 going from start player clockwise.
+            switch(i) {
+                case 0: params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                    params.addRule(RelativeLayout.CENTER_HORIZONTAL);break;
+                case 1: params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+                    params.addRule(RelativeLayout.CENTER_VERTICAL);break;
+                case 2: params.addRule(RelativeLayout.CENTER_HORIZONTAL);break;
+                case 3: params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                    params.addRule(RelativeLayout.CENTER_VERTICAL);break;
+            }
+            ImageButton firstCard = new ImageButton(this), last = firstCard;
+            if(i == 0)
+                firstCard.setBackgroundResource(getResources().getIdentifier(manager.players[player].hand.get(0).getAddress(), "drawable", getPackageName()));
+            else
+                firstCard.setBackgroundResource(getResources().getIdentifier("cardback", "drawable", getPackageName()));
 
-                //Display the rest of the hand
-                for (int j = 1; j < manager.players[i].hand.size(); j++) {
-                    ImageButton cardButton = new ImageButton(this);
-                    cardButton.setBackgroundResource(getResources().getIdentifier(manager.players[i].hand.get(j).getAddress(), "drawable", getPackageName()));
-                    cardButton.setPadding(0, 0, 10, 0);
-                    cardButton.setRight(last.getId());
-                    last = cardButton;
-                    rl.addView(cardButton);
-                }
+            rl.addView(firstCard, params);
+            firstCard.setId(temporaryID++);
+
+            //Display the rest of the hand
+            for(int j = 1; j < manager.players[player].hand.size(); j++) {
+                RelativeLayout.LayoutParams restParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
+                if(i % 2 == 0) {
+                    restParams.addRule(RelativeLayout.END_OF, last.getId());
+                    restParams.addRule(RelativeLayout.ALIGN_TOP, last.getId());
+                } else
+                    restParams.addRule(RelativeLayout.BELOW, last.getId());
+                ImageButton cardButton = new ImageButton(this);
+                if(i == 0)
+                    firstCard.setBackgroundResource(getResources().getIdentifier(manager.players[player].hand.get(j).getAddress(), "drawable", getPackageName()));
+                else
+                    firstCard.setBackgroundResource(getResources().getIdentifier("cardback", "drawable", getPackageName()));
+
+                last = cardButton;
+                rl.addView(cardButton,restParams);
+                cardButton.setId(temporaryID++);
             }
         }
-        */
     }
 
     @Override
