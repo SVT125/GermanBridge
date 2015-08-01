@@ -182,11 +182,11 @@ public class HeartsManager extends Manager implements Serializable {
 
 	//Called for the swapping part of the round, alongside swapCards - returns the cards chosen of player index playerNum.
 	//Assume chosen is an int array of 3 elements.
-	public List<Card> chooseCards(int playerNum, int[] chosenIndices) throws NullPointerException {
+	public List<Card> chooseCards(int playerNum, List<Integer> chosenIndices) throws NullPointerException {
 		
 		List<Card> chosen = new ArrayList<Card>();
 		for(int i = 0; i < 3; i++) {
-			Card chosenCard = this.players[playerNum].hand.get(chosenIndices[i]);
+			Card chosenCard = this.players[playerNum].hand.get(chosenIndices.get(i));
 			try {
 				if (chosen.contains(chosenCard))
 					chosen.remove(chosenCard);

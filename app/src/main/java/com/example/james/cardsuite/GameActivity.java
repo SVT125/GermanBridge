@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -21,9 +22,10 @@ import java.util.List;
 public class GameActivity extends Activity {
     private HeartsManager manager;
     private TextView consoleOutput;
-    private int currentPlayerInteracting = 0, currentPotTurn = 0;
+    private int numberOfCardsChosen = 0, currentPlayerInteracting = 0, currentPotTurn = 0;
     private boolean foundStartPlayer = false;
     private List<List<Card>> chosenLists = new ArrayList<List<Card>>();
+    private List<Integer> chosenIndices = new ArrayList<Integer>();
     private boolean buttonsPresent = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,24 +36,23 @@ public class GameActivity extends Activity {
         consoleOutput = (TextView)findViewById(R.id.consoleOutput);
 
         //Set the instruction text
-        consoleOutput.setText("Player 1 choose:");
+        consoleOutput.setText("Player 1 chooses a card to swap");
 
         //Display the image buttons
         displayHands(0);
     }
 
-    //This should be removed, only for testing - processes the state of the game manager.
-    /*
+    //Processes the state of the game manager.
     public void confirmClick(View v) {
         if(!(manager.isGameOver())) {
             // Part 1 - Swap the cards between players.
             int swapRound = manager.getRoundCount() % 4;
             if(currentPlayerInteracting != 4) {
-                //Assume for now input will only be "card1,card2,card3"
-                String[] chosen = consoleInput.getText().toString().split(",");
-                int[] chosenIndices = new int[]{Integer.parseInt(chosen[0]),
-                    Integer.parseInt(chosen[1]),
-                    Integer.parseInt(chosen[2])};
+                int chosen = v.getId() % (13-manager.getRoundCount());
+                chosenIndices.add(chosen);
+
+                if(chosenIndices.size() < 3)
+                    return;
 
                 List<Card> chosenCards = manager.chooseCards(currentPlayerInteracting, chosenIndices);
                 chosenLists.add(chosenCards);
@@ -59,7 +60,7 @@ public class GameActivity extends Activity {
 
             if (swapRound != 3 && currentPlayerInteracting != 4) {
                 currentPlayerInteracting++;
-                consoleOutput.setText("Player " + Integer.toString(currentPlayerInteracting)+1 + " choose:");
+                consoleOutput.setText("Player " + Integer.toString(currentPlayerInteracting)+1 + " chooses a card to swap");
 
                 if(currentPlayerInteracting == 4) {
                     for (int i = 0; i < 4; i++) {
@@ -103,7 +104,6 @@ public class GameActivity extends Activity {
         startActivity(intent);
         finish();
     }
-    */
 
     //Call when the hands have been updated and need be redisplayed.
     public void displayHands(int player) {
@@ -131,11 +131,24 @@ public class GameActivity extends Activity {
                 case 3: params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
                     params.addRule(RelativeLayout.CENTER_VERTICAL);break;
             }
-            ImageButton firstCard = new ImageButton(this), last = firstCard;
-            if(i == 0)
+            ImageView firstCard, last;
+            //How to treat and initialize the first card depending on whether the current player or any other.
+            if(i == player) {
+                firstCard = new ImageButton(this);
                 firstCard.setBackgroundResource(getResources().getIdentifier(manager.players[player].hand.get(0).getAddress(), "drawable", getPackageName()));
-            else
+                firstCard.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        confirmClick(v);
+                    }
+                });
+            } else {
+                firstCard = new ImageView(this);
                 firstCard.setBackgroundResource(getResources().getIdentifier("cardback", "drawable", getPackageName()));
+            }
+            last = firstCard;
+            firstCard.setMaxWidth(10);
+            firstCard.setMaxHeight(10);
 
             rl.addView(firstCard, params);
             firstCard.setId(temporaryID++);
@@ -148,13 +161,23 @@ public class GameActivity extends Activity {
                     restParams.addRule(RelativeLayout.ALIGN_TOP, last.getId());
                 } else
                     restParams.addRule(RelativeLayout.BELOW, last.getId());
-                ImageButton cardButton = new ImageButton(this);
-                if(i == 0)
-                    firstCard.setBackgroundResource(getResources().getIdentifier(manager.players[player].hand.get(j).getAddress(), "drawable", getPackageName()));
-                else
-                    firstCard.setBackgroundResource(getResources().getIdentifier("cardback", "drawable", getPackageName()));
 
-                last = cardButton;
+                //How to treat and initialize the other cards depending on whether the current player or any other.
+                ImageView cardButton, lastOther;
+                if(i == player) {
+                    cardButton = new ImageButton(this);
+                    cardButton.setBackgroundResource(getResources().getIdentifier(manager.players[player].hand.get(j).getAddress(), "drawable", getPackageName()));
+                    cardButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            confirmClick(v);
+                        }
+                    });
+                } else {
+                    cardButton = new ImageView(this);
+                    cardButton.setBackgroundResource(getResources().getIdentifier("cardback", "drawable", getPackageName()));
+                }
+                lastOther = cardButton;
                 rl.addView(cardButton,restParams);
                 cardButton.setId(temporaryID++);
             }
