@@ -1,5 +1,7 @@
 package com.example.james.cardsuite;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
 import java.io.Serializable;
 import java.util.*;
@@ -65,90 +67,82 @@ public class HeartsManager extends Manager implements Serializable {
 
 	//Called to handle every player's chosen card in the pot and analyzes the pot once all cards are put.
 	//This method is only used for console testing, won't apply to the Android app - don't input out of bounds.
-	public void potHandle() {
-		int select;
-		Card startCard;
-
-		System.out.println("Player " + Integer.toString(startPlayer + 1) + ": place card pls");
-		// first move by first player
-		if (players[startPlayer].hand.size() == 13) {
-			// not handling null pointer exception because this would not appear in the android app
-			do {
-				select = scanner.nextInt();
-			} while (players[startPlayer].hand.get(select).compareTo(new Card(2, Card.Suit.CLUBS)) != 0);
-
-			startCard = players[startPlayer].hand.remove(select);
-			pot.put(startCard, startPlayer);
-			startSuit = startCard.getSuit();
-
-		} else {
-
-			// if hearts is not broken, card cannot be hearts or queen of spades
-			if (heartsBroken) {
-				select = scanner.nextInt();
-				startCard = players[startPlayer].hand.remove(select);
-			}
-			else {
-				do {
-					select = scanner.nextInt();
-					startCard = players[startPlayer].hand.get(select);
-				} while (startCard.getSuit().equals(Card.Suit.HEARTS) || startCard.compareTo(new Card(12,Card.Suit.SPADES)) == 0);
-				players[startPlayer].hand.remove(select);
-			}
-
-			pot.put(startCard, startPlayer);
-			startSuit = startCard.getSuit();
-
-		}
-		System.out.println(this);
-		System.out.println(potString());
-
-		// after first move, other three players place their cards down
-		int currentPlayer = startPlayer;
+	public void potHandle(GameActivity activity, TextView output, boolean outputWritten, int chosen, int currentPlayer) {
 		Card selectCard;
-		for (int i = 0; i < playerCount - 1; i++) {
+
+		if(currentPlayer == startPlayer) {
+			output.setText("Player " + Integer.toString(startPlayer + 1) + " places a card");
+			if (!outputWritten) {
+				outputWritten = true;
+				return;
+			}
+
+			outputWritten = false;
+			// first move by first player
+			if (players[startPlayer].hand.size() == 13) {
+				if (players[startPlayer].hand.get(chosen).compareTo(new Card(2, Card.Suit.CLUBS)) != 0) {
+					output.setText("The first card placed can only be the 2 of clubs");
+					return;
+				}
+
+				selectCard = players[startPlayer].hand.remove(chosen);
+				pot.put(selectCard, startPlayer);
+				startSuit = selectCard.getSuit();
+			} else {
+				// if hearts is not broken, card cannot be hearts or queen of spades
+				if (heartsBroken) {
+					selectCard = players[startPlayer].hand.remove(chosen);
+				} else {
+					selectCard = players[startPlayer].hand.get(chosen);
+					if (selectCard.getSuit().equals(Card.Suit.HEARTS) || selectCard.compareTo(new Card(12, Card.Suit.SPADES)) == 0) {
+						output.setText("The first card placed cannot be hearts or the queen of spades");
+						return;
+					}
+					players[startPlayer].hand.remove(chosen);
+				}
+				pot.put(selectCard, startPlayer);
+				startSuit = selectCard.getSuit();
+			}
+		} else {
+		// after first move, other three players place their cards down
 			currentPlayer = (currentPlayer + 1) % 4;
 
-			System.out.println("Player " + Integer.toString(currentPlayer + 1) + ": place card pls");
+			if(!outputWritten) {
+				activity.displayHands(currentPlayer);
+				output.setText("Player " + Integer.toString(currentPlayer + 1) + "places a card");
+				outputWritten = true;
+				return;
+			}
 
 			// if player has a card of the same suit
 			if (players[currentPlayer].hasSuit(startSuit)) {
-				do {
-					select = scanner.nextInt();
-					selectCard = players[currentPlayer].hand.get(select);
-				} while (!(selectCard.getSuit().equals(startSuit)));
-				players[currentPlayer].hand.remove(select);
+				selectCard = players[currentPlayer].hand.get(chosen);
+				if(!selectCard.getSuit().equals(startSuit)) {
+					output.setText("You need to place a card of the same suit as the pot");
+					return;
+				}
+				players[currentPlayer].hand.remove(chosen);
 			}
-
 			// otherwise if hand is 13, can play anything other than hearts
 			else if (players[currentPlayer].hand.size() == 13) {
-				do {
-					select = scanner.nextInt();
-					selectCard = players[currentPlayer].hand.get(select);
-				} while (selectCard.getSuit().equals(Card.Suit.HEARTS));
+				selectCard = players[currentPlayer].hand.get(chosen);
+				if(selectCard.getSuit().equals(Card.Suit.HEARTS)) {
+					output.setText("You cannot play a heart card");
+					return;
+				}
+				players[currentPlayer].hand.remove(chosen);
 			}
-
 			// if player does not have the same suit he can place anything
 			else {
-				select = scanner.nextInt();
-				selectCard = players[currentPlayer].hand.remove(select);
+				selectCard = players[currentPlayer].hand.remove(chosen);
 				if (selectCard.getSuit().equals(Card.Suit.HEARTS) ||
 						selectCard.compareTo(new Card(12, Card.Suit.SPADES)) == 0 && heartsBroken == false) {
 					heartsBroken = true;
 				}
 			}
-
 			pot.put(selectCard, currentPlayer);
-			System.out.println(this);
-			System.out.println(potString());
+			activity.displayHands(currentPlayer);
 		}
-
-		potAnalyze();
-		for (Card c : pot.keySet()) {
-			((HeartsPlayer)players[startPlayer]).addToPile(c);
-		}
-		this.pot.clear();
-		System.out.println(this);
 	}
 
 	//Analyzes the pot and determines the winning card and start player for the next round.

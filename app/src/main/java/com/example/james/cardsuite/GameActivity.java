@@ -22,11 +22,11 @@ import java.util.List;
 public class GameActivity extends Activity {
     private HeartsManager manager;
     private TextView consoleOutput;
-    private int numberOfCardsChosen = 0, currentPlayerInteracting = 0, currentPotTurn = 0;
+    private int currentPlayerInteracting = 0, currentPotTurn = 0;
     private boolean foundStartPlayer = false;
     private List<List<Card>> chosenLists = new ArrayList<List<Card>>();
     private List<Integer> chosenIndices = new ArrayList<Integer>();
-    private boolean buttonsPresent = false;
+    private boolean buttonsPresent = false, outputWritten = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,8 +47,8 @@ public class GameActivity extends Activity {
         if(!(manager.isGameOver())) {
             // Part 1 - Swap the cards between players.
             int swapRound = manager.getRoundCount() % 4;
+            int chosen = v.getId() % (13-manager.getRoundCount());
             if(currentPlayerInteracting != 4) {
-                int chosen = v.getId() % (13-manager.getRoundCount());
                 chosenIndices.add(chosen);
 
                 if(chosenIndices.size() < 3)
@@ -60,16 +60,19 @@ public class GameActivity extends Activity {
 
             if (swapRound != 3 && currentPlayerInteracting != 4) {
                 currentPlayerInteracting++;
-                consoleOutput.setText("Player " + Integer.toString(currentPlayerInteracting)+1 + " chooses a card to swap");
+                consoleOutput.setText("Player " + Integer.toString(currentPlayerInteracting+1) + " chooses a card to swap");
+                chosenIndices = new ArrayList<Integer>(); //restart the indices chosen for the next player
 
                 if(currentPlayerInteracting == 4) {
                     for (int i = 0; i < 4; i++) {
                         manager.swapCards(chosenLists.get(i), i, swapRound);
                         manager.players[i].organize();
+                        displayHands(0);
                     }
                 } else
                     return;
             }
+            currentPlayerInteracting = 0;
 
             // Done swapping by this point - this should only be called once, the turn directly when we're done swapping.
             // Part 2 - Find player with 2 of clubs, we do this here because the card may be swapped.
@@ -78,27 +81,34 @@ public class GameActivity extends Activity {
                 foundStartPlayer = true;
             }
 
-            //FIRST ROUGH DRAFT - ALL CODE AFTER THIS UNCONVERTED
-
             // Part 3 - handle cards being tossed in the pot until all cards are gone (13 turns).
-            if(currentPotTurn != 13) {
-                manager.potHandle();
+            manager.potHandle(this, consoleOutput, outputWritten, chosen, currentPlayerInteracting);
+            if(currentPlayerInteracting == 3) {
+                currentPlayerInteracting = 0;
                 currentPotTurn++;
+
+                manager.potAnalyze();
+                for (Card c : manager.pot.keySet()) {
+                    ((HeartsPlayer)manager.players[manager.startPlayer]).addToPile(c);
+                }
+                manager.pot.clear();
+                displayHands(manager.startPlayer);
                 return;
             }
 
             // Part 4 - The round is done, update the score and reset the manager for the next round.
-            for (Player player : manager.players) {
-                ((HeartsPlayer) player).scoreChange();
-            }
+            if(currentPotTurn == 13) {
+                for (Player player : manager.players) {
+                    ((HeartsPlayer) player).scoreChange();
+                }
 
-            // reshuffles deck and increments round count for next round
-            manager.reset();
-            //RESET ALL VARIABLES FOR INCREMENTING THE GAME e.g. currentTurn, etc.
+                // reshuffles deck and increments round count for next round
+                manager.reset();
+                //RESET ALL VARIABLES FOR INCREMENTING THE GAME e.g. currentTurn, etc.
+            }
         }
 
         // The game is done.
-        consoleOutput.setText("The winner is player " + manager.findWinner());
         Intent intent = new Intent(GameActivity.this,ResultsActivity.class);
         intent.putExtra("manager",manager);
         startActivity(intent);
@@ -147,8 +157,6 @@ public class GameActivity extends Activity {
                 firstCard.setBackgroundResource(getResources().getIdentifier("cardback", "drawable", getPackageName()));
             }
             last = firstCard;
-            firstCard.setMaxWidth(10);
-            firstCard.setMaxHeight(10);
 
             rl.addView(firstCard, params);
             firstCard.setId(temporaryID++);
@@ -163,7 +171,7 @@ public class GameActivity extends Activity {
                     restParams.addRule(RelativeLayout.BELOW, last.getId());
 
                 //How to treat and initialize the other cards depending on whether the current player or any other.
-                ImageView cardButton, lastOther;
+                ImageView cardButton;
                 if(i == player) {
                     cardButton = new ImageButton(this);
                     cardButton.setBackgroundResource(getResources().getIdentifier(manager.players[player].hand.get(j).getAddress(), "drawable", getPackageName()));
@@ -177,7 +185,7 @@ public class GameActivity extends Activity {
                     cardButton = new ImageView(this);
                     cardButton.setBackgroundResource(getResources().getIdentifier("cardback", "drawable", getPackageName()));
                 }
-                lastOther = cardButton;
+                last = cardButton;
                 rl.addView(cardButton,restParams);
                 cardButton.setId(temporaryID++);
             }

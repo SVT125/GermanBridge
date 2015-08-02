@@ -16,8 +16,7 @@ public abstract class Manager {
 	protected Card.Suit startSuit;
 	protected int startPlayer;
 	protected Player[] players;
-	
-	public abstract void potHandle();
+
 	public abstract void potAnalyze();
 	public abstract void reset();
 	public int getRoundCount() {
