@@ -14,6 +14,7 @@ public class HeartsManager extends Manager implements Serializable {
 	public HeartsManager() {
 		playerCount = 4;
 		players = new HeartsPlayer[playerCount];
+		pot = new HashMap<Card, Integer>();
 		
 		// an ace is 14 because it is higher than all of the other cards
 		for (int i = 2; i < 15; i++) {
@@ -67,17 +68,16 @@ public class HeartsManager extends Manager implements Serializable {
 
 	//Called to handle every player's chosen card in the pot and analyzes the pot once all cards are put.
 	//This method is only used for console testing, won't apply to the Android app - don't input out of bounds.
-	public void potHandle(GameActivity activity, TextView output, boolean outputWritten, int chosen, int currentPlayer) {
+	public void potHandle(GameActivity activity, TextView output, int chosen, int currentPlayer) {
 		Card selectCard;
 
 		if(currentPlayer == startPlayer) {
 			output.setText("Player " + Integer.toString(startPlayer + 1) + " places a card");
-			if (!outputWritten) {
-				outputWritten = true;
+			if (!activity.outputWritten) {
+				activity.outputWritten = true;
 				return;
 			}
 
-			outputWritten = false;
 			// first move by first player
 			if (players[startPlayer].hand.size() == 13) {
 				if (players[startPlayer].hand.get(chosen).compareTo(new Card(2, Card.Suit.CLUBS)) != 0) {
@@ -107,10 +107,10 @@ public class HeartsManager extends Manager implements Serializable {
 		// after first move, other three players place their cards down
 			currentPlayer = (currentPlayer + 1) % 4;
 
-			if(!outputWritten) {
+			if(!activity.outputWritten) {
 				activity.displayHands(currentPlayer);
-				output.setText("Player " + Integer.toString(currentPlayer + 1) + "places a card");
-				outputWritten = true;
+				output.setText("Player " + Integer.toString(currentPlayer + 1) + " places a card");
+				activity.outputWritten = true;
 				return;
 			}
 
