@@ -17,7 +17,8 @@
         android:layout_height="match_parent"
         android:layout_gravity="center_vertical"
         android:layout_weight="0.15"
-        android:id="@+id/leftPlayerLayout"></LinearLayout>
+        android:id="@+id/leftPlayerLayout"
+        android:gravity="center_vertical"></LinearLayout>
 
     <LinearLayout
         android:orientation="vertical"
@@ -31,7 +32,8 @@
             android:layout_width="match_parent"
             android:layout_height="63dp"
             android:layout_gravity="center_horizontal"
-            android:id="@+id/topPlayerLayout">
+            android:id="@+id/topPlayerLayout"
+            android:gravity="center_horizontal">
         </LinearLayout>
 
         <RelativeLayout
@@ -63,7 +65,8 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="72dp"
-            android:id="@+id/bottomPlayerLayout">
+            android:id="@+id/bottomPlayerLayout"
+            android:gravity="center_horizontal">
         </LinearLayout>
     </LinearLayout>
 
@@ -72,5 +75,6 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_weight="0.15"
-        android:id="@+id/rightPlayerLayout"></LinearLayout>
+        android:id="@+id/rightPlayerLayout"
+        android:gravity="center_vertical"></LinearLayout>
 </LinearLayout>

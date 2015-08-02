@@ -135,16 +135,13 @@ public class GameActivity extends Activity {
         }
 
         int temporaryID = 0; //Temporary ID to be assigned to each card, to be reused.
+        LinearLayout left = (LinearLayout)findViewById(R.id.leftPlayerLayout),
+                top = (LinearLayout)findViewById(R.id.topPlayerLayout),
+                right = (LinearLayout)findViewById(R.id.rightPlayerLayout),
+                bottom = (LinearLayout)findViewById(R.id.bottomPlayerLayout);
 
         //Now create the imagebuttons for each of the players
         for(int i = 0; i < 4; i++) {
-            LinearLayout left = (LinearLayout)findViewById(R.id.leftPlayerLayout),
-                    top = (LinearLayout)findViewById(R.id.topPlayerLayout),
-                    right = (LinearLayout)findViewById(R.id.rightPlayerLayout),
-                    bottom = (LinearLayout)findViewById(R.id.bottomPlayerLayout);
-
-            ImageView firstCard, last;
-
             //Display the rest of the hand
             for(int j = 0; j < manager.players[player].hand.size(); j++) {
                 RelativeLayout.LayoutParams restParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
