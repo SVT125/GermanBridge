@@ -74,8 +74,10 @@ public class GameActivity extends Activity {
                             currentPlayerInteracting = 0;
                         }
                         finishedSwapping = true;
-                    } else
+                    } else {
+                        displayHands(currentPlayerInteracting);
                         return;
+                    }
                 }
             }
 
@@ -130,7 +132,8 @@ public class GameActivity extends Activity {
         if(buttonsPresent) {
             for (int i = 0; i < 52; i++) {
                 View view = findViewById(i);
-                ((ViewGroup) view.getParent()).removeView(view);
+                if(view != null)
+                    ((ViewGroup) view.getParent()).removeView(view);
             }
         }
 
