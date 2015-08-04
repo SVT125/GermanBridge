@@ -59,10 +59,10 @@ public class GameActivity extends Activity {
                 // Part 1 - Swap the cards between players.
                 int swapRound = manager.getRoundCount() % 4;
                 if (currentPlayerInteracting != 4) {
-                    if (chosenIndices.contains(chosen))
-                        chosenIndices.remove(chosen);
+                    if (chosenIndices.contains((Integer)chosen))
+                        chosenIndices.remove((Integer)chosen);
                     else {
-                        chosenIndices.add(chosen);
+                        chosenIndices.add((Integer)chosen);
                     }
 
                     if (chosenIndices.size() < 3)
