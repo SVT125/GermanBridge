@@ -46,7 +46,7 @@ public class GameActivity extends Activity {
     //Processes the state of the game manager.
     public void confirmClick(View v) {
         if(!(manager.isGameOver())) {
-            int chosenID = v.getId() % (13 - manager.getRoundCount()), chosen = -1;
+            int chosenID = v.getId() % (13 - manager.getRoundCount() + 1), chosen = -1;
             Card chosenCard = originalHands.get(currentPlayerInteracting).get(chosenID);
             for(int i = 0; i < manager.players[currentPlayerInteracting].hand.size(); i++) {
                 if(manager.players[currentPlayerInteracting].hand.get(i).compareTo(chosenCard) == 0) {
