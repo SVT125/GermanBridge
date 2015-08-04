@@ -66,9 +66,10 @@ public class GameActivity extends Activity {
                     if(chosenCard.isClicked == false) {
                         v.setBackgroundResource(R.drawable.card_border);
                         chosenCard.isClicked = true;
-                    } else
+                    } else {
+                        v.setBackgroundResource(0);
                         chosenCard.isClicked = false;
-
+                    }
                     //If the chosen card is already chosen, unselect it - otherwise, add it to our chosen cards.
                     if (chosenIndices.contains((Integer)chosen))
                         chosenIndices.remove((Integer)chosen);
