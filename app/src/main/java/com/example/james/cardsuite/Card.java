@@ -26,7 +26,7 @@ public class Card {
 				compare.getSuit() != this.getSuit()) {
 			return -1;
 		}
-		if (compare.getCardNumber() == this.getCardNumber() ||
+		if (compare.getCardNumber() == this.getCardNumber() &&
 				compare.getSuit() == this.getSuit()) {
 			return 0;
 		}
@@ -49,6 +49,11 @@ public class Card {
 	
 	public Suit getSuit() {
 		return this.suit;
+	}
+
+	public String toString() {
+		String string = Integer.toString(this.getCardNumber()) + this.getSuit();
+		return string;
 	}
 	
 }
