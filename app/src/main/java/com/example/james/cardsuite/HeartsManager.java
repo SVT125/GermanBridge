@@ -68,81 +68,70 @@ public class HeartsManager extends Manager implements Serializable {
 
 	//Called to handle every player's chosen card in the pot and analyzes the pot once all cards are put.
 	//This method is only used for console testing, won't apply to the Android app - don't input out of bounds.
-	public void potHandle(GameActivity activity, TextView output, int chosen, int currentPlayer) {
-		Card selectCard;
+	public boolean potHandle(GameActivity activity, TextView output, int chosen, int currentPlayer) {
+		Card selectCard = players[currentPlayer].hand.get(chosen);
+
+		if (!activity.outputWritten) {
+			players[currentPlayer].organize();
+			activity.displayHands(currentPlayer);
+			output.setText("Player " + Integer.toString(currentPlayer + 1) + " places a card");
+			activity.outputWritten = true;
+			return false;
+		}
 
 		if(currentPlayer == startPlayer) {
-			output.setText("Player " + Integer.toString(startPlayer + 1) + " places a card");
-			if (!activity.outputWritten) {
-				activity.outputWritten = true;
-				return;
-			}
-
 			// first move by first player
 			if (players[startPlayer].hand.size() == 13) {
 				if (players[startPlayer].hand.get(chosen).compareTo(new Card(2, Card.Suit.CLUBS)) != 0) {
 					output.setText("The first card placed can only be the 2 of clubs");
-					return;
+					return false;
 				}
 
 				selectCard = players[startPlayer].hand.remove(chosen);
-				pot.put(selectCard, startPlayer);
 				startSuit = selectCard.getSuit();
 			} else {
 				// if hearts is not broken, card cannot be hearts or queen of spades
 				if (heartsBroken) {
 					selectCard = players[startPlayer].hand.remove(chosen);
 				} else {
-					selectCard = players[startPlayer].hand.get(chosen);
 					if (selectCard.getSuit().equals(Card.Suit.HEARTS) || selectCard.compareTo(new Card(12, Card.Suit.SPADES)) == 0) {
 						output.setText("The first card placed cannot be hearts or the queen of spades");
-						return;
+						return false;
 					}
 					players[startPlayer].hand.remove(chosen);
 				}
-				pot.put(selectCard, startPlayer);
 				startSuit = selectCard.getSuit();
 			}
 		} else {
 		// after first move, other three players place their cards down
-			currentPlayer = (currentPlayer + 1) % 4;
-
-			if(!activity.outputWritten) {
-				activity.displayHands(currentPlayer);
-				output.setText("Player " + Integer.toString(currentPlayer + 1) + " places a card");
-				activity.outputWritten = true;
-				return;
-			}
-
 			// if player has a card of the same suit
 			if (players[currentPlayer].hasSuit(startSuit)) {
-				selectCard = players[currentPlayer].hand.get(chosen);
 				if(!selectCard.getSuit().equals(startSuit)) {
 					output.setText("You need to place a card of the same suit as the pot");
-					return;
+					return false;
 				}
 				players[currentPlayer].hand.remove(chosen);
 			}
 			// otherwise if hand is 13, can play anything other than hearts
 			else if (players[currentPlayer].hand.size() == 13) {
-				selectCard = players[currentPlayer].hand.get(chosen);
 				if(selectCard.getSuit().equals(Card.Suit.HEARTS)) {
 					output.setText("You cannot play a heart card");
-					return;
+					return false;
 				}
 				players[currentPlayer].hand.remove(chosen);
 			}
 			// if player does not have the same suit he can place anything
 			else {
-				selectCard = players[currentPlayer].hand.remove(chosen);
 				if (selectCard.getSuit().equals(Card.Suit.HEARTS) ||
 						selectCard.compareTo(new Card(12, Card.Suit.SPADES)) == 0 && heartsBroken == false) {
 					heartsBroken = true;
 				}
+				selectCard = players[currentPlayer].hand.remove(chosen);
 			}
-			pot.put(selectCard, currentPlayer);
-			activity.displayHands(currentPlayer);
 		}
+		pot.put(selectCard, currentPlayer);
+		activity.displayHands(currentPlayer);
+		return true;
 	}
 
 	//Analyzes the pot and determines the winning card and start player for the next round.
@@ -160,7 +149,6 @@ public class HeartsManager extends Manager implements Serializable {
 				}
 			}
 		}
-		System.out.println("Player " + Integer.toString(startPlayer + 1) + " wins!");
 	}
 
 	//Determines the start player for the first round.
@@ -212,36 +200,5 @@ public class HeartsManager extends Manager implements Serializable {
 				break;
 		}
 		players[otherPlayer].hand.addAll((Collection<? extends Card>)chosen);
-	}
-
-	public String printScore(){
-		String s = "Scores:";
-		s = s + "\n";
-		for(Player p: players){
-			int i = 1;
-			s = s + "Player " + i + ": " + p.score + "\n";
-			i++;
-		}
-		return s;
-	}
-
-	public String toString(){
-		String hand = "";
-		for (int i = 1; i <= playerCount; i++) {
-			hand = hand + "Player " + Integer.toString(i) + ":";
-			for (Card card : players[i - 1].hand) {
-				hand = hand + " " + card.toString();
-			}
-			hand = hand + "\n";
-		}
-		return hand;
-	}
-
-	public String potString() {
-		String potString = "Pot: ";
-		for (Card c : pot.keySet()) {
-			potString = potString + c.toString() + " ";
-		}
-		return potString;
 	}
 }

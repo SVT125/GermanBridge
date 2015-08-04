@@ -8,10 +8,9 @@ public class HeartsPlayer extends Player {
 	
 	public HeartsPlayer() {
 		hand = new ArrayList<Card>();
+		endPile = new ArrayList<Card>();
 		this.score = 0;
 	}
-
-	public void addToPile(Card card) { endPile.add(card); }
 	
 	public void scoreChange() {
 		for (Card card : endPile) {

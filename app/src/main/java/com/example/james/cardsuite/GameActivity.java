@@ -2,21 +2,19 @@ package com.example.james.cardsuite;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,10 +23,11 @@ public class GameActivity extends Activity {
     private HeartsManager manager;
     private TextView consoleOutput;
     private int currentPlayerInteracting = 0, currentPotTurn = 0;
-    private boolean foundStartPlayer = false, buttonsPresent = false, finishedSwapping = false;
+    private boolean foundStartPlayer = false, buttonsPresent = false, finishedSwapping = false, beganPot = false;
     public boolean outputWritten = false;
     private List<List<Card>> chosenLists = new ArrayList<List<Card>>();
     private List<Integer> chosenIndices = new ArrayList<Integer>();
+    private List<List<Card>> originalHands;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,7 +46,15 @@ public class GameActivity extends Activity {
     //Processes the state of the game manager.
     public void confirmClick(View v) {
         if(!(manager.isGameOver())) {
-            int chosen = v.getId() % (13 - manager.getRoundCount());
+            int chosenID = v.getId() % (13 - manager.getRoundCount()), chosen = -1;
+            Card chosenCard = originalHands.get(currentPlayerInteracting).get(chosenID);
+            for(int i = 0; i < manager.players[currentPlayerInteracting].hand.size(); i++) {
+                if(manager.players[currentPlayerInteracting].hand.get(i).compareTo(chosenCard) == 0) {
+                    chosen = i;
+                    break;
+                }
+            }
+
             if(!finishedSwapping) {
                 // Part 1 - Swap the cards between players.
                 int swapRound = manager.getRoundCount() % 4;
@@ -79,33 +86,46 @@ public class GameActivity extends Activity {
                         }
                         finishedSwapping = true;
                     } else {
+                        manager.players[currentPlayerInteracting].organize();
                         displayHands(currentPlayerInteracting);
                         return;
                     }
                 }
             }
 
-
-
             // Done swapping by this point - this should only be called once, the turn directly when we're done swapping.
             // Part 2 - Find player with 2 of clubs, we do this here because the card may be swapped.
             if(!foundStartPlayer) {
                 manager.findStartPlayer();
                 foundStartPlayer = true;
+                currentPlayerInteracting = manager.startPlayer;
             }
 
             // Part 3 - handle cards being tossed in the pot until all cards are gone (13 turns).
-            manager.potHandle(this, consoleOutput, chosen, currentPlayerInteracting);
-            if(currentPlayerInteracting == 3 && currentPotTurn != 13) {
-                currentPlayerInteracting = 0;
+            if(manager.potHandle(this, consoleOutput, chosen, currentPlayerInteracting)) {
+                currentPlayerInteracting = (currentPlayerInteracting + 1) % 4;
+                if (currentPlayerInteracting == manager.startPlayer && !beganPot) {
+                    beganPot = true;
+                    return;
+                }
+            }
+
+            //End of a single pot round, reset all variables for the next pot round if possible.
+            if(currentPlayerInteracting == manager.startPlayer && currentPotTurn != 13 && beganPot) {
                 currentPotTurn++;
 
-                manager.potAnalyze();
+                manager.potAnalyze(); //sets the new start player for the next pot
                 for (Card c : manager.pot.keySet()) {
-                    ((HeartsPlayer)manager.players[manager.startPlayer]).addToPile(c);
+                    ((HeartsPlayer)manager.players[manager.startPlayer]).endPile.add(c);
                 }
+
                 manager.pot.clear();
                 displayHands(manager.startPlayer);
+
+                beganPot = false;
+                finishedSwapping = false;
+                outputWritten = false;
+
                 return;
             }
 
@@ -139,6 +159,12 @@ public class GameActivity extends Activity {
                 if(view != null)
                     ((ViewGroup) view.getParent()).removeView(view);
             }
+        }
+
+        if(originalHands == null) {
+            originalHands = new ArrayList<>();
+            for (Player p : manager.players)
+                originalHands.add(p.hand);
         }
 
         int temporaryID = 0; //Temporary ID to be assigned to each card, to be reused.
