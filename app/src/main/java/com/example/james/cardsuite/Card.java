@@ -3,7 +3,7 @@ package com.example.james.cardsuite;
 import java.util.*;
 
 public class Card {
-	
+	public boolean isClicked = false;
 	private final int cardNumber;
 	private final Suit suit;
 	private static final Random RANDOM = new Random();

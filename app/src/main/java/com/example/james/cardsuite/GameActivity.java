@@ -55,10 +55,21 @@ public class GameActivity extends Activity {
                 }
             }
 
+            Log.i("Chosen ID: ", Integer.toString(chosenID));
+            Log.i("Actual chosen: ", Integer.toString(chosen));
+
             if(!finishedSwapping) {
                 // Part 1 - Swap the cards between players.
                 int swapRound = manager.getRoundCount() % 4;
                 if (currentPlayerInteracting != 4) {
+                    //Select or unselect the card with a border shown
+                    if(chosenCard.isClicked == false) {
+                        v.setBackgroundResource(R.drawable.card_border);
+                        chosenCard.isClicked = true;
+                    } else
+                        chosenCard.isClicked = false;
+
+                    //If the chosen card is already chosen, unselect it - otherwise, add it to our chosen cards.
                     if (chosenIndices.contains((Integer)chosen))
                         chosenIndices.remove((Integer)chosen);
                     else {
@@ -195,6 +206,7 @@ public class GameActivity extends Activity {
                     cardButton.setImageResource(getResources().getIdentifier("cardback", "drawable", getPackageName()));
                 }
 
+                cardButton.setPadding(2,2,2,2);
                 switch(i) {
                     case 0: bottom.addView(cardButton); break;
                     case 1: left.addView(cardButton); break;

@@ -67,6 +67,7 @@
             android:layout_height="72dp"
             android:id="@+id/bottomPlayerLayout"
             android:gravity="center_horizontal">
+
         </LinearLayout>
     </LinearLayout>
 
