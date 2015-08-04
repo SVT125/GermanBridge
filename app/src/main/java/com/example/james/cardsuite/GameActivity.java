@@ -183,7 +183,7 @@ public class GameActivity extends Activity {
                 ImageView cardButton;
                 if(i == player) {
                     cardButton = new ImageButton(this);
-                    cardButton.setBackgroundResource(getResources().getIdentifier(manager.players[player].hand.get(j).getAddress(), "drawable", getPackageName()));
+                    cardButton.setImageResource(getResources().getIdentifier(manager.players[player].hand.get(j).getAddress(), "drawable", getPackageName()));
                     cardButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -192,7 +192,7 @@ public class GameActivity extends Activity {
                     });
                 } else {
                     cardButton = new ImageView(this);
-                    cardButton.setBackgroundResource(getResources().getIdentifier("cardback", "drawable", getPackageName()));
+                    cardButton.setImageResource(getResources().getIdentifier("cardback", "drawable", getPackageName()));
                 }
 
                 switch(i) {
