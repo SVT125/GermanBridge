@@ -26,6 +26,7 @@ public class HeartsManager extends Manager implements Serializable {
 		for (int i = 0; i < 4; i++) {
 			players[i] = new HeartsPlayer();
 			deck = players[i].fillHand(deck, random, 13);
+			players[i].organize();
 		}
 		
 	}
