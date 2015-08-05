@@ -3,18 +3,15 @@ package com.example.james.cardsuite;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,18 +52,19 @@ public class GameActivity extends Activity {
                 }
             }
 
+            //Select or unselect the card with a border shown
+            if(chosenCard.isClicked == false) {
+                v.setBackgroundResource(R.drawable.card_border);
+                chosenCard.isClicked = true;
+            } else {
+                v.setBackgroundResource(0);
+                chosenCard.isClicked = false;
+            }
+
             if(!finishedSwapping) {
                 // Part 1 - Swap the cards between players.
                 int swapRound = manager.getRoundCount() % 4;
                 if (currentPlayerInteracting != 4) {
-                    //Select or unselect the card with a border shown
-                    if(chosenCard.isClicked == false) {
-                        v.setBackgroundResource(R.drawable.card_border);
-                        chosenCard.isClicked = true;
-                    } else {
-                        v.setBackgroundResource(0);
-                        chosenCard.isClicked = false;
-                    }
                     //If the chosen card is already chosen, unselect it - otherwise, add it to our chosen cards.
                     if (chosenIndices.contains((Integer)chosen))
                         chosenIndices.remove((Integer)chosen);
@@ -111,12 +109,22 @@ public class GameActivity extends Activity {
             }
 
             // Part 3 - handle cards being tossed in the pot until all cards are gone (13 turns).
-            if(manager.potHandle(this, consoleOutput, chosen, currentPlayerInteracting)) {
+            if(manager.potHandle(consoleOutput, chosen, currentPlayerInteracting, outputWritten)) {
+                manager.players[currentPlayerInteracting].organize();
+                displayHands(currentPlayerInteracting);
                 currentPlayerInteracting = (currentPlayerInteracting + 1) % 4;
+
+                //If we're on the start player in the beginning, we want to return at this point; if we're done with the pot, continue.
                 if (currentPlayerInteracting == manager.startPlayer && !beganPot) {
                     beganPot = true;
                     return;
                 }
+            } else if(!outputWritten) {
+                //For when we first start the pot handling, display the start player's hand.
+                outputWritten = true;
+                manager.players[manager.startPlayer].organize();
+                displayHands(manager.startPlayer);
+                return;
             }
 
             //End of a single pot round, reset all variables for the next pot round if possible.
@@ -147,10 +155,8 @@ public class GameActivity extends Activity {
                 // reshuffles deck, increments round count, resets all variables for the next round.
                 manager.reset();
             }
-        }
-
-        // The game is done.
-        if(manager.isGameOver()) {
+        } else {
+            // The game is done.
             Intent intent = new Intent(GameActivity.this, ResultsActivity.class);
             intent.putExtra("manager", manager);
             startActivity(intent);

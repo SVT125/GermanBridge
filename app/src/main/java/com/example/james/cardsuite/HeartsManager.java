@@ -1,6 +1,4 @@
 package com.example.james.cardsuite;
-import android.util.Log;
-import android.view.View;
 import android.widget.TextView;
 
 import java.io.Serializable;
@@ -69,14 +67,11 @@ public class HeartsManager extends Manager implements Serializable {
 
 	//Called to handle every player's chosen card in the pot and analyzes the pot once all cards are put.
 	//This method is only used for console testing, won't apply to the Android app - don't input out of bounds.
-	public boolean potHandle(GameActivity activity, TextView output, int chosen, int currentPlayer) {
+	public boolean potHandle(TextView output, int chosen, int currentPlayer, boolean outputWritten) {
 		Card selectCard = players[currentPlayer].hand.get(chosen);
 
-		if (!activity.outputWritten) {
-			players[currentPlayer].organize();
-			activity.displayHands(currentPlayer);
+		if (!outputWritten) {
 			output.setText("Player " + Integer.toString(currentPlayer + 1) + " places a card");
-			activity.outputWritten = true;
 			return false;
 		}
 
@@ -131,7 +126,6 @@ public class HeartsManager extends Manager implements Serializable {
 			}
 		}
 		pot.put(selectCard, currentPlayer);
-		activity.displayHands(currentPlayer);
 		return true;
 	}
 
