@@ -7,7 +7,7 @@ import java.util.Map.Entry;
 
 public class HeartsManager extends Manager implements Serializable {
 	
-	private boolean heartsBroken = false;
+	public boolean heartsBroken = false;
 	
 	public HeartsManager() {
 		playerCount = 4;

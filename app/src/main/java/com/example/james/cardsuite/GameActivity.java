@@ -2,7 +2,10 @@ package com.example.james.cardsuite;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -203,6 +206,19 @@ public class GameActivity extends Activity {
                             confirmClick(v);
                         }
                     });
+
+                    //Tint and make the card unselectable if it's not meant to be.
+                    if(i == manager.startPlayer) {
+                        Card selectCard = manager.players[manager.startPlayer].hand.get(j);
+                        if(finishedSwapping && ((manager.players[manager.startPlayer].hand.size() == 13 && selectCard.compareTo(new Card(2, Card.Suit.CLUBS)) != 0)
+                                || (!manager.heartsBroken && (selectCard.getSuit().equals(Card.Suit.HEARTS) || selectCard.compareTo(new Card(12, Card.Suit.SPADES)) == 0)))) {
+                            cardButton.setColorFilter(Color.parseColor("#78505050"), PorterDuff.Mode.SRC_ATOP);
+                            cardButton.setClickable(false);
+                        }
+                    } else if(finishedSwapping && (manager.players[i].hand.get(j).getSuit() != manager.startSuit)) {
+                        cardButton.setColorFilter(Color.parseColor("#78505050"), PorterDuff.Mode.SRC_ATOP);
+                        cardButton.setClickable(false);
+                    }
                 } else {
                     cardButton = new ImageView(this);
                     cardButton.setImageResource(getResources().getIdentifier("cardback", "drawable", getPackageName()));
