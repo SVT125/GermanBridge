@@ -1,4 +1,5 @@
 package com.example.james.cardsuite;
+import android.util.Log;
 import android.widget.TextView;
 
 import java.io.Serializable;
