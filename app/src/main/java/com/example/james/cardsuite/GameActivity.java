@@ -23,7 +23,7 @@ public class GameActivity extends Activity {
     private HeartsManager manager;
     private TextView consoleOutput;
     private int currentPlayerInteracting = 0, currentPotTurn = 0;
-    private boolean foundStartPlayer = false, buttonsPresent = false, finishedSwapping = false, beganPot = false;
+    private boolean foundStartPlayer = false, buttonsPresent = false, finishedSwapping = false, potPresent = false;
     public boolean initialOutputWritten = false;
     private List<List<Card>> chosenLists = new ArrayList<List<Card>>();
     private List<Integer> chosenIndices = new ArrayList<Integer>();
@@ -115,26 +115,29 @@ public class GameActivity extends Activity {
             if(manager.potHandle(consoleOutput, chosen, currentPlayerInteracting, initialOutputWritten, this)) {
                 currentPlayerInteracting = (currentPlayerInteracting + 1) % 4;
 
-                //If we're on the start player in the beginning, we want to return at this point; if we're done with the pot, continue.
-                if (currentPlayerInteracting == manager.startPlayer && !beganPot) {
-                    beganPot = true;
+                // If the pot reaches max size of 4, then we know to continue and compare cards
+                if (manager.pot.size() != 4) {
                     return;
                 }
             }
+            else {
+                return;
+            }
 
             //End of a single pot round, reset all variables for the next pot round if possible.
-            if(currentPlayerInteracting == manager.startPlayer && currentPotTurn != 13 && beganPot) {
+            if(currentPlayerInteracting == manager.startPlayer && currentPotTurn != 13) {
                 currentPotTurn++;
 
                 manager.potAnalyze(); //sets the new start player for the next pot
+                currentPlayerInteracting = manager.startPlayer;
                 for (Card c : manager.pot.keySet()) {
                     ((HeartsPlayer)manager.players[manager.startPlayer]).endPile.add(c);
                 }
 
                 manager.pot.clear();
+                consoleOutput.setText("Player " + Integer.toString(currentPlayerInteracting + 1) + " wins the pot! Place a card to begin next round");
                 displayHands(manager.startPlayer);
 
-                beganPot = false;
                 finishedSwapping = false;
                 initialOutputWritten = false;
 
@@ -157,6 +160,16 @@ public class GameActivity extends Activity {
             startActivity(intent);
             finish();
         }
+    }
+
+    // Called when a player places a valid card into the pot; updates the images in the pot
+    public void displayPot(int player, Card card) {
+
+    }
+
+    // Called at the end of a round when all four players have added their cards; clears the pot
+    public void potClear() {
+
     }
 
     //Call when the hands have been updated and need be redisplayed.
