@@ -21,7 +21,7 @@ public class GameActivity extends Activity {
     private TextView consoleOutput;
     private int currentPlayerInteracting = 0, currentPotTurn = 0;
     private boolean foundStartPlayer = false, buttonsPresent = false, finishedSwapping = false, beganPot = false;
-    public boolean outputWritten = false;
+    public boolean initialOutputWritten = false;
     private List<List<Card>> chosenLists = new ArrayList<List<Card>>();
     private List<Integer> chosenIndices = new ArrayList<Integer>();
     private List<List<Card>> originalHands;
@@ -109,9 +109,7 @@ public class GameActivity extends Activity {
             }
 
             // Part 3 - handle cards being tossed in the pot until all cards are gone (13 turns).
-            if(manager.potHandle(consoleOutput, chosen, currentPlayerInteracting, outputWritten)) {
-                manager.players[currentPlayerInteracting].organize();
-                displayHands(currentPlayerInteracting);
+            if(manager.potHandle(consoleOutput, chosen, currentPlayerInteracting, initialOutputWritten, this)) {
                 currentPlayerInteracting = (currentPlayerInteracting + 1) % 4;
 
                 //If we're on the start player in the beginning, we want to return at this point; if we're done with the pot, continue.
@@ -119,12 +117,6 @@ public class GameActivity extends Activity {
                     beganPot = true;
                     return;
                 }
-            } else if(!outputWritten) {
-                //For when we first start the pot handling, display the start player's hand.
-                outputWritten = true;
-                manager.players[manager.startPlayer].organize();
-                displayHands(manager.startPlayer);
-                return;
             }
 
             //End of a single pot round, reset all variables for the next pot round if possible.
@@ -141,7 +133,7 @@ public class GameActivity extends Activity {
 
                 beganPot = false;
                 finishedSwapping = false;
-                outputWritten = false;
+                initialOutputWritten = false;
 
                 return;
             }
