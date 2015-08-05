@@ -15,10 +15,9 @@
         android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_gravity="center_vertical"
         android:layout_weight="0.15"
         android:id="@+id/leftPlayerLayout"
-        android:gravity="center_vertical"></LinearLayout>
+        android:layout_gravity="center_vertical"></LinearLayout>
 
     <LinearLayout
         android:orientation="vertical"
@@ -31,9 +30,16 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="63dp"
-            android:layout_gravity="center_horizontal"
+            android:layout_gravity="top|center_horizontal"
             android:id="@+id/topPlayerLayout"
             android:gravity="center_horizontal">
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageButton"
+                android:src="@drawable/clubs13"
+                android:outlineProvider="paddedBounds" />
         </LinearLayout>
 
         <RelativeLayout
@@ -66,8 +72,8 @@
             android:layout_width="match_parent"
             android:layout_height="72dp"
             android:id="@+id/bottomPlayerLayout"
-            android:gravity="center_horizontal">
-
+            android:gravity="center_horizontal"
+            android:layout_gravity="bottom|center_horizontal">
         </LinearLayout>
     </LinearLayout>
 
@@ -76,6 +82,5 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_weight="0.15"
-        android:id="@+id/rightPlayerLayout"
-        android:gravity="center_vertical"></LinearLayout>
+        android:id="@+id/rightPlayerLayout"></LinearLayout>
 </LinearLayout>

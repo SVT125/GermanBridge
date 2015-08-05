@@ -81,7 +81,7 @@ public class HeartsManager extends Manager implements Serializable {
 		}
 
 		if(currentPlayer == startPlayer) {
-			// first move by first player
+			// first move by first player - if it's the first turn with all hands of 13 cards, only 2 of clubs can be placed
 			if (players[startPlayer].hand.size() == 13) {
 				if (players[startPlayer].hand.get(chosen).compareTo(new Card(2, Card.Suit.CLUBS)) != 0) {
 					output.setText("The first card placed can only be the 2 of clubs");

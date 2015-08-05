@@ -206,9 +206,11 @@ public class GameActivity extends Activity {
                 cardButton.setPadding(2,2,2,2);
                 switch(i) {
                     case 0: bottom.addView(cardButton); break;
-                    case 1: left.addView(cardButton); break;
+                    case 1: cardButton.setRotation(90);
+                        left.addView(cardButton); break;
                     case 2: top.addView(cardButton); break;
-                    case 3: right.addView(cardButton); break;
+                    case 3: cardButton.setRotation(270);
+                        right.addView(cardButton); break;
                 }
                 cardButton.setId(temporaryID++);
             }
