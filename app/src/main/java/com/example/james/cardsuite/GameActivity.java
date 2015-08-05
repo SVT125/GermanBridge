@@ -137,10 +137,7 @@ public class GameActivity extends Activity {
                 manager.pot.clear();
                 consoleOutput.setText("Player " + Integer.toString(currentPlayerInteracting + 1) + " wins the pot! Place a card to begin next round");
                 displayHands(manager.startPlayer);
-
-                finishedSwapping = false;
                 initialOutputWritten = false;
-
                 return;
             }
 
@@ -152,6 +149,7 @@ public class GameActivity extends Activity {
 
                 // reshuffles deck, increments round count, resets all variables for the next round.
                 manager.reset();
+                finishedSwapping = false;
             }
         } else {
             // The game is done.
