@@ -176,16 +176,23 @@ public class GameActivity extends Activity {
         }
 
         int temporaryID = 0; //Temporary ID to be assigned to each card, to be reused.
-        LinearLayout left = (LinearLayout)findViewById(R.id.leftPlayerLayout),
-                top = (LinearLayout)findViewById(R.id.topPlayerLayout),
-                right = (LinearLayout)findViewById(R.id.rightPlayerLayout),
-                bottom = (LinearLayout)findViewById(R.id.bottomPlayerLayout);
+        RelativeLayout left = (RelativeLayout)findViewById(R.id.leftPlayerLayout),
+                top = (RelativeLayout)findViewById(R.id.topPlayerLayout),
+                right = (RelativeLayout)findViewById(R.id.rightPlayerLayout),
+                bottom = (RelativeLayout)findViewById(R.id.bottomPlayerLayout);
 
         //Now create the imagebuttons for each of the players
         for(int i = 0; i < 4; i++) {
             //Display the rest of the hand
+            int offsetMargin = 0; //The offset between cards, this should be relative to the first card and is summed over additional cards
             for(int j = 0; j < manager.players[player].hand.size(); j++) {
                 RelativeLayout.LayoutParams restParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
+
+                //Set the offset between cards, left of/top of depending on player.
+                if(i % 2 == 0)
+                    restParams.setMargins(offsetMargin,0,0,0);
+                else
+                    restParams.setMargins(0,offsetMargin,0,0);
 
                 //How to treat and initialize the other cards depending on whether the current player or any other.
                 ImageView cardButton;
@@ -204,6 +211,8 @@ public class GameActivity extends Activity {
                 }
 
                 cardButton.setPadding(2,2,2,2);
+                cardButton.setLayoutParams(restParams);
+
                 switch(i) {
                     case 0: bottom.addView(cardButton); break;
                     case 1: cardButton.setRotation(90);
@@ -213,6 +222,7 @@ public class GameActivity extends Activity {
                         right.addView(cardButton); break;
                 }
                 cardButton.setId(temporaryID++);
+                offsetMargin += 65;
             }
         }
         buttonsPresent = true;

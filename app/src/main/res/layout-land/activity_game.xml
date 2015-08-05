@@ -11,22 +11,21 @@
     android:weightSum="1"
     android:orientation="horizontal">
 
-    <LinearLayout
+    <RelativeLayout
         android:orientation="vertical"
-        android:layout_width="wrap_content"
+        android:layout_width="50dp"
         android:layout_height="match_parent"
-        android:layout_weight="0.15"
         android:id="@+id/leftPlayerLayout"
-        android:layout_gravity="center_vertical"></LinearLayout>
+        android:layout_gravity="center_vertical">
+    </RelativeLayout>
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="wrap_content"
+        android:layout_width="480dp"
         android:layout_height="match_parent"
-        android:layout_weight="0.7"
         android:id="@+id/centerLayout">
 
-        <LinearLayout
+        <RelativeLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="63dp"
@@ -34,13 +33,7 @@
             android:id="@+id/topPlayerLayout"
             android:gravity="center_horizontal">
 
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/imageButton"
-                android:src="@drawable/clubs13"
-                android:outlineProvider="paddedBounds" />
-        </LinearLayout>
+        </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -67,20 +60,20 @@
             android:layout_weight="0.05">
         </LinearLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="72dp"
             android:id="@+id/bottomPlayerLayout"
             android:gravity="center_horizontal"
             android:layout_gravity="bottom|center_horizontal">
-        </LinearLayout>
+        </RelativeLayout>
     </LinearLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:orientation="vertical"
-        android:layout_width="wrap_content"
+        android:layout_width="50dp"
         android:layout_height="match_parent"
-        android:layout_weight="0.15"
-        android:id="@+id/rightPlayerLayout"></LinearLayout>
+        android:id="@+id/rightPlayerLayout">
+    </RelativeLayout>
 </LinearLayout>
