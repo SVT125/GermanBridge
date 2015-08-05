@@ -133,6 +133,7 @@ public class HeartsManager extends Manager implements Serializable {
 	}
 
 	public void writeOutput(int currentPlayer, TextView output, GameActivity activity) {
+		players[currentPlayer].organize();
 		activity.displayHands(currentPlayer);
 		output.setText("Player " + Integer.toString(currentPlayer + 1) + " place a card");
 	}
