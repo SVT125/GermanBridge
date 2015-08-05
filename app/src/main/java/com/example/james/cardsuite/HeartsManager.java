@@ -112,7 +112,7 @@ public class HeartsManager extends Manager implements Serializable {
 			// otherwise if hand is 13, can play anything other than hearts
 			else if (players[currentPlayer].hand.size() == 13) {
 				if(selectCard.getSuit().equals(Card.Suit.HEARTS)) {
-					output.setText("You cannot play a heart card");
+					output.setText("Hearts has not been broken yet");
 					return false;
 				}
 				players[currentPlayer].hand.remove(chosen);
