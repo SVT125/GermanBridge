@@ -35,7 +35,7 @@ public class HeartsManager extends Manager implements Serializable {
 	public void reset() {
 		this.roundCount++;
 		this.heartsBroken = false;
-		for (int i = 2; i < 15; i++) {
+		for (int i = 1; i < 14; i++) {
 			for (Card.Suit suits : Card.Suit.values()) {
 				deck.add(new Card(i, suits));
 			}
