@@ -32,11 +32,6 @@ public class Card {
 		}
 		return 1;
 	}
-	
-	public static Card cardFactory() {
-		int num = RANDOM.nextInt(numRange) + 2;
-		return new Card(num, suitList.get(RANDOM.nextInt(SIZE)));
-	}
 
 	public String getAddress() {
 		int num = this.cardNumber % 13;
