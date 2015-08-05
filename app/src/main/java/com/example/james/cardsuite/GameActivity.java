@@ -1,240 +1,208 @@
 package com.example.james.cardsuite;
-
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.Serializable;
+import java.util.*;
+import java.util.Map.Entry;
 
+public class HeartsManager extends Manager implements Serializable {
+	
+	private boolean heartsBroken = false;
+	
+	public HeartsManager() {
+		playerCount = 4;
+		players = new HeartsPlayer[playerCount];
+		pot = new HashMap<Card, Integer>();
+		
+		// an ace is 14 because it is higher than all of the other cards
+		for (int i = 2; i < 15; i++) {
+			for (Card.Suit suits : Card.Suit.values()) {
+				deck.add(new Card(i, suits));
+			}
+		}
+		
+		for (int i = 0; i < 4; i++) {
+			players[i] = new HeartsPlayer();
+			deck = players[i].fillHand(deck, random, 13);
+			players[i].organize();
+		}
+		
+	}
 
-public class GameActivity extends Activity {
-    private HeartsManager manager;
-    private TextView consoleOutput;
-    private int currentPlayerInteracting = 0, currentPotTurn = 0;
-    private boolean foundStartPlayer = false, buttonsPresent = false, finishedSwapping = false, beganPot = false;
-    public boolean outputWritten = false;
-    private List<List<Card>> chosenLists = new ArrayList<List<Card>>();
-    private List<Integer> chosenIndices = new ArrayList<Integer>();
-    private List<List<Card>> originalHands;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_game);
-        manager = new HeartsManager();
+	//Resets the state of the manager object for the next round.
+	public void reset() {
+		this.roundCount++;
+		this.heartsBroken = false;
+		for (int i = 2; i < 15; i++) {
+			for (Card.Suit suits : Card.Suit.values()) {
+				deck.add(new Card(i, suits));
+			}
+		}
+		for (int i = 0; i < playerCount; i++) {
+			deck = players[i].fillHand(deck, random, 13);
+		}
+	}
 
-        consoleOutput = (TextView)findViewById(R.id.consoleOutput);
+	//Returns true if the game is over, when someone has hit 100 points.
+	public boolean isGameOver() {
+		for(Player player : players)
+			if(player.score >= 100)
+				return true;
 
-        //Set the instruction text
-        consoleOutput.setText("Player 1 chooses a card to swap");
+		return false;
+	}
 
-        //Display the image buttons
-        displayHands(0);
-    }
+	//Returns the index of player with the lowest score.
+	//Should not be called if the game is over, as there shouldn't be a winner yet.
+	public int findWinner() {
+		int lowestScore = Integer.MAX_VALUE, player = -1;
+		for(int i = 0; i < 4; i++)
+			if(players[i].score < lowestScore) {
+				lowestScore = players[i].score;
+				player = i;
+			}
 
-    //Processes the state of the game manager.
-    public void confirmClick(View v) {
-        if(!(manager.isGameOver())) {
-            int chosenID = v.getId() % (13 - manager.getRoundCount() + 1), chosen = -1;
-            Card chosenCard = originalHands.get(currentPlayerInteracting).get(chosenID);
-            for(int i = 0; i < manager.players[currentPlayerInteracting].hand.size(); i++) {
-                if(manager.players[currentPlayerInteracting].hand.get(i).compareTo(chosenCard) == 0) {
-                    chosen = i;
-                    break;
-                }
-            }
+		return player;
+	}
 
-            if(!finishedSwapping) {
-                // Part 1 - Swap the cards between players.
-                int swapRound = manager.getRoundCount() % 4;
-                if (currentPlayerInteracting != 4) {
-                    //Select or unselect the card with a border shown
-                    if(chosenCard.isClicked == false) {
-                        v.setBackgroundResource(R.drawable.card_border);
-                        chosenCard.isClicked = true;
-                    } else {
-                        v.setBackgroundResource(0);
-                        chosenCard.isClicked = false;
-                    }
-                    //If the chosen card is already chosen, unselect it - otherwise, add it to our chosen cards.
-                    if (chosenIndices.contains((Integer)chosen))
-                        chosenIndices.remove((Integer)chosen);
-                    else {
-                        chosenIndices.add((Integer)chosen);
-                    }
+	//Called to handle every player's chosen card in the pot and analyzes the pot once all cards are put.
+	//This method is only used for console testing, won't apply to the Android app - don't input out of bounds.
+	public boolean potHandle(GameActivity activity, TextView output, int chosen, int currentPlayer) {
+		Card selectCard = players[currentPlayer].hand.get(chosen);
 
-                    if (chosenIndices.size() < 3)
-                        return;
+		if (!activity.outputWritten) {
+			players[currentPlayer].organize();
+			activity.displayHands(currentPlayer);
+			output.setText("Player " + Integer.toString(currentPlayer + 1) + " place a card");
+			activity.outputWritten = true;
+			return false;
+		}
 
-                    List<Card> chosenCards = manager.chooseCards(currentPlayerInteracting, chosenIndices);
-                    chosenLists.add(chosenCards);
-                }
+		if(currentPlayer == startPlayer) {
+			// first move by first player
+			if (players[startPlayer].hand.size() == 13) {
+				if (players[startPlayer].hand.get(chosen).compareTo(new Card(2, Card.Suit.CLUBS)) != 0) {
+					output.setText("The first card placed can only be the 2 of clubs");
+					return false;
+				}
 
-                if (swapRound != 3 && currentPlayerInteracting != 4) {
-                    currentPlayerInteracting++;
-                    consoleOutput.setText("Player " + Integer.toString(currentPlayerInteracting + 1) + " chooses a card to swap");
-                    chosenIndices = new ArrayList<Integer>(); //restart the indices chosen for the next player
+				selectCard = players[startPlayer].hand.remove(chosen);
+				startSuit = selectCard.getSuit();
+			} else {
+				// if hearts is not broken, card cannot be hearts or queen of spades
+				if (heartsBroken) {
+					selectCard = players[startPlayer].hand.remove(chosen);
+				} else {
+					if (selectCard.getSuit().equals(Card.Suit.HEARTS) || selectCard.compareTo(new Card(12, Card.Suit.SPADES)) == 0) {
+						output.setText("The first card placed cannot be hearts or the queen of spades");
+						return false;
+					}
+					players[startPlayer].hand.remove(chosen);
+				}
+				startSuit = selectCard.getSuit();
+			}
+			activity.outputWritten = false;
+		} else {
+		// after first move, other three players place their cards down
+			// if player has a card of the same suit
+			if (players[currentPlayer].hasSuit(startSuit)) {
+				if(!selectCard.getSuit().equals(startSuit)) {
+					output.setText("You need to place a card of the same suit as the pot");
+					return false;
+				}
+				players[currentPlayer].hand.remove(chosen);
+			}
+			// otherwise if hand is 13, can play anything other than hearts
+			else if (players[currentPlayer].hand.size() == 13) {
+				if(selectCard.getSuit().equals(Card.Suit.HEARTS)) {
+					output.setText("You cannot play a heart card");
+					return false;
+				}
+				players[currentPlayer].hand.remove(chosen);
+			}
+			// if player does not have the same suit he can place anything
+			else {
+				if (selectCard.getSuit().equals(Card.Suit.HEARTS) ||
+						selectCard.compareTo(new Card(12, Card.Suit.SPADES)) == 0 && heartsBroken == false) {
+					heartsBroken = true;
+				}
+				selectCard = players[currentPlayer].hand.remove(chosen);
+			}
+			activity.outputWritten = false;
+		}
+		pot.put(selectCard, currentPlayer);
+		activity.displayHands(currentPlayer);
+		return true;
+	}
 
-                    if (currentPlayerInteracting == 4) {
-                        for (int i = 0; i < 4; i++) {
-                            manager.swapCards(chosenLists.get(i), i, swapRound);
-                            manager.players[i].organize();
-                            displayHands(0);
-                            currentPlayerInteracting = 0;
-                        }
-                        finishedSwapping = true;
-                    } else {
-                        manager.players[currentPlayerInteracting].organize();
-                        displayHands(currentPlayerInteracting);
-                        return;
-                    }
-                }
-            }
+	//Analyzes the pot and determines the winning card and start player for the next round.
+	public void potAnalyze() {
+		Card winCard = null;
+		for (Entry<Card, Integer> entry : pot.entrySet()) {
+			if (entry.getKey().getSuit().equals(startSuit)) {
+				if (winCard == null) {
+					winCard = entry.getKey();
+					startPlayer = entry.getValue();
+				}
+				else if (entry.getKey().getCardNumber() > winCard.getCardNumber()){
+					winCard = entry.getKey();
+					startPlayer = entry.getValue();
+				}
+			}
+		}
+	}
 
-            // Done swapping by this point - this should only be called once, the turn directly when we're done swapping.
-            // Part 2 - Find player with 2 of clubs, we do this here because the card may be swapped.
-            if(!foundStartPlayer) {
-                manager.findStartPlayer();
-                foundStartPlayer = true;
-                currentPlayerInteracting = manager.startPlayer;
-            }
+	//Determines the start player for the first round.
+	public void findStartPlayer() {
+		for (int j = 0; j < playerCount; j++) {
+			for (int i = 0; i < players[j].hand.size(); i++) {
+				if (players[j].hand.get(i).compareTo(new Card(2, Card.Suit.CLUBS)) == 0) {
+					Log.i("Card: ", players[j].hand.get(i).toString());
+					this.startPlayer = j;
+				}
+			}
+		}
+	}
 
-            // Part 3 - handle cards being tossed in the pot until all cards are gone (13 turns).
-            if(manager.potHandle(this, consoleOutput, chosen, currentPlayerInteracting)) {
-                currentPlayerInteracting = (currentPlayerInteracting + 1) % 4;
-                if (currentPlayerInteracting == manager.startPlayer && !beganPot) {
-                    beganPot = true;
-                    return;
-                }
-            }
+	//Called for the swapping part of the round, alongside swapCards - returns the cards chosen of player index playerNum.
+	//Assume chosen is an int array of 3 elements.
+	public List<Card> chooseCards(int playerNum, List<Integer> chosenIndices) throws NullPointerException {
+		
+		List<Card> chosen = new ArrayList<Card>();
+		for(int i = 0; i < 3; i++) {
+			Card chosenCard = this.players[playerNum].hand.get(chosenIndices.get(i));
+			try {
+				if (chosen.contains(chosenCard))
+					chosen.remove(chosenCard);
+				else {
+					chosen.add(chosenCard);
+				}
+			}
+			catch (NullPointerException e) {
+				throw e;
+			}
+		}
+		return chosen;
+	}
 
-            //End of a single pot round, reset all variables for the next pot round if possible.
-            if(currentPlayerInteracting == manager.startPlayer && currentPotTurn != 13 && beganPot) {
-                currentPotTurn++;
-
-                manager.potAnalyze(); //sets the new start player for the next pot
-                for (Card c : manager.pot.keySet()) {
-                    ((HeartsPlayer)manager.players[manager.startPlayer]).endPile.add(c);
-                }
-
-                manager.pot.clear();
-                displayHands(manager.startPlayer);
-
-                beganPot = false;
-                finishedSwapping = false;
-                outputWritten = false;
-
-                return;
-            }
-
-            // Part 4 - The round is done, update the score and reset the manager for the next round.
-            if(currentPotTurn == 13) {
-                for (Player player : manager.players) {
-                    ((HeartsPlayer) player).scoreChange();
-                }
-
-                // reshuffles deck, increments round count, resets all variables for the next round.
-                manager.reset();
-            }
-        }
-
-        // The game is done.
-        if(manager.isGameOver()) {
-            Intent intent = new Intent(GameActivity.this, ResultsActivity.class);
-            intent.putExtra("manager", manager);
-            startActivity(intent);
-            finish();
-        }
-    }
-
-    //Call when the hands have been updated and need be redisplayed.
-    public void displayHands(int player) {
-        //Remove all old cards first
-        if(buttonsPresent) {
-            for (int i = 0; i < 52; i++) {
-                View view = findViewById(i);
-                if(view != null)
-                    ((ViewGroup) view.getParent()).removeView(view);
-            }
-        }
-
-        if(originalHands == null) {
-            originalHands = new ArrayList<>();
-            for (Player p : manager.players)
-                originalHands.add(p.hand);
-        }
-
-        int temporaryID = 0; //Temporary ID to be assigned to each card, to be reused.
-        LinearLayout left = (LinearLayout)findViewById(R.id.leftPlayerLayout),
-                top = (LinearLayout)findViewById(R.id.topPlayerLayout),
-                right = (LinearLayout)findViewById(R.id.rightPlayerLayout),
-                bottom = (LinearLayout)findViewById(R.id.bottomPlayerLayout);
-
-        //Now create the imagebuttons for each of the players
-        for(int i = 0; i < 4; i++) {
-            //Display the rest of the hand
-            for(int j = 0; j < manager.players[player].hand.size(); j++) {
-                RelativeLayout.LayoutParams restParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
-
-                //How to treat and initialize the other cards depending on whether the current player or any other.
-                ImageView cardButton;
-                if(i == player) {
-                    cardButton = new ImageButton(this);
-                    cardButton.setImageResource(getResources().getIdentifier(manager.players[player].hand.get(j).getAddress(), "drawable", getPackageName()));
-                    cardButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            confirmClick(v);
-                        }
-                    });
-                } else {
-                    cardButton = new ImageView(this);
-                    cardButton.setImageResource(getResources().getIdentifier("cardback", "drawable", getPackageName()));
-                }
-
-                cardButton.setPadding(2,2,2,2);
-                switch(i) {
-                    case 0: bottom.addView(cardButton); break;
-                    case 1: left.addView(cardButton); break;
-                    case 2: top.addView(cardButton); break;
-                    case 3: right.addView(cardButton); break;
-                }
-                cardButton.setId(temporaryID++);
-            }
-        }
-        buttonsPresent = true;
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_game, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
+	//Called for the swapping part of the round, alongside swapCards - swaps the given cards for players.
+	public void swapCards(Collection<?> chosen, int playerNum, int swapRound) {
+		// The convention is that greater array indices means players to the left.
+		players[playerNum].hand.removeAll(chosen);
+		int otherPlayer = 0; //default initialized
+		switch (swapRound) {
+			case 0:
+				otherPlayer = playerNum != 0 ? playerNum - 1 : 3;
+				break;
+			case 1:
+				otherPlayer = playerNum != 3 ? playerNum + 1 : 0;
+				break;
+			case 2:
+				otherPlayer = (playerNum == 0 || playerNum == 1) ? playerNum + 2 : playerNum - 2;
+				break;
+		}
+		players[otherPlayer].hand.addAll((Collection<? extends Card>)chosen);
+	}
 }

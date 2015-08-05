@@ -17,7 +17,7 @@ public class HeartsManager extends Manager implements Serializable {
 		pot = new HashMap<Card, Integer>();
 		
 		// an ace is 14 because it is higher than all of the other cards
-		for (int i = 1; i < 14; i++) {
+		for (int i = 2; i < 15; i++) {
 			for (Card.Suit suits : Card.Suit.values()) {
 				deck.add(new Card(i, suits));
 			}
