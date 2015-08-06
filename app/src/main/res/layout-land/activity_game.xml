@@ -58,8 +58,13 @@
             android:layout_width="match_parent"
             android:layout_height="110dp"
             android:id="@+id/potLayout"
-            android:layout_weight="0.05"
-            android:gravity="center_vertical|center_horizontal">
+            android:layout_weight="0.05">
+
+            <ImageView
+                android:id="@+id/anchor"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_centerInParent="true" />
 
         </RelativeLayout>
 

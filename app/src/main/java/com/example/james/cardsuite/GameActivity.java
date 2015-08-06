@@ -171,18 +171,23 @@ public class GameActivity extends Activity {
             potCard.setImageResource(getResources().getIdentifier(manager.pot.get(index).getAddress(), "drawable", getPackageName()));
 
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
+            params.addRule(RelativeLayout.CENTER_IN_PARENT);
             switch(index) {
-                case 0: params.setMargins(75,125,0,0); break;
-                case 1: params.setMargins(0,75,125,0);
+                case 0: params.setMargins(0, 25, 0, 0);
+                    params.addRule(RelativeLayout.BELOW, R.id.anchor); break;
+                case 1: params.setMargins(0,0,25,0);
+                    params.addRule(RelativeLayout.LEFT_OF, R.id.anchor);
                     potCard.setRotation(90); break;
-                case 2: params.setMargins(75,0,0,0);
+                case 2: params.setMargins(0,0,0,25);
+                    params.addRule(RelativeLayout.ABOVE, R.id.anchor);
                     potCard.setRotation(180); break;
-                case 3: params.setMargins(125,75,0,0);
+                case 3: params.setMargins(25,0,0,0);
+                    params.addRule(RelativeLayout.RIGHT_OF, R.id.anchor);
                     potCard.setRotation(270); break;
             }
 
             potCard.setElevation(i);
-            potCard.setId(100 + i); //Set the convention that all the pot card views take values 100-103 for all 4 cards.
+            potCard.setId(100 + index); //Set the convention that all the pot card views take values 100-103 for all 4 cards.
             potCard.setLayoutParams(params);
             potLayout.addView(potCard);
         }
