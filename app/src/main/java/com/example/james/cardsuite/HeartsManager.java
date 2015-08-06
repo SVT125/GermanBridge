@@ -66,7 +66,7 @@ public class HeartsManager extends Manager implements Serializable {
 	}
 
 	// Called to check whether a card should be selectable by a player or not
-	public boolean cardSelectable(Card card, boolean finishedSwapping, int currentPlayer) {
+	public boolean cardSelectable(Card card, boolean finishedSwapping) {
 		// all swappable cards are selectable during the swapping process
 		if (finishedSwapping) {
 			// if first turn, only 2 of clubs can be selected
