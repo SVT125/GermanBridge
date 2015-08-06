@@ -137,7 +137,6 @@ public class GameActivity extends Activity {
                 manager.pot.clear();
                 consoleOutput.setText("Player " + Integer.toString(currentPlayerInteracting + 1) + " wins the pot! Place a card to begin next round");
                 displayHands(manager.startPlayer);
-                initialOutputWritten = false;
                 return;
             }
 
