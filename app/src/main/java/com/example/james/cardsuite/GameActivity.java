@@ -114,6 +114,9 @@ public class GameActivity extends Activity {
 
             // Part 3 - handle cards being tossed in the pot until all cards are gone (13 turns).
             if(manager.potHandle(consoleOutput, chosen, currentPlayerInteracting, initialOutputWritten, this)) {
+                if(currentPlayerInteracting == manager.startPlayer)
+                    potClear();
+
                 displayPot();
                 currentPlayerInteracting = (currentPlayerInteracting + 1) % 4;
 
@@ -137,7 +140,6 @@ public class GameActivity extends Activity {
                 }
 
                 manager.pot.clear();
-                potClear();
                 consoleOutput.setText("Player " + Integer.toString(currentPlayerInteracting + 1) + " wins the pot! Place a card to begin next round");
                 displayHands(manager.startPlayer);
                 return;
