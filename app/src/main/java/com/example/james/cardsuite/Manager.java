@@ -22,4 +22,5 @@ public abstract class Manager {
 	public int getRoundCount() {
 		return this.roundCount;
 	}
+	public void newRound() { roundCount++; }
 }

@@ -1,5 +1,4 @@
 package com.example.james.cardsuite;
-import android.util.Log;
 import android.widget.TextView;
 
 import java.io.Serializable;
@@ -32,7 +31,6 @@ public class HeartsManager extends Manager implements Serializable {
 
 	//Resets the state of the manager object for the next round.
 	public void reset() {
-		this.roundCount++;
 		this.heartsBroken = false;
 		for (int i = 1; i < 14; i++) {
 			for (Card.Suit suits : Card.Suit.values()) {
