@@ -1,4 +1,5 @@
 package com.example.james.cardsuite;
+import android.util.Log;
 import android.widget.TextView;
 
 import java.io.Serializable;
@@ -6,27 +7,27 @@ import java.util.*;
 import java.util.Map.Entry;
 
 public class HeartsManager extends Manager implements Serializable {
-	
+
 	public boolean heartsBroken = false;
-	
+
 	public HeartsManager() {
 		playerCount = 4;
 		players = new HeartsPlayer[playerCount];
 		pot = new HashMap<Integer, Card>();
-		
+
 		// an ace is 14 because it is higher than all of the other cards
 		for (int i = 1; i < 14; i++) {
 			for (Card.Suit suits : Card.Suit.values()) {
 				deck.add(new Card(i, suits));
 			}
 		}
-		
+
 		for (int i = 0; i < 4; i++) {
 			players[i] = new HeartsPlayer();
 			deck = players[i].fillHand(deck, random, 13);
 			players[i].organize();
 		}
-		
+
 	}
 
 	//Resets the state of the manager object for the next round.
@@ -64,6 +65,26 @@ public class HeartsManager extends Manager implements Serializable {
 		return player;
 	}
 
+	// Called to check whether a card should be selectable by a player or not
+	public boolean cardSelectable(Card card, boolean finishedSwapping, int currentPlayer) {
+		// all swappable cards are selectable during the swapping process
+		if (finishedSwapping) {
+			// if first turn, only 2 of clubs can be selected
+			if ((players[startPlayer].hand.size() == 13) && (card.compareTo(new Card(2, Card.Suit.CLUBS)) != 0)) {
+				return false;
+			}
+			if (players[startPlayer].hasSuit(startSuit) && pot.size() != 0) {
+				if (!(card.getSuit().equals(startSuit))) {
+					return false;
+				}
+			}
+			if ((!heartsBroken && (card.getSuit().equals(Card.Suit.HEARTS)) || card.compareTo(new Card(12, Card.Suit.SPADES)) == 0)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	//Called to handle every player's chosen card in the pot and analyzes the pot once all cards are put.
 	//This method is only used for console testing, won't apply to the Android app - don't input out of bounds.
 	public boolean potHandle(TextView output, int chosen, int currentPlayer, boolean initialOutputWritten, GameActivity activity) {
@@ -99,7 +120,7 @@ public class HeartsManager extends Manager implements Serializable {
 				startSuit = selectCard.getSuit();
 			}
 		} else {
-		// after first move, other three players place their cards down
+			// after first move, other three players place their cards down
 			// if player has a card of the same suit
 			if (players[currentPlayer].hasSuit(startSuit)) {
 				if(!selectCard.getSuit().equals(startSuit)) {
@@ -167,7 +188,7 @@ public class HeartsManager extends Manager implements Serializable {
 	//Called for the swapping part of the round, alongside swapCards - returns the cards chosen of player index playerNum.
 	//Assume chosen is an int array of 3 elements.
 	public List<Card> chooseCards(int playerNum, List<Integer> chosenIndices) throws NullPointerException {
-		
+
 		List<Card> chosen = new ArrayList<Card>();
 		for(int i = 0; i < 3; i++) {
 			Card chosenCard = this.players[playerNum].hand.get(chosenIndices.get(i));
