@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -113,6 +114,7 @@ public class GameActivity extends Activity {
 
             // Part 3 - handle cards being tossed in the pot until all cards are gone (13 turns).
             if(manager.potHandle(consoleOutput, chosen, currentPlayerInteracting, initialOutputWritten, this)) {
+                displayPot();
                 currentPlayerInteracting = (currentPlayerInteracting + 1) % 4;
 
                 // If the pot reaches max size of 4, then we know to continue and compare cards
@@ -130,11 +132,12 @@ public class GameActivity extends Activity {
 
                 manager.potAnalyze(); //sets the new start player for the next pot
                 currentPlayerInteracting = manager.startPlayer;
-                for (Card c : manager.pot.keySet()) {
+                for (Card c : manager.pot.values()) {
                     ((HeartsPlayer)manager.players[manager.startPlayer]).endPile.add(c);
                 }
 
                 manager.pot.clear();
+                potClear();
                 consoleOutput.setText("Player " + Integer.toString(currentPlayerInteracting + 1) + " wins the pot! Place a card to begin next round");
                 displayHands(manager.startPlayer);
                 return;
@@ -160,12 +163,38 @@ public class GameActivity extends Activity {
     }
 
     // Called when a player places a valid card into the pot; updates the images in the pot
-    public void displayPot(int player, Card card) {
+    public void displayPot() {
+        RelativeLayout potLayout = (RelativeLayout)findViewById(R.id.potLayout);
+        for(int i = 0; i < manager.pot.size(); i++) {
+            int index = (manager.startPlayer + i) % 4;
+            ImageView potCard = new ImageView(this);
+            potCard.setImageResource(getResources().getIdentifier(manager.pot.get(index).getAddress(), "drawable", getPackageName()));
 
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
+            switch(index) {
+                case 0: params.setMargins(75,125,0,0); break;
+                case 1: params.setMargins(0,75,125,0);
+                    potCard.setRotation(90); break;
+                case 2: params.setMargins(75,0,0,0);
+                    potCard.setRotation(180); break;
+                case 3: params.setMargins(125,75,0,0);
+                    potCard.setRotation(270); break;
+            }
+
+            potCard.setElevation(i);
+            potCard.setId(100 + i); //Set the convention that all the pot card views take values 100-103 for all 4 cards.
+            potCard.setLayoutParams(params);
+            potLayout.addView(potCard);
+        }
     }
 
-    // Called at the end of a round when all four players have added their cards; clears the pot
+    // Called at the end of a round when all four players have added their cards; clears the pot using given IDs 100-103.
     public void potClear() {
+        for(int i = 0; i < 4; i++) {
+            View view = findViewById(100 + i);
+            if(view != null)
+                ((ViewGroup) view.getParent()).removeView(view);
+        }
 
     }
 

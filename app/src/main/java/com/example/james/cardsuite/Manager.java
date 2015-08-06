@@ -12,7 +12,7 @@ public abstract class Manager {
 	protected int playerCount;
 	protected int roundCount = 1;
 	protected static Scanner scanner = new Scanner(System.in);
-	protected Map<Card, Integer> pot;
+	protected Map<Integer, Card> pot;
 	protected Card.Suit startSuit;
 	protected int startPlayer;
 	protected Player[] players;

@@ -57,7 +57,7 @@ public class BridgeManager extends Manager {
 		
 
 		startSuit = players[startPlayer].hand.get(chosen).getSuit();
-		pot.put(players[startPlayer].hand.remove(chosen), startPlayer);
+		pot.put(startPlayer, players[startPlayer].hand.remove(chosen));
 		
 		// other players choose cards
 		for (int i = 0; i < playerCount - 1; i++) {
@@ -74,7 +74,7 @@ public class BridgeManager extends Manager {
 				chosen = scanner.nextInt();
 			}
 			
-			pot.put(players[currentPlayer].hand.remove(chosen), currentPlayer);
+			pot.put(currentPlayer, players[currentPlayer].hand.remove(chosen));
 		}
 		
 		potAnalyze();
@@ -83,18 +83,18 @@ public class BridgeManager extends Manager {
 	//Analyzes the pot and updates the pile count for the winning player of the pot.
 	public void potAnalyze() {
 		Card winCard = null;
-		for (Entry<Card, Integer> entry : pot.entrySet()) {
-			if (entry.getKey().getSuit() == startSuit) {
-				if (winCard == null || entry.getKey().getCardNumber() > winCard.getCardNumber()) {
-					winCard = entry.getKey();
-					startPlayer = entry.getValue();
+		for (Entry<Integer, Card> entry : pot.entrySet()) {
+			if (entry.getValue().getSuit() == startSuit) {
+				if (winCard == null || entry.getValue().getCardNumber() > winCard.getCardNumber()) {
+					winCard = entry.getValue();
+					startPlayer = entry.getKey();
 				}
 			}
 			// if a trump card exists it wins/gets compared to other trump cards
-			else if (entry.getKey().getSuit() == trumpSuit) {
-				if ((winCard == null || winCard.getSuit() != trumpSuit) || entry.getKey().getCardNumber() > winCard.getCardNumber()) {
-					winCard = entry.getKey();
-					startPlayer = entry.getValue();
+			else if (entry.getValue().getSuit() == trumpSuit) {
+				if ((winCard == null || winCard.getSuit() != trumpSuit) || entry.getValue().getCardNumber() > winCard.getCardNumber()) {
+					winCard = entry.getValue();
+					startPlayer = entry.getKey();
 				}
 			}
 		}

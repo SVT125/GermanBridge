@@ -13,7 +13,7 @@ public class HeartsManager extends Manager implements Serializable {
 	public HeartsManager() {
 		playerCount = 4;
 		players = new HeartsPlayer[playerCount];
-		pot = new HashMap<Card, Integer>();
+		pot = new HashMap<Integer, Card>();
 		
 		// an ace is 14 because it is higher than all of the other cards
 		for (int i = 1; i < 14; i++) {
@@ -127,7 +127,7 @@ public class HeartsManager extends Manager implements Serializable {
 				selectCard = players[currentPlayer].hand.remove(chosen);
 			}
 		}
-		pot.put(selectCard, currentPlayer);
+		pot.put(currentPlayer, selectCard);
 		this.writeOutput((currentPlayer + 1) % 4, output, activity);
 		return true;
 	}
@@ -141,15 +141,15 @@ public class HeartsManager extends Manager implements Serializable {
 	//Analyzes the pot and determines the winning card and start player for the next round.
 	public void potAnalyze() {
 		Card winCard = null;
-		for (Entry<Card, Integer> entry : pot.entrySet()) {
-			if (entry.getKey().getSuit().equals(startSuit)) {
+		for (Entry<Integer, Card> entry : pot.entrySet()) {
+			if (entry.getValue().getSuit().equals(startSuit)) {
 				if (winCard == null) {
-					winCard = entry.getKey();
-					startPlayer = entry.getValue();
+					winCard = entry.getValue();
+					startPlayer = entry.getKey();
 				}
-				else if (entry.getKey().getCardNumber() > winCard.getCardNumber()){
-					winCard = entry.getKey();
-					startPlayer = entry.getValue();
+				else if (entry.getValue().getCardNumber() > winCard.getCardNumber()){
+					winCard = entry.getValue();
+					startPlayer = entry.getKey();
 				}
 			}
 		}

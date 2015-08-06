@@ -75,7 +75,7 @@ public class SpadesManager extends Manager {
 		
 		startCard = players[startPlayer].hand.remove(chosen);
 		int currentPlayer = startPlayer;
-		pot.put(startCard, startPlayer);
+		pot.put(startPlayer,startCard);
 		startSuit = startCard.getSuit();
 		
 		for (int i = 0; i < 3; i++) {
@@ -106,7 +106,7 @@ public class SpadesManager extends Manager {
 				}
 			}
 			
-			pot.put(players[currentPlayer].hand.remove(chosen), currentPlayer);
+			pot.put(currentPlayer, players[currentPlayer].hand.remove(chosen));
 		}
 		
 		potAnalyze();
@@ -115,26 +115,26 @@ public class SpadesManager extends Manager {
 	
 	public void potAnalyze() {
 		Card winCard = null;
-		for (Entry<Card, Integer> entry : pot.entrySet()) {
-			if (entry.getKey().getSuit() == startSuit) {
+		for (Entry<Integer, Card> entry : pot.entrySet()) {
+			if (entry.getValue().getSuit() == startSuit) {
 				if (winCard == null) {
-					winCard = entry.getKey();
-					startPlayer = entry.getValue();
+					winCard = entry.getValue();
+					startPlayer = entry.getKey();
 				}
-				else if (entry.getKey().getCardNumber() > winCard.getCardNumber()){
-					winCard = entry.getKey();
-					startPlayer = entry.getValue();
+				else if (entry.getValue().getCardNumber() > winCard.getCardNumber()){
+					winCard = entry.getValue();
+					startPlayer = entry.getKey();
 				}
 			}
 			// if spades exists, it tops normal cards
-			else if (entry.getKey().getSuit() == Card.Suit.SPADES) {
+			else if (entry.getValue().getSuit() == Card.Suit.SPADES) {
 				if (winCard == null || winCard.getSuit() != Card.Suit.SPADES) {
-					winCard = entry.getKey();
-					startPlayer = entry.getValue();
+					winCard = entry.getValue();
+					startPlayer = entry.getKey();
 				}
-				else if (entry.getKey().getCardNumber() > winCard.getCardNumber()){
-					winCard = entry.getKey();
-					startPlayer = entry.getValue();
+				else if (entry.getValue().getCardNumber() > winCard.getCardNumber()){
+					winCard = entry.getValue();
+					startPlayer = entry.getKey();
 				}
 			}
 		}

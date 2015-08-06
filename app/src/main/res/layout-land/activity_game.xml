@@ -38,7 +38,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="78dp"
+            android:layout_height="40dp"
             android:layout_gravity="center_horizontal"
             android:id="@+id/messageLayout"
             android:gravity="center_vertical|center_horizontal">
@@ -53,13 +53,15 @@
                 android:gravity="center_vertical|center_horizontal" />
         </RelativeLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="74dp"
+            android:layout_height="110dp"
             android:id="@+id/potLayout"
-            android:layout_weight="0.05">
-        </LinearLayout>
+            android:layout_weight="0.05"
+            android:gravity="center_vertical|center_horizontal">
+
+        </RelativeLayout>
 
         <RelativeLayout
             android:orientation="horizontal"
