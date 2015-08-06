@@ -257,8 +257,7 @@ public class GameActivity extends Activity {
                     //Tint and make the card unselectable if it's not meant to be.
                     if(i == manager.startPlayer) {
                         Card selectCard = manager.players[manager.startPlayer].hand.get(j);
-                        if(finishedSwapping && ((manager.players[manager.startPlayer].hand.size() == 13 && selectCard.compareTo(new Card(2, Card.Suit.CLUBS)) != 0)
-                                || (!manager.heartsBroken && (selectCard.getSuit().equals(Card.Suit.HEARTS) || selectCard.compareTo(new Card(12, Card.Suit.SPADES)) == 0)))) {
+                        if(!(manager.cardSelectable(selectCard, finishedSwapping, i))) {
                             cardButton.setColorFilter(Color.parseColor("#78505050"), PorterDuff.Mode.SRC_ATOP);
                             cardButton.setClickable(false);
                         }
