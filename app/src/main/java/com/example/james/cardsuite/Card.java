@@ -6,11 +6,6 @@ public class Card {
 	public boolean isClicked = false;
 	private final int cardNumber;
 	private final Suit suit;
-	private static final Random RANDOM = new Random();
-	private static final List<Suit> suitList = 
-			Arrays.asList(Suit.values());
-	private static final int SIZE = suitList.size();
-	private static final int numRange = 13;
 	
 	public Card(int cardNumber, Suit suit) {
 		this.cardNumber = cardNumber;
@@ -42,9 +37,7 @@ public class Card {
 		return this.cardNumber;
 	}
 	
-	public Suit getSuit() {
-		return this.suit;
-	}
+	public Suit getSuit() { return this.suit; }
 
 	public String toString() {
 		String string = Integer.toString(this.getCardNumber()) + this.getSuit();
