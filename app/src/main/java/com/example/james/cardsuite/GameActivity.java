@@ -115,7 +115,8 @@ public class GameActivity extends Activity {
             // Part 3 - handle cards being tossed in the pot until all cards are gone (13 turns).
             if(manager.potHandle(consoleOutput, chosen, currentPlayerInteracting, initialOutputWritten, this)) {
                 if(currentPlayerInteracting == manager.startPlayer)
-                    potClear();
+                    for(int i = 0; i < 4; i++)
+                        potClear();
 
                 displayPot();
                 currentPlayerInteracting = (currentPlayerInteracting + 1) % 4;
@@ -178,13 +179,13 @@ public class GameActivity extends Activity {
             switch(index) {
                 case 0: params.setMargins(0, 25, 0, 0);
                     params.addRule(RelativeLayout.BELOW, R.id.anchor); break;
-                case 1: params.setMargins(0,0,25,0);
+                case 1: params.setMargins(0,0,45,0);
                     params.addRule(RelativeLayout.LEFT_OF, R.id.anchor);
                     potCard.setRotation(90); break;
                 case 2: params.setMargins(0,0,0,25);
                     params.addRule(RelativeLayout.ABOVE, R.id.anchor);
                     potCard.setRotation(180); break;
-                case 3: params.setMargins(25,0,0,0);
+                case 3: params.setMargins(45,0,0,0);
                     params.addRule(RelativeLayout.RIGHT_OF, R.id.anchor);
                     potCard.setRotation(270); break;
             }

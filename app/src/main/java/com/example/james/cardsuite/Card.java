@@ -29,7 +29,7 @@ public class Card {
 	}
 
 	public String getAddress() {
-		int num = this.cardNumber % 14;
+		int num = this.cardNumber % 15;
 		return (this.suit.toString().toLowerCase() + num);
 	}
 	
