@@ -142,20 +142,27 @@ public class GameActivity extends Activity {
 
                 manager.pot.clear();
                 manager.newRound();
-                consoleOutput.setText("Player " + Integer.toString(currentPlayerInteracting + 1) + " wins the pot! Place a card to begin next round");
-                displayHands(manager.startPlayer);
-                return;
+                if (currentPotTurn != 13) {
+                    consoleOutput.setText("Player " + Integer.toString(currentPlayerInteracting + 1) + " wins the pot! Place a card to begin next round");
+                    displayHands(manager.startPlayer);
+                    return;
+                }
             }
 
             // Part 4 - The round is done, update the score and reset the manager for the next round.
-            if(currentPotTurn == 13) {
+            if(currentPotTurn == 13 && !manager.isGameOver()) {
+                List<Integer> scores = new ArrayList<Integer>();
                 for (Player player : manager.players) {
                     ((HeartsPlayer) player).scoreChange();
+                    scores.add(player.score);
+                    Log.i("Score: ", Integer.toString(player.score));
                 }
 
                 // reshuffles deck, increments round count, resets all variables for the next round.
                 manager.reset();
                 finishedSwapping = false;
+                initialOutputWritten = false;
+                return;
             }
         } else {
             // The game is done.
