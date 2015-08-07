@@ -255,17 +255,13 @@ public class GameActivity extends Activity {
                     });
 
                     //Tint and make the card unselectable if it's not meant to be.
-                    if(i == manager.startPlayer) {
-                        Card selectCard = manager.players[manager.startPlayer].hand.get(j);
-                        if(!(manager.cardSelectable(selectCard, finishedSwapping))) {
+                    Card selectCard = manager.players[i].hand.get(j);
+                    if(!(manager.cardSelectable(selectCard, finishedSwapping, i))) {
                             cardButton.setColorFilter(Color.parseColor("#78505050"), PorterDuff.Mode.SRC_ATOP);
                             cardButton.setClickable(false);
                         }
-                    } else if(finishedSwapping && (manager.players[i].hand.get(j).getSuit() != manager.startSuit)) {
-                        cardButton.setColorFilter(Color.parseColor("#78505050"), PorterDuff.Mode.SRC_ATOP);
-                        cardButton.setClickable(false);
                     }
-                } else {
+                else {
                     cardButton = new ImageView(this);
                     cardButton.setImageResource(getResources().getIdentifier("cardback", "drawable", getPackageName()));
                 }
