@@ -66,20 +66,20 @@ public class HeartsManager extends Manager implements Serializable {
 	}
 
 	// Called to check whether a card should be selectable by a player or not
-	public boolean cardSelectable(Card card, boolean finishedSwapping) {
+	public boolean cardSelectable(Card card, boolean finishedSwapping, int currentPlayer) {
 		// all swappable cards are selectable during the swapping process
 		if (finishedSwapping) {
 			// if first turn, only 2 of clubs can be selected
 			if ((players[startPlayer].hand.size() == 13) && (card.compareTo(new Card(2, Card.Suit.CLUBS)) != 0)) {
 				return false;
 			}
-			if (players[startPlayer].hasSuit(startSuit) && pot.size() != 0) {
+			if (currentPlayer == startPlayer && (!heartsBroken && (card.getSuit().equals(Card.Suit.HEARTS)) || card.compareTo(new Card(12, Card.Suit.SPADES)) == 0)) {
+				return false;
+			}
+			if (players[currentPlayer].hasSuit(startSuit) && pot.size() != 0) {
 				if (!(card.getSuit().equals(startSuit))) {
 					return false;
 				}
-			}
-			if ((!heartsBroken && (card.getSuit().equals(Card.Suit.HEARTS)) || card.compareTo(new Card(12, Card.Suit.SPADES)) == 0)) {
-				return false;
 			}
 		}
 		return true;
@@ -99,6 +99,10 @@ public class HeartsManager extends Manager implements Serializable {
 
 		if(currentPlayer == startPlayer)
 			startSuit = selectCard.getSuit();
+
+		else if (!heartsBroken && (selectCard.getSuit().equals(Card.Suit.HEARTS) || selectCard.compareTo(new Card(12, Card.Suit.SPADES)) == 0)) {
+			heartsBroken = true;
+		}
 
 		pot.put(currentPlayer, selectCard);
 		this.writeOutput((currentPlayer + 1) % 4, output, activity);
