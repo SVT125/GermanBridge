@@ -162,6 +162,11 @@ public class GameActivity extends Activity {
                 manager.reset();
                 finishedSwapping = false;
                 initialOutputWritten = false;
+                buttonsPresent = false;
+                foundStartPlayer = false;
+                currentPotTurn = 0;
+                displayHands(0);
+
                 return;
             }
         } else {
