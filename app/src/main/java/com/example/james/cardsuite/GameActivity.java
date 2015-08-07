@@ -137,8 +137,10 @@ public class GameActivity extends Activity {
                     ((HeartsPlayer)manager.players[manager.startPlayer]).endPile.add(c);
                 }
 
+                displayScores();
                 manager.pot.clear();
                 manager.newRound();
+
                 if (currentPotTurn != 13) {
                     consoleOutput.setText("Player " + Integer.toString(currentPlayerInteracting + 1) + " wins the pot! Place a card to begin next round");
                     displayHands(manager.startPlayer);

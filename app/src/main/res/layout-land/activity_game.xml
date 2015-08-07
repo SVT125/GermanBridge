@@ -32,13 +32,12 @@
             android:layout_weight="0.7"
             android:gravity="left">
 
-            <TextView
+            <com.example.james.cardsuite.VerticalTextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="Medium Text"
                 android:id="@+id/leftPlayerOutput"
-                android:rotation="90"
                 android:layout_centerVertical="true"
                 android:layout_alignParentEnd="true"
                 android:gravity="center" />
@@ -171,16 +170,15 @@
             android:layout_weight="0.7"
             android:gravity="right">
 
-            <TextView
+            <com.example.james.cardsuite.VerticalTextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="Medium Text"
                 android:id="@+id/rightPlayerOutput"
-                android:rotation="270"
                 android:layout_centerVertical="true"
                 android:layout_centerHorizontal="true"
-                android:gravity="center" />
+                android:gravity="bottom|center" />
         </RelativeLayout>
 
         <RelativeLayout
