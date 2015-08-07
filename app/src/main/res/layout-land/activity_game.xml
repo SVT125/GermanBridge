@@ -6,42 +6,93 @@
     android:screenOrientation="landscape"
     android:configChanges="orientation|keyboardHidden"
     android:weightSum="1"
-    android:orientation="horizontal"
-    android:gravity="center_vertical|center_horizontal">
+    android:orientation="horizontal">
 
-    <RelativeLayout
-        android:orientation="vertical"
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:id="@+id/leftPlayerLayout"
-        android:layout_gravity="center_vertical"
-        android:layout_weight="0.45"
-        android:gravity="center_vertical|center_horizontal">
-    </RelativeLayout>
+        android:layout_weight="0.4">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:id="@+id/leftPlayerCardsLayout"
+            android:layout_weight="0.3"
+            android:gravity="center_vertical|center_horizontal"
+            android:layout_gravity="center_horizontal">
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/leftPlayerDisplayLayout"
+            android:layout_weight="0.7"
+            android:gravity="left">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="Medium Text"
+                android:id="@+id/leftPlayerOutput"
+                android:rotation="90"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
+                android:gravity="center" />
+        </RelativeLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:id="@+id/centerLayout"
-        android:layout_weight="0.1">
+        android:layout_weight="0.2">
 
-        <RelativeLayout
-            android:orientation="horizontal"
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="63dp"
-            android:layout_gravity="top|center_horizontal"
+            android:layout_height="match_parent"
             android:id="@+id/topPlayerLayout"
-            android:gravity="center_vertical|center_horizontal">
+            android:layout_weight="0.225">
 
-        </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:id="@+id/topPlayerCardsLayout"
+                android:layout_weight="0.3"
+                android:gravity="center_vertical|center_horizontal">
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/topPlayerDisplayLayout"
+                android:layout_weight="0.7">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="Small Text"
+                    android:id="@+id/topPlayerOutput"
+                    android:rotation="180"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true" />
+            </RelativeLayout>
+        </LinearLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
             android:id="@+id/messageLayout"
-            android:gravity="center_vertical|center_horizontal">
+            android:gravity="center_vertical|center_horizontal"
+            android:layout_weight="0.3">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -57,9 +108,9 @@
         <RelativeLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="110dp"
+            android:layout_height="match_parent"
             android:id="@+id/potLayout"
-            android:layout_weight="0.05">
+            android:layout_weight="0.2">
 
             <ImageView
                 android:id="@+id/anchor"
@@ -69,22 +120,77 @@
 
         </RelativeLayout>
 
-        <RelativeLayout
-            android:orientation="horizontal"
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="72dp"
+            android:layout_height="match_parent"
             android:id="@+id/bottomPlayerLayout"
-            android:gravity="center_vertical|center_horizontal"
-            android:layout_gravity="bottom|center_horizontal">
-        </RelativeLayout>
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_weight="0.225">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/bottomPlayerDisplayLayout"
+                android:layout_weight="0.7">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="Small Text"
+                    android:id="@+id/bottomPlayerOutput"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/bottomPlayerCardsLayout"
+                android:layout_weight="0.3"
+                android:gravity="center_vertical|center_horizontal">
+            </RelativeLayout>
+        </LinearLayout>
     </LinearLayout>
 
-    <RelativeLayout
-        android:orientation="vertical"
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:id="@+id/rightPlayerLayout"
-        android:layout_weight="0.45"
-        android:gravity="center_vertical|center_horizontal">
-    </RelativeLayout>
+        android:layout_gravity="center_vertical"
+        android:layout_weight="0.4">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/rightPlayerCardsLayout"
+            android:id="@+id/rightPlayerDisplayLayout"
+            android:layout_weight="0.7"
+            android:gravity="right">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="Medium Text"
+                android:id="@+id/rightPlayerOutput"
+                android:rotation="270"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:gravity="center" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:id="@+id/rightPlayerCardsLayout"
+            android:layout_weight="0.3"
+            android:gravity="center_vertical|center_horizontal">
+        </RelativeLayout>
+
+    </LinearLayout>
 </LinearLayout>

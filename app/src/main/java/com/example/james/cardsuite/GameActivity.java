@@ -40,6 +40,7 @@ public class GameActivity extends Activity {
 
         //Display the image buttons
         displayHands(0);
+        displayScores();
     }
 
     //Processes the state of the game manager.
@@ -153,6 +154,8 @@ public class GameActivity extends Activity {
                     scores.add(player.score);
                 }
 
+                displayScores();
+
                 // reshuffles deck, increments round count, resets all variables for the next round.
                 manager.reset();
                 finishedSwapping = false;
@@ -226,10 +229,10 @@ public class GameActivity extends Activity {
         }
 
         int temporaryID = 0; //Temporary ID to be assigned to each card, to be reused.
-        RelativeLayout left = (RelativeLayout)findViewById(R.id.leftPlayerLayout),
-                top = (RelativeLayout)findViewById(R.id.topPlayerLayout),
-                right = (RelativeLayout)findViewById(R.id.rightPlayerLayout),
-                bottom = (RelativeLayout)findViewById(R.id.bottomPlayerLayout);
+        RelativeLayout left = (RelativeLayout)findViewById(R.id.leftPlayerCardsLayout),
+                top = (RelativeLayout)findViewById(R.id.topPlayerCardsLayout),
+                right = (RelativeLayout)findViewById(R.id.rightPlayerCardsLayout),
+                bottom = (RelativeLayout)findViewById(R.id.bottomPlayerCardsLayout);
 
         //Now create the imagebuttons for each of the players
         for(int i = 0; i < 4; i++) {
@@ -284,6 +287,18 @@ public class GameActivity extends Activity {
             }
         }
         buttonsPresent = true;
+    }
+
+    public void displayScores() {
+        TextView bottomOutput = (TextView)findViewById(R.id.bottomPlayerOutput),
+                leftOutput = (TextView)findViewById(R.id.leftPlayerOutput),
+                topOutput = (TextView)findViewById(R.id.topPlayerOutput),
+                rightOutput = (TextView)findViewById(R.id.rightPlayerOutput);
+
+        bottomOutput.setText("Player 1 | Score: " + Integer.toString(manager.players[0].score));
+        leftOutput.setText("Player 2 | Score: " + Integer.toString(manager.players[1].score));
+        topOutput.setText("Player 3 | Score: " + Integer.toString(manager.players[2].score));
+        rightOutput.setText("Player 4 | Score: " + Integer.toString(manager.players[3].score));
     }
 
     @Override
