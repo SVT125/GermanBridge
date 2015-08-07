@@ -1,5 +1,4 @@
 package com.example.james.cardsuite;
-import android.util.Log;
 import android.widget.TextView;
 
 import java.io.Serializable;
@@ -100,10 +99,8 @@ public class HeartsManager extends Manager implements Serializable {
 
 		if(currentPlayer == startPlayer)
 			startSuit = selectCard.getSuit();
-
-		else if (!heartsBroken && (selectCard.getSuit().equals(Card.Suit.HEARTS) || selectCard.compareTo(new Card(12, Card.Suit.SPADES)) == 0)) {
+		else if (!heartsBroken && (selectCard.getSuit().equals(Card.Suit.HEARTS) || selectCard.compareTo(new Card(12, Card.Suit.SPADES)) == 0))
 			heartsBroken = true;
-		}
 
 		pot.put(currentPlayer, selectCard);
 		this.writeOutput((currentPlayer + 1) % 4, output, activity);

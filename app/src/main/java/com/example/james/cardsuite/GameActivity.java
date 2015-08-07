@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -246,7 +245,7 @@ public class GameActivity extends Activity {
         for(int i = 0; i < 4; i++) {
             //Display the rest of the hand
             int offsetMargin = 0; //The offset between cards, this should be relative to the first card and is summed over additional cards
-            for(int j = 0; j < manager.players[player].hand.size(); j++) {
+            for(int j = 0; j < manager.players[i].hand.size(); j++) {
                 RelativeLayout.LayoutParams restParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
 
                 //Set the offset between cards, left of/top of depending on player.
