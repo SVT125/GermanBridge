@@ -88,7 +88,7 @@ public class HeartsManager extends Manager implements Serializable {
 	//Called to handle every player's chosen card in the pot and analyzes the pot once all cards are put.
 	//This method is only used for console testing, won't apply to the Android app - don't input out of bounds.
 	public boolean potHandle(TextView output, int chosen, int currentPlayer, boolean initialOutputWritten, GameActivity activity) {
-		Card selectCard = players[currentPlayer].hand.remove(chosen);
+		Card selectCard = players[currentPlayer].hand.get(chosen);
 
 		if (!initialOutputWritten) {
 			this.writeOutput(currentPlayer, output, activity);
@@ -96,9 +96,56 @@ public class HeartsManager extends Manager implements Serializable {
 			return false;
 		}
 
-		if(currentPlayer == startPlayer)
-			startSuit = selectCard.getSuit();
+		if(currentPlayer == startPlayer) {
+			// first move by first player - if it's the first turn with all hands of 13 cards, only 2 of clubs can be placed
+			if (players[startPlayer].hand.size() == 13) {
+				if (players[startPlayer].hand.get(chosen).compareTo(new Card(2, Card.Suit.CLUBS)) != 0) {
+					output.setText("The first card placed can only be the 2 of clubs");
+					return false;
+				}
 
+				selectCard = players[startPlayer].hand.remove(chosen);
+				startSuit = selectCard.getSuit();
+			} else {
+				// if hearts is not broken, card cannot be hearts or queen of spades
+				if (heartsBroken) {
+					selectCard = players[startPlayer].hand.remove(chosen);
+				} else {
+					if (selectCard.getSuit().equals(Card.Suit.HEARTS) || selectCard.compareTo(new Card(12, Card.Suit.SPADES)) == 0) {
+						output.setText("The first card placed cannot be hearts or the queen of spades");
+						return false;
+					}
+					players[startPlayer].hand.remove(chosen);
+				}
+				startSuit = selectCard.getSuit();
+			}
+		} else {
+			// after first move, other three players place their cards down
+			// if player has a card of the same suit
+			if (players[currentPlayer].hasSuit(startSuit)) {
+				if(!selectCard.getSuit().equals(startSuit)) {
+					output.setText("You need to place a card of the same suit as the pot");
+					return false;
+				}
+				players[currentPlayer].hand.remove(chosen);
+			}
+			// otherwise if hand is 13, can play anything other than hearts
+			else if (players[currentPlayer].hand.size() == 13) {
+				if(selectCard.getSuit().equals(Card.Suit.HEARTS)) {
+					output.setText("Hearts has not been broken yet");
+					return false;
+				}
+				players[currentPlayer].hand.remove(chosen);
+			}
+			// if player does not have the same suit he can place anything
+			else {
+				if (selectCard.getSuit().equals(Card.Suit.HEARTS) ||
+						selectCard.compareTo(new Card(12, Card.Suit.SPADES)) == 0 && heartsBroken == false) {
+					heartsBroken = true;
+				}
+				selectCard = players[currentPlayer].hand.remove(chosen);
+			}
+		}
 		pot.put(currentPlayer, selectCard);
 		this.writeOutput((currentPlayer + 1) % 4, output, activity);
 		return true;
