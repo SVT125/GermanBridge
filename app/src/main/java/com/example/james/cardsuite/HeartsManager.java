@@ -33,6 +33,7 @@ public class HeartsManager extends Manager implements Serializable {
 	//Resets the state of the manager object for the next round.
 	public void reset() {
 		this.heartsBroken = false;
+		this.roundCount = 0;
 		for (int i = 2; i < 15; i++) {
 			for (Card.Suit suits : Card.Suit.values()) {
 				deck.add(new Card(i, suits));
