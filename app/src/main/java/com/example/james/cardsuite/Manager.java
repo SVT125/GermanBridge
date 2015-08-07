@@ -14,7 +14,7 @@ public abstract class Manager {
 	protected static Scanner scanner = new Scanner(System.in);
 	protected Map<Integer, Card> pot;
 	protected Card.Suit startSuit;
-	protected int startPlayer;
+	protected int startPlayer = 0;
 	protected Player[] players;
 
 	public abstract void potAnalyze();

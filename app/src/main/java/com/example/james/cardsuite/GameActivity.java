@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,7 +26,7 @@ public class GameActivity extends Activity {
     public boolean initialOutputWritten = false;
     private List<List<Card>> chosenLists = new ArrayList<List<Card>>();
     private List<Integer> chosenIndices = new ArrayList<Integer>();
-    private List<List<Card>> originalHands;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,14 +45,12 @@ public class GameActivity extends Activity {
     //Processes the state of the game manager.
     public void confirmClick(View v) {
         if(!(manager.isGameOver())) {
-            int chosenID = v.getId() % (13 - manager.getRoundCount() + 1), chosen = -1;
-            Card chosenCard = originalHands.get(currentPlayerInteracting).get(chosenID);
-            for(int i = 0; i < manager.players[currentPlayerInteracting].hand.size(); i++) {
-                if(manager.players[currentPlayerInteracting].hand.get(i).compareTo(chosenCard) == 0) {
-                    chosen = i;
-                    break;
-                }
-            }
+            int chosen = v.getId();
+            for(int i = 0; i < currentPlayerInteracting; i++)
+                chosen -= manager.players[i].hand.size();
+
+            Card chosenCard = manager.players[currentPlayerInteracting].hand.get(chosen);
+
 
             //Select or unselect the card with a border shown
             if(chosenCard.isClicked == false) {
@@ -154,7 +151,6 @@ public class GameActivity extends Activity {
                 for (Player player : manager.players) {
                     ((HeartsPlayer) player).scoreChange();
                     scores.add(player.score);
-                    Log.i("Score: ", Integer.toString(player.score));
                 }
 
                 // reshuffles deck, increments round count, resets all variables for the next round.
@@ -227,12 +223,6 @@ public class GameActivity extends Activity {
                 if(view != null)
                     ((ViewGroup) view.getParent()).removeView(view);
             }
-        }
-
-        if(originalHands == null) {
-            originalHands = new ArrayList<>();
-            for (Player p : manager.players)
-                originalHands.add(p.hand);
         }
 
         int temporaryID = 0; //Temporary ID to be assigned to each card, to be reused.
