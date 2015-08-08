@@ -7,7 +7,7 @@ public abstract class Player {
 	protected List<Card> hand;
 	protected int score;
 	
-	public abstract void scoreChange();
+	public abstract boolean scoreChange();
 	
 	public void organize() {
 		Collections.sort(hand, new CardComparator());
