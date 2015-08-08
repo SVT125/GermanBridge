@@ -40,6 +40,7 @@ public class HeartsManager extends Manager implements Serializable {
 		}
 		for (int i = 0; i < playerCount; i++) {
 			deck = players[i].fillHand(deck, random, 13);
+			players[i].organize();
 		}
 	}
 
@@ -66,7 +67,7 @@ public class HeartsManager extends Manager implements Serializable {
 	}
 
 	// Called to check whether a card should be selectable by a player or not
-	public boolean isCardSelectable(Card card, boolean finishedSwapping, int currentPlayer) {
+	public boolean cardSelectable(Card card, boolean finishedSwapping, int currentPlayer) {
 		// all swappable cards are selectable during the swapping process
 		if (finishedSwapping) {
 			// if first turn, only 2 of clubs can be selected
