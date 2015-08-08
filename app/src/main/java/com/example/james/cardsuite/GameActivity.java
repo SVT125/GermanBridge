@@ -151,21 +151,21 @@ public class GameActivity extends Activity {
             // Part 4 - The round is done, update the score and reset the manager for the next round.
             if(currentPotTurn == 13 && !manager.isGameOver()) {
                 List<Integer> scores = new ArrayList<Integer>();
+                boolean shootMoon = false;
                 for (Player player : manager.players) {
-                    ((HeartsPlayer) player).scoreChange();
+                    shootMoon = ((HeartsPlayer) player).scoreChange();
+                    if (shootMoon) {
+                        for (Player otherPlayers : manager.players) {
+                            if (!otherPlayers.equals(player)) {
+                                otherPlayers.score += 26;
+                            }
+                        }
+                    }
                     scores.add(player.score);
                 }
 
                 displayScores();
-
-                // reshuffles deck, increments round count, resets all variables for the next round.
-                manager.reset();
-                finishedSwapping = false; initialOutputWritten = false; buttonsPresent = false; foundStartPlayer = false;
-                currentPotTurn = 0; currentPlayerInteracting = 0;
-                displayHands(0);
-                chosenLists.clear();
-                chosenIndices.clear();
-
+                reset();
                 return;
             }
         } else {
@@ -173,8 +173,18 @@ public class GameActivity extends Activity {
             Intent intent = new Intent(GameActivity.this, ResultsActivity.class);
             intent.putExtra("manager", manager);
             startActivity(intent);
-            finish();
         }
+        finish();
+    }
+
+    // reshuffles deck, increments round count, resets all variables for the next round.
+    public void reset() {
+        manager.reset();
+        finishedSwapping = false; initialOutputWritten = false; buttonsPresent = false; foundStartPlayer = false;
+        currentPotTurn = 0; currentPlayerInteracting = 0;
+        displayHands(0);
+        chosenLists.clear();
+        chosenIndices.clear();
     }
 
     // Called when a player places a valid card into the pot; updates the images in the pot
