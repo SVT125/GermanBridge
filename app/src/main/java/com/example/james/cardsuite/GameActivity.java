@@ -22,7 +22,7 @@ public class GameActivity extends Activity {
     private HeartsManager manager;
     private TextView consoleOutput;
     private int currentPlayerInteracting = 0, currentPotTurn = 0;
-    private boolean foundStartPlayer = false, buttonsPresent = false, finishedSwapping = false;
+    private boolean foundStartPlayer = false, buttonsPresent = false, finishedSwapping = false, potPresent = false;
     public boolean initialOutputWritten = false;
     private List<List<Card>> chosenLists = new ArrayList<List<Card>>();
     private List<Integer> chosenIndices = new ArrayList<Integer>();
@@ -152,7 +152,7 @@ public class GameActivity extends Activity {
             if(currentPotTurn == 13 && !manager.isGameOver()) {
                 List<Integer> scores = new ArrayList<Integer>();
                 for (Player player : manager.players) {
-                    player.scoreChange();
+                    ((HeartsPlayer) player).scoreChange();
                     scores.add(player.score);
                 }
 
@@ -160,12 +160,11 @@ public class GameActivity extends Activity {
 
                 // reshuffles deck, increments round count, resets all variables for the next round.
                 manager.reset();
-                finishedSwapping = false;
-                initialOutputWritten = false;
-                buttonsPresent = false;
-                foundStartPlayer = false;
-                currentPotTurn = 0;
+                finishedSwapping = false; initialOutputWritten = false; buttonsPresent = false; foundStartPlayer = false;
+                currentPotTurn = 0; currentPlayerInteracting = 0;
                 displayHands(0);
+                chosenLists.clear();
+                chosenIndices.clear();
 
                 return;
             }
@@ -263,7 +262,7 @@ public class GameActivity extends Activity {
 
                     //Tint and make the card unselectable if it's not meant to be.
                     Card selectCard = manager.players[i].hand.get(j);
-                    if(!(manager.isCardSelectable(selectCard, finishedSwapping, i))) {
+                    if(!(manager.cardSelectable(selectCard, finishedSwapping, i))) {
                             cardButton.setColorFilter(Color.parseColor("#78505050"), PorterDuff.Mode.SRC_ATOP);
                             cardButton.setClickable(false);
                         }
@@ -273,19 +272,16 @@ public class GameActivity extends Activity {
                     cardButton.setImageResource(getResources().getIdentifier("cardback", "drawable", getPackageName()));
                 }
 
-                cardButton.setPadding(3,3,3,3);
+                cardButton.setPadding(2,2,2,2);
+                cardButton.setLayoutParams(restParams);
 
                 switch(i) {
-                    case 0: restParams.bottomMargin = 75;
-                        bottom.addView(cardButton, restParams); break;
+                    case 0: bottom.addView(cardButton); break;
                     case 1: cardButton.setRotation(90);
-                        restParams.leftMargin = 100;
-                        left.addView(cardButton, restParams); break;
-                    case 2: restParams.topMargin = 75;
-                        top.addView(cardButton, restParams); break;
+                        left.addView(cardButton); break;
+                    case 2: top.addView(cardButton); break;
                     case 3: cardButton.setRotation(270);
-                        restParams.leftMargin = 25;
-                        right.addView(cardButton, restParams); break;
+                        right.addView(cardButton); break;
                 }
                 cardButton.setId(temporaryID++);
                 offsetMargin += 65;
