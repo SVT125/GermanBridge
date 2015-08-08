@@ -168,11 +168,9 @@ public class SpadesManager extends Manager {
 			currentPlayer++;
 		}
 		
-		// total bids added up for partners.. neaten up this code please
-		players[0].partnerBid = players[2].bid;
-		players[1].partnerBid = players[3].bid;
-		players[2].partnerBid = players[0].bid;
-		players[3].partnerBid = players[1].bid;
+		// total bids added up for partners
+		for(int i = 0; i < 4; i++)
+			players[i].partnerBid = players[(i+2)%4].bid;
 		
 	}
 	

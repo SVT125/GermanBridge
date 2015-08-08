@@ -12,16 +12,31 @@
     <TextView android:text="@string/welcome_title" android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textView"
-        android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/start_title"
-        android:id="@+id/button"
+        android:text="@string/german_bridge_title"
+        android:id="@+id/german_button"
         android:layout_below="@+id/textView"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/hearts_title"
+        android:id="@+id/hearts_button"
+        android:layout_below="@+id/german_button"
         android:layout_centerHorizontal="true"
         android:onClick="startClick" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/spades_title"
+        android:id="@+id/spades_button"
+        android:layout_below="@+id/hearts_button"
+        android:layout_alignStart="@+id/hearts_button" />
 
 </RelativeLayout>

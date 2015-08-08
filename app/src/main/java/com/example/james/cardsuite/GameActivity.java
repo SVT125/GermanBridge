@@ -22,7 +22,7 @@ public class GameActivity extends Activity {
     private HeartsManager manager;
     private TextView consoleOutput;
     private int currentPlayerInteracting = 0, currentPotTurn = 0;
-    private boolean foundStartPlayer = false, buttonsPresent = false, finishedSwapping = false, potPresent = false;
+    private boolean foundStartPlayer = false, buttonsPresent = false, finishedSwapping = false;
     public boolean initialOutputWritten = false;
     private List<List<Card>> chosenLists = new ArrayList<List<Card>>();
     private List<Integer> chosenIndices = new ArrayList<Integer>();
@@ -152,7 +152,7 @@ public class GameActivity extends Activity {
             if(currentPotTurn == 13 && !manager.isGameOver()) {
                 List<Integer> scores = new ArrayList<Integer>();
                 for (Player player : manager.players) {
-                    ((HeartsPlayer) player).scoreChange();
+                    player.scoreChange();
                     scores.add(player.score);
                 }
 
@@ -263,7 +263,7 @@ public class GameActivity extends Activity {
 
                     //Tint and make the card unselectable if it's not meant to be.
                     Card selectCard = manager.players[i].hand.get(j);
-                    if(!(manager.cardSelectable(selectCard, finishedSwapping, i))) {
+                    if(!(manager.isCardSelectable(selectCard, finishedSwapping, i))) {
                             cardButton.setColorFilter(Color.parseColor("#78505050"), PorterDuff.Mode.SRC_ATOP);
                             cardButton.setClickable(false);
                         }
