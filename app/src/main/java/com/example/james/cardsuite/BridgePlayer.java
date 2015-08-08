@@ -1,7 +1,6 @@
 package com.example.james.cardsuite;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 public class BridgePlayer extends Player {
 	
@@ -13,7 +12,7 @@ public class BridgePlayer extends Player {
 		this.score = 0;
 	}
 	
-	public void scoreChange() {
+	public boolean scoreChange() {
 		if (guess == obtained) {
 			score = score + 10 + (int)Math.pow(2, obtained);
 		}
@@ -23,6 +22,7 @@ public class BridgePlayer extends Player {
 		}
 		guess = 0;
 		obtained = 0;
+		return false;
 	}
 	
 }
