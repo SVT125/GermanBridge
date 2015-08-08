@@ -273,7 +273,7 @@ public class GameActivity extends Activity {
                     cardButton.setImageResource(getResources().getIdentifier("cardback", "drawable", getPackageName()));
                 }
 
-                cardButton.setPadding(2,2,2,2);
+                cardButton.setPadding(3,3,3,3);
 
                 switch(i) {
                     case 0: restParams.bottomMargin = 75;
