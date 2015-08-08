@@ -274,15 +274,18 @@ public class GameActivity extends Activity {
                 }
 
                 cardButton.setPadding(2,2,2,2);
-                cardButton.setLayoutParams(restParams);
 
                 switch(i) {
-                    case 0: bottom.addView(cardButton); break;
+                    case 0: restParams.bottomMargin = 75;
+                        bottom.addView(cardButton, restParams); break;
                     case 1: cardButton.setRotation(90);
-                        left.addView(cardButton); break;
-                    case 2: top.addView(cardButton); break;
+                        restParams.leftMargin = 100;
+                        left.addView(cardButton, restParams); break;
+                    case 2: restParams.topMargin = 75;
+                        top.addView(cardButton, restParams); break;
                     case 3: cardButton.setRotation(270);
-                        right.addView(cardButton); break;
+                        restParams.leftMargin = 25;
+                        right.addView(cardButton, restParams); break;
                 }
                 cardButton.setId(temporaryID++);
                 offsetMargin += 65;

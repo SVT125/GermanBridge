@@ -13,23 +13,24 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:id="@+id/leftPlayerLayout"
-        android:layout_weight="0.4">
+        android:layout_weight="0.425">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
             android:id="@+id/leftPlayerCardsLayout"
-            android:layout_weight="0.3"
-            android:gravity="center_vertical|center_horizontal"
-            android:layout_gravity="center_horizontal">
+            android:layout_weight="0.2"
+            android:gravity="center_vertical"
+            android:layout_gravity="center_vertical">
+
         </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/leftPlayerDisplayLayout"
-            android:layout_weight="0.7"
+            android:layout_weight="0.8"
             android:gravity="left">
 
             <com.example.james.cardsuite.VerticalTextView
@@ -49,7 +50,7 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:id="@+id/centerLayout"
-        android:layout_weight="0.2">
+        android:layout_weight="0.15">
 
         <LinearLayout
             android:orientation="vertical"
@@ -71,7 +72,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/topPlayerDisplayLayout"
-                android:layout_weight="0.7">
+                android:layout_weight="0.7"
+                android:gravity="top">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -140,7 +142,8 @@
                     android:text="Small Text"
                     android:id="@+id/bottomPlayerOutput"
                     android:layout_centerVertical="true"
-                    android:layout_centerHorizontal="true" />
+                    android:layout_centerHorizontal="true"
+                    android:gravity="bottom" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -159,7 +162,7 @@
         android:layout_height="fill_parent"
         android:id="@+id/rightPlayerLayout"
         android:layout_gravity="center_vertical"
-        android:layout_weight="0.4">
+        android:layout_weight="0.425">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -167,7 +170,7 @@
             android:layout_centerVertical="true"
             android:layout_toEndOf="@+id/rightPlayerCardsLayout"
             android:id="@+id/rightPlayerDisplayLayout"
-            android:layout_weight="0.7"
+            android:layout_weight="0.8"
             android:gravity="right">
 
             <com.example.james.cardsuite.VerticalTextView
@@ -176,9 +179,9 @@
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="Medium Text"
                 android:id="@+id/rightPlayerOutput"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                android:gravity="bottom|center" />
+                android:gravity="bottom|center"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -186,8 +189,9 @@
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
             android:id="@+id/rightPlayerCardsLayout"
-            android:layout_weight="0.3"
-            android:gravity="center_vertical|center_horizontal">
+            android:layout_weight="0.2"
+            android:gravity="center_vertical">
+
         </RelativeLayout>
 
     </LinearLayout>
