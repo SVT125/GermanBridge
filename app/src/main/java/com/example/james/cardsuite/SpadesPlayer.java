@@ -17,7 +17,7 @@ public class SpadesPlayer extends Player {
 	}
 	
 	// PROBABLY VERY ERROR PRONE; BUG FIXES PROBABLY NECESSARY
-	public void scoreChange() {
+	public boolean scoreChange() {
 		totalBid = bid + partnerBid;
 		
 		// if nil bid is obtained by any person, team gets 100 points
@@ -40,6 +40,7 @@ public class SpadesPlayer extends Player {
 		else {
 			score = score - (totalBid - totalObtained) * 10;
 		}
+		return false;
 	}
 	
 }
