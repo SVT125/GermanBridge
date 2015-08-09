@@ -20,9 +20,10 @@ import java.util.List;
 
 public class GameActivity extends Activity {
     private HeartsManager manager;
+    private BridgeManager manager2;
     private TextView consoleOutput;
-    private int currentPlayerInteracting = 0, currentPotTurn = 0;
-    private boolean foundStartPlayer = false, buttonsPresent = false, finishedSwapping = false;
+    private int currentPlayerInteracting = 0, currentPotTurn = 0, guessIndex = 0;
+    private boolean foundStartPlayer = false, buttonsPresent = false, finishedSwapping = false, finishedGuessing = false;
     public boolean initialOutputWritten = false;
     private List<List<Card>> chosenLists = new ArrayList<List<Card>>();
     private List<Integer> chosenIndices = new ArrayList<Integer>();
@@ -43,15 +44,14 @@ public class GameActivity extends Activity {
         displayScores();
     }
 
-    //Processes the state of the game manager.
-    public void confirmClick(View v) {
+    //Processes the state of the game manager for hearts.
+    public void heartsClick(View v) {
         if(!(manager.isGameOver())) {
             int chosen = v.getId();
             for(int i = 0; i < currentPlayerInteracting; i++)
                 chosen -= manager.players[i].hand.size();
 
             Card chosenCard = manager.players[currentPlayerInteracting].hand.get(chosen);
-
 
             //Select or unselect the card with a border shown
             if(chosenCard.isClicked == false) {
@@ -179,6 +179,58 @@ public class GameActivity extends Activity {
         finish();
     }
 
+    //Processes the state of the game manager for hearts.
+    public void bridgeClick(View v) {
+        int chosen = v.getId();
+        for(int i = 0; i < currentPlayerInteracting; i++)
+            chosen -= manager.players[i].hand.size();
+
+        if(!foundStartPlayer) {
+            currentPlayerInteracting = manager2.startPlayer;
+            foundStartPlayer = true;
+        }
+
+        // players guess how much they will win
+        if(!finishedGuessing) {
+            currentPlayerInteracting = (currentPlayerInteracting + 1) % manager2.playerCount;
+
+            int guess = -1; //Substitute with a scrollable wheel dialog box in the future
+            /*
+            // if last player, cannot select a number that is the addition of the other guesses
+            if (i == playerCount - 1) {
+                do {
+                    guess = scanner.nextInt();
+                } while (guess >= potsFinished && (guess == potsFinished - addedGuesses) && guess < 0);
+            }
+            // other players can select any positive number lower than the max
+            else {
+                do {
+                    guess = scanner.nextInt();
+                } while (guess >= potsFinished && guess < 0);
+            }
+            */
+
+            manager2.addedGuesses += guess;
+            ((BridgePlayer)manager2.players[currentPlayerInteracting]).guess = guess;
+
+            if(guessIndex == manager2.playerCount)
+                finishedGuessing = true;
+        }
+
+        //Below code unchecked...
+
+        // players start putting cards into the pot and calculate score
+        for (int i = 0; i < manager2.potsFinished; i++) {
+            manager2.potHandle(chosen, currentPlayerInteracting);
+        }
+
+        for (Player player : manager2.players)
+            player.scoreChange();
+
+        // resets deck, hands, etc. and increments round
+        manager2.reset();
+    }
+
     // reshuffles deck, increments round count, resets all variables for the next round.
     public void reset() {
         manager.reset();
@@ -268,7 +320,7 @@ public class GameActivity extends Activity {
                     cardButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            confirmClick(v);
+                            heartsClick(v);
                         }
                     });
 

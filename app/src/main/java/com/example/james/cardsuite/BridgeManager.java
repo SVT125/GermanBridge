@@ -4,7 +4,7 @@ import java.util.Map.Entry;
 
 public class BridgeManager extends Manager {
 
-	private int addedGuesses = 0;
+	public int addedGuesses = 0;
 	private Card.Suit trumpSuit;
 	private Card trumpCard; //Variable included in case want to display the trump card
 	
@@ -49,35 +49,21 @@ public class BridgeManager extends Manager {
 	}
 
 	//Ignoring out of bounds errors because we will take care of this in android studio - don't input out of bounds.
-	public void potHandle() {
-		
-		// first player can choose any card he/she wants
-		int chosen = scanner.nextInt();
-		int currentPlayer = startPlayer;
-		
-
-		startSuit = players[startPlayer].hand.get(chosen).getSuit();
-		pot.put(startPlayer, players[startPlayer].hand.remove(chosen));
-		
-		// other players choose cards
-		for (int i = 0; i < playerCount - 1; i++) {
-			currentPlayer = (currentPlayer+1) % playerCount;
-			
-			// player must place similar suit to startSuit if he has it
-			if (players[currentPlayer].hasSuit(startSuit)) {
-				do {
-					chosen = scanner.nextInt();
-				} while (players[startPlayer].hand.get(chosen).getSuit() != startSuit);
-			}
-			// otherwise he places anything
-			else {
-				chosen = scanner.nextInt();
-			}
-			
-			pot.put(currentPlayer, players[currentPlayer].hand.remove(chosen));
+	public void potHandle(int chosen, int currentPlayer) {
+		// other players choose cards - must place similar suit to startSuit if they have it.
+		pot.put(startPlayer, players[currentPlayer].hand.remove(chosen));
+		if(currentPlayer == startPlayer) {
+			// first player can choose any card he/she wants
+			startSuit = players[startPlayer].hand.get(chosen).getSuit();
+			return;
 		}
-		
+
 		potAnalyze();
+	}
+
+	//Returns true if the given card should be selectable to the player
+	public boolean cardSelectable(Card card, int currentPlayer) {
+		return players[currentPlayer].hasSuit(startSuit) && card.getSuit() == startSuit;
 	}
 
 	//Analyzes the pot and updates the pile count for the winning player of the pot.
@@ -100,51 +86,5 @@ public class BridgeManager extends Manager {
 		}
 		// whoever wins pile gets one towards their obtained pile count
 		((BridgePlayer)players[startPlayer]).obtained++;
-	}
-	
-	public void guess() {
-		int guess;
-		int currentPlayer = startPlayer;
-		
-		for (int i = 0; i < playerCount; i++) {
-			currentPlayer = (currentPlayer+1) % playerCount;
-			
-			// if last player, cannot select a number that is the addition of the other guesses
-			if (i == playerCount - 1) {
-				do {
-					guess = scanner.nextInt();
-				} while (guess >= potsFinished && (guess == potsFinished - addedGuesses) && guess < 0);
-			}
-			// other players can select any positive number lower than the max
-			else {
-				do {
-					guess = scanner.nextInt();
-				} while (guess >= potsFinished && guess < 0);
-			}
-			
-			addedGuesses += guess;
-			((BridgePlayer)players[currentPlayer]).guess = guess;
-			currentPlayer++;
-		}
-	}
-
-	public static void main(String args[]) {
-
-		BridgeManager manager = new BridgeManager();
-
-		// players guess how much they will win
-		manager.guess();
-
-		// players start putting cards into the pot and calculate score
-		for (int i = 0; i < manager.potsFinished; i++) {
-			manager.potHandle();
-		}
-
-		for (Player player : manager.players) {
-			((BridgePlayer)player).scoreChange();
-		}
-
-		// resets deck, hands, etc. and increments round
-		manager.reset();
 	}
 }
