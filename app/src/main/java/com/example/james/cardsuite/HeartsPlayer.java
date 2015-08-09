@@ -1,7 +1,8 @@
 package com.example.james.cardsuite;
+import java.io.Serializable;
 import java.util.*;
 
-public class HeartsPlayer extends Player {
+public class HeartsPlayer extends Player implements Serializable {
 	
 	// added endPile to count scores of each player at the end of every round
 	protected List<Card> endPile;

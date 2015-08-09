@@ -10,7 +10,7 @@ public abstract class Manager {
 	protected ArrayList<Card> deck = new ArrayList<Card>();
 	protected Random random = new Random();
 	protected int playerCount;
-	protected int roundCount = 1;
+	protected int potsFinished = 1;
 	protected static Scanner scanner = new Scanner(System.in);
 	protected Map<Integer, Card> pot;
 	protected Card.Suit startSuit;
@@ -19,8 +19,8 @@ public abstract class Manager {
 
 	public abstract void potAnalyze();
 	public abstract void reset();
-	public int getRoundCount() {
-		return this.roundCount;
+	public int getPotsFinished() {
+		return this.potsFinished;
 	}
-	public void newRound() { roundCount++; }
+	public void newRound() { potsFinished++; }
 }

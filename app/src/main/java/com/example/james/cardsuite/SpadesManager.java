@@ -34,7 +34,7 @@ public class SpadesManager extends Manager {
 		
 		manager.bid();
 		
-		for (int i = 0; i < manager.roundCount; i++) {
+		for (int i = 0; i < manager.potsFinished; i++) {
 			manager.potHandle();
 		}
 		
@@ -47,7 +47,7 @@ public class SpadesManager extends Manager {
 	}
 	
 	public void reset() {
-		roundCount++;
+		potsFinished++;
 		spadesBroken = false;
 		// make deck
 		for (int i = 2; i < 15; i++) {

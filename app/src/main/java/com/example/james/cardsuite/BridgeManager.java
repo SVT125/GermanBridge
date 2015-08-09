@@ -23,7 +23,7 @@ public class BridgeManager extends Manager {
 		// give players cards via fillHand method
 		for (int i = 0; i < playerCount; i++) {
 			players[i] = new BridgePlayer();
-			deck = players[i].fillHand(deck, random, roundCount);
+			deck = players[i].fillHand(deck, random, potsFinished);
 		}
 		
 		// find a trumpCard
@@ -34,7 +34,7 @@ public class BridgeManager extends Manager {
 	//Resets the state of the manager object for the next round.
 	public void reset() {
 		deck.clear();
-		roundCount++;
+		potsFinished++;
 		for (int i = 2; i < 15; i++) {
 			for (Card.Suit suits : Card.Suit.values()) {
 				deck.add(new Card(i, suits));
@@ -42,7 +42,7 @@ public class BridgeManager extends Manager {
 		}
 		for (int i = 0; i < playerCount; i++) {
 			players[i] = new BridgePlayer();
-			deck = players[i].fillHand(deck, random, roundCount);
+			deck = players[i].fillHand(deck, random, potsFinished);
 		}
 		trumpSuit = deck.remove(random.nextInt(deck.size())).getSuit();
 		addedGuesses = 0;
@@ -113,13 +113,13 @@ public class BridgeManager extends Manager {
 			if (i == playerCount - 1) {
 				do {
 					guess = scanner.nextInt();
-				} while (guess >= roundCount && (guess == roundCount - addedGuesses) && guess < 0);
+				} while (guess >= potsFinished && (guess == potsFinished - addedGuesses) && guess < 0);
 			}
 			// other players can select any positive number lower than the max
 			else {
 				do {
 					guess = scanner.nextInt();
-				} while (guess >= roundCount && guess < 0);
+				} while (guess >= potsFinished && guess < 0);
 			}
 			
 			addedGuesses += guess;
@@ -136,7 +136,7 @@ public class BridgeManager extends Manager {
 		manager.guess();
 
 		// players start putting cards into the pot and calculate score
-		for (int i = 0; i < manager.roundCount; i++) {
+		for (int i = 0; i < manager.potsFinished; i++) {
 			manager.potHandle();
 		}
 

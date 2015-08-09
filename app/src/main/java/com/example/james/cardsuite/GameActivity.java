@@ -22,7 +22,7 @@ public class GameActivity extends Activity {
     private HeartsManager manager;
     private TextView consoleOutput;
     private int currentPlayerInteracting = 0, currentPotTurn = 0;
-    private boolean foundStartPlayer = false, buttonsPresent = false, finishedSwapping = false, potPresent = false;
+    private boolean foundStartPlayer = false, buttonsPresent = false, finishedSwapping = false;
     public boolean initialOutputWritten = false;
     private List<List<Card>> chosenLists = new ArrayList<List<Card>>();
     private List<Integer> chosenIndices = new ArrayList<Integer>();
@@ -64,7 +64,7 @@ public class GameActivity extends Activity {
 
             if(!finishedSwapping) {
                 // Part 1 - Swap the cards between players.
-                int swapRound = manager.getRoundCount() % 4;
+                int swapRound = manager.getPotsFinished() % 4;
                 if (currentPlayerInteracting != 4) {
                     //If the chosen card is already chosen, unselect it - otherwise, add it to our chosen cards.
                     if (chosenIndices.contains((Integer)chosen))
@@ -169,9 +169,11 @@ public class GameActivity extends Activity {
                 return;
             }
         } else {
-            // The game is done.
+            // The game is done - pass all relevant information for results activity to display.
+            // Passing manager just in case for future statistics if needbe.
             Intent intent = new Intent(GameActivity.this, ResultsActivity.class);
             intent.putExtra("manager", manager);
+            intent.putExtra("players", manager.players);
             startActivity(intent);
         }
         finish();

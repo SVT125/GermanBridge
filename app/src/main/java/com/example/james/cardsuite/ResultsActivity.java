@@ -3,6 +3,7 @@ package com.example.james.cardsuite;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +19,9 @@ public class ResultsActivity extends Activity {
 
         Intent intent = getIntent();
         HeartsManager manager = (HeartsManager)intent.getSerializableExtra("manager");
+        Player[] players = (Player[])intent.getSerializableExtra("players");
+        manager.players = players;
+
         TextView resultsView = (TextView)findViewById(R.id.resultsView);
         resultsView.setText("Player " + manager.findWinner() + " won the game!");
     }
