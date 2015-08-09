@@ -282,16 +282,19 @@ public class GameActivity extends Activity {
                     cardButton.setImageResource(getResources().getIdentifier("cardback", "drawable", getPackageName()));
                 }
 
-                cardButton.setPadding(2,2,2,2);
-                cardButton.setLayoutParams(restParams);
+                cardButton.setPadding(3, 3, 3, 3);
 
                 switch(i) {
-                    case 0: bottom.addView(cardButton); break;
-                    case 1: cardButton.setRotation(90);
-                        left.addView(cardButton); break;
-                    case 2: top.addView(cardButton); break;
-                    case 3: cardButton.setRotation(270);
-                        right.addView(cardButton); break;
+                    case 0: restParams.bottomMargin = 75;
+                        bottom.addView(cardButton, restParams); break;
+                    case 1: restParams.leftMargin = 100;
+                        cardButton.setRotation(90);
+                        left.addView(cardButton, restParams); break;
+                    case 2: restParams.topMargin = 75;
+                        top.addView(cardButton, restParams); break;
+                    case 3: restParams.leftMargin = 25;
+                        cardButton.setRotation(270);
+                        right.addView(cardButton, restParams); break;
                 }
                 cardButton.setId(temporaryID++);
                 offsetMargin += 65;
