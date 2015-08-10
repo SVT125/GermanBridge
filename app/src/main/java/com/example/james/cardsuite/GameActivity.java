@@ -1,6 +1,9 @@
 package com.example.james.cardsuite;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -9,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -22,7 +26,7 @@ public class GameActivity extends Activity {
     private HeartsManager manager;
     private BridgeManager manager2;
     private TextView consoleOutput;
-    private int currentPlayerInteracting = 0, currentPotTurn = 0, guessIndex = 0, currentRound = 0, potIndex = 0;
+    private int currentPlayerInteracting = 0, currentPotTurn = 0, guessIndex = 0, currentRound = 0, potIndex = 0, guess = -1;
     private boolean foundStartPlayer = false, buttonsPresent = false, finishedSwapping = false, finishedGuessing = false;
     public boolean initialOutputWritten = false;
     private List<List<Card>> chosenLists = new ArrayList<List<Card>>();
@@ -194,22 +198,31 @@ public class GameActivity extends Activity {
         if(!finishedGuessing) {
             currentPlayerInteracting = (currentPlayerInteracting + 1) % manager2.playerCount;
 
-            int guess = -1; //Substitute with a scrollable wheel dialog box in the future
-
-            /*
-            // if last player, cannot select a number that is the addition of the other guesses
-            if (i == playerCount - 1) {
-                do {
-                    guess = scanner.nextInt();
-                } while (guess >= roundCount && (guess == roundCount - addedGuesses) && guess < 0);
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Player " + (currentPlayerInteracting + 1) + " bids");
+            final ArrayAdapter<Integer> adapter = new ArrayAdapter<Integer>(this, android.R.layout.select_dialog_singlechoice);
+            if(currentPlayerInteracting == manager2.playerCount - 1) {
+                for(int i = 0; i < manager2.totalRoundCount; i++)
+                    if(i != manager2.totalRoundCount- manager2.addedGuesses)
+                        adapter.add(i);
+            } else {
+                for(int j = 0; j < manager2.totalRoundCount; j++)
+                    adapter.add(j);
             }
-            // other players can select any positive number lower than the max
-            else {
-                do {
-                    guess = scanner.nextInt();
-                } while (guess >= roundCount && guess < 0);
-            }
-            */
+            builder.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if(guess != -1)
+                        dialog.dismiss();
+                }
+            });
+            builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    guess = adapter.getItem(which);
+                }
+            });
+            builder.show();
 
             manager2.addedGuesses += guess;
             ((BridgePlayer)manager2.players[currentPlayerInteracting]).guess = guess;
@@ -221,23 +234,32 @@ public class GameActivity extends Activity {
         }
 
         // players start putting cards into the pot and calculate score
-        if(currentRound < manager2.roundCount - 1) {
+        if(manager2.potsFinished < manager2.totalRoundCount - 1) {
             int currentPlayer = (currentPlayerInteracting + potIndex) % manager2.playerCount;
             manager2.potHandle(chosen,currentPlayer);
 
             potIndex++;
 
-            if(potIndex == manager2.playerCount)
-                currentRound++;
+            if(potIndex == manager2.playerCount) {
+                potIndex = 0;
+
+                for (Player player : manager2.players)
+                    player.scoreChange();
+
+                // resets deck, hands, etc. and increments round
+                manager2.reset();
+            }
 
             return;
         }
 
-        for (Player player : manager2.players)
-            player.scoreChange();
-
-        // resets deck, hands, etc. and increments round
-        manager2.reset();
+        // The game is done - pass all relevant information for results activity to display.
+        // Passing manager just in case for future statistics if needbe.
+        Intent intent = new Intent(GameActivity.this, ResultsActivity.class);
+        intent.putExtra("manager", manager);
+        intent.putExtra("players", manager.players);
+        startActivity(intent);
+        finish();
     }
 
     // reshuffles deck, increments round count, resets all variables for the next round.

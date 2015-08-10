@@ -5,7 +5,7 @@ import java.util.Map.Entry;
 public class BridgeManager extends Manager {
 
 	public int addedGuesses = 0;
-	public int roundCount = 12; //Change later for variable number of players
+	public final int totalRoundCount = 12; //Change later for variable number of players
 	private Card.Suit trumpSuit;
 	private Card trumpCard; //Variable included in case want to display the trump card
 	
