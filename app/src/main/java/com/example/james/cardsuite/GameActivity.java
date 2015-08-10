@@ -25,8 +25,9 @@ import java.util.List;
 public class GameActivity extends Activity {
     private HeartsManager manager;
     private BridgeManager manager2;
+    private SpadesManager manager3;
     private TextView consoleOutput;
-    private int currentPlayerInteracting = 0, currentPotTurn = 0, guessIndex = 0, currentRound = 0, potIndex = 0, guess = -1;
+    private int currentPlayerInteracting = 0, currentPotTurn = 0, guessIndex = 0, currentRound = 0, potIndex = 0, guess = -1; gameMode = 0;
     private boolean foundStartPlayer = false, buttonsPresent = false, finishedSwapping = false, finishedGuessing = false;
     public boolean initialOutputWritten = false;
     private List<List<Card>> chosenLists = new ArrayList<List<Card>>();
@@ -35,17 +36,45 @@ public class GameActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_game);
-        manager = new HeartsManager();
+        setContentView(R.layout.activity_game); 
+        Intent intent = getIntent();
+        gameMode = intent.getIntExtra("gameMode", 0);
+        if (gameMode == 0) {
+            manager = new HeartsManager();
 
-        consoleOutput = (TextView)findViewById(R.id.consoleOutput);
+            consoleOutput = (TextView)findViewById(R.id.consoleOutput);
 
-        //Set the instruction text
-        consoleOutput.setText("Player 1 chooses a card to swap");
+            //Set the instruction text
+            consoleOutput.setText("Player 1 chooses a card to swap");
 
-        //Display the image buttons
-        displayHands(0);
-        displayScores();
+            //Display the image buttons
+            displayHands(0);
+            displayScores();
+        }
+        else if (gameMode == 1) {
+            manager2 = new BridgeManager();
+
+            consoleOutput = (TextView)findViewById(R.id.consoleOutput);
+
+            //Set the instruction text
+            consoleOutput.setText("Player 1 choose how many hands you will win");
+
+            //Display the image buttons
+            displayHands(0);
+            displayScores();
+        }
+        else if (gameMode == 2) {
+            manager3 = new SpadesManager();
+
+            consoleOutput = (TextView)findViewById(R.id.consoleOutput);
+
+            //Set the instruction text
+            consoleOutput.setText("Player 1 choose how many tricks you will win");
+
+            //Display the image buttons
+            displayHands(0);
+            displayScores();
+        }
     }
 
     //Processes the state of the game manager for hearts.
