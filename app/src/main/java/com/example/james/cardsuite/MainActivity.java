@@ -7,8 +7,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-
 public class MainActivity extends Activity {
+
+    int gameMode = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,9 +17,33 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
     }
 
-    public void startClick(View v) {
+    public void heartsClick(View v) {
+
+        gameMode = 0;
+
         //Add bundle content as needed
         Intent intent = new Intent(MainActivity.this,GameActivity.class);
+        intent.putExtra("gameMode", gameMode);
+        startActivity(intent);
+        finish();
+    }
+
+    public void bridgeClick(View v) {
+        gameMode = 1;
+
+        //Add bundle content as needed
+        Intent intent = new Intent(MainActivity.this,GameActivity.class);
+        intent.putExtra("gameMode", gameMode);
+        startActivity(intent);
+        finish();
+    }
+
+    public void spadesClick(View v) {
+        gameMode = 2;
+
+        //Add bundle content as needed
+        Intent intent = new Intent(MainActivity.this,GameActivity.class);
+        intent.putExtra("gameMode", gameMode);
         startActivity(intent);
         finish();
     }
