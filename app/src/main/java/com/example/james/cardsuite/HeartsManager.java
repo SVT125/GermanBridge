@@ -132,7 +132,7 @@ public class HeartsManager extends Manager implements Serializable {
 	}
 
 	//Determines the start player for the first round.
-	public void findStartPlayer() {
+	public int findStartPlayer() {
 		for (int j = 0; j < playerCount; j++) {
 			for (int i = 0; i < players[j].hand.size(); i++) {
 				if (players[j].hand.get(i).compareTo(new Card(2, Card.Suit.CLUBS)) == 0) {
@@ -140,6 +140,7 @@ public class HeartsManager extends Manager implements Serializable {
 				}
 			}
 		}
+		return startPlayer;
 	}
 
 	//Called for the swapping part of the round, alongside swapCards - returns the cards chosen of player index playerNum.
