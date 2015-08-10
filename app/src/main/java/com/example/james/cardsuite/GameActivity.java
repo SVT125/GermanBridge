@@ -22,7 +22,7 @@ public class GameActivity extends Activity {
     private HeartsManager manager;
     private BridgeManager manager2;
     private TextView consoleOutput;
-    private int currentPlayerInteracting = 0, currentPotTurn = 0, guessIndex = 0;
+    private int currentPlayerInteracting = 0, currentPotTurn = 0, guessIndex = 0, currentRound = 0, potIndex = 0;
     private boolean foundStartPlayer = false, buttonsPresent = false, finishedSwapping = false, finishedGuessing = false;
     public boolean initialOutputWritten = false;
     private List<List<Card>> chosenLists = new ArrayList<List<Card>>();
@@ -195,18 +195,19 @@ public class GameActivity extends Activity {
             currentPlayerInteracting = (currentPlayerInteracting + 1) % manager2.playerCount;
 
             int guess = -1; //Substitute with a scrollable wheel dialog box in the future
+
             /*
             // if last player, cannot select a number that is the addition of the other guesses
             if (i == playerCount - 1) {
                 do {
                     guess = scanner.nextInt();
-                } while (guess >= potsFinished && (guess == potsFinished - addedGuesses) && guess < 0);
+                } while (guess >= roundCount && (guess == roundCount - addedGuesses) && guess < 0);
             }
             // other players can select any positive number lower than the max
             else {
                 do {
                     guess = scanner.nextInt();
-                } while (guess >= potsFinished && guess < 0);
+                } while (guess >= roundCount && guess < 0);
             }
             */
 
@@ -215,13 +216,21 @@ public class GameActivity extends Activity {
 
             if(guessIndex == manager2.playerCount)
                 finishedGuessing = true;
+
+            return;
         }
 
-        //Below code unchecked...
-
         // players start putting cards into the pot and calculate score
-        for (int i = 0; i < manager2.potsFinished; i++) {
-            manager2.potHandle(chosen, currentPlayerInteracting);
+        if(currentRound < manager2.roundCount - 1) {
+            int currentPlayer = (currentPlayerInteracting + potIndex) % manager2.playerCount;
+            manager2.potHandle(chosen,currentPlayer);
+
+            potIndex++;
+
+            if(potIndex == manager2.playerCount)
+                currentRound++;
+
+            return;
         }
 
         for (Player player : manager2.players)
