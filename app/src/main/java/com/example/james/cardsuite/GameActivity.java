@@ -87,7 +87,7 @@ public class GameActivity extends Activity {
     public void bridgeHandle(View v) {
         int chosen = v.getId();
         for(int i = 0; i < currentPlayerInteracting; i++)
-            chosen -= manager.players[i].hand.size();
+            chosen -= manager.getPlayers()[i].hand.size();
 
         if(!foundStartPlayer) {
             currentPlayerInteracting = manager.findStartPlayer();
@@ -125,7 +125,7 @@ public class GameActivity extends Activity {
             builder.show();
 
             manager.addedGuesses += guess;
-            ((BridgePlayer)manager.players[currentPlayerInteracting]).guess = guess;
+            ((BridgePlayer)manager.getPlayers()[currentPlayerInteracting]).guess = guess;
 
             if(guessIndex == manager.playerCount)
                 finishedGuessing = true;
@@ -143,7 +143,7 @@ public class GameActivity extends Activity {
             if(potIndex == manager.playerCount) {
                 potIndex = 0;
 
-                for (Player player : manager.players)
+                for (Player player : manager.getPlayers())
                     player.scoreChange();
 
                 // resets deck, hands, etc. and increments round
@@ -157,7 +157,7 @@ public class GameActivity extends Activity {
         // Passing manager just in case for future statistics if needbe.
         Intent intent = new Intent(GameActivity.this, ResultsActivity.class);
         intent.putExtra("manager", (Parcelable) manager);
-        intent.putExtra("players", manager.players);
+        intent.putExtra("players", manager.getPlayers());
         startActivity(intent);
         finish();
     }
@@ -166,7 +166,7 @@ public class GameActivity extends Activity {
         if(!(manager.isGameOver())) {
             int chosen = v.getId();
             for (int i = 0; i < currentPlayerInteracting; i++)
-                chosen -= manager.players[i].hand.size();
+                chosen -= manager.getPlayers()[i].hand.size();
 
             if (!foundStartPlayer) {
                 currentPlayerInteracting = manager.findStartPlayer();
@@ -208,7 +208,7 @@ public class GameActivity extends Activity {
 
             if(currentPotTurn == 13 && !manager.isGameOver()) {
                 List<Integer> scores = new ArrayList<Integer>();
-                for (Player player : manager.players) {
+                for (Player player : manager.getPlayers()) {
                     scores.add(player.score);
                 }
 
@@ -222,7 +222,7 @@ public class GameActivity extends Activity {
             // Passing manager just in case for future statistics if needbe.
             Intent intent = new Intent(GameActivity.this, ResultsActivity.class);
             intent.putExtra("manager", (Parcelable) manager);
-            intent.putExtra("players", manager.players);
+            intent.putExtra("players", manager.getPlayers());
             startActivity(intent);
         }
         finish();
@@ -232,9 +232,9 @@ public class GameActivity extends Activity {
         if(!(manager.isGameOver())) {
             int chosen = v.getId();
             for(int i = 0; i < currentPlayerInteracting; i++)
-                chosen -= manager.players[i].hand.size();
+                chosen -= manager.getPlayers()[i].hand.size();
 
-            Card chosenCard = manager.players[currentPlayerInteracting].hand.get(chosen);
+            Card chosenCard = manager.getPlayers()[currentPlayerInteracting].hand.get(chosen);
 
             //Select or unselect the card with a border shown
             if(chosenCard.isClicked == false) {
@@ -271,13 +271,13 @@ public class GameActivity extends Activity {
                     if (currentPlayerInteracting == 4) {
                         for (int i = 0; i < 4; i++) {
                             manager.swapCards(chosenLists.get(i), i, swapRound);
-                            manager.players[i].organize();
+                            manager.getPlayers()[i].organize();
                             displayHands(0);
                             currentPlayerInteracting = 0;
                         }
                         finishedSwapping = true;
                     } else {
-                        manager.players[currentPlayerInteracting].organize();
+                        manager.getPlayers()[currentPlayerInteracting].organize();
                         displayHands(currentPlayerInteracting);
                         return;
                     }
@@ -316,7 +316,7 @@ public class GameActivity extends Activity {
                 manager.potAnalyze(); //sets the new start player for the next pot
                 currentPlayerInteracting = manager.startPlayer;
                 for (Card c : manager.pot.values()) {
-                    ((HeartsPlayer)manager.players[manager.startPlayer]).endPile.add(c);
+                    ((HeartsPlayer)manager.getPlayers()[manager.startPlayer]).endPile.add(c);
                 }
 
                 displayScores();
@@ -334,10 +334,10 @@ public class GameActivity extends Activity {
             if(currentPotTurn == 13 && !manager.isGameOver()) {
                 List<Integer> scores = new ArrayList<Integer>();
                 boolean shootMoon = false;
-                for (Player player : manager.players) {
+                for (Player player : manager.getPlayers()) {
                     shootMoon = ((HeartsPlayer) player).scoreChange();
                     if (shootMoon) {
-                        for (Player otherPlayers : manager.players) {
+                        for (Player otherPlayers : manager.getPlayers()) {
                             if (!otherPlayers.equals(player)) {
                                 otherPlayers.score += 26;
                             }
@@ -355,7 +355,7 @@ public class GameActivity extends Activity {
             // Passing manager just in case for future statistics if needbe.
             Intent intent = new Intent(GameActivity.this, ResultsActivity.class);
             intent.putExtra("manager", (Parcelable) manager);
-            intent.putExtra("players", manager.players);
+            intent.putExtra("players", manager.getPlayers());
             startActivity(intent);
         }
         finish();
@@ -433,7 +433,7 @@ public class GameActivity extends Activity {
         for(int i = 0; i < 4; i++) {
             //Display the rest of the hand
             int offsetMargin = 0; //The offset between cards, this should be relative to the first card and is summed over additional cards
-            for(int j = 0; j < manager.players[i].hand.size(); j++) {
+            for(int j = 0; j < manager.getPlayers()[i].hand.size(); j++) {
                 RelativeLayout.LayoutParams restParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
 
                 //Set the offset between cards, left of/top of depending on player.
@@ -446,7 +446,7 @@ public class GameActivity extends Activity {
                 ImageView cardButton;
                 if(i == player) {
                     cardButton = new ImageButton(this);
-                    cardButton.setImageResource(getResources().getIdentifier(manager.players[player].hand.get(j).getAddress(), "drawable", getPackageName()));
+                    cardButton.setImageResource(getResources().getIdentifier(manager.getPlayers()[player].hand.get(j).getAddress(), "drawable", getPackageName()));
                     cardButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -455,7 +455,7 @@ public class GameActivity extends Activity {
                     });
 
                     //Tint and make the card unselectable if it's not meant to be.
-                    Card selectCard = manager.players[i].hand.get(j);
+                    Card selectCard = manager.getPlayers()[i].hand.get(j);
                     if(!(manager.cardSelectable(selectCard, finishedSwapping, i))) {
                             cardButton.setColorFilter(Color.parseColor("#78505050"), PorterDuff.Mode.SRC_ATOP);
                             cardButton.setClickable(false);
@@ -493,10 +493,10 @@ public class GameActivity extends Activity {
                 topOutput = (TextView)findViewById(R.id.topPlayerOutput),
                 rightOutput = (TextView)findViewById(R.id.rightPlayerOutput);
 
-        bottomOutput.setText("Player 1 | Score: " + Integer.toString(manager.players[0].score));
-        leftOutput.setText("Player 2 | Score: " + Integer.toString(manager.players[1].score));
-        topOutput.setText("Player 3 | Score: " + Integer.toString(manager.players[2].score));
-        rightOutput.setText("Player 4 | Score: " + Integer.toString(manager.players[3].score));
+        bottomOutput.setText("Player 1 | Score: " + Integer.toString(manager.getPlayers()[0].score));
+        leftOutput.setText("Player 2 | Score: " + Integer.toString(manager.getPlayers()[1].score));
+        topOutput.setText("Player 3 | Score: " + Integer.toString(manager.getPlayers()[2].score));
+        rightOutput.setText("Player 4 | Score: " + Integer.toString(manager.getPlayers()[3].score));
     }
 
     @Override
