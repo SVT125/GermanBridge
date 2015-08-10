@@ -24,9 +24,7 @@ import java.util.List;
 
 
 public class GameActivity extends Activity {
-    private HeartsManager manager;
-    private BridgeManager manager2;
-    private SpadesManager manager3;
+    private Manager manager;
     private TextView consoleOutput;
     private int currentPlayerInteracting = 0, currentPotTurn = 0, guessIndex = 0, currentRound = 0, potIndex = 0, guess = -1, gameMode = 0;
     private boolean foundStartPlayer = false, buttonsPresent = false, finishedSwapping = false, finishedGuessing = false;
@@ -53,7 +51,7 @@ public class GameActivity extends Activity {
             displayScores();
         }
         else if (gameMode == 1) {
-            manager2 = new BridgeManager();
+            manager = new BridgeManager();
 
             consoleOutput = (TextView)findViewById(R.id.consoleOutput);
 
@@ -65,7 +63,7 @@ public class GameActivity extends Activity {
             displayScores();
         }
         else if (gameMode == 2) {
-            manager3 = new SpadesManager();
+            manager = new SpadesManager();
 
             consoleOutput = (TextView)findViewById(R.id.consoleOutput);
 
@@ -92,23 +90,23 @@ public class GameActivity extends Activity {
             chosen -= manager.players[i].hand.size();
 
         if(!foundStartPlayer) {
-            currentPlayerInteracting = manager2.startPlayer;
+            currentPlayerInteracting = manager.findStartPlayer();
             foundStartPlayer = true;
         }
 
         // players guess how much they will win
         if(!finishedGuessing) {
-            currentPlayerInteracting = (currentPlayerInteracting + 1) % manager2.playerCount;
+            currentPlayerInteracting = (currentPlayerInteracting + 1) % manager.playerCount;
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Player " + (currentPlayerInteracting + 1) + " bids");
             final ArrayAdapter<Integer> adapter = new ArrayAdapter<Integer>(this, android.R.layout.select_dialog_singlechoice);
-            if(currentPlayerInteracting == manager2.playerCount - 1) {
-                for(int i = 0; i < manager2.totalRoundCount; i++)
-                    if(i != manager2.totalRoundCount- manager2.addedGuesses)
+            if(currentPlayerInteracting == manager.playerCount - 1) {
+                for(int i = 0; i < manager.totalRoundCount; i++)
+                    if(i != manager.totalRoundCount- manager.addedGuesses)
                         adapter.add(i);
             } else {
-                for(int j = 0; j < manager2.totalRoundCount; j++)
+                for(int j = 0; j < manager.totalRoundCount; j++)
                     adapter.add(j);
             }
             builder.setNeutralButton("OK", new DialogInterface.OnClickListener() {
@@ -126,30 +124,30 @@ public class GameActivity extends Activity {
             });
             builder.show();
 
-            manager2.addedGuesses += guess;
-            ((BridgePlayer)manager2.players[currentPlayerInteracting]).guess = guess;
+            manager.addedGuesses += guess;
+            ((BridgePlayer)manager.players[currentPlayerInteracting]).guess = guess;
 
-            if(guessIndex == manager2.playerCount)
+            if(guessIndex == manager.playerCount)
                 finishedGuessing = true;
 
             return;
         }
 
         // players start putting cards into the pot and calculate score
-        if(manager2.potsFinished < manager2.totalRoundCount - 1) {
-            int currentPlayer = (currentPlayerInteracting + potIndex) % manager2.playerCount;
-            manager2.potHandle(chosen,currentPlayer);
+        if(manager.potsFinished < manager.totalRoundCount - 1) {
+            int currentPlayer = (currentPlayerInteracting + potIndex) % manager.playerCount;
+            manager.potHandle(consoleOutput, chosen, currentPlayerInteracting, initialOutputWritten, this);
 
             potIndex++;
 
-            if(potIndex == manager2.playerCount) {
+            if(potIndex == manager.playerCount) {
                 potIndex = 0;
 
-                for (Player player : manager2.players)
+                for (Player player : manager.players)
                     player.scoreChange();
 
                 // resets deck, hands, etc. and increments round
-                manager2.reset();
+                manager.reset();
             }
 
             return;
@@ -158,7 +156,7 @@ public class GameActivity extends Activity {
         // The game is done - pass all relevant information for results activity to display.
         // Passing manager just in case for future statistics if needbe.
         Intent intent = new Intent(GameActivity.this, ResultsActivity.class);
-        intent.putExtra("manager", manager);
+        intent.putExtra("manager", (Parcelable) manager);
         intent.putExtra("players", manager.players);
         startActivity(intent);
         finish();
@@ -168,17 +166,15 @@ public class GameActivity extends Activity {
         if(!(manager.isGameOver())) {
             int chosen = v.getId();
             for (int i = 0; i < currentPlayerInteracting; i++)
-                chosen -= manager3.players[i].hand.size();
+                chosen -= manager.players[i].hand.size();
 
             if (!foundStartPlayer) {
-                currentPlayerInteracting = manager3.startPlayer;
+                currentPlayerInteracting = manager.findStartPlayer();
                 foundStartPlayer = true;
             }
 
-            Card chosenCard = manager3.players[currentPlayerInteracting].hand.get(chosen);
-
-            if (manager3.potHandle(consoleOutput, chosen, currentPlayerInteracting, initialOutputWritten, this)) {
-                if (currentPlayerInteracting == manager3.startPlayer)
+            if (manager.potHandle(consoleOutput, chosen, currentPlayerInteracting, initialOutputWritten, this)) {
+                if (currentPlayerInteracting == manager.startPlayer)
                     for (int i = 0; i < 4; i++)
                         potClear();
 
@@ -186,36 +182,37 @@ public class GameActivity extends Activity {
                 currentPlayerInteracting = (currentPlayerInteracting + 1) % 4;
 
                 // If the pot reaches max size of 4, then we know to continue and compare cards
-                if (manager3.pot.size() != 4) {
+                if (manager.pot.size() != 4) {
                     return;
                 }
             } else {
                 return;
             }
 
-            if (currentPlayerInteracting == manager3.startPlayer && currentPotTurn != 13) {
+            if (currentPlayerInteracting == manager.startPlayer && currentPotTurn != 13) {
                 currentPotTurn++;
 
-                manager3.potAnalyze(); //sets the new start player for the next pot
-                currentPlayerInteracting = manager3.startPlayer;
+                manager.potAnalyze(); //sets the new start player for the next pot
+                currentPlayerInteracting = manager.startPlayer;
 
                 displayScores();
-                manager3.pot.clear();
-                manager3.newRound();
+                manager.pot.clear();
+                manager.newRound();
 
                 if (currentPotTurn != 13) {
                     consoleOutput.setText("Player " + Integer.toString(currentPlayerInteracting + 1) + " wins the pot! Place a card to begin next round");
-                    displayHands(manager3.startPlayer);
+                    displayHands(manager.startPlayer);
                     return;
                 }
             }
 
-            if(currentPotTurn == 13 && !manager3.isGameOver()) {
+            if(currentPotTurn == 13 && !manager.isGameOver()) {
                 List<Integer> scores = new ArrayList<Integer>();
-                for (Player player : manager3.players) {
+                for (Player player : manager.players) {
                     scores.add(player.score);
                 }
 
+                foundStartPlayer = false;
                 displayScores();
                 reset();
                 return;
@@ -224,7 +221,7 @@ public class GameActivity extends Activity {
             // The game is done - pass all relevant information for results activity to display.
             // Passing manager just in case for future statistics if needbe.
             Intent intent = new Intent(GameActivity.this, ResultsActivity.class);
-            intent.putExtra("manager", (Parcelable) manager3);
+            intent.putExtra("manager", (Parcelable) manager);
             intent.putExtra("players", manager.players);
             startActivity(intent);
         }
@@ -290,9 +287,8 @@ public class GameActivity extends Activity {
             // Done swapping by this point - this should only be called once, the turn directly when we're done swapping.
             // Part 2 - Find player with 2 of clubs, we do this here because the card may be swapped.
             if(!foundStartPlayer) {
-                manager.findStartPlayer();
+                currentPlayerInteracting = manager.findStartPlayer();
                 foundStartPlayer = true;
-                currentPlayerInteracting = manager.startPlayer;
             }
 
             // Part 3 - handle cards being tossed in the pot until all cards are gone (13 turns).
@@ -358,7 +354,7 @@ public class GameActivity extends Activity {
             // The game is done - pass all relevant information for results activity to display.
             // Passing manager just in case for future statistics if needbe.
             Intent intent = new Intent(GameActivity.this, ResultsActivity.class);
-            intent.putExtra("manager", manager);
+            intent.putExtra("manager", (Parcelable) manager);
             intent.putExtra("players", manager.players);
             startActivity(intent);
         }
