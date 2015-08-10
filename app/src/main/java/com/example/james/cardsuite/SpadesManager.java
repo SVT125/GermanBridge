@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.widget.TextView;
 
 import java.awt.font.TextAttribute;
+import java.util.Collection;
+import java.util.List;
 import java.util.Map.Entry;
 
 public class SpadesManager extends Manager {
@@ -28,6 +30,7 @@ public class SpadesManager extends Manager {
 		for (int i = 0; i < playerCount; i++) {
 			players[i] = new SpadesPlayer();
 			deck = players[i].fillHand(deck, random, 13);
+			players[i].organize();
 		}
 		
 	}
@@ -57,7 +60,13 @@ public class SpadesManager extends Manager {
 		for (int i = 0; i < playerCount; i++) {
 			players[i] = new SpadesPlayer();
 			deck = players[i].fillHand(deck, random, 13);
+			players[i].organize();
 		}
+	}
+
+	public int findStartPlayer() {
+		this.startPlayer = potsFinished % 4 - 1;
+		return this.startPlayer;
 	}
 
 	public boolean potHandle(TextView output, int chosen, int currentPlayer, boolean initialOutputWritten, GameActivity activity) {
@@ -79,7 +88,7 @@ public class SpadesManager extends Manager {
 		return true;
 	}
 
-	public boolean cardSelectable(Card card, int currentPlayer) {
+	public boolean cardSelectable(Card card, boolean finishedSwapping, int currentPlayer) {
 		if ((players[startPlayer].hand.size() == 13) && (card.compareTo(new Card(2, Card.Suit.CLUBS)) != 0)) {
 			return false;
 		}
@@ -135,29 +144,6 @@ public class SpadesManager extends Manager {
 			players[startPlayer + 2].totalObtained++;
 		}
 	}
-	
-	public void bid() {
-		
-		int bid;
-		int currentPlayer = startPlayer;
-		
-		for (int i = 0; i < playerCount; i++) {
-			
-			if (currentPlayer == playerCount) {
-				currentPlayer = 0;
-			}
-			
-			do {
-				bid = scanner.nextInt();
-			} while (bid > -1 && bid < 14);
-			
-			players[currentPlayer].bid = bid;
-			currentPlayer++;
-		}
-		
-		// total bids added up for partners
-		for(int i = 0; i < 4; i++)
-			players[i].partnerBid = players[(i+2)%4].bid;
-		
-	}
+	public List<Card> chooseCards(int playerNum, List<Integer> chosenIndices) {return null;};
+	public void swapCards(Collection<?> chosen, int playerNum, int swapRound) {return;};
 }
