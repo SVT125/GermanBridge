@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -164,7 +165,70 @@ public class GameActivity extends Activity {
     }
 
     public void spadesHandle(View v) {
+        if(!(manager.isGameOver())) {
+            int chosen = v.getId();
+            for (int i = 0; i < currentPlayerInteracting; i++)
+                chosen -= manager3.players[i].hand.size();
 
+            if (!foundStartPlayer) {
+                currentPlayerInteracting = manager3.startPlayer;
+                foundStartPlayer = true;
+            }
+
+            Card chosenCard = manager3.players[currentPlayerInteracting].hand.get(chosen);
+
+            if (manager3.potHandle(consoleOutput, chosen, currentPlayerInteracting, initialOutputWritten, this)) {
+                if (currentPlayerInteracting == manager3.startPlayer)
+                    for (int i = 0; i < 4; i++)
+                        potClear();
+
+                displayPot();
+                currentPlayerInteracting = (currentPlayerInteracting + 1) % 4;
+
+                // If the pot reaches max size of 4, then we know to continue and compare cards
+                if (manager3.pot.size() != 4) {
+                    return;
+                }
+            } else {
+                return;
+            }
+
+            if (currentPlayerInteracting == manager3.startPlayer && currentPotTurn != 13) {
+                currentPotTurn++;
+
+                manager3.potAnalyze(); //sets the new start player for the next pot
+                currentPlayerInteracting = manager3.startPlayer;
+
+                displayScores();
+                manager3.pot.clear();
+                manager3.newRound();
+
+                if (currentPotTurn != 13) {
+                    consoleOutput.setText("Player " + Integer.toString(currentPlayerInteracting + 1) + " wins the pot! Place a card to begin next round");
+                    displayHands(manager3.startPlayer);
+                    return;
+                }
+            }
+
+            if(currentPotTurn == 13 && !manager3.isGameOver()) {
+                List<Integer> scores = new ArrayList<Integer>();
+                for (Player player : manager3.players) {
+                    scores.add(player.score);
+                }
+
+                displayScores();
+                reset();
+                return;
+            }
+        } else {
+            // The game is done - pass all relevant information for results activity to display.
+            // Passing manager just in case for future statistics if needbe.
+            Intent intent = new Intent(GameActivity.this, ResultsActivity.class);
+            intent.putExtra("manager", (Parcelable) manager3);
+            intent.putExtra("players", manager.players);
+            startActivity(intent);
+        }
+        finish();
     }
 
     public void heartsHandle(View v) {
