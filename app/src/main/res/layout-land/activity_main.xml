@@ -20,7 +20,8 @@
         android:text="@string/german_bridge_title"
         android:id="@+id/german_button"
         android:layout_below="@+id/textView"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:onClick="bridgeClick" />
 
     <Button
         android:layout_width="wrap_content"
@@ -29,7 +30,7 @@
         android:id="@+id/hearts_button"
         android:layout_below="@+id/german_button"
         android:layout_centerHorizontal="true"
-        android:onClick="startClick" />
+        android:onClick="heartsClick" />
 
     <Button
         android:layout_width="wrap_content"
@@ -37,6 +38,7 @@
         android:text="@string/spades_title"
         android:id="@+id/spades_button"
         android:layout_below="@+id/hearts_button"
-        android:layout_alignStart="@+id/hearts_button" />
+        android:layout_alignStart="@+id/hearts_button"
+        android:onClick="spadesClick" />
 
 </RelativeLayout>
