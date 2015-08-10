@@ -5,6 +5,7 @@ import java.util.Map.Entry;
 public class BridgeManager extends Manager {
 
 	public int addedGuesses = 0;
+	public int roundCount = 12; //Change later for variable number of players
 	private Card.Suit trumpSuit;
 	private Card trumpCard; //Variable included in case want to display the trump card
 	
@@ -52,6 +53,7 @@ public class BridgeManager extends Manager {
 	public void potHandle(int chosen, int currentPlayer) {
 		// other players choose cards - must place similar suit to startSuit if they have it.
 		pot.put(startPlayer, players[currentPlayer].hand.remove(chosen));
+
 		if(currentPlayer == startPlayer) {
 			// first player can choose any card he/she wants
 			startSuit = players[startPlayer].hand.get(chosen).getSuit();

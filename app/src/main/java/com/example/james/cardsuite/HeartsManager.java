@@ -44,8 +44,6 @@ public class HeartsManager extends Manager implements Serializable {
 		}
 	}
 
-
-
 	//Returns true if the game is over, when someone has hit 100 points.
 	public boolean isGameOver() {
 		for(Player player : players)
