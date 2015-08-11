@@ -19,16 +19,6 @@ public class MainActivity extends Activity {
 
     public void heartsClick(View v) {
 
-        gameMode = 0;
-
-        //Add bundle content as needed
-        Intent intent = new Intent(MainActivity.this,GameActivity.class);
-        intent.putExtra("gameMode", gameMode);
-        startActivity(intent);
-        finish();
-    }
-
-    public void bridgeClick(View v) {
         gameMode = 1;
 
         //Add bundle content as needed
@@ -38,8 +28,18 @@ public class MainActivity extends Activity {
         finish();
     }
 
-    public void spadesClick(View v) {
+    public void bridgeClick(View v) {
         gameMode = 2;
+
+        //Add bundle content as needed
+        Intent intent = new Intent(MainActivity.this,GameActivity.class);
+        intent.putExtra("gameMode", gameMode);
+        startActivity(intent);
+        finish();
+    }
+
+    public void spadesClick(View v) {
+        gameMode = 3;
 
         //Add bundle content as needed
         Intent intent = new Intent(MainActivity.this,GameActivity.class);

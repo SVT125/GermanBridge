@@ -1,8 +1,10 @@
 package com.example.james.cardsuite;
 
+import android.util.Log;
 import android.widget.TextView;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -12,25 +14,26 @@ public class BridgeManager extends Manager {
 	public final int totalRoundCount = 12; //Change later for variable number of players
 	private Card.Suit trumpSuit;
 	private Card trumpCard; //Variable included in case want to display the trump card
-	
+
 	public BridgeManager() {
+		pot = new HashMap<Integer, Card>();
 		playerCount = 4;
 		players = new BridgePlayer[playerCount];
 		startPlayer = 0;
-		
+
 		// make deck
 		for (int i = 2; i < 15; i++) {
 			for (Card.Suit suits : Card.Suit.values()) {
 				deck.add(new Card(i, suits));
 			}
 		}
-		
+
 		// give players cards via fillHand method
 		for (int i = 0; i < playerCount; i++) {
 			players[i] = new BridgePlayer();
 			deck = players[i].fillHand(deck, random, potsFinished);
 		}
-		
+
 		// find a trumpCard
 		trumpCard = deck.remove(random.nextInt(deck.size()));
 		trumpSuit = trumpCard.getSuit();
@@ -53,34 +56,24 @@ public class BridgeManager extends Manager {
 		addedGuesses = 0;
 	}
 
-	public int findStartPlayer() {
-		this.startPlayer = potsFinished % 4 - 1;
-		return this.startPlayer;
-	}
-
-	public boolean isGameOver() {
-		if (totalRoundCount == (52/playerCount)) return true;
-		return false;
-	}
-
 	//Ignoring out of bounds errors because we will take care of this in android studio - don't input out of bounds.
 	public boolean potHandle(TextView output, int chosen, int currentPlayer, boolean initialOutputWritten, GameActivity activity) {
 		// other players choose cards - must place similar suit to startSuit if they have it.
-		pot.put(startPlayer, players[currentPlayer].hand.remove(chosen));
+		pot.put(startPlayer, players[currentPlayer].hand.get(chosen));
 
 		if(currentPlayer == startPlayer) {
 			// first player can choose any card he/she wants
-			startSuit = players[startPlayer].hand.get(chosen).getSuit();
-			return false;
+			startSuit = players[startPlayer].hand.remove(chosen).getSuit();
+			return true;
 		}
 
-		potAnalyze();
+		players[currentPlayer].hand.remove(chosen);
 		return true;
 	}
 
 	//Returns true if the given card should be selectable to the player
 	public boolean cardSelectable(Card card, boolean finishedSwapping, int currentPlayer) {
-		return players[currentPlayer].hasSuit(startSuit) && card.getSuit() == startSuit;
+		return !(players[currentPlayer].hasSuit(startSuit) && card.getSuit() == startSuit) || (card.getSuit() == startSuit);
 	}
 
 	//Analyzes the pot and updates the pile count for the winning player of the pot.
@@ -107,5 +100,16 @@ public class BridgeManager extends Manager {
 
 	public List<Card> chooseCards(int playerNum, List<Integer> chosenIndices) {return null;};
 	public void swapCards(Collection<?> chosen, int playerNum, int swapRound) {return;};
+
 	public Player[] getPlayers() { return this.players; }
+
+	public int findStartPlayer() {
+		this.startPlayer = potsFinished % 4 - 1;
+		return this.startPlayer;
+	}
+
+	public boolean isGameOver() {
+		if (totalRoundCount == (52/playerCount)) return true;
+		return false;
+	}
 }
