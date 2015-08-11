@@ -13,7 +13,6 @@ import java.util.Map.Entry;
 public class SpadesManager extends Manager implements Serializable {
 
 	private boolean spadesBroken = false;
-	public SpadesPlayer[] players;
 	
 	public SpadesManager() {
 		
@@ -36,10 +35,10 @@ public class SpadesManager extends Manager implements Serializable {
 			players[i].organize();
 		}
 
-		players[0].partner = players[2];
-		players[2].partner = players[0];
-		players[1].partner = players[3];
-		players[3].partner = players[1];
+		((SpadesPlayer)players[0]).partner = (SpadesPlayer)players[2];
+		((SpadesPlayer)players[2]).partner = (SpadesPlayer)players[0];
+		((SpadesPlayer)players[1]).partner = (SpadesPlayer)players[3];
+		((SpadesPlayer)players[3]).partner = (SpadesPlayer)players[1];
 		
 	}
 
@@ -151,9 +150,9 @@ public class SpadesManager extends Manager implements Serializable {
 			}
 		}
 
-		players[startPlayer].obtained++;
-		players[startPlayer].totalObtained++;
-		players[startPlayer].partner.totalObtained++;
+		((SpadesPlayer)players[startPlayer]).obtained++;
+		((SpadesPlayer)players[startPlayer]).totalObtained++;
+		((SpadesPlayer)players[startPlayer]).partner.totalObtained++;
 	}
 
 	public Player[] getPlayers() { return this.players; }
