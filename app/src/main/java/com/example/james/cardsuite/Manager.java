@@ -1,5 +1,6 @@
 package com.example.james.cardsuite;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -8,7 +9,7 @@ import java.util.Random;
 
 import android.widget.TextView;
 
-public abstract class Manager {
+public abstract class Manager implements Serializable {
 	
 	protected ArrayList<Card> deck = new ArrayList<Card>();
 	protected Map<Integer, Card> pot;

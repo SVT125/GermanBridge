@@ -3,15 +3,15 @@ package com.example.james.cardsuite;
 import android.util.Log;
 import android.widget.TextView;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-public class BridgeManager extends Manager {
+public class BridgeManager extends Manager implements Serializable {
 
 	public int addedGuesses = 0;
-	public final int totalRoundCount = 12; //Change later for variable number of players
 	private Card.Suit trumpSuit;
 	private Card trumpCard; //Variable included in case want to display the trump card
 

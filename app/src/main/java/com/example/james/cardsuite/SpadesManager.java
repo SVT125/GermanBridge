@@ -4,12 +4,13 @@ import android.app.Activity;
 import android.widget.TextView;
 
 import java.awt.font.TextAttribute;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-public class SpadesManager extends Manager {
+public class SpadesManager extends Manager implements Serializable {
 
 	private boolean spadesBroken = false;
 	public SpadesPlayer[] players;

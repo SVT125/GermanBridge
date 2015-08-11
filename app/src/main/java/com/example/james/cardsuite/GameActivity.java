@@ -30,8 +30,8 @@ import java.util.List;
 public class GameActivity extends Activity {
     private Manager manager;
     private TextView consoleOutput;
-    private int currentPlayerInteracting = 0, currentPotTurn = 0, guessIndex = 0, currentRound = 0, potIndex = 0, guess = -1, gameMode = 0;
-    private boolean foundStartPlayer = false, buttonsPresent = false, finishedSwapping = false, finishedGuessing = false;
+    private int currentPlayerInteracting = 0, currentPotTurn = 0, guessIndex = 0, potIndex = 0, guess = -1, gameMode = 0;
+    private boolean foundStartPlayer = false, buttonsPresent = false, finishedSwapping = false;
     public boolean initialOutputWritten = false;
     private List<List<Card>> chosenLists = new ArrayList<List<Card>>();
     private List<Integer> chosenIndices = new ArrayList<Integer>();
@@ -56,6 +56,7 @@ public class GameActivity extends Activity {
         }
         else if (gameMode == 2) {
             manager = new BridgeManager();
+            manager.totalRoundCount = 12; // Change later for variable number of players
 
             consoleOutput = (TextView)findViewById(R.id.consoleOutput);
 
@@ -128,7 +129,7 @@ public class GameActivity extends Activity {
         // The game is done - pass all relevant information for results activity to display.
         // Passing manager just in case for future statistics if needbe.
         Intent intent = new Intent(GameActivity.this, ResultsActivity.class);
-        intent.putExtra("manager", (Parcelable)manager);
+        intent.putExtra("manager", manager);
         intent.putExtra("players", manager.players);
         startActivity(intent);
         finish();
@@ -194,7 +195,7 @@ public class GameActivity extends Activity {
             // The game is done - pass all relevant information for results activity to display.
             // Passing manager just in case for future statistics if needbe.
             Intent intent = new Intent(GameActivity.this, ResultsActivity.class);
-            intent.putExtra("manager", (Parcelable) manager);
+            intent.putExtra("manager", manager);
             intent.putExtra("players", manager.getPlayers());
             startActivity(intent);
         }
@@ -327,7 +328,7 @@ public class GameActivity extends Activity {
             // The game is done - pass all relevant information for results activity to display.
             // Passing manager just in case for future statistics if needbe.
             Intent intent = new Intent(GameActivity.this, ResultsActivity.class);
-            intent.putExtra("manager", (Parcelable) manager);
+            intent.putExtra("manager", manager);
             intent.putExtra("players", manager.getPlayers());
             startActivity(intent);
         }
@@ -477,12 +478,12 @@ public class GameActivity extends Activity {
         currentPlayerInteracting = (currentPlayerInteracting + 1) % manager.playerCount;
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
         builder.setTitle("Player " + (currentPlayerInteracting + 1) + " bids");
         HorizontalScrollView horizontalScrollView = new HorizontalScrollView(this);
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.HORIZONTAL);
 
-        Log.i("Total round ct: ", Integer.toString(manager.totalRoundCount));
         if(currentPlayerInteracting == manager.playerCount - 1) {
             for(int i = 0; i < manager.totalRoundCount; i++)
                 if(i != manager.totalRoundCount - manager.addedGuesses) {
@@ -512,22 +513,32 @@ public class GameActivity extends Activity {
 
         horizontalScrollView.addView(layout);
         builder.setView(horizontalScrollView);
-        builder.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("OK",null);
+
+        final AlertDialog d = builder.create();
+
+        d.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (guess != -1) {
-                    manager.addedGuesses += guess;
-                    ((BridgePlayer) manager.players[currentPlayerInteracting]).guess = guess;
-                    guessIndex++;
-                    dialog.dismiss();
-                    if (guessIndex < manager.playerCount)
-                        openGuessDialog();
-                    else
-                        currentPlayerInteracting = manager.startPlayer;
-                }
+            public void onShow(DialogInterface dialog) {
+                Button okButton = d.getButton(AlertDialog.BUTTON_POSITIVE);
+                okButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (guess != -1) {
+                            manager.addedGuesses += guess;
+                            ((BridgePlayer) manager.players[currentPlayerInteracting]).guess = guess;
+                            guessIndex++;
+                            d.dismiss();
+                            if (guessIndex < manager.playerCount)
+                                openGuessDialog();
+                            else
+                                currentPlayerInteracting = manager.startPlayer;
+                        }
+                    }
+                });
             }
         });
-        builder.show();
+        d.show();
     }
 
     @Override
