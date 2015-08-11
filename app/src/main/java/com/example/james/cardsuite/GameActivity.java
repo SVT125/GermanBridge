@@ -209,6 +209,7 @@ public class GameActivity extends Activity {
             if(currentPotTurn == 13 && !manager.isGameOver()) {
                 List<Integer> scores = new ArrayList<Integer>();
                 for (Player player : manager.getPlayers()) {
+                    player.scoreChange();
                     scores.add(player.score);
                 }
 
