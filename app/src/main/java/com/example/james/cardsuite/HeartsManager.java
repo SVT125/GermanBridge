@@ -182,4 +182,6 @@ public class HeartsManager extends Manager implements Serializable {
 		}
 		players[otherPlayer].hand.addAll((Collection<? extends Card>)chosen);
 	}
+	
+	public Player[] getPlayers() { return this.players; }
 }
