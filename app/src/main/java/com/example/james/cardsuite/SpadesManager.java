@@ -77,6 +77,17 @@ public class SpadesManager extends Manager implements Serializable {
 		return this.startPlayer;
 	}
 
+	public int findWinner() {
+		int max = 0, winner = -1;
+		for (int i = 0; i < 4; i++) {
+			if (players[i].score > max) {
+				winner = i;
+				max = players[i].score;
+			}
+		}
+		return winner;
+	}
+
 	public boolean potHandle(TextView output, int chosen, int currentPlayer, boolean initialOutputWritten, GameActivity activity) {
 		if (!initialOutputWritten) {
 			this.writeOutput(currentPlayer, output, activity);
