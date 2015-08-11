@@ -35,6 +35,7 @@ public class GameActivity extends Activity {
     public boolean initialOutputWritten = false;
     private List<List<Card>> chosenLists = new ArrayList<List<Card>>();
     private List<Integer> chosenIndices = new ArrayList<Integer>();
+    private List<Integer> scores = new ArrayList<Integer>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +43,9 @@ public class GameActivity extends Activity {
         setContentView(R.layout.activity_game); 
         Intent intent = getIntent();
         gameMode = intent.getIntExtra("gameMode", 0);
+        for (int i = 0; i < 4; i++) {
+            scores.add(0);
+        }
         if (gameMode == 1) {
             manager = new HeartsManager();
 
@@ -52,7 +56,7 @@ public class GameActivity extends Activity {
 
             //Display the image buttons
             displayHands(0);
-            displayScores();
+            displayScores(scores);
         }
         else if (gameMode == 2) {
             manager = new BridgeManager();
@@ -65,7 +69,7 @@ public class GameActivity extends Activity {
 
             //Display the image buttons
             displayHands(manager.startPlayer);
-            displayScores();
+            displayScores(scores);
 
             openGuessDialog();
         }
@@ -79,7 +83,7 @@ public class GameActivity extends Activity {
 
             //Display the image buttons
             displayHands(0);
-            displayScores();
+            displayScores(scores);
         }
     }
 
@@ -115,7 +119,7 @@ public class GameActivity extends Activity {
                 for (Player player : manager.players)
                     player.scoreChange();
 
-                displayScores();
+                displayScores(scores);
 
                 // resets deck, hands, etc. and increments round
                 manager.reset();
@@ -168,7 +172,7 @@ public class GameActivity extends Activity {
                 manager.potAnalyze(); //sets the new start player for the next pot
                 currentPlayerInteracting = manager.startPlayer;
 
-                displayScores();
+                displayScores(scores);
                 manager.pot.clear();
                 manager.newRound();
 
@@ -187,7 +191,7 @@ public class GameActivity extends Activity {
                 }
 
                 foundStartPlayer = false;
-                displayScores();
+                displayScores(scores);
                 reset();
                 return;
             }
@@ -293,7 +297,7 @@ public class GameActivity extends Activity {
                     ((HeartsPlayer)manager.getPlayers()[manager.startPlayer]).endPile.add(c);
                 }
 
-                displayScores();
+                displayScores(scores);
                 manager.pot.clear();
                 manager.newRound();
 
@@ -306,7 +310,7 @@ public class GameActivity extends Activity {
 
             // Part 4 - The round is done, update the score and reset the manager for the next round.
             if(currentPotTurn == 13 && !manager.isGameOver()) {
-                List<Integer> scores = new ArrayList<Integer>();
+                scores.clear();
                 boolean shootMoon = false;
                 for (Player player : manager.getPlayers()) {
                     shootMoon = ((HeartsPlayer) player).scoreChange();
@@ -320,7 +324,7 @@ public class GameActivity extends Activity {
                     scores.add(player.score);
                 }
 
-                displayScores();
+                displayScores(scores);
                 reset();
                 return;
             }
@@ -461,16 +465,16 @@ public class GameActivity extends Activity {
         buttonsPresent = true;
     }
 
-    public void displayScores() {
+    public void displayScores(List<Integer> scores) {
         TextView bottomOutput = (TextView)findViewById(R.id.bottomPlayerOutput),
                 leftOutput = (TextView)findViewById(R.id.leftPlayerOutput),
                 topOutput = (TextView)findViewById(R.id.topPlayerOutput),
                 rightOutput = (TextView)findViewById(R.id.rightPlayerOutput);
 
-        bottomOutput.setText("Player 1 | Score: " + Integer.toString(manager.getPlayers()[0].score));
-        leftOutput.setText("Player 2 | Score: " + Integer.toString(manager.getPlayers()[1].score));
-        topOutput.setText("Player 3 | Score: " + Integer.toString(manager.getPlayers()[2].score));
-        rightOutput.setText("Player 4 | Score: " + Integer.toString(manager.getPlayers()[3].score));
+        bottomOutput.setText("Player 1 | Score: " + Integer.toString(scores.get(0)));
+        leftOutput.setText("Player 2 | Score: " + Integer.toString(scores.get(1)));
+        topOutput.setText("Player 3 | Score: " + Integer.toString(scores.get(2)));
+        rightOutput.setText("Player 4 | Score: " + Integer.toString(scores.get(3)));
     }
 
     //Opens the guess dialog - fit for German Bridge for now.
