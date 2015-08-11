@@ -5,6 +5,7 @@ import android.widget.TextView;
 
 import java.awt.font.TextAttribute;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -18,6 +19,7 @@ public class SpadesManager extends Manager {
 		playerCount = 4;
 		players = new SpadesPlayer[playerCount];
 		startPlayer = 0;
+		pot = new HashMap<Integer, Card>();
 		
 		// make deck
 		for (int i = 2; i < 15; i++) {
@@ -32,6 +34,11 @@ public class SpadesManager extends Manager {
 			deck = players[i].fillHand(deck, random, 13);
 			players[i].organize();
 		}
+
+		players[0].partner = players[2];
+		players[2].partner = players[0];
+		players[1].partner = players[3];
+		players[3].partner = players[1];
 		
 	}
 
@@ -89,10 +96,7 @@ public class SpadesManager extends Manager {
 	}
 
 	public boolean cardSelectable(Card card, boolean finishedSwapping, int currentPlayer) {
-		if ((players[startPlayer].hand.size() == 13) && (card.compareTo(new Card(2, Card.Suit.CLUBS)) != 0)) {
-			return false;
-		}
-		if (currentPlayer == startPlayer && (!spadesBroken && (card.getSuit().equals(Card.Suit.HEARTS)) || card.compareTo(new Card(12, Card.Suit.SPADES)) == 0)) {
+		if (currentPlayer == startPlayer && (!spadesBroken && (card.getSuit().equals(Card.Suit.SPADES)))) {
 			return false;
 		}
 		if (players[currentPlayer].hasSuit(startSuit) && pot.size() != 0) {
@@ -134,16 +138,14 @@ public class SpadesManager extends Manager {
 				}
 			}
 		}
-		// CONDENSE SOMEHOW PLS
+
 		players[startPlayer].obtained++;
 		players[startPlayer].totalObtained++;
-		if (startPlayer > 2) {
-			players[startPlayer - 2].totalObtained++;
-		}
-		else {
-			players[startPlayer + 2].totalObtained++;
-		}
+		players[startPlayer].partner.totalObtained++;
 	}
+
+	public Player[] getPlayers() { return this.players; }
+
 	public List<Card> chooseCards(int playerNum, List<Integer> chosenIndices) {return null;};
 	public void swapCards(Collection<?> chosen, int playerNum, int swapRound) {return;};
 }
