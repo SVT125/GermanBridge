@@ -107,4 +107,5 @@ public class BridgeManager extends Manager {
 
 	public List<Card> chooseCards(int playerNum, List<Integer> chosenIndices) {return null;};
 	public void swapCards(Collection<?> chosen, int playerNum, int swapRound) {return;};
+	public Player[] getPlayers() { return this.players; }
 }
