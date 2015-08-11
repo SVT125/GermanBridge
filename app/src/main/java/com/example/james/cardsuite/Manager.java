@@ -27,6 +27,7 @@ public abstract class Manager implements Serializable {
 	public abstract void swapCards(Collection<?> chosen, int playerNum, int swapRound);
 	public abstract int findStartPlayer();
 	public abstract Player[] getPlayers();
+	public abstract int findWinner();
 	public int getPotsFinished() {
 		return this.potsFinished;
 	}
