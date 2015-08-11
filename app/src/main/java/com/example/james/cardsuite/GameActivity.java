@@ -40,7 +40,7 @@ public class GameActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_game); 
+        setContentView(R.layout.activity_game);
         Intent intent = getIntent();
         gameMode = intent.getIntExtra("gameMode", 0);
         for (int i = 0; i < 4; i++) {
@@ -71,7 +71,7 @@ public class GameActivity extends Activity {
             displayHands(manager.startPlayer);
             displayScores(scores);
 
-            openGuessDialog();
+            openGuessDialog(gameMode);
         }
         else if (gameMode == 3) {
             manager = new SpadesManager();
@@ -84,6 +84,8 @@ public class GameActivity extends Activity {
             //Display the image buttons
             displayHands(0);
             displayScores(scores);
+
+            openGuessDialog(gameMode);
         }
     }
 
@@ -478,7 +480,7 @@ public class GameActivity extends Activity {
     }
 
     //Opens the guess dialog - fit for German Bridge for now.
-    public void openGuessDialog() {
+    public void openGuessDialog(final int gameMode) {
         currentPlayerInteracting = (currentPlayerInteracting + 1) % manager.playerCount;
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -488,36 +490,50 @@ public class GameActivity extends Activity {
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.HORIZONTAL);
 
-        if(currentPlayerInteracting == manager.playerCount - 1) {
-            for(int i = 0; i < manager.totalRoundCount; i++)
-                if(i != manager.totalRoundCount - manager.addedGuesses) {
+        if (gameMode == 3) {
+            for (int i = 1; i <= manager.players[currentPlayerInteracting].hand.size(); i++) {
+                Button guessButton = new Button(this);
+                guessButton.setText(Integer.toString(i));
+                guessButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        guess = Integer.parseInt(((TextView) v).getText().toString());
+                    }
+                });
+                layout.addView(guessButton);
+            }
+        } else {
+            if (currentPlayerInteracting == manager.playerCount - 1) {
+                for (int i = 1; i <= manager.potsFinished; i++)
+                    if (i != manager.potsFinished - manager.addedGuesses - 1) {
+                        Button guessButton = new Button(this);
+                        guessButton.setText(Integer.toString(i));
+                        guessButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                guess = Integer.parseInt(((TextView) v).getText().toString());
+                            }
+                        });
+                        layout.addView(guessButton);
+                    }
+            } else {
+                for (int j = 1; j <= manager.potsFinished; j++) {
                     Button guessButton = new Button(this);
-                    guessButton.setText(Integer.toString(i));
+                    guessButton.setText(Integer.toString(j));
                     guessButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            guess = Integer.parseInt(((TextView)v).getText().toString());
+                            guess = Integer.parseInt(((TextView) v).getText().toString());
                         }
                     });
                     layout.addView(guessButton);
                 }
-        } else {
-            for(int j = 0; j < manager.totalRoundCount; j++) {
-                Button guessButton = new Button(this);
-                guessButton.setText(Integer.toString(j));
-                guessButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        guess = Integer.parseInt(((TextView)v).getText().toString());
-                    }
-                });
-                layout.addView(guessButton);
             }
         }
 
         horizontalScrollView.addView(layout);
         builder.setView(horizontalScrollView);
-        builder.setPositiveButton("OK",null);
+        builder.setPositiveButton("OK", null);
 
         final AlertDialog d = builder.create();
 
@@ -529,12 +545,16 @@ public class GameActivity extends Activity {
                     @Override
                     public void onClick(View v) {
                         if (guess != -1) {
-                            manager.addedGuesses += guess;
-                            ((BridgePlayer) manager.players[currentPlayerInteracting]).guess = guess;
+                            if (gameMode == 2) {
+                                manager.addedGuesses += guess;
+                                ((BridgePlayer) manager.players[currentPlayerInteracting]).guess = guess;
+                            } else if (gameMode == 3)
+                                ((SpadesPlayer) manager.players[currentPlayerInteracting]).bid = guess;
+
                             guessIndex++;
                             d.dismiss();
                             if (guessIndex < manager.playerCount)
-                                openGuessDialog();
+                                openGuessDialog(gameMode);
                             else
                                 currentPlayerInteracting = manager.startPlayer;
                         }
