@@ -6,7 +6,8 @@
     android:screenOrientation="landscape"
     android:configChanges="orientation|keyboardHidden"
     android:weightSum="1"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:background="@drawable/test_background">
 
     <LinearLayout
         android:orientation="horizontal"
