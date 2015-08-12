@@ -18,7 +18,7 @@ public class ResultsActivity extends Activity {
         setContentView(R.layout.activity_results);
 
         Intent intent = getIntent();
-        HeartsManager manager = (HeartsManager)intent.getSerializableExtra("manager");
+        Manager manager = (Manager)intent.getSerializableExtra("manager");
         Player[] players = (Player[])intent.getSerializableExtra("players");
         manager.players = players;
 
