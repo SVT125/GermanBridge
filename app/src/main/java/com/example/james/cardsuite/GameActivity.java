@@ -118,8 +118,11 @@ public class GameActivity extends Activity {
                 potIndex = 0;
 
                 manager.potAnalyze();
-                for (Player player : manager.players)
+                scores.clear();
+                for (Player player : manager.players) {
                     player.scoreChange();
+                    scores.add(player.score);
+                }
 
                 displayScores(scores);
 
@@ -557,8 +560,10 @@ public class GameActivity extends Activity {
                             d.dismiss();
                             if (guessIndex < manager.playerCount)
                                 openGuessDialog(gameMode);
-                            else
+                            else {
                                 currentPlayerInteracting = manager.startPlayer;
+                                guessIndex = 0;
+                            }
                         }
                     }
                 });
