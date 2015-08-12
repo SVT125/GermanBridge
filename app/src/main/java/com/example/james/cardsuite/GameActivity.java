@@ -10,6 +10,7 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -46,6 +47,7 @@ public class GameActivity extends Activity {
         for (int i = 0; i < 4; i++) {
             scores.add(0);
         }
+
         if (gameMode == 1) {
             manager = new HeartsManager();
 
@@ -87,6 +89,7 @@ public class GameActivity extends Activity {
 
             openGuessDialog(gameMode);
         }
+        displayEndPiles(scores, gameMode);
     }
 
     //Processes the state of the game manager for hearts.
@@ -409,10 +412,10 @@ public class GameActivity extends Activity {
         }
 
         int temporaryID = 0; //Temporary ID to be assigned to each card, to be reused.
-        RelativeLayout left = (RelativeLayout)findViewById(R.id.leftPlayerCardsLayout),
-                top = (RelativeLayout)findViewById(R.id.topPlayerCardsLayout),
-                right = (RelativeLayout)findViewById(R.id.rightPlayerCardsLayout),
-                bottom = (RelativeLayout)findViewById(R.id.bottomPlayerCardsLayout);
+        RelativeLayout left = (RelativeLayout)findViewById(R.id.leftPlayerHandLayout),
+                top = (RelativeLayout)findViewById(R.id.topPlayerHandLayout),
+                right = (RelativeLayout)findViewById(R.id.rightPlayerHandLayout),
+                bottom = (RelativeLayout)findViewById(R.id.bottomPlayerHandLayout);
 
         //Now create the imagebuttons for each of the players
         for(int i = 0; i < 4; i++) {
@@ -466,10 +469,56 @@ public class GameActivity extends Activity {
                         right.addView(cardButton, restParams); break;
                 }
                 cardButton.setId(temporaryID++);
-                offsetMargin += 65;
+                if(i %2 == 0)
+                    offsetMargin += 65;
+                else
+                    offsetMargin += 55;
             }
         }
         buttonsPresent = true;
+    }
+
+    //Call when the end piles and the scores displayed on top of the piles need be redisplayed.
+    //ID's taken will be 200-207, where 200-201 are the ID's for the pile and score for first player, etc.
+    public void displayEndPiles(List<Integer> scores, int gameMode) {
+        for (int i = 200; i < 208; i++) {
+            View view = findViewById(i);
+            if(view != null)
+                ((ViewGroup) view.getParent()).removeView(view);
+        }
+
+        RelativeLayout left = (RelativeLayout)findViewById(R.id.leftPlayerPileLayout),
+                top = (RelativeLayout)findViewById(R.id.topPlayerPileLayout),
+                right = (RelativeLayout)findViewById(R.id.rightPlayerPileLayout),
+                bottom = (RelativeLayout)findViewById(R.id.bottomPlayerPileLayout);
+
+        for(int i = 0; i < 4; i++) {
+            TextView score = new TextView(this);
+            score.setText(Integer.toString(scores.get(i)));
+
+            //If the game is hearts, display the top card of the end pile.
+            if(gameMode == 1 && ((HeartsPlayer)manager.players[i]).endPile.size() > 0) {ImageView imageView = new ImageView(this);
+                Card card = ((HeartsPlayer)manager.players[i]).endPile.get(((HeartsPlayer)manager.players[i]).endPile.size() - 1);
+                imageView.setImageResource(getResources().getIdentifier(card.getAddress(), "drawable", getPackageName()));
+
+                //Layer the score above the end pile card via elevation
+                score.setElevation(1);
+                switch(i) {
+                    case 0: bottom.addView(imageView); break;
+                    case 1: left.addView(imageView); break;
+                    case 2: top.addView(imageView); break;
+                    case 3: right.addView(imageView); break;
+                }
+            } else {
+                switch(i) {
+                    case 0: bottom.addView(score); break;
+                    case 1: left.addView(score); break;
+                    case 2: top.addView(score); break;
+                    case 3: right.addView(score); break;
+                }
+            }
+
+        }
     }
 
     public void displayScores(List<Integer> scores) {
