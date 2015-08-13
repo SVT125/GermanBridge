@@ -168,7 +168,8 @@
                 android:id="@+id/trumpView"
                 android:layout_alignParentTop="true"
                 android:background="@drawable/trump_border"
-                android:padding="1dp" />
+                android:padding="1dp"
+                android:visibility="invisible" />
         </RelativeLayout>
 
         <RelativeLayout

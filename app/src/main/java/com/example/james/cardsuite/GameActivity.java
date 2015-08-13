@@ -51,7 +51,6 @@ public class GameActivity extends Activity {
             displayHands(0);
             displayScores(scores);
             displayEndPiles(scores, gameMode);
-            trumpView.setVisibility(0);
         }
         else if (gameMode == 2) {
             manager = new BridgeManager();
@@ -64,6 +63,7 @@ public class GameActivity extends Activity {
 
 
             Card trumpCard = ((BridgeManager)manager).trumpCard;
+            trumpView.setVisibility(View.VISIBLE);
             trumpView.setImageResource(getResources().getIdentifier(trumpCard.getAddress(), "drawable", getPackageName()));
 
             openGuessDialog(gameMode);
@@ -75,7 +75,6 @@ public class GameActivity extends Activity {
             displayHands(0);
             displayScores(scores);
             displayEndPiles(scores, gameMode);
-            trumpView.setVisibility(0);
 
             openGuessDialog(gameMode);
         }
