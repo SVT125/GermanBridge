@@ -2,15 +2,21 @@ package com.example.james.cardsuite;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
@@ -42,8 +48,6 @@ public class GameActivity extends Activity {
             scores.add(0);
         }
 
-        ImageView trumpView = (ImageView)findViewById(R.id.trumpView);
-
         if (gameMode == 1) {
             manager = new HeartsManager();
 
@@ -60,11 +64,6 @@ public class GameActivity extends Activity {
             displayHands(manager.startPlayer);
             displayScores(scores);
             displayEndPiles(scores, gameMode);
-
-
-            Card trumpCard = ((BridgeManager)manager).trumpCard;
-            trumpView.setVisibility(View.VISIBLE);
-            trumpView.setImageResource(getResources().getIdentifier(trumpCard.getAddress(), "drawable", getPackageName()));
 
             openGuessDialog(gameMode);
         }
@@ -103,10 +102,11 @@ public class GameActivity extends Activity {
         }
     }
 
+    //Processes the state of the game manager for hearts.
     public void bridgeHandle(View v) {
         int chosen = v.getId();
         for(int i = 0; i < currentPlayerInteracting; i++)
-            chosen -= manager.players[i].hand.size();
+            chosen -= manager.getPlayers()[i].hand.size();
 
         // players start putting cards into the pot and calculate score
         if(manager.potsFinished < manager.totalRoundCount - 1) {
@@ -118,7 +118,7 @@ public class GameActivity extends Activity {
             displayHands(currentPlayerInteracting);
 
             //Set up the next round, reset all variables.
-            if(potIndex == manager.playerCount) {
+            if(manager.getPlayers()[currentPlayerInteracting].hand.isEmpty()) {
                 potIndex = 0;
 
                 manager.potAnalyze();
@@ -130,18 +130,11 @@ public class GameActivity extends Activity {
 
                 // resets deck, hands, etc. and increments round
                 manager.reset();
-                manager.players[currentPlayerInteracting].handsWon++;
                 potClear();
                 displayPot();
                 displayHands(manager.startPlayer);
                 displayScores(scores);
                 displayEndPiles(scores,gameMode);
-
-                //Redisplay the trump
-                ImageView trumpView = (ImageView)findViewById(R.id.trumpView);
-                Card trumpCard = ((BridgeManager)manager).trumpCard;
-                trumpView.setImageResource(getResources().getIdentifier(trumpCard.getAddress(), "drawable", getPackageName()));
-
                 openGuessDialog(gameMode);
             }
 
@@ -510,16 +503,21 @@ public class GameActivity extends Activity {
 
         for(int i = 0; i < 4; i++) {
             //Update the score, but remove or update the pile if it exists.
-            if(gameMode == 1 && ((HeartsPlayer)manager.players[i]).endPile.size() > 0) {
-                Card card = ((HeartsPlayer)manager.players[i]).endPile.get(((HeartsPlayer)manager.players[i]).endPile.size() - 1);
+            if(gameMode == 1 && ((HeartsPlayer)manager.getPlayers()[i]).endPile.size() > 0) {
+                Card card = ((HeartsPlayer)manager.getPlayers()[i]).endPile.get(((HeartsPlayer)manager.getPlayers()[i]).endPile.size() - 1);
                 pileViews[i].setImageResource(getResources().getIdentifier(card.getAddress(), "drawable", getPackageName()));
-            } else
+            } else {
                 pileViews[i].setImageResource(0);
+            }
 
             if(gameMode == 1)
                 scoreViews[i].setText(Integer.toString(scores.get(i)));
-            else
-                scoreViews[i].setText(Integer.toString(manager.players[i].handsWon));
+            else if ((manager.getPlayers()[i].handsWon) > 0) {
+                scoreViews[i].setText(Integer.toString(manager.getPlayers()[i].handsWon));
+                scoreViews[i].setVisibility(View.VISIBLE);
+            } else {
+                scoreViews[i].setVisibility(View.INVISIBLE);
+            }
         }
     }
 
@@ -535,7 +533,7 @@ public class GameActivity extends Activity {
         layout.setOrientation(LinearLayout.HORIZONTAL);
 
         if (gameMode == 3) {
-            for (int i = 1; i <= manager.players[currentPlayerInteracting].hand.size(); i++) {
+            for (int i = 0; i <= manager.players[currentPlayerInteracting].hand.size(); i++) {
                 Button guessButton = new Button(this);
                 guessButton.setText(Integer.toString(i));
                 guessButton.setOnClickListener(new View.OnClickListener() {
@@ -547,8 +545,8 @@ public class GameActivity extends Activity {
                 layout.addView(guessButton);
             }
         } else {
-            if (currentPlayerInteracting == manager.playerCount - 1) {
-                for (int i = 1; i <= manager.potsFinished; i++)
+            if (currentPlayerInteracting == (manager.startPlayer + 3) % 4) {
+                for (int i = 0; i <= manager.potsFinished; i++)
                     if (i != manager.potsFinished - manager.addedGuesses - 1) {
                         Button guessButton = new Button(this);
                         guessButton.setText(Integer.toString(i));
@@ -561,7 +559,7 @@ public class GameActivity extends Activity {
                         layout.addView(guessButton);
                     }
             } else {
-                for (int j = 1; j <= manager.potsFinished; j++) {
+                for (int j = 0; j <= manager.potsFinished; j++) {
                     Button guessButton = new Button(this);
                     guessButton.setText(Integer.toString(j));
                     guessButton.setOnClickListener(new View.OnClickListener() {
