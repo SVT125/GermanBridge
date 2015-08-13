@@ -87,9 +87,9 @@ public class SpadesManager extends Manager implements Serializable {
 		return winner;
 	}
 
-	public boolean potHandle(TextView output, int chosen, int currentPlayer, boolean initialOutputWritten, GameActivity activity) {
+	public boolean potHandle(int chosen, int currentPlayer, boolean initialOutputWritten, GameActivity activity) {
 		if (!initialOutputWritten) {
-			this.writeOutput(currentPlayer, output, activity);
+			this.writeOutput(currentPlayer, activity);
 			activity.initialOutputWritten = true;
 			return false;
 		}
@@ -102,7 +102,7 @@ public class SpadesManager extends Manager implements Serializable {
 			spadesBroken = true;
 
 		pot.put(currentPlayer, selectCard);
-		this.writeOutput((currentPlayer + 1) % 4, output, activity);
+		this.writeOutput((currentPlayer + 1) % 4, activity);
 		return true;
 	}
 
@@ -118,11 +118,9 @@ public class SpadesManager extends Manager implements Serializable {
 		return true;
 	}
 
-	public void writeOutput(int currentPlayer, TextView output, GameActivity activity) {
+	public void writeOutput(int currentPlayer, GameActivity activity) {
 		players[currentPlayer].organize();
-		activity.displayHands(currentPlayer);
-		output.setText("Player " + Integer.toString(currentPlayer + 1) + " place a card");
-	}
+		activity.displayHands(currentPlayer);}
 	
 	public void potAnalyze() {
 		Card winCard = null;

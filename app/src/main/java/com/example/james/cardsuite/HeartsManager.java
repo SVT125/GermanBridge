@@ -88,10 +88,10 @@ public class HeartsManager extends Manager implements Serializable {
 
 	//Called to handle every player's chosen card in the pot and analyzes the pot once all cards are put.
 	//This method is only used for console testing, won't apply to the Android app - don't input out of bounds.
-	public boolean potHandle(TextView output, int chosen, int currentPlayer, boolean initialOutputWritten, GameActivity activity) {
+	public boolean potHandle(int chosen, int currentPlayer, boolean initialOutputWritten, GameActivity activity) {
 
 		if (!initialOutputWritten) {
-			this.writeOutput(currentPlayer, output, activity);
+			this.writeOutput(currentPlayer, activity);
 			activity.initialOutputWritten = true;
 			return false;
 		}
@@ -104,14 +104,13 @@ public class HeartsManager extends Manager implements Serializable {
 			heartsBroken = true;
 
 		pot.put(currentPlayer, selectCard);
-		this.writeOutput((currentPlayer + 1) % 4, output, activity);
+		this.writeOutput((currentPlayer + 1) % 4, activity);
 		return true;
 	}
 
-	public void writeOutput(int currentPlayer, TextView output, GameActivity activity) {
+	public void writeOutput(int currentPlayer, GameActivity activity) {
 		players[currentPlayer].organize();
 		activity.displayHands(currentPlayer);
-		output.setText("Player " + Integer.toString(currentPlayer + 1) + " place a card");
 	}
 
 	//Analyzes the pot and determines the winning card and start player for the next round.

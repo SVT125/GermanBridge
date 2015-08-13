@@ -57,7 +57,7 @@ public class BridgeManager extends Manager implements Serializable {
 	}
 
 	//Ignoring out of bounds errors because we will take care of this in android studio - don't input out of bounds.
-	public boolean potHandle(TextView output, int chosen, int currentPlayer, boolean initialOutputWritten, GameActivity activity) {
+	public boolean potHandle(int chosen, int currentPlayer, boolean initialOutputWritten, GameActivity activity) {
 		// other players choose cards - must place similar suit to startSuit if they have it.
 		pot.put(currentPlayer, players[currentPlayer].hand.get(chosen));
 

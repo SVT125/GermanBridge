@@ -31,7 +31,6 @@ import java.util.List;
 
 public class GameActivity extends Activity {
     private Manager manager;
-    private TextView consoleOutput;
     private int currentPlayerInteracting = 0, currentPotTurn = 0, guessIndex = 0, potIndex = 0, guess = -1, gameMode = 0;
     private boolean foundStartPlayer = false, buttonsPresent = false, finishedSwapping = false;
     public boolean initialOutputWritten = false;
@@ -52,11 +51,6 @@ public class GameActivity extends Activity {
         if (gameMode == 1) {
             manager = new HeartsManager();
 
-            consoleOutput = (TextView)findViewById(R.id.consoleOutput);
-
-            //Set the instruction text
-            consoleOutput.setText("Player 1 chooses a card to swap");
-
             //Display the image buttons
             displayHands(0);
             displayScores(scores);
@@ -65,11 +59,6 @@ public class GameActivity extends Activity {
         else if (gameMode == 2) {
             manager = new BridgeManager();
             manager.totalRoundCount = 12; // Change later for variable number of players
-
-            consoleOutput = (TextView)findViewById(R.id.consoleOutput);
-
-            //Set the instruction text
-            consoleOutput.setText("Player 1 choose how many hands you will win");
 
             //Display the image buttons
             displayHands(manager.startPlayer);
@@ -80,11 +69,6 @@ public class GameActivity extends Activity {
         }
         else if (gameMode == 3) {
             manager = new SpadesManager();
-
-            consoleOutput = (TextView)findViewById(R.id.consoleOutput);
-
-            //Set the instruction text
-            consoleOutput.setText("Player 1 choose how many tricks you will win");
 
             //Display the image buttons
             displayHands(0);
@@ -126,7 +110,7 @@ public class GameActivity extends Activity {
 
         // players start putting cards into the pot and calculate score
         if(manager.potsFinished < manager.totalRoundCount - 1) {
-            manager.potHandle(consoleOutput,chosen,currentPlayerInteracting, false, this);
+            manager.potHandle(chosen,currentPlayerInteracting, false, this);
             displayPot();
 
             currentPlayerInteracting = (currentPlayerInteracting+1) % manager.playerCount;
@@ -178,7 +162,7 @@ public class GameActivity extends Activity {
                 foundStartPlayer = true;
             }
 
-            if (manager.potHandle(consoleOutput, chosen, currentPlayerInteracting, initialOutputWritten, this)) {
+            if (manager.potHandle(chosen, currentPlayerInteracting, initialOutputWritten, this)) {
                 if (currentPlayerInteracting == manager.startPlayer)
                     for (int i = 0; i < 4; i++)
                         potClear();
@@ -207,7 +191,6 @@ public class GameActivity extends Activity {
                 manager.newRound();
 
                 if (currentPotTurn != 13) {
-                    consoleOutput.setText("Player " + Integer.toString(currentPlayerInteracting + 1) + " wins the pot! Place a card to begin next round");
                     displayHands(manager.startPlayer);
                     openGuessDialog(gameMode);
                     return;
@@ -275,7 +258,6 @@ public class GameActivity extends Activity {
 
                 if (swapRound != 3 && currentPlayerInteracting != 4) {
                     currentPlayerInteracting++;
-                    consoleOutput.setText("Player " + Integer.toString(currentPlayerInteracting + 1) + " chooses a card to swap");
                     chosenIndices = new ArrayList<Integer>(); //restart the indices chosen for the next player
 
                     if (currentPlayerInteracting == 4) {
@@ -302,7 +284,7 @@ public class GameActivity extends Activity {
             }
 
             // Part 3 - handle cards being tossed in the pot until all cards are gone (13 turns).
-            if(manager.potHandle(consoleOutput, chosen, currentPlayerInteracting, initialOutputWritten, this)) {
+            if(manager.potHandle(chosen, currentPlayerInteracting, initialOutputWritten, this)) {
                 if(currentPlayerInteracting == manager.startPlayer)
                     for(int i = 0; i < 4; i++)
                         potClear();
@@ -335,7 +317,6 @@ public class GameActivity extends Activity {
                 manager.newRound();
 
                 if (currentPotTurn != 13) {
-                    consoleOutput.setText("Player " + Integer.toString(currentPlayerInteracting + 1) + " wins the pot! Place a card to begin next round");
                     displayHands(manager.startPlayer);
                     return;
                 }

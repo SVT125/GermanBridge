@@ -19,7 +19,7 @@ public abstract class Manager implements Serializable {
 	protected Player[] players;
 
 	public abstract void potAnalyze();
-	public abstract boolean potHandle(TextView output, int chosen, int currentPlayer, boolean initialOutputWritten, GameActivity activity);
+	public abstract boolean potHandle(int chosen, int currentPlayer, boolean initialOutputWritten, GameActivity activity);
 	public abstract void reset();
 	public abstract boolean isGameOver();
 	public abstract boolean cardSelectable(Card card, boolean finishedSwapping, int currentPlayer);
