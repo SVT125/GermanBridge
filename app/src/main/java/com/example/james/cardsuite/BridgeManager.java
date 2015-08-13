@@ -1,5 +1,8 @@
 package com.example.james.cardsuite;
 
+import android.util.Log;
+import android.widget.TextView;
+
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
@@ -9,8 +12,8 @@ import java.util.Map.Entry;
 public class BridgeManager extends Manager implements Serializable {
 
 	public int addedGuesses = 0;
-	public Card.Suit trumpSuit;
-	public Card trumpCard; //Variable included in case want to display the trump card
+	private Card.Suit trumpSuit;
+	private Card trumpCard; //Variable included in case want to display the trump card
 
 	public BridgeManager() {
 		pot = new HashMap<Integer, Card>();
@@ -48,9 +51,9 @@ public class BridgeManager extends Manager implements Serializable {
 		for (int i = 0; i < playerCount; i++) {
 			players[i] = new BridgePlayer();
 			deck = players[i].fillHand(deck, random, potsFinished);
+			players[i].handsWon = 0;
 		}
-		trumpCard = deck.remove(random.nextInt(deck.size()));
-		trumpSuit = trumpCard.getSuit();
+		trumpSuit = deck.remove(random.nextInt(deck.size())).getSuit();
 		addedGuesses = 0;
 	}
 
