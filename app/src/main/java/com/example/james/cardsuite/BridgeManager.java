@@ -32,6 +32,7 @@ public class BridgeManager extends Manager implements Serializable {
 		for (int i = 0; i < playerCount; i++) {
 			players[i] = new BridgePlayer();
 			deck = players[i].fillHand(deck, random, potsFinished);
+			players[i].handsWon = 0;
 		}
 
 		// find a trumpCard
@@ -97,6 +98,7 @@ public class BridgeManager extends Manager implements Serializable {
 		}
 		// whoever wins pile gets one towards their obtained pile count
 		((BridgePlayer)players[startPlayer]).obtained++;
+		((BridgePlayer)players[startPlayer]).handsWon++;
 	}
 
 	public List<Card> chooseCards(int playerNum, List<Integer> chosenIndices) {return null;};
