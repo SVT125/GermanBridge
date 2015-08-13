@@ -2,21 +2,15 @@ package com.example.james.cardsuite;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
@@ -48,6 +42,8 @@ public class GameActivity extends Activity {
             scores.add(0);
         }
 
+        ImageView trumpView = (ImageView)findViewById(R.id.trumpView);
+
         if (gameMode == 1) {
             manager = new HeartsManager();
 
@@ -55,6 +51,7 @@ public class GameActivity extends Activity {
             displayHands(0);
             displayScores(scores);
             displayEndPiles(scores, gameMode);
+            trumpView.setVisibility(0);
         }
         else if (gameMode == 2) {
             manager = new BridgeManager();
@@ -65,6 +62,10 @@ public class GameActivity extends Activity {
             displayScores(scores);
             displayEndPiles(scores, gameMode);
 
+
+            Card trumpCard = ((BridgeManager)manager).trumpCard;
+            trumpView.setImageResource(getResources().getIdentifier(trumpCard.getAddress(), "drawable", getPackageName()));
+
             openGuessDialog(gameMode);
         }
         else if (gameMode == 3) {
@@ -74,6 +75,7 @@ public class GameActivity extends Activity {
             displayHands(0);
             displayScores(scores);
             displayEndPiles(scores, gameMode);
+            trumpView.setVisibility(0);
 
             openGuessDialog(gameMode);
         }
@@ -136,6 +138,12 @@ public class GameActivity extends Activity {
                 displayHands(manager.startPlayer);
                 displayScores(scores);
                 displayEndPiles(scores,gameMode);
+
+                //Redisplay the trump
+                ImageView trumpView = (ImageView)findViewById(R.id.trumpView);
+                Card trumpCard = ((BridgeManager)manager).trumpCard;
+                trumpView.setImageResource(getResources().getIdentifier(trumpCard.getAddress(), "drawable", getPackageName()));
+
                 openGuessDialog(gameMode);
             }
 
@@ -504,7 +512,7 @@ public class GameActivity extends Activity {
 
         for(int i = 0; i < 4; i++) {
             //Update the score, but remove or update the pile if it exists.
-            if(((HeartsPlayer)manager.players[i]).endPile.size() > 0) {
+            if(gameMode == 1 && ((HeartsPlayer)manager.players[i]).endPile.size() > 0) {
                 Card card = ((HeartsPlayer)manager.players[i]).endPile.get(((HeartsPlayer)manager.players[i]).endPile.size() - 1);
                 pileViews[i].setImageResource(getResources().getIdentifier(card.getAddress(), "drawable", getPackageName()));
             } else

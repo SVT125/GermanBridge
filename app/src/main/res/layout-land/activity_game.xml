@@ -90,7 +90,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/topPlayerLayout"
-            android:layout_weight="0.225">
+            android:layout_weight="0.25">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -162,6 +162,13 @@
             android:gravity="center_vertical|center_horizontal"
             android:layout_weight="0.3">
 
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/trumpView"
+                android:layout_alignParentTop="true"
+                android:background="@drawable/trump_border"
+                android:padding="1dp" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -169,7 +176,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/potLayout"
-            android:layout_weight="0.2">
+            android:layout_weight="0.25">
 
             <ImageView
                 android:id="@+id/anchor"
@@ -185,7 +192,7 @@
             android:layout_height="match_parent"
             android:id="@+id/bottomPlayerLayout"
             android:layout_gravity="bottom|center_horizontal"
-            android:layout_weight="0.225">
+            android:layout_weight="0.25">
 
             <RelativeLayout
                 android:layout_width="match_parent"
