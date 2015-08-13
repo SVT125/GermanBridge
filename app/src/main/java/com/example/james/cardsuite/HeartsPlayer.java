@@ -10,7 +10,6 @@ public class HeartsPlayer extends Player implements Serializable {
 	public HeartsPlayer() {
 		hand = new ArrayList<Card>();
 		endPile = new ArrayList<Card>();
-		this.score = 0;
 	}
 
 	// boolean returns true or false value depending on whether player has shot the moon or not

@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
@@ -59,6 +60,7 @@ public class GameActivity extends Activity {
             //Display the image buttons
             displayHands(0);
             displayScores(scores);
+            displayEndPiles(scores, gameMode);
         }
         else if (gameMode == 2) {
             manager = new BridgeManager();
@@ -72,6 +74,7 @@ public class GameActivity extends Activity {
             //Display the image buttons
             displayHands(manager.startPlayer);
             displayScores(scores);
+            displayEndPiles(scores, gameMode);
 
             openGuessDialog(gameMode);
         }
@@ -86,9 +89,23 @@ public class GameActivity extends Activity {
             //Display the image buttons
             displayHands(0);
             displayScores(scores);
+            displayEndPiles(scores, gameMode);
 
             openGuessDialog(gameMode);
         }
+
+        //Display the player tags
+        TextView bottomOutput = (TextView)findViewById(R.id.bottomPlayerOutput),
+                leftOutput = (TextView)findViewById(R.id.leftPlayerOutput),
+                topOutput = (TextView)findViewById(R.id.topPlayerOutput),
+                rightOutput = (TextView)findViewById(R.id.rightPlayerOutput);
+
+        bottomOutput.setText("Player 1");
+        leftOutput.setText("Player 2");
+        topOutput.setText("Player 3");
+        rightOutput.setText("Player 4");
+
+        displayScores(scores);
         displayEndPiles(scores, gameMode);
     }
 
@@ -127,12 +144,14 @@ public class GameActivity extends Activity {
                     scores.add(player.score);
                 }
 
-                displayScores(scores);
-
                 // resets deck, hands, etc. and increments round
                 manager.reset();
+                manager.players[currentPlayerInteracting].handsWon++;
+                potClear();
                 displayPot();
                 displayHands(manager.startPlayer);
+                displayScores(scores);
+                displayEndPiles(scores,gameMode);
                 openGuessDialog(gameMode);
             }
 
@@ -180,8 +199,10 @@ public class GameActivity extends Activity {
 
                 manager.potAnalyze(); //sets the new start player for the next pot
                 currentPlayerInteracting = manager.startPlayer;
+                manager.players[currentPlayerInteracting].handsWon++;
 
                 displayScores(scores);
+                displayEndPiles(scores,gameMode);
                 manager.pot.clear();
                 manager.newRound();
 
@@ -202,6 +223,7 @@ public class GameActivity extends Activity {
 
                 foundStartPlayer = false;
                 displayScores(scores);
+                displayEndPiles(scores, gameMode);
                 reset();
                 return;
             }
@@ -308,6 +330,7 @@ public class GameActivity extends Activity {
                 }
 
                 displayScores(scores);
+                displayEndPiles(scores,gameMode);
                 manager.pot.clear();
                 manager.newRound();
 
@@ -335,6 +358,7 @@ public class GameActivity extends Activity {
                 }
 
                 displayScores(scores);
+                displayEndPiles(scores,gameMode);
                 reset();
                 return;
             }
@@ -357,6 +381,18 @@ public class GameActivity extends Activity {
         displayHands(0);
         chosenLists.clear();
         chosenIndices.clear();
+    }
+
+    public void displayScores(List<Integer> scores) {
+        TextView bottomOutput = (TextView)findViewById(R.id.bottomPlayerOutput),
+                leftOutput = (TextView)findViewById(R.id.leftPlayerOutput),
+                topOutput = (TextView)findViewById(R.id.topPlayerOutput),
+                rightOutput = (TextView)findViewById(R.id.rightPlayerOutput);
+
+        bottomOutput.setText("Player 1 | Score: " + Integer.toString(scores.get(0)));
+        leftOutput.setText("Player 2 | Score: " + Integer.toString(scores.get(1)));
+        topOutput.setText("Player 3 | Score: " + Integer.toString(scores.get(2)));
+        rightOutput.setText("Player 4 | Score: " + Integer.toString(scores.get(3)));
     }
 
     // Called when a player places a valid card into the pot; updates the images in the pot
@@ -445,10 +481,10 @@ public class GameActivity extends Activity {
                     //Tint and make the card unselectable if it's not meant to be.
                     Card selectCard = manager.getPlayers()[i].hand.get(j);
                     if(!(manager.cardSelectable(selectCard, finishedSwapping, i))) {
-                            cardButton.setColorFilter(Color.parseColor("#78505050"), PorterDuff.Mode.SRC_ATOP);
-                            cardButton.setClickable(false);
-                        }
+                        cardButton.setColorFilter(Color.parseColor("#78505050"), PorterDuff.Mode.SRC_ATOP);
+                        cardButton.setClickable(false);
                     }
+                }
                 else {
                     cardButton = new ImageView(this);
                     cardButton.setImageResource(getResources().getIdentifier("cardback", "drawable", getPackageName()));
@@ -479,58 +515,25 @@ public class GameActivity extends Activity {
     }
 
     //Call when the end piles and the scores displayed on top of the piles need be redisplayed.
-    //ID's taken will be 200-207, where 200-201 are the ID's for the pile and score for first player, etc.
     public void displayEndPiles(List<Integer> scores, int gameMode) {
-        for (int i = 200; i < 208; i++) {
-            View view = findViewById(i);
-            if(view != null)
-                ((ViewGroup) view.getParent()).removeView(view);
-        }
-
-        RelativeLayout left = (RelativeLayout)findViewById(R.id.leftPlayerPileLayout),
-                top = (RelativeLayout)findViewById(R.id.topPlayerPileLayout),
-                right = (RelativeLayout)findViewById(R.id.rightPlayerPileLayout),
-                bottom = (RelativeLayout)findViewById(R.id.bottomPlayerPileLayout);
+        TextView[] scoreViews = new TextView[] {(TextView)findViewById(R.id.bottomScore), (TextView)findViewById(R.id.leftScore),
+                (TextView)findViewById(R.id.topScore), (TextView)findViewById(R.id.rightScore)};
+        ImageView[] pileViews = new ImageView[] {(ImageView)findViewById(R.id.bottomPile), (ImageView)findViewById(R.id.leftPile),
+                (ImageView)findViewById(R.id.topPile), (ImageView)findViewById(R.id.rightPile)};
 
         for(int i = 0; i < 4; i++) {
-            TextView score = new TextView(this);
-            score.setText(Integer.toString(scores.get(i)));
-
-            //If the game is hearts, display the top card of the end pile.
-            if(gameMode == 1 && ((HeartsPlayer)manager.players[i]).endPile.size() > 0) {ImageView imageView = new ImageView(this);
+            //Update the score, but remove or update the pile if it exists.
+            if(((HeartsPlayer)manager.players[i]).endPile.size() > 0) {
                 Card card = ((HeartsPlayer)manager.players[i]).endPile.get(((HeartsPlayer)manager.players[i]).endPile.size() - 1);
-                imageView.setImageResource(getResources().getIdentifier(card.getAddress(), "drawable", getPackageName()));
+                pileViews[i].setImageResource(getResources().getIdentifier(card.getAddress(), "drawable", getPackageName()));
+            } else
+                pileViews[i].setImageResource(0);
 
-                //Layer the score above the end pile card via elevation
-                score.setElevation(1);
-                switch(i) {
-                    case 0: bottom.addView(imageView); break;
-                    case 1: left.addView(imageView); break;
-                    case 2: top.addView(imageView); break;
-                    case 3: right.addView(imageView); break;
-                }
-            } else {
-                switch(i) {
-                    case 0: bottom.addView(score); break;
-                    case 1: left.addView(score); break;
-                    case 2: top.addView(score); break;
-                    case 3: right.addView(score); break;
-                }
-            }
-
+            if(gameMode == 1)
+                scoreViews[i].setText(Integer.toString(scores.get(i)));
+            else
+                scoreViews[i].setText(Integer.toString(manager.players[i].handsWon));
         }
-    }
-
-    public void displayScores(List<Integer> scores) {
-        TextView bottomOutput = (TextView)findViewById(R.id.bottomPlayerOutput),
-                leftOutput = (TextView)findViewById(R.id.leftPlayerOutput),
-                topOutput = (TextView)findViewById(R.id.topPlayerOutput),
-                rightOutput = (TextView)findViewById(R.id.rightPlayerOutput);
-
-        bottomOutput.setText("Player 1 | Score: " + Integer.toString(scores.get(0)));
-        leftOutput.setText("Player 2 | Score: " + Integer.toString(scores.get(1)));
-        topOutput.setText("Player 3 | Score: " + Integer.toString(scores.get(2)));
-        rightOutput.setText("Player 4 | Score: " + Integer.toString(scores.get(3)));
     }
 
     //Opens the guess dialog - fit for German Bridge for now.

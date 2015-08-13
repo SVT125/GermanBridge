@@ -5,7 +5,7 @@ import java.util.*;
 public abstract class Player {
 	
 	protected List<Card> hand;
-	protected int score;
+	protected int score, handsWon;
 	
 	public abstract boolean scoreChange();
 	

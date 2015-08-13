@@ -14,7 +14,7 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:id="@+id/leftPlayerLayout"
-        android:layout_weight="0.425">
+        android:layout_weight="0.41">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -28,16 +28,35 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight=".2"
+                android:layout_weight=".125"
                 android:id="@+id/leftPlayerHandLayout"
-                android:gravity="bottom|center_horizontal"></RelativeLayout>
+                android:gravity="center_vertical|center_horizontal"></RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight=".8"
+                android:layout_weight=".875"
                 android:id="@+id/leftPlayerPileLayout"
-                android:gravity="center_vertical|center_horizontal"></RelativeLayout>
+                android:gravity="center_vertical|center_horizontal">
+
+                <com.example.james.cardsuite.VerticalTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="0"
+                    android:id="@+id/leftScore"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentLeft="true"
+                    android:textSize="18dp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/leftPile"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true"
+                    android:rotation="90" />
+            </RelativeLayout>
         </LinearLayout>
 
         <RelativeLayout
@@ -64,7 +83,7 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:id="@+id/centerLayout"
-        android:layout_weight="0.15">
+        android:layout_weight="0.18">
 
         <LinearLayout
             android:orientation="vertical"
@@ -84,16 +103,35 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight=".8"
+                    android:layout_weight=".875"
                     android:id="@+id/topPlayerPileLayout"
-                    android:gravity="center_vertical|center_horizontal"></RelativeLayout>
+                    android:gravity="center_vertical|center_horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:text="0"
+                        android:id="@+id/topScore"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:textSize="18dp"
+                        android:elevation="1dp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/topPile"
+                        android:layout_centerVertical="true"
+                        android:layout_centerHorizontal="true" />
+                </RelativeLayout>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight=".2"
+                    android:layout_weight=".125"
                     android:id="@+id/topPlayerHandLayout"
-                    android:gravity="left|center_vertical"></RelativeLayout>
+                    android:gravity="center_vertical|center_horizontal"></RelativeLayout>
             </LinearLayout>
 
             <RelativeLayout
@@ -112,6 +150,7 @@
                     android:rotation="180"
                     android:layout_centerVertical="true"
                     android:layout_centerHorizontal="true" />
+
             </RelativeLayout>
         </LinearLayout>
 
@@ -184,9 +223,9 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight=".2"
+                    android:layout_weight=".125"
                     android:id="@+id/bottomPlayerHandLayout"
-                    android:gravity="center_vertical|right">
+                    android:gravity="center_vertical|center_horizontal">
 
                 </RelativeLayout>
 
@@ -195,9 +234,28 @@
                     android:layout_height="match_parent"
                     android:layout_centerVertical="true"
                     android:layout_alignParentStart="true"
-                    android:layout_weight=".8"
+                    android:layout_weight=".875"
                     android:id="@+id/bottomPlayerPileLayout"
-                    android:gravity="center_vertical|center_horizontal"></RelativeLayout>
+                    android:gravity="center_vertical|center_horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:text="0"
+                        android:id="@+id/bottomScore"
+                        android:elevation="1dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:textSize="18dp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/bottomPile"
+                        android:layout_centerVertical="true"
+                        android:layout_centerHorizontal="true" />
+                </RelativeLayout>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
@@ -208,7 +266,7 @@
         android:layout_height="fill_parent"
         android:id="@+id/rightPlayerLayout"
         android:layout_gravity="center_vertical"
-        android:layout_weight="0.425">
+        android:layout_weight="0.41">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -241,16 +299,35 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight=".8"
+                android:layout_weight=".875"
                 android:id="@+id/rightPlayerPileLayout"
-                android:gravity="center_vertical|center_horizontal"></RelativeLayout>
+                android:gravity="center_vertical|center_horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/rightPile"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true"
+                    android:rotation="270"/>
+
+                <com.example.james.cardsuite.VerticalTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="0"
+                    android:id="@+id/rightScore"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:textSize="18dp" />
+            </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight=".2"
+                android:layout_weight=".125"
                 android:id="@+id/rightPlayerHandLayout"
-                android:gravity="top|center_horizontal"></RelativeLayout>
+                android:gravity="left|center_vertical"></RelativeLayout>
         </LinearLayout>
 
     </LinearLayout>
