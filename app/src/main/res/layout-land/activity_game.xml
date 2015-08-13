@@ -115,8 +115,7 @@
                         android:id="@+id/topScore"
                         android:layout_alignParentTop="true"
                         android:layout_centerHorizontal="true"
-                        android:textSize="18dp"
-                        android:elevation="1dp" />
+                        android:textSize="18dp" />
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -243,7 +242,6 @@
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:text="0"
                         android:id="@+id/bottomScore"
-                        android:elevation="1dp"
                         android:layout_alignParentBottom="true"
                         android:layout_centerHorizontal="true"
                         android:textSize="18dp" />

@@ -103,7 +103,6 @@ public class GameActivity extends Activity {
         }
     }
 
-    //Processes the state of the game manager for hearts.
     public void bridgeHandle(View v) {
         int chosen = v.getId();
         for(int i = 0; i < currentPlayerInteracting; i++)
