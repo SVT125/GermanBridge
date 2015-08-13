@@ -14,7 +14,8 @@ public class BridgePlayer extends Player {
 	
 	public boolean scoreChange() {
 		if (guess == obtained) {
-			score = score + 10 + (int)Math.pow(2, obtained);
+			if (guess == 0) score += 10;
+			else score = score + 10 + (int)Math.pow(2, obtained);
 		}
 		else {
 			int difference = Math.abs(guess - obtained);
