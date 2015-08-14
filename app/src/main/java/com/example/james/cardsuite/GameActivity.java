@@ -61,11 +61,10 @@ public class GameActivity extends Activity {
             manager.totalRoundCount = 12; // Change later for variable number of players
 
             //Display the image buttons
-            displayHands(manager.startPlayer);
             displayScores(scores);
             displayEndPiles(scores, gameMode);
-
             openGuessDialog(gameMode);
+            displayHands(manager.findStartPlayer());
         }
         else if (gameMode == 3) {
             manager = new SpadesManager();
@@ -130,12 +129,16 @@ public class GameActivity extends Activity {
 
                 // resets deck, hands, etc. and increments round
                 manager.reset();
-                potClear();
+                manager.addedGuesses = 0;
+                for (int i = 0; i < 4; i++)
+                    potClear();
                 displayPot();
-                displayHands(manager.startPlayer);
                 displayScores(scores);
                 displayEndPiles(scores,gameMode);
+                currentPlayerInteracting = (currentPlayerInteracting + 1) % 4;
                 openGuessDialog(gameMode);
+                displayHands(manager.findStartPlayer());
+
             }
 
             return;
@@ -191,7 +194,6 @@ public class GameActivity extends Activity {
 
                 if (currentPotTurn != 13) {
                     displayHands(manager.startPlayer);
-                    openGuessDialog(gameMode);
                     return;
                 }
             }
@@ -207,6 +209,7 @@ public class GameActivity extends Activity {
                 displayScores(scores);
                 displayEndPiles(scores, gameMode);
                 reset();
+                openGuessDialog(gameMode);
                 return;
             }
         } else {
@@ -523,7 +526,8 @@ public class GameActivity extends Activity {
 
     //Opens the guess dialog - fit for German Bridge for now.
     public void openGuessDialog(final int gameMode) {
-        currentPlayerInteracting = (currentPlayerInteracting + 1) % manager.playerCount;
+
+        displayHands(currentPlayerInteracting);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false);
@@ -547,7 +551,8 @@ public class GameActivity extends Activity {
         } else {
             if (currentPlayerInteracting == (manager.startPlayer + 3) % 4) {
                 for (int i = 0; i <= manager.potsFinished; i++)
-                    if (i != manager.potsFinished - manager.addedGuesses - 1) {
+                    if (i != manager.getPlayers()[currentPlayerInteracting].hand.size() - manager.addedGuesses) {
+                        Log.i("addedGuess", Integer.toString(manager.addedGuesses));
                         Button guessButton = new Button(this);
                         guessButton.setText(Integer.toString(i));
                         guessButton.setOnClickListener(new View.OnClickListener() {
@@ -607,6 +612,12 @@ public class GameActivity extends Activity {
             }
         });
         d.show();
+
+        if (currentPlayerInteracting == (manager.findStartPlayer() + 3) % 4)
+            displayHands(manager.findStartPlayer());
+        else
+            currentPlayerInteracting = (currentPlayerInteracting + 1) % 4;
+
     }
 
     @Override
