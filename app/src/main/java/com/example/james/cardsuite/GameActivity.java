@@ -35,7 +35,7 @@ public class GameActivity extends Activity {
     private List<Integer> chosenIndices = new ArrayList<Integer>();
     private List<Integer> scores = new ArrayList<Integer>();
     private SoundPool[] soundPools = new SoundPool[] {new SoundPool.Builder().build(), new SoundPool.Builder().build(),
-            new SoundPool.Builder().build()};
+            new SoundPool.Builder().build(), new SoundPool.Builder().build()};
     private int[] sounds;
     private SoundPool.OnLoadCompleteListener loadListener;
     private Random r = new Random();
@@ -48,8 +48,8 @@ public class GameActivity extends Activity {
         gameMode = intent.getIntExtra("gameMode", 0);
 
         //Play the sound of a card being played, unless it's hearts wherein it might be bid for swapping (different sound used).
-        sounds = new int[] {soundPools[0].load(this,R.raw.cardplace1,1), soundPools[1].load(this,R.raw.cardplace3,1),
-                soundPools[2].load(this,R.raw.cardplace4,1)};
+        sounds = new int[] {soundPools[0].load(this,R.raw.cardplace1,1), soundPools[1].load(this,R.raw.cardplace2,1),
+                soundPools[2].load(this,R.raw.cardplace3,1), soundPools[3].load(this,R.raw.swapcardselect,1)};
         loadListener = new SoundPool.OnLoadCompleteListener() {
             @Override
             public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
@@ -110,9 +110,11 @@ public class GameActivity extends Activity {
 
     //Processes the state of the game manager for hearts.
     public void gameClick(View v) {
-        if(soundsLoaded == 3)
+        //If all sounds loaded, set the flag to true.
+        if(soundsLoaded == sounds.length)
             finishedLoading = true;
 
+        //Play sounds only if we're done swapping in hearts or are in any other game mode.
         if((finishedLoading && (gameMode == 1 && finishedSwapping)) || (finishedLoading && gameMode != 1)) {
             int chosenSound = r.nextInt(3);
             soundPools[chosenSound].play(sounds[chosenSound],1,1,0,0,1);
@@ -265,6 +267,9 @@ public class GameActivity extends Activity {
             }
 
             if(!finishedSwapping) {
+                //Play swapping sound.
+                soundPools[3].play(sounds[3],1,1,0,0,1);
+
                 // Part 1 - Swap the cards between players.
                 int swapRound = manager.getPotsFinished() % 4;
                 if (currentPlayerInteracting != 4) {
