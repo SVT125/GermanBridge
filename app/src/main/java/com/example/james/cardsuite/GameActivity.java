@@ -2,21 +2,17 @@ package com.example.james.cardsuite;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.graphics.Typeface;
+import android.media.SoundPool;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
@@ -27,16 +23,22 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 
 public class GameActivity extends Activity {
     private Manager manager;
-    private int currentPlayerInteracting = 0, currentPotTurn = 0, guessIndex = 0, potIndex = 0, guess = -1, gameMode = 0;
-    private boolean foundStartPlayer = false, buttonsPresent = false, finishedSwapping = false;
+    private int currentPlayerInteracting = 0, currentPotTurn = 0, guessIndex = 0, potIndex = 0, guess = -1, gameMode = 0, soundsLoaded = 0;
+    private boolean foundStartPlayer = false, buttonsPresent = false, finishedSwapping = false, finishedLoading = false;
     public boolean initialOutputWritten = false;
     private List<List<Card>> chosenLists = new ArrayList<List<Card>>();
     private List<Integer> chosenIndices = new ArrayList<Integer>();
     private List<Integer> scores = new ArrayList<Integer>();
+    private SoundPool[] soundPools = new SoundPool[] {new SoundPool.Builder().build(), new SoundPool.Builder().build(),
+            new SoundPool.Builder().build()};
+    private int[] sounds;
+    private SoundPool.OnLoadCompleteListener loadListener;
+    private Random r = new Random();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +46,20 @@ public class GameActivity extends Activity {
         setContentView(R.layout.activity_game);
         Intent intent = getIntent();
         gameMode = intent.getIntExtra("gameMode", 0);
+
+        //Play the sound of a card being played, unless it's hearts wherein it might be bid for swapping (different sound used).
+        sounds = new int[] {soundPools[0].load(this,R.raw.cardplace1,1), soundPools[1].load(this,R.raw.cardplace3,1),
+                soundPools[2].load(this,R.raw.cardplace4,1)};
+        loadListener = new SoundPool.OnLoadCompleteListener() {
+            @Override
+            public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
+                soundsLoaded++;
+            }
+        };
+
+        for(SoundPool pool : soundPools)
+            pool.setOnLoadCompleteListener(loadListener);
+
         for (int i = 0; i < 4; i++) {
             scores.add(0);
         }
@@ -94,6 +110,14 @@ public class GameActivity extends Activity {
 
     //Processes the state of the game manager for hearts.
     public void gameClick(View v) {
+        if(soundsLoaded == 3)
+            finishedLoading = true;
+
+        if((finishedLoading && (gameMode == 1 && finishedSwapping)) || (finishedLoading && gameMode != 1)) {
+            int chosenSound = r.nextInt(3);
+            soundPools[chosenSound].play(sounds[chosenSound],1,1,0,0,1);
+        }
+
         switch(gameMode) {
             case 1: this.heartsHandle(v); break;
             case 2: this.bridgeHandle(v); break;
