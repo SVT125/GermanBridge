@@ -316,7 +316,8 @@
                     android:id="@+id/rightScore"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:textSize="18dp" />
+                    android:textSize="18dp"
+                    android:gravity="bottom" />
             </RelativeLayout>
 
             <RelativeLayout

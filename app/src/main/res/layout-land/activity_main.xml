@@ -7,19 +7,21 @@
     android:gravity="center"
     android:id="@+id/mainLayout"
     android:screenOrientation="landscape"
-    android:configChanges="orientation|keyboardHidden">
+    android:configChanges="orientation|keyboardHidden"
+    android:background="@drawable/test_background">
 
     <TextView android:text="@string/welcome_title" android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textView"
-        android:layout_centerHorizontal="true" />
+        android:id="@+id/greetingView"
+        android:layout_centerHorizontal="true"
+        android:textSize="26dp" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/german_bridge_title"
         android:id="@+id/german_button"
-        android:layout_below="@+id/textView"
+        android:layout_below="@+id/greetingView"
         android:layout_centerHorizontal="true"
         android:onClick="bridgeClick" />
 
@@ -28,17 +30,17 @@
         android:layout_height="wrap_content"
         android:text="@string/hearts_title"
         android:id="@+id/hearts_button"
+        android:onClick="heartsClick"
         android:layout_below="@+id/german_button"
-        android:layout_centerHorizontal="true"
-        android:onClick="heartsClick" />
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/spades_title"
         android:id="@+id/spades_button"
+        android:onClick="spadesClick"
         android:layout_below="@+id/hearts_button"
-        android:layout_alignStart="@+id/hearts_button"
-        android:onClick="spadesClick" />
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
