@@ -42,6 +42,7 @@ public class BridgeManager extends Manager implements Serializable {
 
 	//Resets the state of the manager object for the next round.
 	public void reset() {
+		this.addedGuesses = 0;
 		deck.clear();
 		potsFinished++;
 		for (int i = 2; i < 15; i++) {
@@ -55,7 +56,6 @@ public class BridgeManager extends Manager implements Serializable {
 			players[i].handsWon = 0;
 		}
 		trumpSuit = deck.remove(random.nextInt(deck.size())).getSuit();
-		addedGuesses = 0;
 	}
 
 	//Ignoring out of bounds errors because we will take care of this in android studio - don't input out of bounds.
