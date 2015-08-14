@@ -23,7 +23,9 @@
         android:id="@+id/german_button"
         android:layout_below="@+id/greetingView"
         android:layout_centerHorizontal="true"
-        android:onClick="bridgeClick" />
+        android:onClick="bridgeClick"
+        android:background="@drawable/button_background"
+        android:layout_marginTop="12.5dp" />
 
     <Button
         android:layout_width="wrap_content"
@@ -32,7 +34,9 @@
         android:id="@+id/hearts_button"
         android:onClick="heartsClick"
         android:layout_below="@+id/german_button"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/button_background"
+        android:layout_marginTop="5dp" />
 
     <Button
         android:layout_width="wrap_content"
@@ -41,6 +45,8 @@
         android:id="@+id/spades_button"
         android:onClick="spadesClick"
         android:layout_below="@+id/hearts_button"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/button_background"
+        android:layout_marginTop="5dp" />
 
 </RelativeLayout>
