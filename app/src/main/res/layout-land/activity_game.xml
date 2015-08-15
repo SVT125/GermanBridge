@@ -47,7 +47,8 @@
                     android:id="@+id/leftScore"
                     android:layout_centerVertical="true"
                     android:layout_alignParentLeft="true"
-                    android:textSize="18dp" />
+                    android:textSize="18dp"
+                    android:typeface="serif" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -74,7 +75,8 @@
                 android:id="@+id/leftPlayerOutput"
                 android:layout_centerVertical="true"
                 android:layout_alignParentEnd="true"
-                android:gravity="center" />
+                android:gravity="center"
+                android:typeface="serif" />
         </RelativeLayout>
     </LinearLayout>
 
@@ -115,7 +117,8 @@
                         android:id="@+id/topScore"
                         android:layout_alignParentTop="true"
                         android:layout_centerHorizontal="true"
-                        android:textSize="18dp" />
+                        android:textSize="18dp"
+                        android:typeface="serif" />
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -148,7 +151,8 @@
                     android:id="@+id/topPlayerOutput"
                     android:rotation="180"
                     android:layout_centerVertical="true"
-                    android:layout_centerHorizontal="true" />
+                    android:layout_centerHorizontal="true"
+                    android:typeface="serif" />
 
             </RelativeLayout>
         </LinearLayout>
@@ -208,7 +212,8 @@
                     android:id="@+id/bottomPlayerOutput"
                     android:layout_centerVertical="true"
                     android:layout_centerHorizontal="true"
-                    android:gravity="bottom" />
+                    android:gravity="bottom"
+                    android:typeface="serif" />
             </RelativeLayout>
 
             <LinearLayout
@@ -244,7 +249,8 @@
                         android:id="@+id/bottomScore"
                         android:layout_alignParentBottom="true"
                         android:layout_centerHorizontal="true"
-                        android:textSize="18dp" />
+                        android:textSize="18dp"
+                        android:typeface="serif" />
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -282,7 +288,8 @@
                 android:id="@+id/rightPlayerOutput"
                 android:gravity="bottom|center"
                 android:layout_alignParentTop="true"
-                android:layout_alignParentStart="true" />
+                android:layout_alignParentStart="true"
+                android:typeface="serif" />
         </LinearLayout>
 
         <LinearLayout
@@ -297,8 +304,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/optionsLayout"
-                android:layout_weight="3.25"
-                android:gravity="center_vertical|center_horizontal">
+                android:layout_weight="4.25"
+                android:gravity="center_vertical|right">
 
                 <Button
                     style="?android:attr/buttonStyleSmall"
@@ -316,7 +323,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="3"
+                android:layout_weight="4.2"
                 android:id="@+id/rightPlayerPileLayout"
                 android:gravity="center_vertical|center_horizontal">
 
@@ -337,7 +344,8 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:textSize="18dp"
-                    android:gravity="bottom" />
+                    android:gravity="bottom"
+                    android:typeface="serif" />
             </RelativeLayout>
 
             <RelativeLayout
