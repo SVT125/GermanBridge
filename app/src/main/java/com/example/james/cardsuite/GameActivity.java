@@ -556,8 +556,7 @@ public class GameActivity extends Activity {
         for(int i = 0; i < 4; i++) {
             //Update the score, but remove or update the pile if it exists.
             if(gameMode == 1 && ((HeartsPlayer)manager.getPlayers()[i]).endPile.size() > 0) {
-                Card card = ((HeartsPlayer)manager.getPlayers()[i]).endPile.get(((HeartsPlayer)manager.getPlayers()[i]).endPile.size() - 1);
-                pileViews[i].setImageResource(getResources().getIdentifier(card.getAddress(), "drawable", getPackageName()));
+                pileViews[i].setImageResource(getResources().getIdentifier("cardback", "drawable", getPackageName()));
             } else {
                 pileViews[i].setImageResource(0);
             }
