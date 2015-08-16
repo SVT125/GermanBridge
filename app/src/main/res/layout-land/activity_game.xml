@@ -23,7 +23,7 @@
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
             android:id="@+id/leftPlayerCardsLayout"
-            android:layout_weight="0.2"
+            android:layout_weight=".155"
             android:layout_gravity="center_vertical"
             android:orientation="vertical">
 
@@ -72,7 +72,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/leftPlayerDisplayLayout"
-            android:layout_weight="0.8"
+            android:layout_weight=".85"
             android:gravity="left">
 
             <com.example.james.cardsuite.VerticalTextView
@@ -84,7 +84,8 @@
                 android:layout_centerVertical="true"
                 android:layout_alignParentEnd="true"
                 android:gravity="center"
-                android:typeface="serif" />
+                android:typeface="serif"
+                android:textSize="12dp" />
         </RelativeLayout>
     </LinearLayout>
 
@@ -107,7 +108,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center_horizontal"
                 android:id="@+id/topPlayerCardsLayout"
-                android:layout_weight="0.3"
+                android:layout_weight=".15"
                 android:orientation="horizontal">
 
                 <FrameLayout
@@ -150,7 +151,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/topPlayerDisplayLayout"
-                android:layout_weight="0.7"
+                android:layout_weight=".85"
                 android:gravity="top">
 
                 <TextView
@@ -162,7 +163,8 @@
                     android:rotation="180"
                     android:layout_centerVertical="true"
                     android:layout_centerHorizontal="true"
-                    android:typeface="serif" />
+                    android:typeface="serif"
+                    android:textSize="12dp" />
 
             </RelativeLayout>
         </LinearLayout>
@@ -212,7 +214,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/bottomPlayerDisplayLayout"
-                android:layout_weight="0.7">
+                android:layout_weight=".85">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -223,14 +225,15 @@
                     android:layout_centerVertical="true"
                     android:layout_centerHorizontal="true"
                     android:gravity="bottom"
-                    android:typeface="serif" />
+                    android:typeface="serif"
+                    android:textSize="12dp" />
             </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/bottomPlayerCardsLayout"
-                android:layout_weight="0.3"
+                android:layout_weight=".15"
                 android:orientation="horizontal">
 
                 <RelativeLayout
@@ -292,7 +295,7 @@
             android:layout_centerVertical="true"
             android:layout_toEndOf="@+id/rightPlayerCardsLayout"
             android:id="@+id/rightPlayerDisplayLayout"
-            android:layout_weight="0.8"
+            android:layout_weight="0.85"
             android:gravity="right">
 
             <com.example.james.cardsuite.VerticalTextView
@@ -304,7 +307,8 @@
                 android:gravity="bottom|center"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentStart="true"
-                android:typeface="serif" />
+                android:typeface="serif"
+                android:textSize="12dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -312,7 +316,7 @@
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
             android:id="@+id/rightPlayerCardsLayout"
-            android:layout_weight="0.2"
+            android:layout_weight="0.15"
             android:orientation="vertical">
 
             <RelativeLayout

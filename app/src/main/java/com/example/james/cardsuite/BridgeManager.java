@@ -12,8 +12,8 @@ import java.util.Map.Entry;
 public class BridgeManager extends Manager implements Serializable {
 
 	public int addedGuesses = 0;
-	private Card.Suit trumpSuit;
-	private Card trumpCard; //Variable included in case want to display the trump card
+	public Card.Suit trumpSuit;
+	public Card trumpCard; //Variable included in case want to display the trump card
 
 	public BridgeManager() {
 		pot = new HashMap<Integer, Card>();

@@ -76,6 +76,11 @@ public class GameActivity extends Activity {
             manager = new BridgeManager();
             manager.totalRoundCount = 12; // Change later for variable number of players
 
+            ImageView trumpView = (ImageView)findViewById(R.id.trumpView);
+            trumpView.setVisibility(View.VISIBLE);
+            Card trumpCard = ((BridgeManager)manager).trumpCard;
+            trumpView.setImageResource(getResources().getIdentifier(trumpCard.getAddress(), "drawable", getPackageName()));
+
             //Display the image buttons
             displayScores(scores);
             displayEndPiles(scores, gameMode);
@@ -183,6 +188,10 @@ public class GameActivity extends Activity {
                 openGuessDialog(gameMode);
                 displayHands(manager.findStartPlayer());
 
+                //Redisplay the trump
+                ImageView trumpView = (ImageView)findViewById(R.id.trumpView);
+                Card trumpCard = ((BridgeManager)manager).trumpCard;
+                trumpView.setImageResource(getResources().getIdentifier(trumpCard.getAddress(), "drawable", getPackageName()));
             }
 
             return;
