@@ -80,7 +80,6 @@ public class GameActivity extends Activity {
             displayScores(scores);
             displayEndPiles(scores, gameMode);
             openGuessDialog(gameMode);
-            displayHands(manager.findStartPlayer());
         }
         else if (gameMode == 3) {
             manager = new SpadesManager();
@@ -89,7 +88,6 @@ public class GameActivity extends Activity {
             displayHands(0);
             displayScores(scores);
             displayEndPiles(scores, gameMode);
-
             openGuessDialog(gameMode);
         }
 
@@ -654,7 +652,8 @@ public class GameActivity extends Activity {
                             if (guessIndex < manager.playerCount)
                                 openGuessDialog(gameMode);
                             else {
-                                currentPlayerInteracting = manager.startPlayer;
+                                currentPlayerInteracting = manager.findStartPlayer();
+                                displayHands(manager.findStartPlayer());
                                 guessIndex = 0;
                             }
                         }
@@ -664,11 +663,7 @@ public class GameActivity extends Activity {
         });
         d.show();
 
-        if (currentPlayerInteracting == (manager.findStartPlayer() + 3) % 4)
-            displayHands(manager.findStartPlayer());
-        else
-            currentPlayerInteracting = (currentPlayerInteracting + 1) % 4;
-
+        currentPlayerInteracting = (currentPlayerInteracting + 1) % 4;
     }
 
     @Override
