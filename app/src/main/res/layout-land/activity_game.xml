@@ -32,7 +32,7 @@
                 android:id="@+id/leftPlayerHandLayout"
                 android:gravity="center_vertical|center_horizontal"></RelativeLayout>
 
-            <RelativeLayout
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight=".875"
@@ -48,7 +48,10 @@
                     android:layout_centerVertical="true"
                     android:layout_alignParentLeft="true"
                     android:textSize="18dp"
-                    android:typeface="serif" />
+                    android:typeface="serif"
+                    android:layout_gravity="center"
+                    android:elegantTextHeight="false"
+                    android:elevation="1dp" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -56,8 +59,9 @@
                     android:id="@+id/leftPile"
                     android:layout_centerVertical="true"
                     android:layout_centerHorizontal="true"
-                    android:rotation="90" />
-            </RelativeLayout>
+                    android:rotation="90"
+                    android:layout_gravity="center" />
+            </FrameLayout>
         </LinearLayout>
 
         <RelativeLayout
@@ -102,12 +106,11 @@
                 android:layout_weight="0.3"
                 android:orientation="horizontal">
 
-                <RelativeLayout
+                <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight=".875"
-                    android:id="@+id/topPlayerPileLayout"
-                    android:gravity="center_vertical|center_horizontal">
+                    android:id="@+id/topPlayerPileLayout">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -115,18 +118,18 @@
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:text="0"
                         android:id="@+id/topScore"
-                        android:layout_alignParentTop="true"
-                        android:layout_centerHorizontal="true"
                         android:textSize="18dp"
-                        android:typeface="serif" />
+                        android:typeface="serif"
+                        android:elevation="1dp"
+                        android:layout_gravity="center" />
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/topPile"
-                        android:layout_centerVertical="true"
-                        android:layout_centerHorizontal="true" />
-                </RelativeLayout>
+                        android:layout_centerInParent="true"
+                        android:layout_gravity="center" />
+                </FrameLayout>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -232,7 +235,7 @@
 
                 </RelativeLayout>
 
-                <RelativeLayout
+                <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_centerVertical="true"
@@ -250,15 +253,18 @@
                         android:layout_alignParentBottom="true"
                         android:layout_centerHorizontal="true"
                         android:textSize="18dp"
-                        android:typeface="serif" />
+                        android:typeface="serif"
+                        android:layout_gravity="center"
+                        android:elevation="1dp" />
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/bottomPile"
                         android:layout_centerVertical="true"
-                        android:layout_centerHorizontal="true" />
-                </RelativeLayout>
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center" />
+                </FrameLayout>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
@@ -320,7 +326,7 @@
                     android:onClick="menuClick" />
             </RelativeLayout>
 
-            <RelativeLayout
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="4.2"
@@ -333,7 +339,8 @@
                     android:id="@+id/rightPile"
                     android:layout_centerVertical="true"
                     android:layout_centerHorizontal="true"
-                    android:rotation="270"/>
+                    android:rotation="270"
+                    android:layout_gravity="center" />
 
                 <com.example.james.cardsuite.VerticalTextView
                     android:layout_width="wrap_content"
@@ -345,8 +352,10 @@
                     android:layout_centerVertical="true"
                     android:textSize="18dp"
                     android:gravity="bottom"
-                    android:typeface="serif" />
-            </RelativeLayout>
+                    android:typeface="serif"
+                    android:layout_gravity="center"
+                    android:elevation="1dp" />
+            </FrameLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
