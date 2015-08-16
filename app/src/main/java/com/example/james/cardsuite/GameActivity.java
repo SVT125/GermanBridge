@@ -1,5 +1,7 @@
 package com.example.james.cardsuite;
 
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorSet;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -280,6 +282,9 @@ public class GameActivity extends Activity {
             //Select or unselect the card with a border shown
             if(chosenCard.isClicked == false) {
                 v.setBackgroundResource(R.drawable.card_border);
+                AnimatorSet forward = (AnimatorSet) AnimatorInflater.loadAnimator(this, R.anim.card_forward);
+                forward.setTarget(v);
+                forward.start();
                 chosenCard.isClicked = true;
             } else {
                 v.setBackgroundResource(0);

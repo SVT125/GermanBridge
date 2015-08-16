@@ -32,4 +32,5 @@ public abstract class Manager implements Serializable {
 		return this.potsFinished;
 	}
 	public void newRound() { potsFinished++; }
+
 }
