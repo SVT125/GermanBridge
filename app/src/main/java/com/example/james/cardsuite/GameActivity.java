@@ -69,7 +69,6 @@ public class GameActivity extends Activity {
 
             //Display the image buttons
             displayHands(0);
-            displayScores(scores);
             displayEndPiles(scores, gameMode);
         }
         else if (gameMode == 2) {
@@ -82,7 +81,6 @@ public class GameActivity extends Activity {
             trumpView.setImageResource(getResources().getIdentifier(trumpCard.getAddress(), "drawable", getPackageName()));
 
             //Display the image buttons
-            displayScores(scores);
             displayEndPiles(scores, gameMode);
             openGuessDialog(gameMode);
         }
@@ -91,23 +89,10 @@ public class GameActivity extends Activity {
 
             //Display the image buttons
             displayHands(0);
-            displayScores(scores);
             displayEndPiles(scores, gameMode);
             openGuessDialog(gameMode);
         }
 
-        //Display the player tags
-        TextView bottomOutput = (TextView)findViewById(R.id.bottomPlayerOutput),
-                leftOutput = (TextView)findViewById(R.id.leftPlayerOutput),
-                topOutput = (TextView)findViewById(R.id.topPlayerOutput),
-                rightOutput = (TextView)findViewById(R.id.rightPlayerOutput);
-
-        bottomOutput.setText("Player 1");
-        leftOutput.setText("Player 2");
-        topOutput.setText("Player 3");
-        rightOutput.setText("Player 4");
-
-        displayScores(scores);
         displayEndPiles(scores, gameMode);
     }
 
@@ -182,7 +167,6 @@ public class GameActivity extends Activity {
                 for (int i = 0; i < 4; i++)
                     potClear();
                 displayPot();
-                displayScores(scores);
                 displayEndPiles(scores,gameMode);
                 currentPlayerInteracting = (currentPlayerInteracting + 1) % 4;
                 openGuessDialog(gameMode);
@@ -193,10 +177,8 @@ public class GameActivity extends Activity {
                 Card trumpCard = ((BridgeManager)manager).trumpCard;
                 trumpView.setImageResource(getResources().getIdentifier(trumpCard.getAddress(), "drawable", getPackageName()));
             }
-
             return;
         }
-
         // The game is done - pass all relevant information for results activity to display.
         // Passing manager just in case for future statistics if needbe.
         Intent intent = new Intent(GameActivity.this, ResultsActivity.class);
@@ -240,7 +222,6 @@ public class GameActivity extends Activity {
                 currentPlayerInteracting = manager.startPlayer;
                 manager.players[currentPlayerInteracting].handsWon++;
 
-                displayScores(scores);
                 displayEndPiles(scores,gameMode);
                 manager.pot.clear();
                 manager.newRound();
@@ -259,7 +240,6 @@ public class GameActivity extends Activity {
                 }
 
                 foundStartPlayer = false;
-                displayScores(scores);
                 displayEndPiles(scores, gameMode);
                 reset();
                 openGuessDialog(gameMode);
@@ -397,8 +377,6 @@ public class GameActivity extends Activity {
                     }
                     scores.add(player.score);
                 }
-
-                displayScores(scores);
                 roundScores.clear();
                 for (int i = 0; i < manager.getPlayers().length; i++)
                     roundScores.add(((HeartsPlayer)manager.getPlayers()[i]).tallyRoundScore());
@@ -425,18 +403,6 @@ public class GameActivity extends Activity {
         displayHands(0);
         chosenLists.clear();
         chosenIndices.clear();
-    }
-
-    public void displayScores(List<Integer> scores) {
-        TextView bottomOutput = (TextView)findViewById(R.id.bottomPlayerOutput),
-                leftOutput = (TextView)findViewById(R.id.leftPlayerOutput),
-                topOutput = (TextView)findViewById(R.id.topPlayerOutput),
-                rightOutput = (TextView)findViewById(R.id.rightPlayerOutput);
-
-        bottomOutput.setText("Player 1 | Score: " + Integer.toString(scores.get(0)));
-        leftOutput.setText("Player 2 | Score: " + Integer.toString(scores.get(1)));
-        topOutput.setText("Player 3 | Score: " + Integer.toString(scores.get(2)));
-        rightOutput.setText("Player 4 | Score: " + Integer.toString(scores.get(3)));
     }
 
     // Called when a player places a valid card into the pot; updates the images in the pot

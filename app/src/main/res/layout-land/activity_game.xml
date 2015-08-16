@@ -68,25 +68,6 @@
             </FrameLayout>
         </LinearLayout>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/leftPlayerDisplayLayout"
-            android:layout_weight=".85"
-            android:gravity="left">
-
-            <com.example.james.cardsuite.VerticalTextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="Medium Text"
-                android:id="@+id/leftPlayerOutput"
-                android:layout_centerVertical="true"
-                android:layout_alignParentEnd="true"
-                android:gravity="center"
-                android:typeface="serif"
-                android:textSize="12dp" />
-        </RelativeLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -147,26 +128,6 @@
                     android:gravity="center_vertical|center_horizontal"></RelativeLayout>
             </LinearLayout>
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/topPlayerDisplayLayout"
-                android:layout_weight=".85"
-                android:gravity="top">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="Small Text"
-                    android:id="@+id/topPlayerOutput"
-                    android:rotation="180"
-                    android:layout_centerVertical="true"
-                    android:layout_centerHorizontal="true"
-                    android:typeface="serif"
-                    android:textSize="12dp" />
-
-            </RelativeLayout>
         </LinearLayout>
 
         <RelativeLayout
@@ -209,25 +170,6 @@
             android:id="@+id/bottomPlayerLayout"
             android:layout_gravity="bottom|center_horizontal"
             android:layout_weight="0.25">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/bottomPlayerDisplayLayout"
-                android:layout_weight=".85">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="Small Text"
-                    android:id="@+id/bottomPlayerOutput"
-                    android:layout_centerVertical="true"
-                    android:layout_centerHorizontal="true"
-                    android:gravity="bottom"
-                    android:typeface="serif"
-                    android:textSize="12dp" />
-            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -288,28 +230,6 @@
         android:layout_gravity="center_vertical"
         android:layout_weight="0.41"
         android:baselineAligned="false">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerVertical="true"
-            android:layout_toEndOf="@+id/rightPlayerCardsLayout"
-            android:id="@+id/rightPlayerDisplayLayout"
-            android:layout_weight="0.85"
-            android:gravity="right">
-
-            <com.example.james.cardsuite.VerticalTextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="Medium Text"
-                android:id="@+id/rightPlayerOutput"
-                android:gravity="bottom|center"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentStart="true"
-                android:typeface="serif"
-                android:textSize="12dp" />
-        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
