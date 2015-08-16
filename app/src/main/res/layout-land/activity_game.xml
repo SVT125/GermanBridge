@@ -7,14 +7,16 @@
     android:configChanges="orientation|keyboardHidden"
     android:weightSum="1"
     android:orientation="horizontal"
-    android:background="@drawable/test_background">
+    android:background="@drawable/test_background"
+    android:baselineAligned="false">
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:id="@+id/leftPlayerLayout"
-        android:layout_weight="0.41">
+        android:layout_weight="0.41"
+        android:baselineAligned="false">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -47,12 +49,13 @@
                     android:id="@+id/leftScore"
                     android:layout_centerVertical="true"
                     android:layout_alignParentLeft="true"
-                    android:textSize="18dp"
+                    android:textSize="12dp"
                     android:typeface="serif"
                     android:layout_gravity="center"
                     android:elegantTextHeight="false"
                     android:elevation="1dp"
-                    android:background="@drawable/small_button_background" />
+                    android:background="@drawable/small_button_background"
+                    android:textIsSelectable="false" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -119,12 +122,13 @@
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:text="0"
                         android:id="@+id/topScore"
-                        android:textSize="18dp"
+                        android:textSize="12dp"
                         android:typeface="serif"
                         android:elevation="1dp"
                         android:layout_gravity="center"
                         android:autoText="false"
-                        android:background="@drawable/small_button_background" />
+                        android:background="@drawable/small_button_background"
+                        android:visibility="visible" />
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -255,7 +259,7 @@
                         android:id="@+id/bottomScore"
                         android:layout_alignParentBottom="true"
                         android:layout_centerHorizontal="true"
-                        android:textSize="18dp"
+                        android:textSize="12dp"
                         android:typeface="serif"
                         android:layout_gravity="center"
                         android:elevation="1dp"
@@ -279,7 +283,8 @@
         android:layout_height="fill_parent"
         android:id="@+id/rightPlayerLayout"
         android:layout_gravity="center_vertical"
-        android:layout_weight="0.41">
+        android:layout_weight="0.41"
+        android:baselineAligned="false">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -354,7 +359,7 @@
                     android:id="@+id/rightScore"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:textSize="18dp"
+                    android:textSize="12dp"
                     android:gravity="bottom"
                     android:typeface="serif"
                     android:layout_gravity="center"

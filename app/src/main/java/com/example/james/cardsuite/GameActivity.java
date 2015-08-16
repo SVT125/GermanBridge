@@ -559,21 +559,17 @@ public class GameActivity extends Activity {
             //Update the score, but remove or update the pile if it exists.
             if(gameMode == 1 && scores.get(i) != 0) {
                 pileViews[i].setImageResource(getResources().getIdentifier("cardback", "drawable", getPackageName()));
-            } else {
-                pileViews[i].setImageResource(0);
-            }
-
-            if(gameMode == 1 && scores.get(i) != 0) {
                 scoreViews[i].setVisibility(View.VISIBLE);
                 scoreViews[i].setText(Integer.toString(scores.get(i)));
-            }
-            else
+            } else {
+                pileViews[i].setImageResource(0);
                 scoreViews[i].setVisibility(View.INVISIBLE);
+            }
 
             if ((manager.getPlayers()[i].handsWon) > 0 && gameMode != 1) {
                 scoreViews[i].setText(Integer.toString(manager.getPlayers()[i].handsWon));
                 scoreViews[i].setVisibility(View.VISIBLE);
-            } else {
+            } else if(gameMode != 1){
                 scoreViews[i].setVisibility(View.INVISIBLE);
             }
         }
