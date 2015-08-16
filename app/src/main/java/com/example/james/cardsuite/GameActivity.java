@@ -1,7 +1,5 @@
 package com.example.james.cardsuite;
 
-import android.animation.AnimatorInflater;
-import android.animation.AnimatorSet;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -35,7 +33,7 @@ public class GameActivity extends Activity {
     public boolean initialOutputWritten = false;
     private List<List<Card>> chosenLists = new ArrayList<List<Card>>();
     private List<Integer> chosenIndices = new ArrayList<Integer>();
-    private List<Integer> scores = new ArrayList<Integer>(), roundScores = new ArrayList<Integer>();
+    private List<Integer> scores = new ArrayList<Integer>(), roundScores = new ArrayList<>();
     private SoundPool[] soundPools = new SoundPool[] {new SoundPool.Builder().build(), new SoundPool.Builder().build(),
             new SoundPool.Builder().build(), new SoundPool.Builder().build()};
     private int[] sounds;
@@ -282,9 +280,6 @@ public class GameActivity extends Activity {
             //Select or unselect the card with a border shown
             if(chosenCard.isClicked == false) {
                 v.setBackgroundResource(R.drawable.card_border);
-                AnimatorSet forward = (AnimatorSet) AnimatorInflater.loadAnimator(this, R.anim.card_forward);
-                forward.setTarget(v);
-                forward.start();
                 chosenCard.isClicked = true;
             } else {
                 v.setBackgroundResource(0);
@@ -363,9 +358,8 @@ public class GameActivity extends Activity {
 
                 manager.potAnalyze(); //sets the new start player for the next pot
                 currentPlayerInteracting = manager.startPlayer;
-                for (Card c : manager.pot.values()) {
-                    ((HeartsPlayer)manager.getPlayers()[manager.startPlayer]).endPile.add(c);
-                }
+                for (Card c : manager.pot.values())
+                    ((HeartsPlayer) manager.getPlayers()[manager.startPlayer]).endPile.add(c);
 
                 roundScores.clear();
                 for (int i = 0; i < manager.getPlayers().length; i++)
@@ -563,15 +557,20 @@ public class GameActivity extends Activity {
 
         for(int i = 0; i < 4; i++) {
             //Update the score, but remove or update the pile if it exists.
-            if(gameMode == 1 && ((HeartsPlayer)manager.getPlayers()[i]).endPile.size() > 0) {
+            if(gameMode == 1 && scores.get(i) != 0) {
                 pileViews[i].setImageResource(getResources().getIdentifier("cardback", "drawable", getPackageName()));
             } else {
                 pileViews[i].setImageResource(0);
             }
 
-            if(gameMode == 1)
+            if(gameMode == 1 && scores.get(i) != 0) {
+                scoreViews[i].setVisibility(View.VISIBLE);
                 scoreViews[i].setText(Integer.toString(scores.get(i)));
-            else if ((manager.getPlayers()[i].handsWon) > 0) {
+            }
+            else
+                scoreViews[i].setVisibility(View.INVISIBLE);
+
+            if ((manager.getPlayers()[i].handsWon) > 0 && gameMode != 1) {
                 scoreViews[i].setText(Integer.toString(manager.getPlayers()[i].handsWon));
                 scoreViews[i].setVisibility(View.VISIBLE);
             } else {
