@@ -390,7 +390,10 @@ public class GameActivity extends Activity {
                 }
 
                 displayScores(scores);
-                displayEndPiles(scores,gameMode);
+                roundScores.clear();
+                for (int i = 0; i < manager.getPlayers().length; i++)
+                    roundScores.add(((HeartsPlayer)manager.getPlayers()[i]).tallyRoundScore());
+                displayEndPiles(roundScores,gameMode);
                 reset();
                 return;
             }
