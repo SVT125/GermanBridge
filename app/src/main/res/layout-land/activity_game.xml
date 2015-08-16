@@ -51,7 +51,8 @@
                     android:typeface="serif"
                     android:layout_gravity="center"
                     android:elegantTextHeight="false"
-                    android:elevation="1dp" />
+                    android:elevation="1dp"
+                    android:background="@drawable/small_button_background" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -121,7 +122,9 @@
                         android:textSize="18dp"
                         android:typeface="serif"
                         android:elevation="1dp"
-                        android:layout_gravity="center" />
+                        android:layout_gravity="center"
+                        android:autoText="false"
+                        android:background="@drawable/small_button_background" />
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -255,7 +258,8 @@
                         android:textSize="18dp"
                         android:typeface="serif"
                         android:layout_gravity="center"
-                        android:elevation="1dp" />
+                        android:elevation="1dp"
+                        android:background="@drawable/small_button_background" />
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -354,7 +358,8 @@
                     android:gravity="bottom"
                     android:typeface="serif"
                     android:layout_gravity="center"
-                    android:elevation="1dp" />
+                    android:elevation="1dp"
+                    android:background="@drawable/small_button_background" />
             </FrameLayout>
 
             <RelativeLayout
