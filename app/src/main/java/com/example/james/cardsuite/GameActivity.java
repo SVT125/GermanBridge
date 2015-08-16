@@ -109,7 +109,7 @@ public class GameActivity extends Activity {
     }
 
     public void menuClick(View v) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this,android.R.style.Theme_Holo_Dialog_MinWidth);
         builder.setTitle("Are you sure you want to exit the game?");
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
@@ -580,7 +580,7 @@ public class GameActivity extends Activity {
 
         displayHands(currentPlayerInteracting);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this,android.R.style.Theme_Holo_Panel);
         builder.setCancelable(false);
         builder.setTitle("Player " + (currentPlayerInteracting + 1) + " bids");
         HorizontalScrollView horizontalScrollView = new HorizontalScrollView(this);
