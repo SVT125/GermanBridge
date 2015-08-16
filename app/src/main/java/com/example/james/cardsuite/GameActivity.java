@@ -35,7 +35,7 @@ public class GameActivity extends Activity {
     public boolean initialOutputWritten = false;
     private List<List<Card>> chosenLists = new ArrayList<List<Card>>();
     private List<Integer> chosenIndices = new ArrayList<Integer>();
-    private List<Integer> scores = new ArrayList<Integer>();
+    private List<Integer> scores = new ArrayList<Integer>(), roundScores = new ArrayList<Integer>();
     private SoundPool[] soundPools = new SoundPool[] {new SoundPool.Builder().build(), new SoundPool.Builder().build(),
             new SoundPool.Builder().build(), new SoundPool.Builder().build()};
     private int[] sounds;
@@ -367,8 +367,11 @@ public class GameActivity extends Activity {
                     ((HeartsPlayer)manager.getPlayers()[manager.startPlayer]).endPile.add(c);
                 }
 
-                displayScores(scores);
-                displayEndPiles(scores,gameMode);
+                roundScores.clear();
+                for (int i = 0; i < manager.getPlayers().length; i++)
+                    roundScores.add(((HeartsPlayer)manager.getPlayers()[i]).tallyRoundScore());
+
+                displayEndPiles(roundScores,gameMode);
                 manager.pot.clear();
                 manager.newRound();
 
