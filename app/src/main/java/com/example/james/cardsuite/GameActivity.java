@@ -471,7 +471,7 @@ public class GameActivity extends Activity {
             float initialTheta= (float)-4.6*manager.getPlayers()[i].hand.size()/2;
             for(int j = 0; j < manager.getPlayers()[i].hand.size(); j++) {
                 float theta = (float)(initialTheta + 4.6*j);
-                deltaY = (int)(2.75*(30 - Math.pow(j - manager.getPlayers()[i].hand.size()/2,2))); //Truncate the result of the offset
+                deltaY = (int)(2.5*(30 - Math.pow(j - manager.getPlayers()[i].hand.size()/2,2))); //Truncate the result of the offset
                 RelativeLayout.LayoutParams restParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
 
                 //How to treat and initialize the other cards depending on whether the current player or any other.
@@ -518,7 +518,7 @@ public class GameActivity extends Activity {
 
                 //Set the deltaX/theta parameters for the next card/loop iteration.
                 //Consequence of more space horizontally than vertically; set smaller distance between cards vertically.
-                deltaX = (i % 2 == 0) ? deltaX + 65 : deltaX + 55;
+                deltaX = (i % 2 == 0) ? deltaX + 60 : deltaX + 55;
             }
         }
         buttonsPresent = true;
