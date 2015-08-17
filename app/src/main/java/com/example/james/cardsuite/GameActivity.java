@@ -463,18 +463,16 @@ public class GameActivity extends Activity {
                 right = (RelativeLayout)findViewById(R.id.rightPlayerHandLayout),
                 bottom = (RelativeLayout)findViewById(R.id.bottomPlayerHandLayout);
 
-        //Now create the imagebuttons for each of the players
+        //Now create the imagebuttons for each of the players.
+        //Note: other possible param values for initialTheta scalar and deltaY scalar are (5,3).
         for(int i = 0; i < 4; i++) {
-            //Display the rest of the hand
-            int offsetMargin = 0; //The offset between cards, this should be relative to the first card and is summed over additional cards
+            //The coordinate and angular offsets for every card. Theta is dependent on the number of cards in the hand.
+            int deltaX = 0, deltaY;
+            float initialTheta= (float)-4.6*manager.getPlayers()[i].hand.size()/2;
             for(int j = 0; j < manager.getPlayers()[i].hand.size(); j++) {
+                float theta = (float)(initialTheta + 4.6*j);
+                deltaY = (int)(2.75*(30 - Math.pow(j - manager.getPlayers()[i].hand.size()/2,2))); //Truncate the result of the offset
                 RelativeLayout.LayoutParams restParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
-
-                //Set the offset between cards, left of/top of depending on player.
-                if(i % 2 == 0)
-                    restParams.setMargins(offsetMargin,0,0,0);
-                else
-                    restParams.setMargins(0,offsetMargin,0,0);
 
                 //How to treat and initialize the other cards depending on whether the current player or any other.
                 ImageView cardButton;
@@ -503,22 +501,24 @@ public class GameActivity extends Activity {
                 cardButton.setPadding(3, 3, 3, 3);
 
                 switch(i) {
-                    case 0: restParams.bottomMargin = 75;
+                    case 0: restParams.setMargins(deltaX,95-deltaY,0,0);
+                        cardButton.setRotation(theta);
                         bottom.addView(cardButton, restParams); break;
-                    case 1: restParams.leftMargin = 100;
-                        cardButton.setRotation(90);
+                    case 1: restParams.setMargins(100+deltaY,deltaX,0,0);
+                        cardButton.setRotation(90 + theta);
                         left.addView(cardButton, restParams); break;
-                    case 2: restParams.topMargin = 75;
+                    case 2: restParams.setMargins(deltaX,60+deltaY,0,0);
+                        cardButton.setRotation(180 - theta);
                         top.addView(cardButton, restParams); break;
-                    case 3: restParams.leftMargin = 25;
-                        cardButton.setRotation(270);
+                    case 3: restParams.setMargins(115-deltaY,deltaX,0,0);
+                        cardButton.setRotation(90 - theta);
                         right.addView(cardButton, restParams); break;
                 }
                 cardButton.setId(temporaryID++);
-                if(i %2 == 0)
-                    offsetMargin += 65;
-                else
-                    offsetMargin += 55;
+
+                //Set the deltaX/theta parameters for the next card/loop iteration.
+                //Consequence of more space horizontally than vertically; set smaller distance between cards vertically.
+                deltaX = (i % 2 == 0) ? deltaX + 65 : deltaX + 55;
             }
         }
         buttonsPresent = true;
