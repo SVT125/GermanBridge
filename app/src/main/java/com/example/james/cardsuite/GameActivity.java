@@ -577,19 +577,23 @@ public class GameActivity extends Activity {
             }
         } else {
             if (currentPlayerInteracting == (manager.startPlayer + 3) % 4) {
-                for (int i = 0; i <= manager.potsFinished; i++)
+                for (int i = 0; i <= manager.potsFinished; i++) {
+                    Button guessButton = new Button(this);
+                    guessButton.setText(Integer.toString(i));
                     if (i != manager.getPlayers()[currentPlayerInteracting].hand.size() - manager.addedGuesses) {
-                        Log.i("addedGuess", Integer.toString(manager.addedGuesses));
-                        Button guessButton = new Button(this);
-                        guessButton.setText(Integer.toString(i));
+                        guessButton.setBackgroundResource(R.drawable.guess_selectable);
                         guessButton.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                guess = Integer.parseInt(((TextView) v).getText().toString());
-                            }
-                        });
-                        layout.addView(guessButton);
+                        @Override
+                        public void onClick(View v) {
+                            guess = Integer.parseInt(((TextView) v).getText().toString());
+                        }
+                    }); }
+                    else {
+                        guessButton.setClickable(false);
+                        guessButton.setBackgroundResource(R.drawable.guess_nonselectable);
                     }
+                    layout.addView(guessButton);
+                }
             } else {
                 for (int j = 0; j <= manager.potsFinished; j++) {
                     Button guessButton = new Button(this);
