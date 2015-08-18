@@ -1,11 +1,24 @@
 package com.example.james.cardsuite;
 
-// The German Bridge AI, heuristic eval function sourced mostly from http://www.fongboy.com/programs/Whist/whist_paper.pdf with Luckhardt/Irani's MaxN algorithm.
+import java.util.Random;
+
+// The German Bridge AI. Heuristic eval function sourced mostly from http://www.fongboy.com/programs/Whist/whist_paper.pdf with Luckhardt/Irani's MaxN algorithm.
 // Will also consider http://www.cs.umd.edu/~bswilson/presentation.pdf for socially oriented evaluations and varying difficulties.
 public class BridgeAI {
+    // Returns the suggested number of bids for the given player.
+    // TODO: Find a more comprehensive bidding function...
+    public int getBid(int currentPlayer, BridgeManager manager) {
+        int guessedBid = manager.getPlayers()[currentPlayer].hand.size() - manager.addedGuesses;
+        Random r = new Random();
+        while(guessedBid != manager.getPlayers()[currentPlayer].hand.size() - manager.addedGuesses) {
+            guessedBid = r.nextInt(manager.potsFinished);
+        }
+        return guessedBid;
+    }
+
     // The maxN recursive function with shallow pruning.
     // Returns a 4-tuple for index ij, where i is the ith index of the tuple and j is the jth node of the tree.
-    private static double[] maxN(int currentPlayer, BridgeManager manager, int level, int turnsLeft) {
+    public static double[] maxN(int currentPlayer, BridgeManager manager, int level, int turnsLeft) {
         // If we've hit a terminal node or don't wish to continue searching, return the evaluation vector for the node.
         if(turnsLeft == 0 || level == 0)
             return new double[] {evaluate(0, manager), evaluate(1, manager),
@@ -17,7 +30,7 @@ public class BridgeAI {
             for(int i = 0; i < manager.players[i].hand.size(); i++) {
                 manager.players[i].hand.remove(i);
                 double[] evaluationVector = maxN((currentPlayer+1)%4,manager,level-1,turnsLeft-1);
-                if(evaluationVector[currentPlayer-1] > maxVector[currentPlayer-1])
+                if(evaluationVector[(currentPlayer-1)%4] > maxVector[(currentPlayer-1)%4])
                     maxVector = evaluationVector;
             }
             return maxVector;
