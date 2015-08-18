@@ -82,7 +82,12 @@ public class GameActivity extends Activity {
 
             //Display the image buttons
             displayEndPiles(scores, gameMode);
-            openGuessDialog(gameMode);
+
+            for(int i = 3; i >= 0; i--)
+                openGuessDialog(i, gameMode);
+
+            currentPlayerInteracting = manager.findStartPlayer();
+            displayHands(manager.findStartPlayer());
         }
         else if (gameMode == 3) {
             manager = new SpadesManager();
@@ -90,7 +95,12 @@ public class GameActivity extends Activity {
             //Display the image buttons
             displayHands(0);
             displayEndPiles(scores, gameMode);
-            openGuessDialog(gameMode);
+
+            for(int i = 3; i >= 0; i--)
+                openGuessDialog(i, gameMode);
+
+            currentPlayerInteracting = manager.findStartPlayer();
+            displayHands(manager.findStartPlayer());
         }
 
         displayEndPiles(scores, gameMode);
@@ -169,7 +179,7 @@ public class GameActivity extends Activity {
                 displayPot();
                 displayEndPiles(scores,gameMode);
                 currentPlayerInteracting = (currentPlayerInteracting + 1) % 4;
-                openGuessDialog(gameMode);
+                openGuessDialog(currentPlayerInteracting,gameMode);
                 displayHands(manager.findStartPlayer());
 
                 //Redisplay the trump
@@ -242,7 +252,7 @@ public class GameActivity extends Activity {
                 foundStartPlayer = false;
                 displayEndPiles(scores, gameMode);
                 reset();
-                openGuessDialog(gameMode);
+                openGuessDialog(currentPlayerInteracting,gameMode);
                 return;
             }
         } else {
@@ -552,19 +562,18 @@ public class GameActivity extends Activity {
     }
 
     //Opens the guess dialog - fit for German Bridge for now.
-    public void openGuessDialog(final int gameMode) {
-
-        displayHands(currentPlayerInteracting);
+    public void openGuessDialog(final int currentPlayer, final int gameMode) {
+        displayHands(currentPlayer);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this,android.R.style.Theme_Holo_Panel);
         builder.setCancelable(false);
-        builder.setTitle("Player " + (currentPlayerInteracting + 1) + " bids");
+        builder.setTitle("Player " + (currentPlayer + 1) + " bids");
         HorizontalScrollView horizontalScrollView = new HorizontalScrollView(this);
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.HORIZONTAL);
 
         if (gameMode == 3) {
-            for (int i = 0; i <= manager.players[currentPlayerInteracting].hand.size(); i++) {
+            for (int i = 0; i <= manager.players[currentPlayer].hand.size(); i++) {
                 Button guessButton = new Button(this);
                 guessButton.setText(Integer.toString(i));
                 guessButton.setOnClickListener(new View.OnClickListener() {
@@ -576,11 +585,11 @@ public class GameActivity extends Activity {
                 layout.addView(guessButton);
             }
         } else {
-            if (currentPlayerInteracting == (manager.startPlayer + 3) % 4) {
+            if (currentPlayer == (manager.startPlayer + 3) % 4) {
                 for (int i = 0; i <= manager.potsFinished; i++) {
                     Button guessButton = new Button(this);
                     guessButton.setText(Integer.toString(i));
-                    if (i != manager.getPlayers()[currentPlayerInteracting].hand.size() - manager.addedGuesses) {
+                    if (i != manager.getPlayers()[currentPlayer].hand.size() - manager.addedGuesses) {
                         guessButton.setBackgroundResource(R.drawable.guess_selectable);
                         guessButton.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -625,27 +634,17 @@ public class GameActivity extends Activity {
                         if (guess != -1) {
                             if (gameMode == 2) {
                                 manager.addedGuesses += guess;
-                                ((BridgePlayer) manager.players[currentPlayerInteracting]).guess = guess;
+                                ((BridgePlayer) manager.players[currentPlayer]).guess = guess;
                             } else if (gameMode == 3)
-                                ((SpadesPlayer) manager.players[currentPlayerInteracting]).bid = guess;
+                                ((SpadesPlayer) manager.players[currentPlayer]).bid = guess;
 
-                            guessIndex++;
                             d.dismiss();
-                            if (guessIndex < manager.playerCount)
-                                openGuessDialog(gameMode);
-                            else {
-                                currentPlayerInteracting = manager.findStartPlayer();
-                                displayHands(manager.findStartPlayer());
-                                guessIndex = 0;
-                            }
                         }
                     }
                 });
             }
         });
         d.show();
-
-        currentPlayerInteracting = (currentPlayerInteracting + 1) % 4;
     }
 
     @Override
