@@ -18,22 +18,34 @@ public class BridgeAI {
 
     // The maxN recursive function with shallow pruning.
     // Returns a 4-tuple for index ij, where i is the ith index of the tuple and j is the jth node of the tree.
-    public static double[] maxN(int currentPlayer, BridgeManager manager, int level, int turnsLeft) {
-        // If we've hit a terminal node or don't wish to continue searching, return the evaluation vector for the node.
-        if(turnsLeft == 0 || level == 0)
-            return new double[] {evaluate(0, manager), evaluate(1, manager),
-                    evaluate(2,manager), evaluate(3,manager)};
-        else {
-            // Otherwise, Evaluate maxN for all child nodes and return the max possible vector.
+    public static Pair<Card,double[]> maxN(int currentPlayer, BridgeManager manager, int level, int turnsLeft, Card card) {
+        // If we've hit a terminal node or don't wish to continue searching, return the evaluation vector and last move for the node.
+        if(turnsLeft == 0 || level == 0) {
+            Pair<Card,double[]> result = new Pair<Card,double[]>();
+            result.move = card;
+            result.values = new double[]{evaluate(0, manager), evaluate(1, manager),
+                        evaluate(2, manager), evaluate(3, manager)};
+            return result;
+        }else {
+            // Otherwise, Evaluate maxN for all child nodes and return the max possible vector and its corresponding move.
             double[] maxVector = new double[] {Double.MIN_VALUE, Double.MIN_VALUE, Double.MIN_VALUE, Double.MIN_VALUE};
-
+            Card maxCard = null;
             for(int i = 0; i < manager.players[i].hand.size(); i++) {
-                manager.players[i].hand.remove(i);
-                double[] evaluationVector = maxN((currentPlayer+1)%4,manager,level-1,turnsLeft-1);
-                if(evaluationVector[(currentPlayer-1)%4] > maxVector[(currentPlayer-1)%4])
-                    maxVector = evaluationVector;
+                Card chosenCard = manager.players[i].hand.remove(i);
+                Pair<Card, double[]> result = maxN((currentPlayer+1)%4,manager,level-1,turnsLeft-1, chosenCard);
+                if(result.values[(currentPlayer-1)%4] > maxVector[(currentPlayer-1)%4]) {
+                    maxCard = result.move;
+                    maxVector = result.values;
+                }
+
+                //Put the card back for next iterations
+                manager.players[i].hand.add(chosenCard);
             }
-            return maxVector;
+
+            Pair<Card,double[]> result = new Pair<Card,double[]>();
+            result.move = maxCard;
+            result.values = maxVector;
+            return result;
         }
     }
 
