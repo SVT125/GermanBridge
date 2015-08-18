@@ -72,7 +72,7 @@ public class BridgeAI {
         int missedBids = 0;
         for(int i = 0; i < manager.players.length; i++) {
             BridgePlayer player = ((BridgePlayer)manager.players[i]);
-            double partialTricksRemaining = player.guess - player.obtained - 0.75 * findGuaranteedWinners(i,manager), tricksRemaining;
+            double partialTricksRemaining = player.guess - player.obtained - 0.75 * findLikelyWinners(i,manager), tricksRemaining;
 
             if(partialTricksRemaining > 0)
                 tricksRemaining = partialTricksRemaining - 0.25 * findNeutrals(i,manager);
