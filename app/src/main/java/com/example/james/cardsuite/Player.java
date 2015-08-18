@@ -40,5 +40,14 @@ public abstract class Player {
 		}
 		return false;
 	}
+
+	public boolean hasCard(Card card) {
+		for (Card card1 : hand) {
+			if (card1.compareTo(card) == 0) {
+				return true;
+			}
+		}
+		return false;
+	}
 	
 }
