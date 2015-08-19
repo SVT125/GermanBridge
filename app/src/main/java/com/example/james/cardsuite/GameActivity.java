@@ -389,6 +389,7 @@ public class GameActivity extends Activity {
                     roundScores.add(((HeartsPlayer)manager.getPlayers()[i]).tallyRoundScore());
 
                 displayEndPiles(roundScores,gameMode);
+                manager.usedCards.addAll(manager.pot.values());
                 manager.pot.clear();
                 manager.newRound();
 
