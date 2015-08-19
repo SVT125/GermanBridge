@@ -1,8 +1,8 @@
 package com.example.james.cardsuite;
 
-import java.util.*;
+import java.io.Serializable;
 
-public class Card {
+public class Card implements Serializable {
 	public boolean isClicked = false;
 	private final int cardNumber;
 	private final Suit suit;

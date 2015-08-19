@@ -155,6 +155,7 @@ public class GameActivity extends Activity {
 
     //Processes the state of the game manager for hearts.
     public void bridgeHandle(View v) {
+        //Get the index of the chosen card in the current player's hand.
         int chosen = v.getId();
         for(int i = 0; i < currentPlayerInteracting; i++)
             chosen -= manager.getPlayers()[i].hand.size();
@@ -164,9 +165,6 @@ public class GameActivity extends Activity {
             manager.potHandle(chosen, currentPlayerInteracting, false, this);
             displayPot();
 
-            currentPlayerInteracting = (currentPlayerInteracting+1) % manager.playerCount;
-            displayHands(currentPlayerInteracting);
-
             //If this is singleplayer, have all the AI act to prepare the player's next click.
             if(isSinglePlayer) {
                 for(int i = 1; i < 4; i++) {
@@ -175,10 +173,14 @@ public class GameActivity extends Activity {
 
                     Card bestMove = BridgeAI.chooseMove(currentPlayer,(BridgeManager)manager,levelsToSearch,4-i);
                     int chosenAI = manager.players[currentPlayer].hand.indexOf(bestMove);
+
                     manager.potHandle(chosenAI, currentPlayer, false, this);
                     displayPot();
                 }
-            }
+            } else
+                currentPlayerInteracting = (currentPlayerInteracting+1) % manager.playerCount;
+
+            displayHands(currentPlayerInteracting);
 
             //Set up the next round, reset all variables.
             if(manager.getPlayers()[currentPlayerInteracting].hand.isEmpty()) {
@@ -194,11 +196,12 @@ public class GameActivity extends Activity {
                 manager.addedGuesses = 0;
                 for (int i = 0; i < 4; i++)
                     potClear();
+
                 displayPot();
-                displayEndPiles(scores,gameMode);
-                currentPlayerInteracting = (currentPlayerInteracting + 1) % 4;
-                openGuessDialog(currentPlayerInteracting,gameMode);
-                displayHands(manager.findStartPlayer());
+                displayEndPiles(scores, gameMode);
+                currentPlayerInteracting = manager.startPlayer;
+                openGuessDialog(currentPlayerInteracting, gameMode);
+                displayHands(currentPlayerInteracting);
 
                 //Redisplay the trump
                 ImageView trumpView = (ImageView)findViewById(R.id.trumpView);

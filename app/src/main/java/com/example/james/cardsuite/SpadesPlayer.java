@@ -1,8 +1,9 @@
 package com.example.james.cardsuite;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class SpadesPlayer extends Player {
+public class SpadesPlayer extends Player implements Serializable {
 	
 	protected int bid, totalBid, bags, obtained, totalObtained;
 	protected boolean blindNil = false;

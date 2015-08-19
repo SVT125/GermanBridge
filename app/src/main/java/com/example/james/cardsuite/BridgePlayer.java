@@ -1,8 +1,9 @@
 package com.example.james.cardsuite;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class BridgePlayer extends Player {
+public class BridgePlayer extends Player implements Serializable {
 	
 	protected int guess;
 	protected int obtained;
@@ -25,5 +26,4 @@ public class BridgePlayer extends Player {
 		obtained = 0;
 		return false;
 	}
-	
 }
