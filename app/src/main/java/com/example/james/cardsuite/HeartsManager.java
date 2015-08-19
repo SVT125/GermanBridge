@@ -181,6 +181,13 @@ public class HeartsManager extends Manager implements Serializable {
 		}
 		players[otherPlayer].hand.addAll((Collection<? extends Card>)chosen);
 	}
+
+	public boolean potHasSuit(Card.Suit suit) {
+		for (Card card : pot.values())
+			if (card.getSuit().equals(suit))
+				return true;
+		return false;
+	}
 	
 	public Player[] getPlayers() { return this.players; }
 }
