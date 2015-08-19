@@ -8,7 +8,6 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.media.SoundPool;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,7 +27,7 @@ import java.util.Random;
 public class GameActivity extends Activity {
     private Manager manager;
     private int currentPlayerInteracting = 0, currentPotTurn = 0, guess = -1, gameMode = 0, soundsLoaded = 0;
-    public final int levelsToSearch = 3; //Parameter for AI that indicates how many levels down to search.
+    public final int levelsToSearch = 5; //Parameter for AI that indicates how many levels down to search.
     private boolean foundStartPlayer = false, buttonsPresent = false, finishedSwapping = false, finishedLoading = false, isSinglePlayer = true;
     public boolean initialOutputWritten = false;
     private List<List<Card>> chosenLists = new ArrayList<List<Card>>();
@@ -163,6 +162,8 @@ public class GameActivity extends Activity {
         // players start putting cards into the pot and calculate score
         if(manager.potsFinished < manager.totalRoundCount - 1) {
             manager.potHandle(chosen, currentPlayerInteracting, false, this);
+            for (int i = 0; i < 4; i++)
+                potClear();
             displayPot();
 
             //If this is singleplayer, have all the AI act to prepare the player's next click.
@@ -175,15 +176,18 @@ public class GameActivity extends Activity {
                     int chosenAI = manager.players[currentPlayer].hand.indexOf(bestMove);
 
                     manager.potHandle(chosenAI, currentPlayer, false, this);
+                    for (int j = 0; j < 4; j++)
+                        potClear();
                     displayPot();
                 }
             } else
-                currentPlayerInteracting = (currentPlayerInteracting+1) % manager.playerCount;
+                currentPlayerInteracting = (currentPlayerInteracting + 1) % manager.playerCount;
 
             displayHands(currentPlayerInteracting);
 
             //Set up the next round, reset all variables.
-            if(manager.getPlayers()[currentPlayerInteracting].hand.isEmpty()) {
+            int lastPlayer = (manager.startPlayer-1 % 4) + (manager.startPlayer-1 < 0 ? 4 : 0);
+            if(manager.getPlayers()[lastPlayer].hand.isEmpty()) {
                 manager.potAnalyze();
                 scores.clear();
                 for (Player player : manager.players) {

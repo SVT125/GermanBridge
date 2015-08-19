@@ -23,7 +23,7 @@ public class ResultsActivity extends Activity {
         manager.players = players;
 
         TextView resultsView = (TextView)findViewById(R.id.resultsView);
-        resultsView.setText("Player " + manager.findWinner() + " won the game!");
+        resultsView.setText("Player " + (manager.findWinner()+1) + " won the game!");
     }
 
     // Starts a new game when clicked - goes to the main activity again.

@@ -64,8 +64,6 @@ public class BridgeAI {
         for(int i = 0; i < manager.players[currentPlayer].hand.size(); i++) {
             Card chosenCard = manager.players[currentPlayer].hand.remove(i);
             Pair<Card, double[]> result = maxN((currentPlayer+1)%4,manager,level-1,turnsLeft-1, chosenCard);
-            //for(int j = 0; j < result.values.length; j++)
-            //   Log.i("Score ", Integer.toString(j) + ": " + result.values[j]);
             if(result.values[(currentPlayer)] > maxVector[(currentPlayer)])
                 maxVector = result.values;
 

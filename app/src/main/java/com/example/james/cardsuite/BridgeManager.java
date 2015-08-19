@@ -52,7 +52,8 @@ public class BridgeManager extends Manager implements Serializable {
 			deck = players[i].fillHand(deck, random, potsFinished);
 			players[i].handsWon = 0;
 		}
-		trumpSuit = deck.remove(random.nextInt(deck.size())).getSuit();
+		trumpCard = deck.remove(random.nextInt(deck.size()));
+		trumpSuit = trumpCard.getSuit();
 	}
 
 	public boolean potHandle(int chosen, int currentPlayer, boolean initialOutputWritten, GameActivity activity) {
