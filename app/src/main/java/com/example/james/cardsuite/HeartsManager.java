@@ -42,6 +42,7 @@ public class HeartsManager extends Manager implements Serializable {
 			deck = players[i].fillHand(deck, random, 13);
 			players[i].organize();
 		}
+		usedCards.clear();
 	}
 
 	//Returns true if the game is over, when someone has hit 100 points.
