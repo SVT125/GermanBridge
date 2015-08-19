@@ -188,6 +188,14 @@ public class HeartsManager extends Manager implements Serializable {
 				return true;
 		return false;
 	}
+
+	public int potHighestValue() {
+		int max = 0;
+		for (Card card : pot.values())
+			if (card.getCardNumber() > max && card.getSuit().equals(startSuit))
+				max = card.getCardNumber();
+		return max;
+	}
 	
 	public Player[] getPlayers() { return this.players; }
 }
