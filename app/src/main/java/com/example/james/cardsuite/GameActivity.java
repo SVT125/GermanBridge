@@ -25,11 +25,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-
 public class GameActivity extends Activity {
     private Manager manager;
-    private int currentPlayerInteracting = 0, currentPotTurn = 0, guessIndex = 0, potIndex = 0, guess = -1, gameMode = 0, soundsLoaded = 0;
-    private boolean foundStartPlayer = false, buttonsPresent = false, finishedSwapping = false, finishedLoading = false;
+    private int currentPlayerInteracting = 0, currentPotTurn = 0, guess = -1, gameMode = 0, soundsLoaded = 0;
+    public final int levelsToSearch = 3; //Parameter for AI that indicates how many levels down to search.
+    private boolean foundStartPlayer = false, buttonsPresent = false, finishedSwapping = false, finishedLoading = false, isSinglePlayer = true;
     public boolean initialOutputWritten = false;
     private List<List<Card>> chosenLists = new ArrayList<List<Card>>();
     private List<Integer> chosenIndices = new ArrayList<Integer>();
@@ -83,8 +83,16 @@ public class GameActivity extends Activity {
             //Display the image buttons
             displayEndPiles(scores, gameMode);
 
-            for(int i = 3; i >= 0; i--)
-                openGuessDialog(i, gameMode);
+            if(!isSinglePlayer)
+                for(int i = 3; i >= 0; i--)
+                    openGuessDialog(i, gameMode);
+            else {
+                for(int i = 0; i < 4; i++)
+                    if(i != manager.findStartPlayer())
+                        ((BridgePlayer)(manager.players[i])).guess = BridgeAI.getBid(i,(BridgeManager)manager);
+
+                openGuessDialog(manager.findStartPlayer(), gameMode);
+            }
 
             currentPlayerInteracting = manager.findStartPlayer();
             displayHands(manager.findStartPlayer());
@@ -153,17 +161,27 @@ public class GameActivity extends Activity {
 
         // players start putting cards into the pot and calculate score
         if(manager.potsFinished < manager.totalRoundCount - 1) {
-            manager.potHandle(chosen,currentPlayerInteracting, false, this);
+            manager.potHandle(chosen, currentPlayerInteracting, false, this);
             displayPot();
 
             currentPlayerInteracting = (currentPlayerInteracting+1) % manager.playerCount;
-            potIndex++;
             displayHands(currentPlayerInteracting);
+
+            //If this is singleplayer, have all the AI act to prepare the player's next click.
+            if(isSinglePlayer) {
+                for(int i = 1; i < 4; i++) {
+                    int currentPlayer = (currentPlayerInteracting+i)%4;
+                    displayHands(currentPlayer);
+
+                    Card bestMove = BridgeAI.chooseMove(currentPlayer,(BridgeManager)manager,levelsToSearch,4-i);
+                    int chosenAI = manager.players[currentPlayer].hand.indexOf(bestMove);
+                    manager.potHandle(chosenAI, currentPlayer, false, this);
+                    displayPot();
+                }
+            }
 
             //Set up the next round, reset all variables.
             if(manager.getPlayers()[currentPlayerInteracting].hand.isEmpty()) {
-                potIndex = 0;
-
                 manager.potAnalyze();
                 scores.clear();
                 for (Player player : manager.players) {
@@ -187,6 +205,7 @@ public class GameActivity extends Activity {
                 Card trumpCard = ((BridgeManager)manager).trumpCard;
                 trumpView.setImageResource(getResources().getIdentifier(trumpCard.getAddress(), "drawable", getPackageName()));
             }
+
             return;
         }
         // The game is done - pass all relevant information for results activity to display.
