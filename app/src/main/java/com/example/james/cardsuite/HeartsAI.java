@@ -115,12 +115,12 @@ public class HeartsAI extends HeartsPlayer {
         // otherwise dump queen of spades, other high spades, and any other hearts
         else if (this.hasCard(new Card(12, Card.Suit.SPADES)))
             return (new Card(12, Card.Suit.SPADES));
-        else if (!(manager.hasBeenPlayed(new Card(12, Card.Suit.SPADES)))) {
+        /*else if (!(manager.hasBeenPlayed(new Card(12, Card.Suit.SPADES)))) {
             if (this.hasCard(new Card(14, Card.Suit.SPADES)))
                 return (new Card(14, Card.Suit.SPADES));
             else if (this.hasCard(new Card(13, Card.Suit.SPADES)))
                 return (new Card(13, Card.Suit.SPADES));
-        }
+        }*/
         else if (this.hasSuit(Card.Suit.HEARTS))
             return this.playHighestSuit(Card.Suit.HEARTS);
         else if (this.hasSuit(Card.Suit.CLUBS))
@@ -129,8 +129,6 @@ public class HeartsAI extends HeartsPlayer {
             return this.playHighestSuit(Card.Suit.DIAMONDS);
         else
             return this.playHighestSuit(Card.Suit.SPADES);
-
-        return null;
     }
 
     // Selects a move when bot is the one leading the current pot

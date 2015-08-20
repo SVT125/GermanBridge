@@ -19,14 +19,13 @@ public class BridgeAI {
     }
 
     // Returns the best possible move for the given player and state of game using the recursive maxN algorithm.
-    public static Card chooseMove(int currentPlayer, BridgeManager manager, int level, int turnsLeft) {
+    public static Card chooseMove(int currentPlayer, BridgeManager manager, int level) {
         double[] maxVector = new double[] {Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY};
         Card bestCard = null;
         for(int i = 0; i < manager.players[currentPlayer].hand.size(); i++) {
             Card chosenCard = manager.players[currentPlayer].hand.remove(i);
-            Pair<Card, double[]> result = maxN((currentPlayer+1)%4,manager,level-1,turnsLeft-1, chosenCard);
-            //for(int j = 0; j < result.values.length; j++)
-            //    Log.i("Score ", Integer.toString(j) + ": " + result.values[j]);
+
+            Pair<Card, double[]> result = maxN((currentPlayer+1)%4,manager,level-1, chosenCard);
             if(result.values[(currentPlayer)] > maxVector[(currentPlayer)]) {
                 maxVector = result.values;
                 bestCard = chosenCard;
@@ -40,9 +39,9 @@ public class BridgeAI {
 
     // The maxN recursive function with shallow pruning.
     // Returns a 4-tuple for index ij, where i is the ith index of the tuple and j is the jth node of the tree.
-    private static Pair<Card,double[]> maxN(int currentPlayer, BridgeManager manager, int level, int turnsLeft, Card card) {
+    private static Pair<Card,double[]> maxN(int currentPlayer, BridgeManager manager, int level, Card card) {
         // If we've hit a terminal node, return the evaluation vector, in this case each of the player scores.
-        if(manager.players[currentPlayer].hand.size() == 0) {
+        if(manager.players[0].hand.size() == 0 || manager.players[1].hand.size() == 0 || manager.players[2].hand.size() == 0 || manager.players[3].hand.size() == 0) {
             Pair<Card,double[]> result = new Pair<Card,double[]>();
             result.move = card;
             result.values = new double[] {manager.players[0].score, manager.players[1].score, manager.players[2].score,
@@ -51,7 +50,7 @@ public class BridgeAI {
         }
 
         // If we don't wish to continue searching, return the evaluation vector and last move for the node.
-        if(turnsLeft == 0 || level == 0) {
+        if(level == 0) {
             Pair<Card,double[]> result = new Pair<Card,double[]>();
             result.move = card;
             result.values = new double[]{evaluate(0, manager), evaluate(1, manager),
@@ -63,7 +62,7 @@ public class BridgeAI {
         double[] maxVector = new double[] {Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY};
         for(int i = 0; i < manager.players[currentPlayer].hand.size(); i++) {
             Card chosenCard = manager.players[currentPlayer].hand.remove(i);
-            Pair<Card, double[]> result = maxN((currentPlayer+1)%4,manager,level-1,turnsLeft-1, chosenCard);
+            Pair<Card, double[]> result = maxN((currentPlayer+1)%4,manager,level-1, chosenCard);
             if(result.values[(currentPlayer)] > maxVector[(currentPlayer)])
                 maxVector = result.values;
 

@@ -8,6 +8,8 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.media.SoundPool;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,7 +29,7 @@ import java.util.Random;
 public class GameActivity extends Activity {
     private Manager manager;
     private int currentPlayerInteracting = 0, currentPotTurn = 0, guess = -1, gameMode = 0, soundsLoaded = 0;
-    public final int levelsToSearch = 5; //Parameter for AI that indicates how many levels down to search.
+    public final int levelsToSearch = 3; //Parameter for AI that indicates how many levels down to search.
     private boolean foundStartPlayer = false, buttonsPresent = false, finishedSwapping = false, finishedLoading = false, isSinglePlayer = true;
     public boolean initialOutputWritten = false;
     private List<List<Card>> chosenLists = new ArrayList<List<Card>>();
@@ -160,7 +162,7 @@ public class GameActivity extends Activity {
             chosen -= manager.getPlayers()[i].hand.size();
 
         // players start putting cards into the pot and calculate score
-        if(manager.potsFinished < manager.totalRoundCount - 1) {
+        if(manager.potsFinished <= manager.totalRoundCount) {
             manager.potHandle(chosen, currentPlayerInteracting, false, this);
             for (int i = 0; i < 4; i++)
                 potClear();
@@ -172,9 +174,8 @@ public class GameActivity extends Activity {
                     int currentPlayer = (currentPlayerInteracting+i)%4;
                     displayHands(currentPlayer);
 
-                    Card bestMove = BridgeAI.chooseMove(currentPlayer,(BridgeManager)manager,levelsToSearch,4-i);
+                    Card bestMove = BridgeAI.chooseMove(currentPlayer,(BridgeManager)manager,levelsToSearch);
                     int chosenAI = manager.players[currentPlayer].hand.indexOf(bestMove);
-
                     manager.potHandle(chosenAI, currentPlayer, false, this);
                     for (int j = 0; j < 4; j++)
                         potClear();
