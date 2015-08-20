@@ -203,7 +203,12 @@ public class GameActivity extends Activity {
 
                 displayPot();
                 displayEndPiles(scores, gameMode);
-                currentPlayerInteracting = manager.startPlayer;
+
+                if(isSinglePlayer)
+                    currentPlayerInteracting = 0;
+                else
+                    currentPlayerInteracting = manager.startPlayer;
+
                 openGuessDialog(currentPlayerInteracting, gameMode);
                 displayHands(currentPlayerInteracting);
 
@@ -213,7 +218,9 @@ public class GameActivity extends Activity {
                 trumpView.setImageResource(getResources().getIdentifier(trumpCard.getAddress(), "drawable", getPackageName()));
             }
 
-            return;
+            //If this wasn't the last round, return; otherwise, the game is finished.
+            if(manager.potsFinished < manager.totalRoundCount - 1)
+                return;
         }
         // The game is done - pass all relevant information for results activity to display.
         // Passing manager just in case for future statistics if needbe.
