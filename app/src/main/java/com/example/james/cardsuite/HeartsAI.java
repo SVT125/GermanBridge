@@ -13,6 +13,14 @@ import java.util.Comparator;
 public class HeartsAI extends HeartsPlayer {
 
     private int gameMode = 0;
+    private int difficulty = 0;
+
+    public HeartsAI(int difficulty) {
+        super();
+        this.isBot = true;
+        this.difficulty = difficulty;
+        this.findGameMode();
+    }
 
     // Bot chooses the ideal cards to swap at the beginning of each hand round
     public List<Card> chooseSwap(HeartsManager manager, int startPlayer) {
