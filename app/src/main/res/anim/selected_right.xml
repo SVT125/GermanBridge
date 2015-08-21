@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <set xmlns:android="http://schemas.android.com/apk/res/android">
     <objectAnimator
-        android:propertyName="y"
+        android:propertyName="x"
         android:valueTo="300"
         android:valueType="floatType"/>
     <objectAnimator
-        android:propertyName="y"
+        android:propertyName="x"
+        android:valueTo="200"
         android:repeatCount="infinite"
         android:repeatMode="reverse"
         />

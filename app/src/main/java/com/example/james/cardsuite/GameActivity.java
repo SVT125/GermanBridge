@@ -1,5 +1,7 @@
 package com.example.james.cardsuite;
 
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorSet;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -272,7 +274,7 @@ public class GameActivity extends Activity {
                 currentPlayerInteracting = manager.startPlayer;
                 manager.players[currentPlayerInteracting].handsWon++;
 
-                displayEndPiles(scores,gameMode);
+                displayEndPiles(scores, gameMode);
                 manager.pot.clear();
                 manager.newRound();
 
@@ -292,7 +294,7 @@ public class GameActivity extends Activity {
                 foundStartPlayer = false;
                 displayEndPiles(scores, gameMode);
                 reset();
-                openGuessDialog(currentPlayerInteracting,gameMode);
+                openGuessDialog(currentPlayerInteracting, gameMode);
                 return;
             }
         } else {
@@ -316,7 +318,29 @@ public class GameActivity extends Activity {
 
             //Select or unselect the card with a border shown
             if(chosenCard.isClicked == false) {
-                v.setBackgroundResource(R.drawable.card_border);
+
+                switch(currentPlayerInteracting){
+                    case 0:
+                        AnimatorSet selected_f = (AnimatorSet) AnimatorInflater.loadAnimator(this, R.anim.selected_forward);
+                        selected_f.setTarget(v);
+                        selected_f.start();
+                        break;
+                    case 1:
+                        AnimatorSet selected_r = (AnimatorSet) AnimatorInflater.loadAnimator(this, R.anim.selected_right);
+                        selected_r.setTarget(v);
+                        selected_r.start();
+                        break;
+                    case 2:
+                        AnimatorSet selected_b = (AnimatorSet) AnimatorInflater.loadAnimator(this, R.anim.selected_back);
+                        selected_b.setTarget(v);
+                        selected_b.start();
+                        break;
+                    case 3:
+                        AnimatorSet selected_l = (AnimatorSet) AnimatorInflater.loadAnimator(this, R.anim.selected_left);
+                        selected_l.setTarget(v);
+                        selected_l.start();
+                        break;
+                }
                 chosenCard.isClicked = true;
             } else {
                 v.setBackgroundResource(0);
