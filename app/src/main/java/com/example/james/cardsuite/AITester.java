@@ -14,13 +14,13 @@ public class AITester {
             wins[AITester.executeBridgeGame()]++;
 
         //Trials done, print statistics.
-        System.out.println("Bridge AI win %: " + ((wins[0] + wins[1]) / trialsRun));
+        System.out.println("Bridge AI win %: " + ((wins[0] + wins[1])*100 / trialsRun));
         System.out.println("Bridge AI wins: " + (wins[0]+wins[1]));
         System.out.println("Player 1 (Bridge AI) wins: " + wins[0]);
         System.out.println("Player 2 (Bridge AI) wins: " + wins[1]);
 
 
-        System.out.println("Random AI win %: " + ((wins[2] + wins[3]) / trialsRun));
+        System.out.println("Random AI win %: " + ((wins[2] + wins[3])*100 / trialsRun));
         System.out.println("Random AI wins: " + (wins[2] + wins[3]));
         System.out.println("Player 3 (Random AI) wins: " + wins[2]);
         System.out.println("Player 4 (Random AI) wins: " + wins[3]);
@@ -29,11 +29,11 @@ public class AITester {
     //Executes 1 game of German Bridge, returns the player number (0-3) that won.
     private static int executeBridgeGame() {
         BridgeManager manager = new BridgeManager();
+        manager.totalRoundCount = 12;
         //Each loop iteration is a round, where the i'th round each player will start with i cards.
         int currentPlayer;
-        for(int i = 0; i < manager.totalRoundCount; i++) {
+        for(int i = 0; i < manager.totalRoundCount - 1; i++) {
             currentPlayer = manager.startPlayer;
-            int lastPlayer = (manager.startPlayer-1 % 4) + (manager.startPlayer-1 < 0 ? 4 : 0);
 
             //Bidding (Players 1,2 are maxN AI while 3,4 are random).
             ((BridgePlayer)(manager.players[0])).guess = BridgeAI.getBid(currentPlayer,manager);
@@ -42,19 +42,28 @@ public class AITester {
             ((BridgePlayer)(manager.players[3])).guess = RandomAI.getGermanBid(currentPlayer,manager);
 
             //Continuing the execution of a round, until all hands' cards are gone.
+            int turnsTaken = 0;
+            int lastPlayer = (manager.startPlayer-1 % 4) + (manager.startPlayer-1 < 0 ? 4 : 0);
             while(!manager.getPlayers()[lastPlayer].hand.isEmpty()) {
                 Card card = currentPlayer < 2 ? BridgeAI.chooseMove(currentPlayer,manager,maxNLevelDepth) : RandomAI.chooseMove(currentPlayer,manager);
                 int chosen = manager.players[currentPlayer].hand.indexOf(card);
+
                 germanPotHandle(chosen,currentPlayer,manager);
+                currentPlayer = (currentPlayer + 1) % 4;
+                turnsTaken++;
+
+                if(turnsTaken == 4) {
+                    manager.potAnalyze();
+                    turnsTaken = 0;
+                }
             }
 
-            manager.potAnalyze();
             for(Player player : manager.players)
                 player.scoreChange();
             manager.reset();
-            currentPlayer = manager.startPlayer;
         }
 
+        System.out.println(manager.players[0].score + "|" + manager.players[1].score + "|" + manager.players[2].score + "|" + manager.players[3].score);
         return manager.findWinner();
     }
 
@@ -65,6 +74,7 @@ public class AITester {
         if(currentPlayer == manager.startPlayer) {
             // first player can choose any card he/she wants
             manager.startSuit = manager.players[manager.startPlayer].hand.remove(chosen).getSuit();
+            return;
         }
 
         manager.players[currentPlayer].hand.remove(chosen);

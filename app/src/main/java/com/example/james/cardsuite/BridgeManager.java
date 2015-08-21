@@ -48,7 +48,6 @@ public class BridgeManager extends Manager implements Serializable {
 			}
 		}
 		for (int i = 0; i < playerCount; i++) {
-			players[i] = new BridgePlayer();
 			deck = players[i].fillHand(deck, random, potsFinished);
 			players[i].handsWon = 0;
 		}
