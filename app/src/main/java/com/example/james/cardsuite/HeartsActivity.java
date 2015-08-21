@@ -29,6 +29,9 @@ public class HeartsActivity extends GameActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hearts);
 
+        Intent intent = getIntent();
+        this.isSinglePlayer = intent.getBooleanExtra("isSinglePlayer", true);
+
         manager = new HeartsManager();
 
         //Display the image buttons

@@ -30,6 +30,9 @@ public class BridgeActivity extends GameActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bridge);
 
+        Intent intent = getIntent();
+        this.isSinglePlayer = intent.getBooleanExtra("isSinglePlayer", true);
+
         manager = new BridgeManager();
         manager.totalRoundCount = 12; // Change later for variable number of players
 
@@ -56,13 +59,12 @@ public class BridgeActivity extends GameActivity {
     }
 
     public void gameClick(View v) {
+        super.gameClick(v);
         //Play sounds only if we're done swapping in hearts or are in any other game mode.
         if(finishedLoading) {
             int chosenSound = r.nextInt(3);
             soundPools[chosenSound].play(sounds[chosenSound],1,1,0,0,1);
         }
-
-        super.gameClick(v);
         //Get the index of the chosen card in the current player's hand.
         int chosen = v.getId();
         for(int i = 0; i < currentPlayerInteracting; i++)

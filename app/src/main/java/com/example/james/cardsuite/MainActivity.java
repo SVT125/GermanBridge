@@ -1,6 +1,8 @@
 package com.example.james.cardsuite;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
@@ -25,23 +27,37 @@ public class MainActivity extends Activity {
         super.onConfigurationChanged(config);
     }
 
-    public void heartsClick(View v) {
-        //Add bundle content as needed
-        Intent intent = new Intent(MainActivity.this,HeartsActivity.class);
-        startActivity(intent);
-        finish();
+    public void gameClick(final View v) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this,android.R.style.Theme_Holo_Dialog_MinWidth);
+        builder.setPositiveButton("Multiplayer", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                runGameActivity(v,false);
+                dialog.dismiss();
+            }
+        });
+        builder.setNegativeButton("Singleplayer", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                runGameActivity(v,true);
+                dialog.dismiss();
+            }
+        });
+        builder.setCancelable(false);
+        builder.show();
     }
 
-    public void bridgeClick(View v) {
-        //Add bundle content as needed
-        Intent intent = new Intent(MainActivity.this,BridgeActivity.class);
-        startActivity(intent);
-        finish();
-    }
+    public void runGameActivity(View v, boolean isSinglePlayer) {
+        Class<? extends GameActivity> executingActivity = null;
+        if(v == findViewById(R.id.hearts_button))
+            executingActivity = HeartsActivity.class;
+        else if(v == findViewById(R.id.german_button))
+            executingActivity = BridgeActivity.class;
+        else if(v == findViewById(R.id.spades_button))
+            executingActivity = SpadesActivity.class;
 
-    public void spadesClick(View v) {
-        //Add bundle content as needed
-        Intent intent = new Intent(MainActivity.this,SpadesActivity.class);
+        Intent intent = new Intent(MainActivity.this,executingActivity);
+        intent.putExtra("isSinglePlayer",isSinglePlayer);
         startActivity(intent);
         finish();
     }

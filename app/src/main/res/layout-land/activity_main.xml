@@ -23,16 +23,17 @@
         android:id="@+id/german_button"
         android:layout_below="@+id/greetingView"
         android:layout_centerHorizontal="true"
-        android:onClick="bridgeClick"
+        android:onClick="gameClick"
         android:background="@drawable/button_background"
-        android:layout_marginTop="12.5dp" />
+        android:layout_marginTop="12.5dp"
+        android:nestedScrollingEnabled="false" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/hearts_title"
         android:id="@+id/hearts_button"
-        android:onClick="heartsClick"
+        android:onClick="gameClick"
         android:layout_below="@+id/german_button"
         android:layout_centerHorizontal="true"
         android:background="@drawable/button_background"
@@ -43,10 +44,11 @@
         android:layout_height="wrap_content"
         android:text="@string/spades_title"
         android:id="@+id/spades_button"
-        android:onClick="spadesClick"
+        android:onClick="gameClick"
         android:layout_below="@+id/hearts_button"
         android:layout_centerHorizontal="true"
         android:background="@drawable/button_background"
-        android:layout_marginTop="5dp" />
+        android:layout_marginTop="5dp"
+        android:nestedScrollingEnabled="false" />
 
 </RelativeLayout>

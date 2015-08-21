@@ -4,7 +4,7 @@ import android.util.Log;
 
 //Run this to test AI.
 public class AITester {
-    private static final int maxNLevelDepth = 3, trialsRun = 500;
+    private static final int maxNLevelDepth = 3, trialsRun = 100;
     private static int[] wins = new int[4];
 
     //TODO - Implement general solution - below solution for bridge AI testing alone.

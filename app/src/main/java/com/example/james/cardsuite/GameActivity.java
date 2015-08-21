@@ -76,7 +76,7 @@ public abstract class GameActivity extends Activity {
     }
 
     //Processes the state of the game manager for hearts.
-    public void gameClick(View v) {
+    public void gameClick(final View v) {
         //If all sounds loaded, set the flag to true.
         if(soundsLoaded == sounds.length)
             finishedLoading = true;

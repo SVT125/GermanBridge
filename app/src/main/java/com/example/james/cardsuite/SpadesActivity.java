@@ -30,6 +30,9 @@ public class SpadesActivity extends GameActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spades);
 
+        Intent intent = getIntent();
+        this.isSinglePlayer = intent.getBooleanExtra("isSinglePlayer", true);
+
         manager = new SpadesManager();
 
         //Display the image buttons
@@ -44,13 +47,13 @@ public class SpadesActivity extends GameActivity {
     }
 
     public void gameClick(View v) {
+        super.gameClick(v);
         //Play sounds only if we're done swapping in hearts or are in any other game mode.
         if(finishedLoading) {
             int chosenSound = r.nextInt(3);
             soundPools[chosenSound].play(sounds[chosenSound],1,1,0,0,1);
         }
 
-        super.gameClick(v);
         if(!(manager.isGameOver())) {
             int chosen = v.getId();
             for (int i = 0; i < currentPlayerInteracting; i++)
