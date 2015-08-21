@@ -28,6 +28,12 @@ public class Card implements Serializable {
 		return 1;
 	}
 
+	public boolean equals(int cardNum, Suit cardSuit) {
+		if (this.cardNumber == cardNum && suit.equals(cardSuit))
+			return true;
+		return false;
+	}
+
 	public String getAddress() {
 		int num = this.cardNumber % 15;
 		return (this.suit.toString().toLowerCase() + num);
