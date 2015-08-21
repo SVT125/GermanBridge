@@ -2,6 +2,7 @@ package com.example.james.cardsuite;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -24,6 +25,11 @@ public class ResultsActivity extends Activity {
 
         TextView resultsView = (TextView)findViewById(R.id.resultsView);
         resultsView.setText("Player " + (manager.findWinner()+1) + " won the game!");
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration config) {
+        super.onConfigurationChanged(config);
     }
 
     // Starts a new game when clicked - goes to the main activity again.

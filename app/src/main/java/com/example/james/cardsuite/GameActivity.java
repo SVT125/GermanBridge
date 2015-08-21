@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.media.SoundPool;
@@ -113,6 +114,11 @@ public class GameActivity extends Activity {
         }
 
         displayEndPiles(scores, gameMode);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration config) {
+        super.onConfigurationChanged(config);
     }
 
     public void menuClick(View v) {

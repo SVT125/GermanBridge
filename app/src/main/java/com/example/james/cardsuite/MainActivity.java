@@ -2,6 +2,7 @@ package com.example.james.cardsuite;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.Menu;
@@ -19,7 +20,12 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         TextView greetingView = (TextView)findViewById(R.id.greetingView);
-        greetingView.setTypeface(Typeface.createFromAsset(getAssets(),"fonts/Asimov.ttf"));
+        greetingView.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Asimov.ttf"));
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration config) {
+        super.onConfigurationChanged(config);
     }
 
     public void heartsClick(View v) {

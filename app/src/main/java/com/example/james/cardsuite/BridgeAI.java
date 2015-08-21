@@ -1,7 +1,5 @@
 package com.example.james.cardsuite;
 
-import android.util.Log;
-
 import java.util.Random;
 
 // The German Bridge AI. Heuristic eval function sourced mostly from http://www.fongboy.com/programs/Whist/whist_paper.pdf with Luckhardt/Irani's MaxN algorithm.
