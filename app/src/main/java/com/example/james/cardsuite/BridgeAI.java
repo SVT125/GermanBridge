@@ -21,16 +21,18 @@ public class BridgeAI {
         double[] maxVector = new double[] {Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY};
         Card bestCard = null;
         for(int i = 0; i < manager.players[currentPlayer].hand.size(); i++) {
-            Card chosenCard = manager.players[currentPlayer].hand.remove(i);
+            if(manager.cardSelectable(manager.players[currentPlayer].hand.get(i),true,currentPlayer)) {
+                Card chosenCard = manager.players[currentPlayer].hand.remove(i);
 
-            Pair<Card, double[]> result = maxN((currentPlayer+1)%4,manager,level-1, chosenCard);
-            if(result.values[(currentPlayer)] > maxVector[(currentPlayer)]) {
-                maxVector = result.values;
-                bestCard = chosenCard;
+                Pair<Card, double[]> result = maxN((currentPlayer + 1) % 4, manager, level - 1, chosenCard);
+                if (result.values[(currentPlayer)] > maxVector[(currentPlayer)]) {
+                    maxVector = result.values;
+                    bestCard = chosenCard;
+                }
+
+                //Put the card back for next iterations
+                manager.players[currentPlayer].hand.add(i, chosenCard);
             }
-
-            //Put the card back for next iterations
-            manager.players[currentPlayer].hand.add(i,chosenCard);
         }
         return bestCard;
     }
@@ -59,13 +61,15 @@ public class BridgeAI {
         // Otherwise, evaluate maxN for all child nodes and return the max possible vector and its corresponding move.
         double[] maxVector = new double[] {Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY};
         for(int i = 0; i < manager.players[currentPlayer].hand.size(); i++) {
-            Card chosenCard = manager.players[currentPlayer].hand.remove(i);
-            Pair<Card, double[]> result = maxN((currentPlayer+1)%4,manager,level-1, chosenCard);
-            if(result.values[(currentPlayer)] > maxVector[(currentPlayer)])
-                maxVector = result.values;
+            if(manager.cardSelectable(manager.players[currentPlayer].hand.get(i),true,currentPlayer)) {
+                Card chosenCard = manager.players[currentPlayer].hand.remove(i);
+                Pair<Card, double[]> result = maxN((currentPlayer + 1) % 4, manager, level - 1, chosenCard);
+                if (result.values[(currentPlayer)] > maxVector[(currentPlayer)])
+                    maxVector = result.values;
 
-            //Put the card back for next iterations
-            manager.players[currentPlayer].hand.add(i,chosenCard);
+                //Put the card back for next iterations
+                manager.players[currentPlayer].hand.add(i, chosenCard);
+            }
         }
 
         Pair<Card,double[]> result = new Pair<Card,double[]>();
@@ -115,7 +119,7 @@ public class BridgeAI {
     private static int findGuaranteedWinners(int currentPlayer, BridgeManager manager) {
         //If the aces, etc. have already been played, find the next guaranteed winners.
         int highestPossibleWinner = 14;
-        while(!manager.isPlayable(highestPossibleWinner,manager.trumpSuit) && manager.hasSuit(manager.trumpSuit))
+        while(!manager.isInPlayersHands(highestPossibleWinner, manager.trumpSuit) && manager.hasSuit(manager.trumpSuit))
             highestPossibleWinner--;
 
         int found = 0;
