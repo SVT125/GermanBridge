@@ -40,9 +40,9 @@ public abstract class Player {
 		return true;
 	}
 
-	public boolean hasCard(Card card) {
+	public boolean hasCard(int num, Card.Suit suit) {
 		for (Card card1 : hand) {
-			if (card1.compareTo(card) == 0)
+			if (card1.equals(num, suit))
 				return true;
 		}
 		return false;
