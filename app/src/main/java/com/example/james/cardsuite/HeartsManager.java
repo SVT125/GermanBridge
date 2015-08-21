@@ -197,6 +197,34 @@ public class HeartsManager extends Manager implements Serializable {
 				max = card.getCardNumber();
 		return max;
 	}
+
+	public Card.Suit leastPlayedSuit() {
+		Map<Integer, Card.Suit> suitCounts = new HashMap<>();
+		int clubs = 0, diamonds = 0, hearts = 0, spades = 0;
+		for (Card card : usedCards) {
+			if (card.getSuit().equals(Card.Suit.SPADES))
+				spades++;
+			if (card.getSuit().equals(Card.Suit.HEARTS))
+				hearts++;
+			if (card.getSuit().equals(Card.Suit.CLUBS))
+				clubs++;
+			if (card.getSuit().equals(Card.Suit.DIAMONDS))
+				diamonds++;
+		}
+		suitCounts.put(diamonds, Card.Suit.DIAMONDS);
+		suitCounts.put(spades, Card.Suit.SPADES);
+		suitCounts.put(clubs, Card.Suit.CLUBS);
+
+		int min = hearts;
+		Card.Suit minSuit = Card.Suit.HEARTS;
+		for (Entry<Integer, Card.Suit> entry : suitCounts.entrySet()) {
+			if (entry.getKey() < min ) {
+				min = entry.getKey();
+				minSuit = entry.getValue();
+			}
+		}
+		return minSuit;
+	}
 	
 	public Player[] getPlayers() { return this.players; }
 }
