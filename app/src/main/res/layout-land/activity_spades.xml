@@ -1,0 +1,305 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SpadesActivity"
+    android:id="@+id/gameLayout"
+    android:screenOrientation="landscape"
+    android:configChanges="orientation|keyboardHidden"
+    android:weightSum="1"
+    android:orientation="horizontal"
+    android:background="@drawable/test_background"
+    android:baselineAligned="false">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/leftPlayerLayout"
+        android:layout_weight="0.41"
+        android:baselineAligned="false">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:id="@+id/leftPlayerCardsLayout"
+            android:layout_weight=".155"
+            android:layout_gravity="center_vertical"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight=".125"
+                android:id="@+id/leftPlayerHandLayout"
+                android:gravity="center_vertical|center_horizontal"></RelativeLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight=".875"
+                android:id="@+id/leftPlayerPileLayout"
+                android:gravity="center_vertical|center_horizontal">
+
+                <com.example.james.cardsuite.VerticalTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="0"
+                    android:id="@+id/leftScore"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentLeft="true"
+                    android:textSize="12dp"
+                    android:typeface="serif"
+                    android:layout_gravity="center"
+                    android:elegantTextHeight="false"
+                    android:elevation="1dp"
+                    android:background="@drawable/small_button_background"
+                    android:textIsSelectable="false" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/leftPile"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true"
+                    android:rotation="90"
+                    android:layout_gravity="center" />
+            </FrameLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/centerLayout"
+        android:layout_weight="0.18">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/topPlayerLayout"
+            android:layout_weight="0.25">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:id="@+id/topPlayerCardsLayout"
+                android:layout_weight=".15"
+                android:orientation="horizontal">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".875"
+                    android:id="@+id/topPlayerPileLayout">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:text="0"
+                        android:id="@+id/topScore"
+                        android:textSize="12dp"
+                        android:typeface="serif"
+                        android:elevation="1dp"
+                        android:layout_gravity="center"
+                        android:autoText="false"
+                        android:background="@drawable/small_button_background"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/topPile"
+                        android:layout_centerInParent="true"
+                        android:layout_gravity="center" />
+                </FrameLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".125"
+                    android:id="@+id/topPlayerHandLayout"
+                    android:gravity="center_vertical|center_horizontal"></RelativeLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/trumpLayout"
+            android:gravity="center_vertical|center_horizontal"
+            android:layout_weight="0.3">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/trumpView"
+                android:layout_alignParentTop="true"
+                android:background="@drawable/trump_border"
+                android:padding="1dp"
+                android:visibility="invisible" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/potLayout"
+            android:layout_weight="0.25">
+
+            <ImageView
+                android:id="@+id/anchor"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_centerInParent="true" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/bottomPlayerLayout"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_weight="0.25">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/bottomPlayerCardsLayout"
+                android:layout_weight=".15"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".125"
+                    android:id="@+id/bottomPlayerHandLayout"
+                    android:gravity="center_horizontal">
+
+                </RelativeLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_weight=".875"
+                    android:id="@+id/bottomPlayerPileLayout"
+                    android:gravity="center_vertical|center_horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:text="0"
+                        android:id="@+id/bottomScore"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:textSize="12dp"
+                        android:typeface="serif"
+                        android:layout_gravity="center"
+                        android:elevation="1dp"
+                        android:background="@drawable/small_button_background" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/bottomPile"
+                        android:layout_centerVertical="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center" />
+                </FrameLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/rightPlayerLayout"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="0.41"
+        android:baselineAligned="false">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:id="@+id/rightPlayerCardsLayout"
+            android:layout_weight="0.15"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/optionsLayout"
+                android:layout_weight="4.25"
+                android:gravity="center_vertical|right">
+
+                <Button
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:text="Menu"
+                    android:id="@+id/button"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/small_button_background"
+                    android:textSize="10dp"
+                    android:onClick="menuClick" />
+            </RelativeLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="4.2"
+                android:id="@+id/rightPlayerPileLayout"
+                android:gravity="center_vertical|center_horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/rightPile"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true"
+                    android:rotation="270"
+                    android:layout_gravity="center" />
+
+                <com.example.james.cardsuite.VerticalTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="0"
+                    android:id="@+id/rightScore"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:textSize="12dp"
+                    android:gravity="bottom"
+                    android:typeface="serif"
+                    android:layout_gravity="center"
+                    android:elevation="1dp"
+                    android:background="@drawable/small_button_background" />
+            </FrameLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:id="@+id/rightPlayerHandLayout"
+                android:gravity="center_vertical">
+
+            </RelativeLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

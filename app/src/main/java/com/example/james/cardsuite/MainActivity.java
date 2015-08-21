@@ -11,9 +11,6 @@ import android.view.View;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
-
-    int gameMode = 0;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,32 +26,22 @@ public class MainActivity extends Activity {
     }
 
     public void heartsClick(View v) {
-
-        gameMode = 1;
-
         //Add bundle content as needed
-        Intent intent = new Intent(MainActivity.this,GameActivity.class);
-        intent.putExtra("gameMode", gameMode);
+        Intent intent = new Intent(MainActivity.this,HeartsActivity.class);
         startActivity(intent);
         finish();
     }
 
     public void bridgeClick(View v) {
-        gameMode = 2;
-
         //Add bundle content as needed
-        Intent intent = new Intent(MainActivity.this,GameActivity.class);
-        intent.putExtra("gameMode", gameMode);
+        Intent intent = new Intent(MainActivity.this,BridgeActivity.class);
         startActivity(intent);
         finish();
     }
 
     public void spadesClick(View v) {
-        gameMode = 3;
-
         //Add bundle content as needed
-        Intent intent = new Intent(MainActivity.this,GameActivity.class);
-        intent.putExtra("gameMode", gameMode);
+        Intent intent = new Intent(MainActivity.this,SpadesActivity.class);
         startActivity(intent);
         finish();
     }
