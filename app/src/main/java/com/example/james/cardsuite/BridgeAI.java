@@ -6,12 +6,25 @@ import java.util.Random;
 // Will also consider http://www.cs.umd.edu/~bswilson/presentation.pdf for socially oriented evaluations and varying difficulties.
 public class BridgeAI {
     // Returns the suggested number of bids for the given player.
+    // Calculated by finding the number of cards of the trump suit and subtracting by a random number [0-3].
     // TODO: Find a more comprehensive bidding function...
     public static int getBid(int currentPlayer, BridgeManager manager) {
-        int guessedBid = manager.getPlayers()[currentPlayer].hand.size() - manager.addedGuesses;
+        //Count the number of applicable cards towards winning the pot - we know the count is less than the potsFinished/total hand size.
+        int trumpCount = 0;
+        for(Card card : manager.players[currentPlayer].hand)
+            if(card.getSuit() == manager.trumpSuit)
+                trumpCount++;
+
+        int cap = trumpCount/3, guessedBid = manager.getPlayers()[currentPlayer].hand.size() - manager.addedGuesses;
         Random r = new Random();
-        while(guessedBid != manager.getPlayers()[currentPlayer].hand.size() - manager.addedGuesses) {
-            guessedBid = r.nextInt(manager.potsFinished);
+        while(guessedBid == manager.getPlayers()[currentPlayer].hand.size() - manager.addedGuesses) {
+            if(cap == 0) {
+                guessedBid = 0;
+                break;
+            } else {
+                guessedBid = trumpCount - r.nextInt(cap);
+                cap++; //If the same guesses are being made, increment the random weight.
+            }
         }
         return guessedBid;
     }
@@ -119,7 +132,7 @@ public class BridgeAI {
     private static int findGuaranteedWinners(int currentPlayer, BridgeManager manager) {
         //If the aces, etc. have already been played, find the next guaranteed winners.
         int highestPossibleWinner = 14;
-        while(!manager.isInPlayersHands(highestPossibleWinner, manager.trumpSuit) && manager.hasSuit(manager.trumpSuit))
+        while(!manager.isInPlayersHands(highestPossibleWinner, manager.trumpSuit) && manager.playerHasSuit(manager.trumpSuit))
             highestPossibleWinner--;
 
         int found = 0;

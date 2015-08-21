@@ -41,12 +41,11 @@ public abstract class Manager implements Serializable {
 		return false;
 	}
 
-	public boolean hasSuit(Card.Suit suit) {
+	public boolean playerHasSuit(Card.Suit suit) {
 		for(Player player : players)
 			if(player.hasSuit(suit))
 				return true;
 
 		return false;
 	}
-
 }

@@ -36,16 +36,16 @@ public class AITester {
             currentPlayer = manager.startPlayer;
 
             //Bidding (Players 1,2 are maxN AI while 3,4 are random).
-            ((BridgePlayer)(manager.players[0])).guess = BridgeAI.getBid(currentPlayer,manager);
-            ((BridgePlayer)(manager.players[1])).guess = BridgeAI.getBid(currentPlayer, manager);
-            ((BridgePlayer)(manager.players[2])).guess = RandomAI.getGermanBid(currentPlayer,manager);
-            ((BridgePlayer)(manager.players[3])).guess = RandomAI.getGermanBid(currentPlayer,manager);
+            ((BridgePlayer)(manager.players[0])).guess = BridgeAI.getBid(0, manager);
+            ((BridgePlayer)(manager.players[1])).guess = BridgeAI.getBid(1, manager);
+            ((BridgePlayer)(manager.players[2])).guess = RandomAI.getGermanBid(2,manager);
+            ((BridgePlayer)(manager.players[3])).guess = RandomAI.getGermanBid(3,manager);
 
             //Continuing the execution of a round, until all hands' cards are gone.
             int turnsTaken = 0;
             int lastPlayer = (manager.startPlayer-1 % 4) + (manager.startPlayer-1 < 0 ? 4 : 0);
             while(!manager.getPlayers()[lastPlayer].hand.isEmpty()) {
-                Card card = currentPlayer < 2 ? BridgeAI.chooseMove(currentPlayer,manager,maxNLevelDepth) : RandomAI.chooseMove(currentPlayer,manager);
+                Card card = currentPlayer < 2 ? BridgeAI.chooseMove(currentPlayer,manager,maxNLevelDepth) : RandomAI.chooseMove(currentPlayer, manager);
                 int chosen = manager.players[currentPlayer].hand.indexOf(card);
 
                 germanPotHandle(chosen,currentPlayer,manager);
