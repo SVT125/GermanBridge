@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import android.widget.TextView;
-
 public abstract class Manager implements Serializable {
 	
 	protected ArrayList<Card> deck = new ArrayList<Card>();
@@ -33,5 +31,22 @@ public abstract class Manager implements Serializable {
 		return this.potsFinished;
 	}
 	public void newRound() { potsFinished++; }
+	public boolean isPlayable(int cardNumber, Card.Suit suit) {
+		Card checkedCard = new Card(cardNumber,suit);
+		for(Player player : players)
+			for(Card card : player.hand)
+				if(card.compareTo(checkedCard) == 0)
+					return true;
+
+		return false;
+	}
+
+	public boolean hasSuit(Card.Suit suit) {
+		for(Player player : players)
+			if(player.hasSuit(suit))
+				return true;
+
+		return false;
+	}
 
 }

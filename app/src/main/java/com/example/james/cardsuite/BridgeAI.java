@@ -115,9 +115,14 @@ public class BridgeAI {
     // Returns the number of guaranteed winners in the given player's hand.
     // Guaranteed winner cards are defined here as aces of the trump suit (therefore values 0-1).
     private static int findGuaranteedWinners(int currentPlayer, BridgeManager manager) {
+        //If the aces, etc. have already been played, find the next guaranteed winners.
+        int highestPossibleWinner = 14;
+        while(!manager.isPlayable(highestPossibleWinner,manager.trumpSuit) && manager.hasSuit(manager.trumpSuit))
+            highestPossibleWinner--;
+
         int found = 0;
         for(Card card : ((BridgePlayer)manager.players[currentPlayer]).hand)
-            if(card.getSuit() == manager.trumpSuit && card.getCardNumber() == 15)
+            if(card.getSuit() == manager.trumpSuit && card.getCardNumber() ==  highestPossibleWinner)
                 found++;
 
         return found;
