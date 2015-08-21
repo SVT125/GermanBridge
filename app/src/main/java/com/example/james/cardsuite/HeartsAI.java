@@ -12,7 +12,7 @@ import java.util.Comparator;
  */
 public class HeartsAI extends HeartsPlayer {
 
-    boolean attemptShootMoon;
+    private int gameMode = 0;
 
     // Bot chooses the ideal cards to swap at the beginning of each hand round
     public List<Card> chooseSwap(HeartsManager manager, int startPlayer) {
@@ -20,8 +20,8 @@ public class HeartsAI extends HeartsPlayer {
         List<Card> priorityCards = new ArrayList<Card>();
 
         // if player has queen of spades and has lower spades cards to buffer, keep it; otherwise, toss it
-        if (this.hasCard(new Card(12, Card.Suit.SPADES))) {
-            if (this.suitCount(Card.Suit.SPADES) < 3 && !attemptShootMoon)
+        if (this.hasCard(12, Card.Suit.SPADES)) {
+            if (this.suitCount(Card.Suit.SPADES) < 3 && (gameMode != 4))
                 priorityCards.add(new Card(12, Card.Suit.SPADES));
         }
 
@@ -59,6 +59,7 @@ public class HeartsAI extends HeartsPlayer {
         return weight;
     }
 
+    // Takes suit weights and orders them and returns as a list from highest priority to lowest
     public List<Card.Suit> getPrioritySuit() {
         int heartsWeight = suitWeights(Card.Suit.HEARTS);
         int clubsWeight = suitWeights(Card.Suit.CLUBS);
@@ -85,15 +86,12 @@ public class HeartsAI extends HeartsPlayer {
 
     // Selects a move for the bot at any point in the game
     public Card makeMove(int currentPlayer, int startPlayer, HeartsManager manager) {
-        if (currentPlayer == startPlayer) {
-            return this.leadMove();
-        }
-        else if (currentPlayer == (startPlayer + 3) % 4) {
+        if (currentPlayer == startPlayer)
+            return this.leadMove(manager);
+        else if (currentPlayer == (startPlayer + 3) % 4)
             return this.lastMove(manager);
-        }
-        else {
+        else
             return this.move(manager);
-        }
     }
 
     // Selects a move when bot is the one ending the current pot
@@ -113,40 +111,46 @@ public class HeartsAI extends HeartsPlayer {
             return this.playLowestSuit(playSuit);
 
         // otherwise dump queen of spades, other high spades, and any other hearts
-        else if (this.hasCard(new Card(12, Card.Suit.SPADES)))
+        else if (this.hasCard(12, Card.Suit.SPADES))
             return (new Card(12, Card.Suit.SPADES));
-        /*else if (!(manager.hasBeenPlayed(new Card(12, Card.Suit.SPADES)))) {
-            if (this.hasCard(new Card(14, Card.Suit.SPADES)))
+        else if (manager.isInPlayersHands(12, Card.Suit.SPADES)) {
+            if (this.hasCard(14, Card.Suit.SPADES))
                 return (new Card(14, Card.Suit.SPADES));
-            else if (this.hasCard(new Card(13, Card.Suit.SPADES)))
+            else if (this.hasCard(13, Card.Suit.SPADES))
                 return (new Card(13, Card.Suit.SPADES));
-        }*/
-        else if (this.hasSuit(Card.Suit.HEARTS))
-            return this.playHighestSuit(Card.Suit.HEARTS);
-        else if (this.hasSuit(Card.Suit.CLUBS))
-            return this.playHighestSuit(Card.Suit.CLUBS);
-        else if (this.hasSuit(Card.Suit.DIAMONDS))
-            return this.playHighestSuit(Card.Suit.DIAMONDS);
-        else
-            return this.playHighestSuit(Card.Suit.SPADES);
+        }
+
+        // else play highest of suit that is the most dangerous (weights)
+        List<Card.Suit> priorities = getPrioritySuit();
+        Card.Suit prioritySuit = priorities.get(0);
+        return playHighestSuit(prioritySuit);
     }
 
     // Selects a move when bot is the one leading the current pot
-    // TODO
-    public Card leadMove() {
+    public Card leadMove(HeartsManager manager) {
 
         // if person does not have queen of spades and has a safe hand for spades, place low spades
-        if (!(this.hasCard(new Card(12, Card.Suit.SPADES))) && (suitWeights(Card.Suit.SPADES) < 3) && this.hasSuit(Card.Suit.SPADES)) {
+        if (!(this.hasCard(12, Card.Suit.SPADES)) && (suitWeights(Card.Suit.SPADES) < 3) && this.hasSuit(Card.Suit.SPADES)) {
             return this.playLowestSuit(Card.Suit.SPADES);
         }
 
-        return null;
+        // otherwise lead in suit that has been played the least
+        Card.Suit leastSuit = manager.leastPlayedSuit();
+        return this.playLowestSuit(leastSuit);
     }
 
     // Selects a move when bot is neither last nor first player
-    // TODO
     public Card move(HeartsManager manager) {
-        return null;
+        Card.Suit playSuit = manager.startSuit;
+
+        // if bot has the suit, return the lowest of that suit
+        if (this.hasSuit(playSuit))
+            return playLowestSuit(playSuit);
+
+        // else play highest of suit that is the most dangerous (weights)
+        List<Card.Suit> priorities = getPrioritySuit();
+        Card.Suit prioritySuit = priorities.get(0);
+        return playHighestSuit(prioritySuit);
     }
 
     public Card playLowestSuit(Card.Suit suit) {
@@ -163,6 +167,13 @@ public class HeartsAI extends HeartsPlayer {
             if (this.hand.get(i).getSuit().equals(suit))
                 return this.hand.get(i);
         return null;
+    }
+
+    // Dynamically changes the bots' play style during the game depending on the circumstances
+    // 1 - Low Layer , 2 - Voider, 3 - Equalizer, 4 - Moon Shooter
+    // TODO
+    public void findGameMode() {
+        this.gameMode = 1;
     }
 
 }
