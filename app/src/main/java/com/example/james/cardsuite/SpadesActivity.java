@@ -38,8 +38,16 @@ public class SpadesActivity extends GameActivity {
         //Display the image buttons
         displayHands(0);
 
-        for(int i = 3; i >= 0; i--)
-            openGuessDialog(i);
+        if(!isSinglePlayer)
+            for(int i = 3; i >= 0; i--)
+                openGuessDialog(i);
+        else {
+            for(int i = 0; i < 4; i++)
+                if(i != manager.findStartPlayer())
+                    ((SpadesPlayer)(manager.players[i])).bid = SpadesAI.getBid(i,(SpadesManager)manager);
+
+            openGuessDialog(manager.findStartPlayer());
+        }
 
         currentPlayerInteracting = manager.findStartPlayer();
         displayHands(manager.findStartPlayer());
@@ -68,9 +76,23 @@ public class SpadesActivity extends GameActivity {
                 if (currentPlayerInteracting == manager.startPlayer)
                     for (int i = 0; i < 4; i++)
                         potClear();
-
                 displayPot();
-                currentPlayerInteracting = (currentPlayerInteracting + 1) % 4;
+
+                //If this is singleplayer, have all the AI act to prepare the player's next click.
+                if(isSinglePlayer) {
+                    for(int i = 1; i < 4; i++) {
+                        int currentPlayer = (currentPlayerInteracting+i)%4;
+                        displayHands(currentPlayer);
+
+                        Card bestMove = SpadesAI.chooseMove(currentPlayer,(SpadesManager)manager,levelsToSearch);
+                        int chosenAI = manager.players[currentPlayer].hand.indexOf(bestMove);
+                        manager.potHandle(chosenAI, currentPlayer, false, this);
+                        for (int j = 0; j < 4; j++)
+                            potClear();
+                        displayPot();
+                    }
+                } else
+                    currentPlayerInteracting = (currentPlayerInteracting + 1) % manager.playerCount;
 
                 // If the pot reaches max size of 4, then we know to continue and compare cards
                 if (manager.pot.size() != 4) {
@@ -185,7 +207,16 @@ public class SpadesActivity extends GameActivity {
                     public void onClick(View v) {
                         if (guess != -1) {
                             ((SpadesPlayer) manager.players[currentPlayer]).bid = guess;
-
+                            switch(currentPlayer) {
+                                case 0: ((SpadesPlayer) manager.players[0]).totalBid = ((SpadesPlayer) manager.players[2]).totalBid =
+                                        ((SpadesPlayer) manager.players[0]).bid + ((SpadesPlayer) manager.players[2]).bid; break;
+                                case 1: ((SpadesPlayer) manager.players[1]).totalBid = ((SpadesPlayer) manager.players[3]).totalBid =
+                                        ((SpadesPlayer) manager.players[1]).bid + ((SpadesPlayer) manager.players[3]).bid; break;
+                                case 2: ((SpadesPlayer) manager.players[0]).totalBid = ((SpadesPlayer) manager.players[2]).totalBid =
+                                        ((SpadesPlayer) manager.players[0]).bid + ((SpadesPlayer) manager.players[2]).bid; break;
+                                case 3: ((SpadesPlayer) manager.players[1]).totalBid = ((SpadesPlayer) manager.players[3]).totalBid =
+                                        ((SpadesPlayer) manager.players[1]).bid + ((SpadesPlayer) manager.players[3]).bid; break;
+                            }
                             d.dismiss();
                         }
                     }

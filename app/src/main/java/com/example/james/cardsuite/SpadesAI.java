@@ -92,7 +92,7 @@ public class SpadesAI {
     // Given the manager, which represents the current state of the game, and the player of interest, return their heuristic value.
     private static double evaluate(int currentPlayer, SpadesManager manager) {
         SpadesPlayer player = ((SpadesPlayer)manager.players[currentPlayer]);
-        double partialTricksRemaining = player.bid - player.obtained - 0.75 * findGuaranteedWinners(currentPlayer,manager), tricksRemaining;
+        double partialTricksRemaining = player.totalBid - player.totalObtained - 0.75 * findGuaranteedWinners(currentPlayer,manager), tricksRemaining;
 
         if(partialTricksRemaining > 0)
             tricksRemaining = partialTricksRemaining - 0.25 * findNeutrals(currentPlayer,manager);
@@ -100,7 +100,7 @@ public class SpadesAI {
             tricksRemaining = partialTricksRemaining - 0.1 * findNeutrals(currentPlayer,manager);
 
         double pointBidEstimate = 10 * (player.hand.size() - tricksRemaining)/player.hand.size();
-        double pointTricksEstimate = player.bid - tricksRemaining;
+        double pointTricksEstimate = player.totalBid - tricksRemaining;
 
         //This is the final heuristic value determined.
         return pointBidEstimate + pointTricksEstimate + guessAllMissingBids(manager);
