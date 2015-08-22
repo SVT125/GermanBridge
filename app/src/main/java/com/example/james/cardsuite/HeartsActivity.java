@@ -30,9 +30,9 @@ public class HeartsActivity extends GameActivity {
         setContentView(R.layout.activity_hearts);
 
         Intent intent = getIntent();
-        this.isSinglePlayer = intent.getBooleanExtra("isSinglePlayer", true);
+        this.isBot = intent.getBooleanArrayExtra("isBot");
 
-        manager = new HeartsManager();
+        manager = new HeartsManager(isBot);
 
         //Display the image buttons
         displayHands(0);
@@ -55,80 +55,9 @@ public class HeartsActivity extends GameActivity {
 
         if(!(manager.isGameOver())) {
             int chosen = getCardIndex(v);
-
             Card chosenCard = manager.getPlayers()[currentPlayerInteracting].hand.get(chosen);
 
-            //Select or unselect the card with a border shown
-            if(chosenCard.isClicked == false) {
-
-                switch(currentPlayerInteracting){
-                    case 0:
-                        AnimatorSet selected_f = (AnimatorSet) AnimatorInflater.loadAnimator(this, R.anim.selected_forward);
-                        selected_f.setTarget(v);
-                        selected_f.start();
-                        break;
-                    case 1:
-                        AnimatorSet selected_r = (AnimatorSet) AnimatorInflater.loadAnimator(this, R.anim.selected_right);
-                        selected_r.setTarget(v);
-                        selected_r.start();
-                        break;
-                    case 2:
-                        AnimatorSet selected_b = (AnimatorSet) AnimatorInflater.loadAnimator(this, R.anim.selected_back);
-                        selected_b.setTarget(v);
-                        selected_b.start();
-                        break;
-                    case 3:
-                        AnimatorSet selected_l = (AnimatorSet) AnimatorInflater.loadAnimator(this, R.anim.selected_left);
-                        selected_l.setTarget(v);
-                        selected_l.start();
-                        break;
-                }
-                chosenCard.isClicked = true;
-            } else {
-                v.setBackgroundResource(0);
-                chosenCard.isClicked = false;
-            }
-
-            if(!finishedSwapping) {
-                //Play swapping sound.
-                soundPools[3].play(sounds[3],1,1,0,0,1);
-
-                // Part 1 - Swap the cards between players.
-                int swapRound = manager.getPotsFinished() % 4;
-                if (currentPlayerInteracting != 4) {
-                    //If the chosen card is already chosen, unselect it - otherwise, add it to our chosen cards.
-                    if (chosenIndices.contains((Integer)chosen))
-                        chosenIndices.remove((Integer)chosen);
-                    else {
-                        chosenIndices.add((Integer)chosen);
-                    }
-
-                    if (chosenIndices.size() < 3)
-                        return;
-
-                    List<Card> chosenCards = manager.chooseCards(currentPlayerInteracting, chosenIndices);
-                    chosenLists.add(chosenCards);
-                }
-
-                if (swapRound != 3 && currentPlayerInteracting != 4) {
-                    currentPlayerInteracting++;
-                    chosenIndices = new ArrayList<Integer>(); //restart the indices chosen for the next player
-
-                    if (currentPlayerInteracting == 4) {
-                        for (int i = 0; i < 4; i++) {
-                            manager.swapCards(chosenLists.get(i), i, swapRound);
-                            manager.getPlayers()[i].organize();
-                            displayHands(0);
-                            currentPlayerInteracting = 0;
-                        }
-                        finishedSwapping = true;
-                    } else {
-                        manager.getPlayers()[currentPlayerInteracting].organize();
-                        displayHands(currentPlayerInteracting);
-                        return;
-                    }
-                }
-            }
+            this.chooseAndSwap(chosenCard, chosen, v);
 
             // Done swapping by this point - this should only be called once, the turn directly when we're done swapping.
             // Part 2 - Find player with 2 of clubs, we do this here because the card may be swapped.
@@ -207,6 +136,80 @@ public class HeartsActivity extends GameActivity {
             intent.putExtra("players", manager.getPlayers());
             startActivity(intent);
             finish();
+        }
+    }
+
+    public void chooseAndSwap(Card chosenCard, int chosen, View v) {
+        //Select or unselect the card with a border shown
+        if(chosenCard.isClicked == false) {
+
+            switch(currentPlayerInteracting){
+                case 0:
+                    AnimatorSet selected_f = (AnimatorSet) AnimatorInflater.loadAnimator(this, R.anim.selected_forward);
+                    selected_f.setTarget(v);
+                    selected_f.start();
+                    break;
+                case 1:
+                    AnimatorSet selected_r = (AnimatorSet) AnimatorInflater.loadAnimator(this, R.anim.selected_right);
+                    selected_r.setTarget(v);
+                    selected_r.start();
+                    break;
+                case 2:
+                    AnimatorSet selected_b = (AnimatorSet) AnimatorInflater.loadAnimator(this, R.anim.selected_back);
+                    selected_b.setTarget(v);
+                    selected_b.start();
+                    break;
+                case 3:
+                    AnimatorSet selected_l = (AnimatorSet) AnimatorInflater.loadAnimator(this, R.anim.selected_left);
+                    selected_l.setTarget(v);
+                    selected_l.start();
+                    break;
+            }
+            chosenCard.isClicked = true;
+        } else {
+            v.setBackgroundResource(0);
+            chosenCard.isClicked = false;
+        }
+
+        if(!finishedSwapping) {
+            //Play swapping sound.
+            soundPools[3].play(sounds[3],1,1,0,0,1);
+
+            // Swap the cards between players.
+            int swapRound = manager.getPotsFinished() % 4;
+            if (currentPlayerInteracting != 4) {
+                //If the chosen card is already chosen, unselect it - otherwise, add it to our chosen cards.
+                if (chosenIndices.contains((Integer)chosen))
+                    chosenIndices.remove((Integer)chosen);
+                else {
+                    chosenIndices.add((Integer)chosen);
+                }
+
+                if (chosenIndices.size() < 3)
+                    return;
+
+                List<Card> chosenCards = manager.chooseCards(currentPlayerInteracting, chosenIndices);
+                chosenLists.add(chosenCards);
+            }
+
+            if (swapRound != 3 && currentPlayerInteracting != 4) {
+                currentPlayerInteracting++;
+                chosenIndices = new ArrayList<Integer>(); //restart the indices chosen for the next player
+
+                if (currentPlayerInteracting == 4) {
+                    for (int i = 0; i < 4; i++) {
+                        manager.swapCards(chosenLists.get(i), i, swapRound);
+                        manager.getPlayers()[i].organize();
+                        displayHands(0);
+                        currentPlayerInteracting = 0;
+                    }
+                    finishedSwapping = true;
+                } else {
+                    manager.getPlayers()[currentPlayerInteracting].organize();
+                    displayHands(currentPlayerInteracting);
+                    return;
+                }
+            }
         }
     }
 
