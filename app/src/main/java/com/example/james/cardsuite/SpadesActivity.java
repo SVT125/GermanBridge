@@ -62,7 +62,6 @@ public class SpadesActivity extends GameActivity {
             int chosenSound = r.nextInt(3);
             soundPools[chosenSound].play(sounds[chosenSound], 1, 1, 0, 0, 1);
         }
-
         if(!(manager.isGameOver())) {
             int chosen = getCardIndex(v);
 
@@ -76,7 +75,7 @@ public class SpadesActivity extends GameActivity {
                 for(int i = 1; i < 4; i++) {
                     int currentPlayer = (currentPlayerInteracting+i)%4;
                     displayHands(currentPlayer);
-
+                    
                     Card bestMove = SpadesAI.chooseMove(currentPlayer,(SpadesManager)manager,levelsToSearch);
                     int chosenAI = manager.players[currentPlayer].hand.indexOf(bestMove);
                     manager.potHandle(chosenAI, currentPlayer);

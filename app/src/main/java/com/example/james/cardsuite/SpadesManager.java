@@ -38,7 +38,6 @@ public class SpadesManager extends Manager implements Serializable {
 		((SpadesPlayer)players[2]).partner = (SpadesPlayer)players[0];
 		((SpadesPlayer)players[1]).partner = (SpadesPlayer)players[3];
 		((SpadesPlayer)players[3]).partner = (SpadesPlayer)players[1];
-		
 	}
 
 	// not sure if this is correct
@@ -100,7 +99,7 @@ public class SpadesManager extends Manager implements Serializable {
 		if (currentPlayer == startPlayer && !spadesBroken && card.getSuit().equals(Card.Suit.SPADES)) {
 			return false;
 		}
-		if (players[currentPlayer].hasSuit(startSuit) && pot.size() != 0) {
+		if (currentPlayer != startPlayer && players[currentPlayer].hasSuit(startSuit) && pot.size() != 0) {
 			if (!(card.getSuit().equals(startSuit))) {
 				return false;
 			}
