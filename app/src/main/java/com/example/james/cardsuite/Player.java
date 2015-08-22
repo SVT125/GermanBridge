@@ -6,6 +6,7 @@ public abstract class Player {
 	
 	protected List<Card> hand;
 	protected int score, handsWon;
+	protected boolean isBot = false;
 	
 	public abstract boolean scoreChange();
 	
