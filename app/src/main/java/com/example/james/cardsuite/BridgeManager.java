@@ -55,18 +55,17 @@ public class BridgeManager extends Manager implements Serializable {
 		trumpSuit = trumpCard.getSuit();
 	}
 
-	public boolean potHandle(int chosen, int currentPlayer, boolean initialOutputWritten, GameActivity activity) {
+	public void potHandle(int chosen, int currentPlayer) {
 		// other players choose cards - must place similar suit to startSuit if they have it.
 		pot.put(currentPlayer, players[currentPlayer].hand.get(chosen));
 
 		if(currentPlayer == startPlayer) {
 			// first player can choose any card he/she wants
 			startSuit = players[startPlayer].hand.remove(chosen).getSuit();
-			return true;
+			return;
 		}
 
 		players[currentPlayer].hand.remove(chosen);
-		return true;
 	}
 
 	//Returns true if the given card should be selectable to the player

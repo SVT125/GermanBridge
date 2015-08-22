@@ -66,13 +66,11 @@ public class BridgeActivity extends GameActivity {
             soundPools[chosenSound].play(sounds[chosenSound],1,1,0,0,1);
         }
         //Get the index of the chosen card in the current player's hand.
-        int chosen = v.getId();
-        for(int i = 0; i < currentPlayerInteracting; i++)
-            chosen -= manager.getPlayers()[i].hand.size();
+        int chosen = getCardIndex(v);
 
         // players start putting cards into the pot and calculate score
         if(manager.potsFinished <= manager.totalRoundCount) {
-            manager.potHandle(chosen, currentPlayerInteracting, false, this);
+            manager.potHandle(chosen, currentPlayerInteracting);
             for (int i = 0; i < 4; i++)
                 potClear();
             displayPot();
@@ -85,7 +83,7 @@ public class BridgeActivity extends GameActivity {
 
                     Card bestMove = BridgeAI.chooseMove(currentPlayer,(BridgeManager)manager,levelsToSearch);
                     int chosenAI = manager.players[currentPlayer].hand.indexOf(bestMove);
-                    manager.potHandle(chosenAI, currentPlayer, false, this);
+                    manager.potHandle(chosenAI, currentPlayer);
                     for (int j = 0; j < 4; j++)
                         potClear();
                     displayPot();
@@ -93,6 +91,7 @@ public class BridgeActivity extends GameActivity {
             } else
                 currentPlayerInteracting = (currentPlayerInteracting + 1) % manager.playerCount;
 
+            manager.players[currentPlayerInteracting].organize();
             displayHands(currentPlayerInteracting);
 
             //Set up the next round, reset all variables.

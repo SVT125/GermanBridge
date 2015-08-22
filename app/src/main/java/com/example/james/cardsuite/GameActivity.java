@@ -82,6 +82,13 @@ public abstract class GameActivity extends Activity {
             finishedLoading = true;
     }
 
+    public int getCardIndex(final View v) {
+        int chosen = v.getId();
+        for (int i = 0; i < currentPlayerInteracting; i++)
+            chosen -= manager.getPlayers()[i].hand.size();
+        return chosen;
+    }
+
     // Called when a player places a valid card into the pot; updates the images in the pot
     public void displayPot() {
         RelativeLayout potLayout = (RelativeLayout)findViewById(R.id.potLayout);

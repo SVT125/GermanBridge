@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map.Entry;
 
 public class SpadesManager extends Manager implements Serializable {
-
 	private boolean spadesBroken = false;
 	
 	public SpadesManager() {
@@ -87,13 +86,7 @@ public class SpadesManager extends Manager implements Serializable {
 		return winner;
 	}
 
-	public boolean potHandle(int chosen, int currentPlayer, boolean initialOutputWritten, GameActivity activity) {
-		if (!initialOutputWritten) {
-			this.writeOutput(currentPlayer, activity);
-			activity.initialOutputWritten = true;
-			return false;
-		}
-
+	public void potHandle(int chosen, int currentPlayer) {
 		Card selectCard = players[currentPlayer].hand.remove(chosen);
 
 		if(currentPlayer == startPlayer)
@@ -102,8 +95,6 @@ public class SpadesManager extends Manager implements Serializable {
 			spadesBroken = true;
 
 		pot.put(currentPlayer, selectCard);
-		this.writeOutput((currentPlayer + 1) % 4, activity);
-		return true;
 	}
 
 	public boolean cardSelectable(Card card, boolean finishedSwapping, int currentPlayer) {
@@ -117,10 +108,6 @@ public class SpadesManager extends Manager implements Serializable {
 		}
 		return true;
 	}
-
-	public void writeOutput(int currentPlayer, GameActivity activity) {
-		players[currentPlayer].organize();
-		activity.displayHands(currentPlayer);}
 	
 	public void potAnalyze() {
 		Card winCard = null;

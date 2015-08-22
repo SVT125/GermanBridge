@@ -54,9 +54,7 @@ public class HeartsActivity extends GameActivity {
         }
 
         if(!(manager.isGameOver())) {
-            int chosen = v.getId();
-            for(int i = 0; i < currentPlayerInteracting; i++)
-                chosen -= manager.getPlayers()[i].hand.size();
+            int chosen = getCardIndex(v);
 
             Card chosenCard = manager.getPlayers()[currentPlayerInteracting].hand.get(chosen);
 
@@ -140,20 +138,18 @@ public class HeartsActivity extends GameActivity {
             }
 
             // Part 3 - handle cards being tossed in the pot until all cards are gone (13 turns).
-            if(manager.potHandle(chosen, currentPlayerInteracting, initialOutputWritten, this)) {
-                if(currentPlayerInteracting == manager.startPlayer)
-                    for(int i = 0; i < 4; i++)
-                        potClear();
+            manager.potHandle(chosen, currentPlayerInteracting);
+            if(currentPlayerInteracting == manager.startPlayer)
+                for(int i = 0; i < 4; i++)
+                    potClear();
 
-                displayPot();
-                currentPlayerInteracting = (currentPlayerInteracting + 1) % 4;
+            displayPot();
+            currentPlayerInteracting = (currentPlayerInteracting + 1) % 4;
+            manager.players[currentPlayerInteracting].organize();
+            displayHands(currentPlayerInteracting);
 
-                // If the pot reaches max size of 4, then we know to continue and compare cards
-                if (manager.pot.size() != 4) {
-                    return;
-                }
-            }
-            else {
+            // If the pot reaches max size of 4, then we know to continue and compare cards
+            if (manager.pot.size() != 4) {
                 return;
             }
 

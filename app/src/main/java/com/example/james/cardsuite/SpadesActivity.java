@@ -7,6 +7,7 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -59,66 +60,60 @@ public class SpadesActivity extends GameActivity {
         //Play sounds only if we're done swapping in hearts or are in any other game mode.
         if(finishedLoading) {
             int chosenSound = r.nextInt(3);
-            soundPools[chosenSound].play(sounds[chosenSound],1,1,0,0,1);
+            soundPools[chosenSound].play(sounds[chosenSound], 1, 1, 0, 0, 1);
         }
 
         if(!(manager.isGameOver())) {
-            int chosen = v.getId();
-            for (int i = 0; i < currentPlayerInteracting; i++)
-                chosen -= manager.getPlayers()[i].hand.size();
+            int chosen = getCardIndex(v);
 
-            if (!foundStartPlayer) {
-                currentPlayerInteracting = manager.findStartPlayer();
-                foundStartPlayer = true;
-            }
+            manager.potHandle(chosen, currentPlayerInteracting);
+            for (int i = 0; i < 4; i++)
+                potClear();
+            displayPot();
 
-            if (manager.potHandle(chosen, currentPlayerInteracting, initialOutputWritten, this)) {
-                if (currentPlayerInteracting == manager.startPlayer)
-                    for (int i = 0; i < 4; i++)
+            //If this is singleplayer, have all the AI act to prepare the player's next click.
+            if(isSinglePlayer) {
+                for(int i = 1; i < 4; i++) {
+                    int currentPlayer = (currentPlayerInteracting+i)%4;
+                    displayHands(currentPlayer);
+
+                    Card bestMove = SpadesAI.chooseMove(currentPlayer,(SpadesManager)manager,levelsToSearch);
+                    int chosenAI = manager.players[currentPlayer].hand.indexOf(bestMove);
+                    manager.potHandle(chosenAI, currentPlayer);
+                    for (int j = 0; j < 4; j++)
                         potClear();
-                displayPot();
-
-                //If this is singleplayer, have all the AI act to prepare the player's next click.
-                if(isSinglePlayer) {
-                    for(int i = 1; i < 4; i++) {
-                        int currentPlayer = (currentPlayerInteracting+i)%4;
-                        displayHands(currentPlayer);
-
-                        Card bestMove = SpadesAI.chooseMove(currentPlayer,(SpadesManager)manager,levelsToSearch);
-                        int chosenAI = manager.players[currentPlayer].hand.indexOf(bestMove);
-                        manager.potHandle(chosenAI, currentPlayer, false, this);
-                        for (int j = 0; j < 4; j++)
-                            potClear();
-                        displayPot();
-                    }
-                } else
-                    currentPlayerInteracting = (currentPlayerInteracting + 1) % manager.playerCount;
-
-                // If the pot reaches max size of 4, then we know to continue and compare cards
-                if (manager.pot.size() != 4) {
-                    return;
+                    displayPot();
                 }
-            } else {
-                return;
-            }
+            } else
+                currentPlayerInteracting = (currentPlayerInteracting + 1) % manager.playerCount;
 
-            if (currentPlayerInteracting == manager.startPlayer && currentPotTurn != 13) {
+            manager.players[currentPlayerInteracting].organize();
+            displayHands(currentPlayerInteracting);
+
+            if (manager.pot.size() == 4 && currentPotTurn != 13) {
                 currentPotTurn++;
-
                 manager.potAnalyze(); //sets the new start player for the next pot
-                currentPlayerInteracting = manager.startPlayer;
+
+                if(isSinglePlayer)
+                    currentPlayerInteracting = 0;
+                else
+                    currentPlayerInteracting = manager.startPlayer;
+
                 manager.players[currentPlayerInteracting].handsWon++;
 
                 displayEndPiles(scores);
-                manager.pot.clear();
                 manager.newRound();
 
                 if (currentPotTurn != 13) {
-                    displayHands(manager.startPlayer);
+                    displayHands(currentPlayerInteracting);
                     return;
                 }
+            } else if(manager.pot.size() != 4) {
+                // If the pot reaches max size of 4, then we know to continue and compare cards
+                return;
             }
 
+            //If all the hands are exhausted, restart the entire game (until a score has reached 500).
             if(currentPotTurn == 13 && !manager.isGameOver()) {
                 List<Integer> scores = new ArrayList<Integer>();
                 for (Player player : manager.getPlayers()) {
@@ -126,7 +121,6 @@ public class SpadesActivity extends GameActivity {
                     scores.add(player.score);
                 }
 
-                foundStartPlayer = false;
                 displayEndPiles(scores);
                 reset();
                 openGuessDialog(currentPlayerInteracting);
