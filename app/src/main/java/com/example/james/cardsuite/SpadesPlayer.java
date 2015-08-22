@@ -34,6 +34,11 @@ public class SpadesPlayer extends Player implements Serializable {
 			this.score -= 100;
 		}
 
+		totalObtained = 0;
+		obtained = 0;
+		bags = 0;
+		handsWon = 0;
+
 		return false;
 	}
 }
