@@ -2,17 +2,28 @@ package com.example.james.cardsuite;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.RadioButton;
+import android.widget.ListView;
+import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.ArrayAdapter;
 
 public class MainActivity extends Activity {
+
+    boolean[] isBot = new boolean[4];
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,26 +39,69 @@ public class MainActivity extends Activity {
     }
 
     public void gameClick(final View v) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this,android.R.style.Theme_Holo_Dialog_MinWidth);
-        builder.setPositiveButton("Multiplayer", new DialogInterface.OnClickListener() {
+        final String[] choices = new String[4];
+
+        choices[0] = "PLAYER 1";
+        choices[1] = "PLAYER 2";
+        choices[2] = "PLAYER 3";
+        choices[3] = "PLAYER 4";
+
+        ArrayAdapter adapter = new ArrayAdapter(this, R.layout.row, choices) {
+
+            int selectedPosition;
+
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                runGameActivity(v,false);
-                dialog.dismiss();
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View v = convertView;
+                if (v == null) {
+                    LayoutInflater vi = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    v = vi.inflate(R.layout.row, null);
+                }
+                TextView name = (TextView) v.findViewById(R.id.textView1);
+                name.setText(choices[position]);
+                RadioButton playerButton = (RadioButton)v.findViewById(R.id.playerButton);
+                RadioButton botButton = (RadioButton)v.findViewById(R.id.botButton);
+                playerButton.setChecked(position == selectedPosition);
+                playerButton.setTag(position);
+                playerButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        selectedPosition = (Integer)view.getTag();
+                        isBot[selectedPosition] = false;
+                    }
+                });
+                botButton.setChecked(position == selectedPosition);
+                botButton.setTag(position);
+                botButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        selectedPosition = (Integer)view.getTag();
+                        isBot[selectedPosition] = true;
+                    }
+                });
+                return v;
             }
-        });
-        builder.setNegativeButton("Singleplayer", new DialogInterface.OnClickListener() {
+
+        };
+
+
+        ListView players = new ListView(this);
+        players.setAdapter(adapter);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(players);
+        builder.setTitle("Select players or bots");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                runGameActivity(v,true);
-                dialog.dismiss();
+                runGameActivity(v);
             }
         });
         builder.setCancelable(false);
         builder.show();
     }
 
-    public void runGameActivity(View v, boolean isSinglePlayer) {
+    public void runGameActivity(View v) {
         Class<? extends GameActivity> executingActivity = null;
         if(v == findViewById(R.id.hearts_button))
             executingActivity = HeartsActivity.class;
@@ -57,9 +111,27 @@ public class MainActivity extends Activity {
             executingActivity = SpadesActivity.class;
 
         Intent intent = new Intent(MainActivity.this,executingActivity);
-        intent.putExtra("isSinglePlayer",isSinglePlayer);
+        intent.putExtra("isBot", isBot);
         startActivity(intent);
         finish();
+    }
+
+    public void onRadioButtonClicked(View view) {
+        // Is the button now checked?
+        boolean checked = ((RadioButton) view).isChecked();
+
+        // Check which radio button was clicked
+        switch(view.getId()) {
+            case R.id.playerButton:
+                if (checked)
+
+                    break;
+            case R.id.botButton:
+                if (checked)
+
+                    break;
+        }
+
     }
 
     @Override
