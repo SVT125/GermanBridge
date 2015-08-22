@@ -64,7 +64,6 @@ public class SpadesManager extends Manager implements Serializable {
 				
 		// give players cards via fillHand method
 		for (int i = 0; i < playerCount; i++) {
-			players[i] = new SpadesPlayer();
 			deck = players[i].fillHand(deck, random, 13);
 			players[i].organize();
 		}
@@ -98,7 +97,7 @@ public class SpadesManager extends Manager implements Serializable {
 	}
 
 	public boolean cardSelectable(Card card, boolean finishedSwapping, int currentPlayer) {
-		if (currentPlayer == startPlayer && (!spadesBroken && (card.getSuit().equals(Card.Suit.SPADES)))) {
+		if (currentPlayer == startPlayer && !spadesBroken && card.getSuit().equals(Card.Suit.SPADES)) {
 			return false;
 		}
 		if (players[currentPlayer].hasSuit(startSuit) && pot.size() != 0) {
