@@ -23,7 +23,7 @@ public abstract class GameActivity extends Activity {
     protected int currentPotTurn = 0;
     private int soundsLoaded = 0;
     public final int levelsToSearch = 3; //Parameter for AI that indicates how many levels down to search.
-    protected boolean isSinglePlayer = true; // TODO: Add option to change this in the future when done testing
+    protected boolean isSinglePlayer = true;
     protected boolean foundStartPlayer = false, finishedSwapping = false, buttonsPresent = false, finishedLoading = false;
     public boolean initialOutputWritten = false;
     protected List<Integer> scores = new ArrayList<Integer>(), roundScores = new ArrayList<>();
