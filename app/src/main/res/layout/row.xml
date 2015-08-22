@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal" >
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:text="Player 1"
+        android:textSize="18dp"
+        android:layout_margin="10dp"
+        android:gravity="top" />
+
+    <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/botPlayerSelections"
+        android:longClickable="true"
+        android:weightSum="1"
+        android:layout_toEndOf="@+id/textView1"
+        android:layout_alignBottom="@+id/textView1"
+        android:layout_alignTop="@+id/textView1"
+        android:layout_margin="2dp">
+        <RadioButton android:id="@+id/playerButton"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onRadioButtonClicked"
+            android:text="Player"
+            android:layout_gravity="right"
+            android:layout_marginLeft="40dp"
+            android:clickable="false" />
+        <RadioButton android:id="@+id/botButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onRadioButtonClicked"
+            android:text="Bot"
+            android:layout_marginLeft="35dp" />
+    </RadioGroup>
+</RelativeLayout>
