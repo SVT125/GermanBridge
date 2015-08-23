@@ -75,6 +75,7 @@ public class MainActivity extends Activity {
                     @Override
                     public void onClick(View view) {
                         selectedPosition = (Integer)view.getTag();
+                        isBot[selectedPosition] = false;
                     }
                 });
 
@@ -87,11 +88,13 @@ public class MainActivity extends Activity {
                     @Override
                     public void onClick(View view) {
                         selectedPosition = (Integer)view.getTag();
+                        isBot[selectedPosition] = true;
                     }
                 });
                 return v;
             }
         };
+
 
         ListView players = new ListView(this);
         players.setAdapter(adapter);

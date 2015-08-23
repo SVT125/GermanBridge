@@ -32,12 +32,12 @@ public class BridgeActivity extends GameActivity {
 
         Intent intent = getIntent();
         this.isBot = intent.getBooleanArrayExtra("isBot");
-        
+
         int currentPlayerInteracting = 0;
         while(isBot[currentPlayerInteracting]) {
             currentPlayerInteracting++;
         }
-
+        
         manager = new BridgeManager(currentPlayerInteracting);
         manager.totalRoundCount = 12; // Change later for variable number of players
 
@@ -130,7 +130,7 @@ public class BridgeActivity extends GameActivity {
     // Executes AI moves for the next player onwards, stopping once we're on a player that isn't a bot.
     // This mutates currentPlayerInteracting (to the next non-AI player) and the pot as it loops.
     public void executeAITurns() {
-        for(int i = 0; i <= 4; i++) {
+        for(int i = 0; i < 4; i++) {
             if(manager.pot.get(i) == null) {
                 currentPlayerInteracting = i;
                 if (isBot[currentPlayerInteracting]) {
