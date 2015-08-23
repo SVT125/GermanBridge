@@ -251,6 +251,10 @@ public class BridgeActivity extends GameActivity {
             for(int j = 0; j < manager.getPlayers()[i].hand.size(); j++) {
                 float theta = (float)(initialTheta + 4.6*j);
                 deltaY = (int)(2.5*(30 - Math.pow(j - manager.getPlayers()[i].hand.size()/2,2))); //Truncate the result of the offset
+
+                if(manager.getPlayers()[i].hand.size() % 2 != 0 && j == (manager.getPlayers()[i].hand.size()-1)/2)
+                    theta = 0;
+
                 RelativeLayout.LayoutParams restParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
 
                 //How to treat and initialize the other cards depending on whether the current player or any other.
