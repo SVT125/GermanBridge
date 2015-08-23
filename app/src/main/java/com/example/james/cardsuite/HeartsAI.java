@@ -23,7 +23,7 @@ public class HeartsAI extends HeartsPlayer {
     }
 
     // Bot chooses the ideal cards to swap at the beginning of each hand round
-    public List<Card> chooseSwap(HeartsManager manager, int startPlayer) {
+    public List<Card> chooseSwap() {
         this.organize();
         List<Card> priorityCards = new ArrayList<Card>();
 
@@ -137,14 +137,23 @@ public class HeartsAI extends HeartsPlayer {
     // Selects a move when bot is the one leading the current pot
     public Card leadMove(HeartsManager manager) {
 
+        if (this.hand.size() == 13)
+            return new Card(2, Card.Suit.CLUBS);
+
         // if person does not have queen of spades and has a safe hand for spades, place low spades
         if (!(this.hasCard(12, Card.Suit.SPADES)) && (suitWeights(Card.Suit.SPADES) < 3) && this.hasSuit(Card.Suit.SPADES)) {
             return this.playLowestSuit(Card.Suit.SPADES);
         }
 
-        // otherwise lead in suit that has been played the least
-        Card.Suit leastSuit = manager.leastPlayedSuit();
-        return this.playLowestSuit(leastSuit);
+        if (manager.heartsBroken) {
+            // otherwise lead in suit that has been played the least
+            Card.Suit leastSuit = manager.leastPlayedSuit(true);
+            return this.playLowestSuit(leastSuit);
+        }
+        else {
+            Card.Suit leastSuit = manager.leastPlayedSuit(false);
+            return this.playLowestSuit(leastSuit);
+        }
     }
 
     // Selects a move when bot is neither last nor first player
