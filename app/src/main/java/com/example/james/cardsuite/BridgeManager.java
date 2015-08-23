@@ -12,11 +12,11 @@ public class BridgeManager extends Manager implements Serializable {
 	public Card.Suit trumpSuit;
 	public Card trumpCard; //Variable included in case want to display the trump card
 
-	public BridgeManager() {
+	public BridgeManager(int player) {
 		pot = new HashMap<Integer, Card>();
 		playerCount = 4;
 		players = new BridgePlayer[playerCount];
-		startPlayer = 0;
+		startPlayer = player;
 
 		// make deck
 		for (int i = 2; i < 15; i++) {

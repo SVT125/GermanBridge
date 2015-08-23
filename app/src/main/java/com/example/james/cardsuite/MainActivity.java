@@ -48,7 +48,7 @@ public class MainActivity extends Activity {
 
         ArrayAdapter adapter = new ArrayAdapter(this, R.layout.row, choices) {
 
-            int selectedPosition;
+            int selectedPosition = -1;
 
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
@@ -61,7 +61,10 @@ public class MainActivity extends Activity {
                 name.setText(choices[position]);
                 RadioButton playerButton = (RadioButton)v.findViewById(R.id.playerButton);
                 RadioButton botButton = (RadioButton)v.findViewById(R.id.botButton);
-                playerButton.setChecked(position == selectedPosition);
+
+                if(position == 0)
+                    playerButton.setChecked(true);
+
                 playerButton.setTag(position);
                 playerButton.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -70,7 +73,10 @@ public class MainActivity extends Activity {
                         isBot[selectedPosition] = false;
                     }
                 });
-                botButton.setChecked(position == selectedPosition);
+
+                if(position != 0)
+                    botButton.setChecked(true);
+
                 botButton.setTag(position);
                 botButton.setOnClickListener(new View.OnClickListener() {
                     @Override
