@@ -9,6 +9,7 @@ import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -62,8 +63,10 @@ public class MainActivity extends Activity {
                 RadioButton playerButton = (RadioButton)v.findViewById(R.id.playerButton);
                 RadioButton botButton = (RadioButton)v.findViewById(R.id.botButton);
 
-                if(position == 0)
+                if(position == 0) {
                     playerButton.setChecked(true);
+                    isBot[0] = true;
+                }
 
                 playerButton.setTag(position);
                 playerButton.setOnClickListener(new View.OnClickListener() {
@@ -74,8 +77,10 @@ public class MainActivity extends Activity {
                     }
                 });
 
-                if(position != 0)
+                if(position != 0) {
                     botButton.setChecked(true);
+                    isBot[position] = true;
+                }
 
                 botButton.setTag(position);
                 botButton.setOnClickListener(new View.OnClickListener() {
@@ -105,6 +110,8 @@ public class MainActivity extends Activity {
         });
         builder.setCancelable(false);
         builder.show();
+
+        Log.i("",""+isBot[0] +"|" +isBot[1]+"|"+isBot[2] +"|" +isBot[3]);
     }
 
     public void runGameActivity(View v) {

@@ -54,7 +54,6 @@ public class BridgeActivity extends GameActivity {
         }
         //Display the image buttons
         displayEndPiles(scores);
-        executeAIMoves();
         displayHands(currentPlayerInteracting);
     }
 
@@ -75,7 +74,7 @@ public class BridgeActivity extends GameActivity {
                 potClear();
             displayPot();
 
-            executeAIMoves();
+            executeAITurns();
 
             manager.players[currentPlayerInteracting].organize();
             displayHands(currentPlayerInteracting);
@@ -130,9 +129,10 @@ public class BridgeActivity extends GameActivity {
 
     // Executes AI moves for the next player onwards, stopping once we're on a player that isn't a bot.
     // This mutates currentPlayerInteracting (to the next non-AI player) and the pot as it loops.
-    public void executeAIMoves() {
-        for(int i = 0; i < 4; i++) {
+    public void executeAITurns() {
+        for(int i = 0; i <= 4; i++) {
             if(manager.pot.get(i) == null) {
+                currentPlayerInteracting = i;
                 if (isBot[currentPlayerInteracting]) {
                     displayHands(currentPlayerInteracting);
 
@@ -142,8 +142,6 @@ public class BridgeActivity extends GameActivity {
                     for (int j = 0; j < 4; j++)
                         potClear();
                     displayPot();
-
-                    currentPlayerInteracting = (currentPlayerInteracting + 1) % manager.playerCount;
                 } else
                     break;
             }
