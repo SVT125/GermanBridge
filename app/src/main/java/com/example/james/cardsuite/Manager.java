@@ -22,7 +22,6 @@ public abstract class Manager implements Serializable {
 	public abstract void reset();
 	public abstract boolean isGameOver();
 	public abstract boolean cardSelectable(Card card, boolean finishedSwapping, int currentPlayer);
-	public abstract List<Card> chooseCards(int playerNum, List<Integer> chosenIndices);
 	public abstract void swapCards(Collection<?> chosen, int playerNum, int swapRound);
 	public abstract int findStartPlayer();
 	public abstract Player[] getPlayers();
