@@ -186,6 +186,15 @@ public class HeartsAI extends HeartsPlayer {
         return null;
     }
 
+    public void removeCard(Card card) {
+        for (Card card1 : hand) {
+            if (card1.compareTo(card) == 0) {
+                hand.remove(card1);
+                return;
+            }
+        }
+    }
+
     // Dynamically changes the bots' play style during the game depending on the circumstances
     // 1 - Low Layer , 2 - Voider, 3 - Equalizer, 4 - Moon Shooter
     // TODO
