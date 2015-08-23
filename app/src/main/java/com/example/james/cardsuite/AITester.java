@@ -4,7 +4,7 @@ import android.util.Log;
 
 //Run this to test AI.
 public class AITester {
-    private static final int maxNLevelDepth = 3, trialsRun = 100;
+    private static final int maxNLevelDepth = 7, trialsRun = 100;
     private static int[] wins = new int[4];
 
     //TODO - Implement general solution - below solution for bridge AI testing alone.
@@ -28,7 +28,7 @@ public class AITester {
 
     //Executes 1 game of German Bridge, returns the player number (0-3) that won.
     private static int executeBridgeGame() {
-        BridgeManager manager = new BridgeManager();
+        BridgeManager manager = new BridgeManager(0);
         manager.totalRoundCount = 12;
         //Each loop iteration is a round, where the i'th round each player will start with i cards.
         int currentPlayer;
@@ -38,14 +38,14 @@ public class AITester {
             //Bidding (Players 1,2 are maxN AI while 3,4 are random).
             ((BridgePlayer)(manager.players[0])).guess = BridgeAI.getBid(0, manager);
             ((BridgePlayer)(manager.players[1])).guess = BridgeAI.getBid(1, manager);
-            ((BridgePlayer)(manager.players[2])).guess = RandomAI.getGermanBid(2,manager);
-            ((BridgePlayer)(manager.players[3])).guess = RandomAI.getGermanBid(3,manager);
+            ((BridgePlayer)(manager.players[2])).guess = BridgeAI.getBid(2, manager);
+            ((BridgePlayer)(manager.players[3])).guess = BridgeAI.getBid(3, manager);
 
             //Continuing the execution of a round, until all hands' cards are gone.
             int turnsTaken = 0;
             int lastPlayer = (manager.startPlayer-1 % 4) + (manager.startPlayer-1 < 0 ? 4 : 0);
             while(!manager.getPlayers()[lastPlayer].hand.isEmpty()) {
-                Card card = currentPlayer < 2 ? BridgeAI.chooseMove(currentPlayer,manager,maxNLevelDepth) : RandomAI.chooseMove(currentPlayer, manager);
+                Card card = currentPlayer < 2 ? BridgeAI.chooseMove(currentPlayer,manager,maxNLevelDepth) : BridgeAI.chooseMove(currentPlayer,manager,1);
                 int chosen = manager.players[currentPlayer].hand.indexOf(card);
 
                 germanPotHandle(chosen,currentPlayer,manager);
