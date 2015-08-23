@@ -107,10 +107,14 @@ public class HeartsManager extends Manager implements Serializable {
 	}
 
 	public void potHandle(Card chosen, int currentPlayer) {
+		players[currentPlayer].hand.remove(chosen);
+
 		if(currentPlayer == startPlayer)
 			startSuit = chosen.getSuit();
 		else if (!heartsBroken && (chosen.getSuit().equals(Card.Suit.HEARTS) || chosen.compareTo(new Card(12, Card.Suit.SPADES)) == 0))
 			heartsBroken = true;
+
+		System.out.println(startSuit);
 
 		pot.put(currentPlayer, chosen);
 	}
