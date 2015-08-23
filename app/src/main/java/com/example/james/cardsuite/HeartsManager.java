@@ -106,6 +106,15 @@ public class HeartsManager extends Manager implements Serializable {
 		pot.put(currentPlayer, selectCard);
 	}
 
+	public void potHandle(Card chosen, int currentPlayer) {
+		if(currentPlayer == startPlayer)
+			startSuit = chosen.getSuit();
+		else if (!heartsBroken && (chosen.getSuit().equals(Card.Suit.HEARTS) || chosen.compareTo(new Card(12, Card.Suit.SPADES)) == 0))
+			heartsBroken = true;
+
+		pot.put(currentPlayer, chosen);
+	}
+
 	//Analyzes the pot and determines the winning card and start player for the next round.
 	public void potAnalyze() {
 		Card winCard = null;
@@ -135,29 +144,9 @@ public class HeartsManager extends Manager implements Serializable {
 		return startPlayer;
 	}
 
-	//Called for the swapping part of the round, alongside swapCards - returns the cards chosen of player index playerNum.
-	//Assume chosen is an int array of 3 elements.
-	public List<Card> chooseCards(int playerNum, List<Integer> chosenIndices) throws NullPointerException {
-
-		List<Card> chosen = new ArrayList<Card>();
-		for(int i = 0; i < 3; i++) {
-			Card chosenCard = this.players[playerNum].hand.get(chosenIndices.get(i));
-			try {
-				if (chosen.contains(chosenCard))
-					chosen.remove(chosenCard);
-				else {
-					chosen.add(chosenCard);
-				}
-			}
-			catch (NullPointerException e) {
-				throw e;
-			}
-		}
-		return chosen;
-	}
-
 	//Called for the swapping part of the round, alongside swapCards - swaps the given cards for players.
 	public void swapCards(Collection<?> chosen, int playerNum, int swapRound) {
+
 		// The convention is that greater array indices means players to the left.
 		players[playerNum].hand.removeAll(chosen);
 		int otherPlayer = 0; //default initialized
@@ -190,7 +179,7 @@ public class HeartsManager extends Manager implements Serializable {
 		return max;
 	}
 
-	public Card.Suit leastPlayedSuit() {
+	public Card.Suit leastPlayedSuit(boolean heartsBroken) {
 		Map<Integer, Card.Suit> suitCounts = new HashMap<>();
 		int clubs = 0, diamonds = 0, hearts = 0, spades = 0;
 		for (Card card : usedCards) {
@@ -203,12 +192,13 @@ public class HeartsManager extends Manager implements Serializable {
 			if (card.getSuit().equals(Card.Suit.DIAMONDS))
 				diamonds++;
 		}
+		if (heartsBroken)
+			suitCounts.put(hearts, Card.Suit.HEARTS);
 		suitCounts.put(diamonds, Card.Suit.DIAMONDS);
-		suitCounts.put(spades, Card.Suit.SPADES);
 		suitCounts.put(clubs, Card.Suit.CLUBS);
 
-		int min = hearts;
-		Card.Suit minSuit = Card.Suit.HEARTS;
+		int min = spades;
+		Card.Suit minSuit = Card.Suit.SPADES;
 		for (Entry<Integer, Card.Suit> entry : suitCounts.entrySet()) {
 			if (entry.getKey() < min ) {
 				min = entry.getKey();
