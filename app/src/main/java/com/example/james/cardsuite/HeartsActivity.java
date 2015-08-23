@@ -346,6 +346,7 @@ public class HeartsActivity extends GameActivity {
                     if (!(manager.cardSelectable(selectCard, finishedSwapping, i))) {
                         cardButton.setColorFilter(Color.parseColor("#78505050"), PorterDuff.Mode.SRC_ATOP);
                         cardButton.setClickable(false);
+                        System.out.println("wtf");
                     }
                 } else {
                     cardButton = new ImageView(this);
