@@ -32,7 +32,7 @@ public class BridgeActivity extends GameActivity {
 
         Intent intent = getIntent();
         this.isBot = intent.getBooleanArrayExtra("isBot");
-
+        
         int currentPlayerInteracting = 0;
         while(isBot[currentPlayerInteracting]) {
             currentPlayerInteracting++;

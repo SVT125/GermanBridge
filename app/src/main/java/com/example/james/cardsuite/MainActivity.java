@@ -47,12 +47,15 @@ public class MainActivity extends Activity {
         choices[2] = "PLAYER 3";
         choices[3] = "PLAYER 4";
 
+        isBot[0] = false;
+        isBot[1] = isBot[2] = isBot[3] = true;
+
         ArrayAdapter adapter = new ArrayAdapter(this, R.layout.row, choices) {
 
             int selectedPosition = -1;
 
             @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
+            public View getView(final int position, View convertView, ViewGroup parent) {
                 View v = convertView;
                 if (v == null) {
                     LayoutInflater vi = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -65,7 +68,6 @@ public class MainActivity extends Activity {
 
                 if(position == 0) {
                     playerButton.setChecked(true);
-                    isBot[0] = true;
                 }
 
                 playerButton.setTag(position);
@@ -73,13 +75,11 @@ public class MainActivity extends Activity {
                     @Override
                     public void onClick(View view) {
                         selectedPosition = (Integer)view.getTag();
-                        isBot[selectedPosition] = false;
                     }
                 });
 
                 if(position != 0) {
                     botButton.setChecked(true);
-                    isBot[position] = true;
                 }
 
                 botButton.setTag(position);
@@ -87,14 +87,11 @@ public class MainActivity extends Activity {
                     @Override
                     public void onClick(View view) {
                         selectedPosition = (Integer)view.getTag();
-                        isBot[selectedPosition] = true;
                     }
                 });
                 return v;
             }
-
         };
-
 
         ListView players = new ListView(this);
         players.setAdapter(adapter);
@@ -110,8 +107,6 @@ public class MainActivity extends Activity {
         });
         builder.setCancelable(false);
         builder.show();
-
-        Log.i("",""+isBot[0] +"|" +isBot[1]+"|"+isBot[2] +"|" +isBot[3]);
     }
 
     public void runGameActivity(View v) {
