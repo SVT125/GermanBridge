@@ -9,7 +9,7 @@ public class HeartsManager extends Manager implements Serializable {
 
 	public boolean heartsBroken = false;
 
-	public HeartsManager() {
+	public HeartsManager(boolean[] isBot) {
 		playerCount = 4;
 		players = new HeartsPlayer[playerCount];
 		pot = new HashMap<Integer, Card>();
@@ -22,7 +22,13 @@ public class HeartsManager extends Manager implements Serializable {
 		}
 
 		for (int i = 0; i < 4; i++) {
-			players[i] = new HeartsPlayer();
+			if (isBot[i]) {
+				players[i] = new HeartsAI(0);
+			}
+			else {
+				players[i] = new HeartsPlayer();
+			}
+
 			deck = players[i].fillHand(deck, random, 13);
 			players[i].organize();
 		}
