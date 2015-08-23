@@ -32,22 +32,18 @@ public class SpadesActivity extends GameActivity {
         setContentView(R.layout.activity_spades);
 
         Intent intent = getIntent();
-        this.isSinglePlayer = intent.getBooleanExtra("isSinglePlayer", true);
+        this.isBot = intent.getBooleanArrayExtra("isBot");
 
         manager = new SpadesManager();
 
         //Display the image buttons
         displayHands(0);
 
-        if(!isSinglePlayer)
-            for(int i = 3; i >= 0; i--)
+        for(int i = 3; i <= 0; i--) {
+            if(isBot[i])
+                ((SpadesPlayer)(manager.players[i])).bid = SpadesAI.getBid(i,(SpadesManager)manager);
+            else
                 openGuessDialog(i);
-        else {
-            for(int i = 0; i < 4; i++)
-                if(i != manager.findStartPlayer())
-                    ((SpadesPlayer)(manager.players[i])).bid = SpadesAI.getBid(i,(SpadesManager)manager);
-
-            openGuessDialog(manager.findStartPlayer());
         }
 
         currentPlayerInteracting = manager.findStartPlayer();
@@ -71,20 +67,19 @@ public class SpadesActivity extends GameActivity {
             displayPot();
 
             //If this is singleplayer, have all the AI act to prepare the player's next click.
-            if(isSinglePlayer) {
-                for(int i = 1; i < 4; i++) {
-                    int currentPlayer = (currentPlayerInteracting+i)%4;
-                    displayHands(currentPlayer);
-                    
-                    Card bestMove = SpadesAI.chooseMove(currentPlayer,(SpadesManager)manager,levelsToSearch);
-                    int chosenAI = manager.players[currentPlayer].hand.indexOf(bestMove);
-                    manager.potHandle(chosenAI, currentPlayer);
+            for(int i = 1; i < 4; i++) {
+                currentPlayerInteracting = (currentPlayerInteracting + 1) % manager.playerCount;
+                if(isBot[currentPlayerInteracting]) {
+                    displayHands(currentPlayerInteracting);
+
+                    Card bestMove = SpadesAI.chooseMove(currentPlayerInteracting, (SpadesManager) manager, levelsToSearch);
+                    int chosenAI = manager.players[currentPlayerInteracting].hand.indexOf(bestMove);
+                    manager.potHandle(chosenAI, currentPlayerInteracting);
                     for (int j = 0; j < 4; j++)
                         potClear();
                     displayPot();
                 }
-            } else
-                currentPlayerInteracting = (currentPlayerInteracting + 1) % manager.playerCount;
+            }
 
             manager.players[currentPlayerInteracting].organize();
             displayHands(currentPlayerInteracting);
@@ -93,10 +88,7 @@ public class SpadesActivity extends GameActivity {
                 currentPotTurn++;
                 manager.potAnalyze(); //sets the new start player for the next pot
 
-                if(isSinglePlayer)
-                    currentPlayerInteracting = 0;
-                else
-                    currentPlayerInteracting = manager.startPlayer;
+                currentPlayerInteracting = manager.startPlayer;
 
                 manager.players[currentPlayerInteracting].handsWon++;
 

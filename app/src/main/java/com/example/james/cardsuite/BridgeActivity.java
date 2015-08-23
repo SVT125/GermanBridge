@@ -1,6 +1,5 @@
 package com.example.james.cardsuite;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -8,6 +7,7 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,7 +31,7 @@ public class BridgeActivity extends GameActivity {
         setContentView(R.layout.activity_bridge);
 
         Intent intent = getIntent();
-        this.isSinglePlayer = intent.getBooleanExtra("isSinglePlayer", true);
+        this.isBot = intent.getBooleanArrayExtra("isBot");
 
         manager = new BridgeManager();
         manager.totalRoundCount = 12; // Change later for variable number of players
@@ -41,15 +41,11 @@ public class BridgeActivity extends GameActivity {
         Card trumpCard = ((BridgeManager)manager).trumpCard;
         trumpView.setImageResource(getResources().getIdentifier(trumpCard.getAddress(), "drawable", getPackageName()));
 
-        if(!isSinglePlayer)
-            for(int i = 3; i >= 0; i--)
+        for(int i = 3; i <= 0; i--) {
+            if(isBot[i])
+                ((SpadesPlayer)(manager.players[i])).bid = BridgeAI.getBid(i,(BridgeManager)manager);
+            else
                 openGuessDialog(i);
-        else {
-            for(int i = 0; i < 4; i++)
-                if(i != manager.findStartPlayer())
-                    ((BridgePlayer)(manager.players[i])).guess = BridgeAI.getBid(i,(BridgeManager)manager);
-
-            openGuessDialog(manager.findStartPlayer());
         }
 
         //Display the image buttons
@@ -76,20 +72,20 @@ public class BridgeActivity extends GameActivity {
             displayPot();
 
             //If this is singleplayer, have all the AI act to prepare the player's next click.
-            if(isSinglePlayer) {
-                for(int i = 1; i < 4; i++) {
-                    int currentPlayer = (currentPlayerInteracting+i)%4;
-                    displayHands(currentPlayer);
+            for(int i = 1; i < 4; i++) {
+                currentPlayerInteracting = (currentPlayerInteracting + 1) % manager.playerCount;
+                if(isBot[currentPlayerInteracting]) {
+                    displayHands(currentPlayerInteracting);
 
-                    Card bestMove = BridgeAI.chooseMove(currentPlayer,(BridgeManager)manager,levelsToSearch);
-                    int chosenAI = manager.players[currentPlayer].hand.indexOf(bestMove);
-                    manager.potHandle(chosenAI, currentPlayer);
+                    Card bestMove = BridgeAI.chooseMove(currentPlayerInteracting, (BridgeManager) manager, levelsToSearch);
+                    int chosenAI = manager.players[currentPlayerInteracting].hand.indexOf(bestMove);
+                    manager.potHandle(chosenAI, currentPlayerInteracting);
                     for (int j = 0; j < 4; j++)
                         potClear();
                     displayPot();
-                }
-            } else
-                currentPlayerInteracting = (currentPlayerInteracting + 1) % manager.playerCount;
+                } else
+                    break;
+            }
 
             manager.players[currentPlayerInteracting].organize();
             displayHands(currentPlayerInteracting);
@@ -113,10 +109,7 @@ public class BridgeActivity extends GameActivity {
                 displayPot();
                 displayEndPiles(scores);
 
-                if(isSinglePlayer)
-                    currentPlayerInteracting = 0;
-                else
-                    currentPlayerInteracting = manager.startPlayer;
+                currentPlayerInteracting = manager.startPlayer;
 
                 openGuessDialog(currentPlayerInteracting);
                 displayHands(currentPlayerInteracting);
