@@ -21,7 +21,10 @@ public class ResultsActivity extends Activity {
         Intent intent = getIntent();
         Manager manager = (Manager)intent.getSerializableExtra("manager");
         Player[] players = (Player[])intent.getSerializableExtra("players");
+        int[] scores = (int[])intent.getSerializableExtra("scores");
         manager.players = players;
+        for(int i = 0; i < 4; i++)
+            manager.players[i].score = scores[i];
 
         TextView resultsView = (TextView)findViewById(R.id.resultsView);
         resultsView.setText("Player " + (manager.findWinner()+1) + " won the game!");

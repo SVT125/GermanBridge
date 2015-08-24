@@ -7,6 +7,7 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class BridgeActivity extends GameActivity {
@@ -33,7 +35,7 @@ public class BridgeActivity extends GameActivity {
         Intent intent = getIntent();
         this.isBot = intent.getBooleanArrayExtra("isBot");
 
-        int currentPlayerInteracting = 0;
+        //currentPlayerInteracting default-init'd to 0, we increment until we find a non-bot player.
         while(isBot[currentPlayerInteracting]) {
             currentPlayerInteracting++;
         }
@@ -68,7 +70,7 @@ public class BridgeActivity extends GameActivity {
         int chosen = getCardIndex(v);
 
         // players start putting cards into the pot and calculate score
-        if(manager.potsFinished <= manager.totalRoundCount) {
+        if(manager.potsFinished <= 3) {
             manager.potHandle(chosen, currentPlayerInteracting);
             for (int i = 0; i < 4; i++)
                 potClear();
@@ -76,13 +78,22 @@ public class BridgeActivity extends GameActivity {
 
             executeAITurns();
 
-            manager.players[currentPlayerInteracting].organize();
+            //If the pot is full (all players have tossed a card), reset the pot, analyze it, find the new start player/winner of the pot.
+            if(manager.pot.size() == 4) {
+                manager.potAnalyze();
+                manager.pot = new HashMap<Integer,Card>();
+                currentPlayerInteracting = manager.startPlayer;
+                executeAITurns();
+                for (int i = 0; i < 4; i++)
+                    potClear();
+                displayPot();
+            }
+
             displayHands(currentPlayerInteracting);
 
             //Set up the next round, reset all variables.
-            int lastPlayer = (manager.startPlayer-1 % 4) + (manager.startPlayer-1 < 0 ? 4 : 0);
+            int lastPlayer = manager.startPlayer == 0 ? 3 : manager.startPlayer - 1;
             if(manager.getPlayers()[lastPlayer].hand.isEmpty()) {
-                manager.potAnalyze();
                 scores.clear();
                 for (Player player : manager.players) {
                     player.scoreChange();
@@ -90,15 +101,12 @@ public class BridgeActivity extends GameActivity {
                 }
 
                 // resets deck, hands, etc. and increments round
-                manager.reset();
-                manager.addedGuesses = 0;
-                for (int i = 0; i < 4; i++)
-                    potClear();
+                reset();
 
-                displayPot();
                 displayEndPiles(scores);
 
-                currentPlayerInteracting = manager.startPlayer;
+                //Cycle through any AI players for the first non-AI player.
+                executeAITurns();
 
                 openGuessDialog(currentPlayerInteracting);
                 displayHands(currentPlayerInteracting);
@@ -113,39 +121,52 @@ public class BridgeActivity extends GameActivity {
             if(manager.potsFinished < manager.totalRoundCount - 1)
                 return;
         }
+
         // The game is done - pass all relevant information for results activity to display.
         // Passing manager just in case for future statistics if needbe.
         Intent intent = new Intent(BridgeActivity.this, ResultsActivity.class);
         intent.putExtra("manager", manager);
         intent.putExtra("players", manager.players);
+        intent.putExtra("scores", new int[]{manager.players[0].score, manager.players[1].score,
+                manager.players[2].score, manager.players[3].score});
         startActivity(intent);
         finish();
     }
 
     // reshuffles deck, increments round count, resets all variables for the next round.
     public void reset() {
-        //TODO - Call this to reset instead.
+        manager.reset();
+        manager.addedGuesses = 0;
     }
 
     // Executes AI moves for the next player onwards, stopping once we're on a player that isn't a bot.
-    // This mutates currentPlayerInteracting (to the next non-AI player) and the pot as it loops.
+    // This mutates currentPlayerInteracting (to the next non-AI player or player whose hand is empty) and the pot as it loops.
     public void executeAITurns() {
-        for(int i = 0; i < 4; i++) {
-            if(manager.pot.get(i) == null) {
-                currentPlayerInteracting = i;
-                if (isBot[currentPlayerInteracting]) {
-                    displayHands(currentPlayerInteracting);
+        int offset = 0;
+        for(; offset < 4; offset++) {
+            final int currentPlayer = (currentPlayerInteracting + offset) % manager.playerCount;
+            //If the pot is already full, then we break and reset the manager (which will call this again to proceed through the AI).
+            if(manager.pot.size() == 4)
+                break;
 
-                    Card bestMove = BridgeAI.chooseMove(currentPlayerInteracting, (BridgeManager) manager, levelsToSearch);
-                    int chosenAI = manager.players[currentPlayerInteracting].hand.indexOf(bestMove);
-                    manager.potHandle(chosenAI, currentPlayerInteracting);
+            //If the pot position for this player is empty, then they haven't gone yet.
+            //If the player is a bot, commence AI movement and go to the next player; if they aren't a bot, break and leave at this player.
+            if(manager.pot.get(currentPlayer) == null) {
+                if (isBot[currentPlayer] && manager.players[currentPlayer].hand.size() > 0) {
+                    displayHands(currentPlayer);
+
+                    Card bestMove = BridgeAI.chooseMove(currentPlayer, (BridgeManager) manager, levelsToSearch);
+                    int chosenAI = manager.players[currentPlayer].hand.indexOf(bestMove);
+                    manager.potHandle(chosenAI, currentPlayer);
                     for (int j = 0; j < 4; j++)
                         potClear();
                     displayPot();
+                    displayHands(currentPlayer);
                 } else
                     break;
             }
         }
+        currentPlayerInteracting = (currentPlayerInteracting + offset) % manager.playerCount;
     }
 
     //Call when the end piles and the scores displayed on top of the piles need be redisplayed.
@@ -255,6 +276,7 @@ public class BridgeActivity extends GameActivity {
         //Now create the imagebuttons for each of the players.
         //Note: other possible param values for initialTheta scalar and deltaY scalar are (5,3).
         for(int i = 0; i < 4; i++) {
+            manager.players[i].organize();
             //The coordinate and angular offsets for every card. Theta is dependent on the number of cards in the hand.
             int deltaX = 0, deltaY;
             float initialTheta= (float)-4.6*manager.getPlayers()[i].hand.size()/2;
