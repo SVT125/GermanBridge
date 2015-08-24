@@ -34,11 +34,15 @@ public class HeartsAI extends HeartsPlayer {
         }
 
         List<Card.Suit> prioritySuits = getPrioritySuit();
-        for (Card.Suit suit : prioritySuits) {
-            for (int i = this.hand.size() - 1; i >= 0; i--) {
-                if (hand.get(i).getSuit() == suit)
+        for (Card.Suit suit : prioritySuits)
+            for (int i = this.hand.size() - 1; i >= 0; i--)
+                if (hand.get(i).getSuit() == suit && (!suit.equals(Card.Suit.SPADES)))
                     priorityCards.add(hand.get(i));
-            }
+
+        if (priorityCards.size() < 3) {
+            for (int i = this.hand.size() - 1; i >= 0; i--)
+                if (hand.get(i).getSuit().equals(Card.Suit.SPADES))
+                    priorityCards.add(hand.get(i));
         }
 
         List<Card> chosenCards = new ArrayList<>();
@@ -63,6 +67,8 @@ public class HeartsAI extends HeartsPlayer {
                 }
             }
         weight = weight + (high2 - low1) * 2 + (high1 - low2);
+        if (weight > 0) { weight = weight * 2; }
+        if (weight < 0) { weight = Math.abs(weight); }
 
         return weight;
     }
@@ -72,11 +78,13 @@ public class HeartsAI extends HeartsPlayer {
         int heartsWeight = suitWeights(Card.Suit.HEARTS);
         int clubsWeight = suitWeights(Card.Suit.CLUBS);
         int diamondsWeight = suitWeights(Card.Suit.DIAMONDS);
+        int spadesWeight = suitWeights(Card.Suit.SPADES);
 
         final Map<Card.Suit, Integer> suitWeight = new HashMap<>();
         suitWeight.put(Card.Suit.HEARTS, heartsWeight);
         suitWeight.put(Card.Suit.CLUBS, clubsWeight);
         suitWeight.put(Card.Suit.DIAMONDS, diamondsWeight);
+        suitWeight.put(Card.Suit.SPADES, spadesWeight);
         List<Card.Suit> prioritySuits = new ArrayList(suitWeight.keySet());
         Collections.sort(prioritySuits, new Comparator<Card.Suit>() {
             Map<Card.Suit, Integer> map;
@@ -89,6 +97,11 @@ public class HeartsAI extends HeartsPlayer {
                 return map.get(o2) - map.get(o1);
             }
         });
+        for (Card.Suit suit : suitWeight.keySet()) {
+            if (suitWeight.get(suit) == 0) {
+                prioritySuits.remove(suit);
+            }
+        }
         return prioritySuits;
     }
 
@@ -102,23 +115,31 @@ public class HeartsAI extends HeartsPlayer {
             return this.move(manager);
     }
 
-    // Selects a move when bot is the one ending the current pot
     public Card lastMove(HeartsManager manager) {
+        this.organize();
         Card.Suit playSuit = manager.startSuit;
+        List<Card> placeable = findPlaceable(manager);
+
+        System.out.println("last");
 
         // if player has suit and pot does not have Q spades or hearts, safely play highest card of suit
-        if (this.hasSuit(playSuit) && !(manager.potHasSuit(Card.Suit.HEARTS)) && manager.pot.containsValue(new Card(12, Card.Suit.SPADES)))
-            return this.playHighestSuit(playSuit);
+        if (this.hasSuit(playSuit) && !(manager.potHasSuit(Card.Suit.HEARTS)) && !(manager.pot.containsValue(new Card(12, Card.Suit.SPADES)))) {
+            System.out.println("1");
+            System.out.println(placeable.get(placeable.size() - 1));
+            return placeable.get(placeable.size() - 1);
+        }
 
-        // if pot contains such values of Q of spades and hearts,
-        else if (this.hasSuit(playSuit) && this.playLowestSuit(playSuit).getCardNumber() > manager.potHighestValue())
-            return this.playHighestSuit(playSuit);
+        else if (this.hasSuit(playSuit) && (placeable.get(0).getCardNumber() > manager.potHighestValue())) {
+            System.out.println("2");
+            System.out.println(placeable.get(placeable.size() - 1));
+            return placeable.get(placeable.size() - 1);
+        }
 
-        // if player has suit and the pot contains point giving cards, play
-        else if (this.hasSuit(playSuit))
-            return this.playLowestSuit(playSuit);
+        else if (this.hasSuit(playSuit)) {
+            System.out.println("3");
+            return this.playLowestSuit(placeable, manager.potHighestValue());
+        }
 
-        // otherwise dump queen of spades, other high spades, and any other hearts
         else if (this.hasCard(12, Card.Suit.SPADES))
             return (new Card(12, Card.Suit.SPADES));
         else if (manager.isInPlayersHands(12, Card.Suit.SPADES)) {
@@ -128,61 +149,116 @@ public class HeartsAI extends HeartsPlayer {
                 return (new Card(13, Card.Suit.SPADES));
         }
 
-        // else play highest of suit that is the most dangerous (weights)
         List<Card.Suit> priorities = getPrioritySuit();
-        Card.Suit prioritySuit = priorities.get(0);
-        return playHighestSuit(prioritySuit);
+        if (!(priorities.isEmpty())) {
+            Card.Suit prioritySuit = priorities.get(0);
+            return playHighestSuit(prioritySuit);
+        }
+        return hand.get(0);
     }
 
     // Selects a move when bot is the one leading the current pot
     public Card leadMove(HeartsManager manager) {
+        this.organize();
+        List<Card> placeable = findPlaceable(manager);
+
+        System.out.println("lead");
 
         if (this.hand.size() == 13)
-            return new Card(2, Card.Suit.CLUBS);
+            return placeable.get(0);
 
         // if person does not have queen of spades and has a safe hand for spades, place low spades
         if (!(this.hasCard(12, Card.Suit.SPADES)) && (suitWeights(Card.Suit.SPADES) < 3) && this.hasSuit(Card.Suit.SPADES)) {
-            return this.playLowestSuit(Card.Suit.SPADES);
+            System.out.println("1");
+            return this.playLowestSuit(Card.Suit.SPADES, placeable);
         }
 
         if (manager.heartsBroken) {
             // otherwise lead in suit that has been played the least
             Card.Suit leastSuit = manager.leastPlayedSuit(true);
-            return this.playLowestSuit(leastSuit);
+            System.out.println("2");
+            if (this.hasSuit(leastSuit)) {
+                return this.playLowestSuit(leastSuit, placeable);
+            }
         }
         else {
             Card.Suit leastSuit = manager.leastPlayedSuit(false);
-            return this.playLowestSuit(leastSuit);
+            System.out.println("3");
+            if (this.hasSuit(leastSuit)) {
+                return this.playLowestSuit(leastSuit, placeable);
+            }
         }
+        return placeable.get(0);
     }
 
     // Selects a move when bot is neither last nor first player
     public Card move(HeartsManager manager) {
+        this.organize();
         Card.Suit playSuit = manager.startSuit;
+        List<Card> placeable = findPlaceable(manager);
+
+        System.out.println("move");
 
         // if bot has the suit, return the lowest of that suit
-        if (this.hasSuit(playSuit))
-            return playLowestSuit(playSuit);
+        if (this.hasSuit(playSuit) && (placeable.get(0).getCardNumber() > manager.potHighestValue())) {
+            System.out.println("1");
+            return playHighestSuit(playSuit);
+        }
+
+        else if (this.hasSuit(playSuit)) {
+            System.out.println("2");
+            return playLowestSuit(placeable, manager.potHighestValue());
+        }
 
         // else play highest of suit that is the most dangerous (weights)
         List<Card.Suit> priorities = getPrioritySuit();
-        Card.Suit prioritySuit = priorities.get(0);
-        return playHighestSuit(prioritySuit);
+        if (!priorities.isEmpty()) {
+            Card.Suit prioritySuit = priorities.get(0);
+            return playHighestSuit(prioritySuit);
+        }
+        return placeable.get(placeable.size() - 1);
     }
 
-    public Card playLowestSuit(Card.Suit suit) {
-        this.organize();
-        for (Card card : this.hand)
-            if (card.getSuit().equals(suit))
-                return card;
+    public boolean hasSuit(List<Card> placeable, Card.Suit suit) {
+        if (placeable.get(0).getSuit().equals(suit))
+            return true;
+        return false;
+    }
+
+    public Card playLowestSuit(Card.Suit suit, List<Card> placeable) {
+        for (int i = 0; i < placeable.size(); i++) {
+            if (placeable.get(i).getSuit().equals(suit)) {
+                return placeable.get(i);
+            }
+        }
+        return null;
+    }
+
+    public Card playLowestSuit(List<Card> placeable, int minNumPot) {
+        for (int i = placeable.size() - 1; i >= 0; i--) {
+            if (placeable.get(i).getCardNumber() < minNumPot) {
+                return placeable.get(i);
+            }
+        }
+        System.out.println("wtf");
+        return null;
+    }
+
+    public Card playLowestSuit(List<Card> placeable, Card.Suit suit, int minNumPot) {
+        for (int i = placeable.size() - 1; i >= 0; i--) {
+            if (placeable.get(i).getSuit().equals(suit) && placeable.get(i).getCardNumber() < minNumPot) {
+                return placeable.get(i);
+            }
+        }
         return null;
     }
 
     public Card playHighestSuit(Card.Suit suit) {
         this.organize();
-        for (int i = this.hand.size() - 1; i >= 0; i--)
+        for (int i = this.hand.size() - 1; i >= 0; i--) {
             if (this.hand.get(i).getSuit().equals(suit))
                 return this.hand.get(i);
+        }
         return null;
     }
 
@@ -193,6 +269,14 @@ public class HeartsAI extends HeartsPlayer {
                 return;
             }
         }
+    }
+
+    public List<Card> findPlaceable(HeartsManager manager) {
+        List<Card> placeable = new ArrayList<>();
+        for (Card card : this.hand)
+            if (manager.cardSelectable(card, true, (manager.startPlayer + 3) % 4))
+                placeable.add(card);
+        return placeable;
     }
 
     // Dynamically changes the bots' play style during the game depending on the circumstances
