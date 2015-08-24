@@ -70,7 +70,7 @@ public class BridgeActivity extends GameActivity {
         int chosen = getCardIndex(v);
 
         // players start putting cards into the pot and calculate score
-        if(manager.potsFinished <= 3) {
+        if(manager.potsFinished <= manager.totalRoundCount) {
             manager.potHandle(chosen, currentPlayerInteracting);
             for (int i = 0; i < 4; i++)
                 potClear();
