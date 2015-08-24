@@ -48,9 +48,9 @@ public class BridgeActivity extends GameActivity {
         Card trumpCard = ((BridgeManager)manager).trumpCard;
         trumpView.setImageResource(getResources().getIdentifier(trumpCard.getAddress(), "drawable", getPackageName()));
 
-        for(int i = 3; i <= 0; i--) {
+        for(int i = 3; i >= 0; i--) {
             if(isBot[i])
-                ((SpadesPlayer)(manager.players[i])).bid = BridgeAI.getBid(i,(BridgeManager)manager);
+                ((BridgePlayer)(manager.players[i])).guess = BridgeAI.getBid(i,(BridgeManager)manager);
             else
                 openGuessDialog(i);
         }
@@ -108,7 +108,13 @@ public class BridgeActivity extends GameActivity {
                 //Cycle through any AI players for the first non-AI player.
                 executeAITurns();
 
-                openGuessDialog(currentPlayerInteracting);
+                for(int i = 3; i >= 0; i--) {
+                    if(isBot[i])
+                        ((BridgePlayer)(manager.players[i])).guess = BridgeAI.getBid(i,(BridgeManager)manager);
+                    else
+                        openGuessDialog(i);
+                }
+
                 displayHands(currentPlayerInteracting);
 
                 //Redisplay the trump

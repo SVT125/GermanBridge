@@ -14,11 +14,11 @@ import java.util.Map.Entry;
 public class SpadesManager extends Manager implements Serializable {
 	private boolean spadesBroken = false;
 	
-	public SpadesManager() {
+	public SpadesManager(int player) {
 		
 		playerCount = 4;
 		players = new SpadesPlayer[playerCount];
-		startPlayer = 0;
+		startPlayer = player;
 		pot = new HashMap<Integer, Card>();
 		
 		// make deck
@@ -54,6 +54,7 @@ public class SpadesManager extends Manager implements Serializable {
 	
 	public void reset() {
 		potsFinished++;
+		pot = new HashMap<Integer,Card>();
 		spadesBroken = false;
 		// make deck
 		for (int i = 2; i < 15; i++) {
