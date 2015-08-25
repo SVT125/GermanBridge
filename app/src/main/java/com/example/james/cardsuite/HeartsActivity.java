@@ -33,6 +33,7 @@ public class HeartsActivity extends GameActivity {
         this.isBot = intent.getBooleanArrayExtra("isBot");
 
         manager = new HeartsManager(isBot);
+        displayEndPiles(scores);
 
         if (manager.getPlayers()[0].isBot)
             botHandle();
@@ -264,7 +265,6 @@ public class HeartsActivity extends GameActivity {
         }
         finishedSwapping = true;
         findStartPlayer();
-        System.out.println(this.currentPlayerInteracting);
     }
 
     // reshuffles deck, increments round count, resets all variables for the next round.
@@ -346,7 +346,6 @@ public class HeartsActivity extends GameActivity {
                     if (!(manager.cardSelectable(selectCard, finishedSwapping, i))) {
                         cardButton.setColorFilter(Color.parseColor("#78505050"), PorterDuff.Mode.SRC_ATOP);
                         cardButton.setClickable(false);
-                        System.out.println("wtf");
                     }
                 } else {
                     cardButton = new ImageView(this);
