@@ -34,11 +34,11 @@ public abstract class Player {
 		return deck;
 	}
 
-	// Returns whether a player has a certain suit or not
 	public boolean hasSuit(Card.Suit suit) {
-		if (suitCount(suit) == 0)
-			return false;
-		return true;
+		for (Card card : hand)
+			if (card.getSuit().equals(suit))
+				return true;
+		return false;
 	}
 
 	public boolean hasCard(int num, Card.Suit suit) {
