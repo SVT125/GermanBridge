@@ -98,6 +98,7 @@ public class HeartsAI extends HeartsPlayer {
             }
         });
         for (Card.Suit suit : suitWeight.keySet()) {
+            System.out.println(suitWeight.get(suit));
             if (suitWeight.get(suit) == 0) {
                 prioritySuits.remove(suit);
             }
@@ -123,24 +124,23 @@ public class HeartsAI extends HeartsPlayer {
         System.out.println("last");
 
         // if player has suit and pot does not have Q spades or hearts, safely play highest card of suit
-        if (this.hasSuit(playSuit) && !(manager.potHasSuit(Card.Suit.HEARTS)) && !(manager.pot.containsValue(new Card(12, Card.Suit.SPADES)))) {
+        if (this.hasSuit(placeable, playSuit) && !(manager.potHasSuit(Card.Suit.HEARTS)) && !(manager.pot.containsValue(new Card(12, Card.Suit.SPADES)))) {
             System.out.println("1");
             System.out.println(placeable.get(placeable.size() - 1));
             return placeable.get(placeable.size() - 1);
         }
 
-        else if (this.hasSuit(playSuit) && (placeable.get(0).getCardNumber() > manager.potHighestValue())) {
+        else if (this.hasSuit(placeable, playSuit) && (placeable.get(0).getCardNumber() > manager.potHighestValue())) {
             System.out.println("2");
-            System.out.println(placeable.get(placeable.size() - 1));
             return placeable.get(placeable.size() - 1);
         }
 
-        else if (this.hasSuit(playSuit)) {
+        else if (this.hasSuit(placeable, playSuit)) {
             System.out.println("3");
             return this.playLowestSuit(placeable, manager.potHighestValue());
         }
 
-        else if (this.hasCard(12, Card.Suit.SPADES))
+        else if (this.hasCard(12, Card.Suit.SPADES) && hand.size() != 13)
             return (new Card(12, Card.Suit.SPADES));
         else if (manager.isInPlayersHands(12, Card.Suit.SPADES)) {
             if (this.hasCard(14, Card.Suit.SPADES))
@@ -168,7 +168,7 @@ public class HeartsAI extends HeartsPlayer {
             return placeable.get(0);
 
         // if person does not have queen of spades and has a safe hand for spades, place low spades
-        if (!(this.hasCard(12, Card.Suit.SPADES)) && (suitWeights(Card.Suit.SPADES) < 3) && this.hasSuit(Card.Suit.SPADES)) {
+        if (!(this.hasCard(12, Card.Suit.SPADES)) && (suitWeights(Card.Suit.SPADES) < 3) && this.hasSuit(placeable, Card.Suit.SPADES)) {
             System.out.println("1");
             return this.playLowestSuit(Card.Suit.SPADES, placeable);
         }
@@ -177,14 +177,14 @@ public class HeartsAI extends HeartsPlayer {
             // otherwise lead in suit that has been played the least
             Card.Suit leastSuit = manager.leastPlayedSuit(true);
             System.out.println("2");
-            if (this.hasSuit(leastSuit)) {
+            if (this.hasSuit(placeable, leastSuit)) {
                 return this.playLowestSuit(leastSuit, placeable);
             }
         }
         else {
             Card.Suit leastSuit = manager.leastPlayedSuit(false);
             System.out.println("3");
-            if (this.hasSuit(leastSuit)) {
+            if (this.hasSuit(placeable, leastSuit)) {
                 return this.playLowestSuit(leastSuit, placeable);
             }
         }
@@ -199,15 +199,31 @@ public class HeartsAI extends HeartsPlayer {
 
         System.out.println("move");
 
+        if (this.hand.size() == 13) {
+            return placeable.get(placeable.size() - 1);
+        }
+
         // if bot has the suit, return the lowest of that suit
-        if (this.hasSuit(playSuit) && (placeable.get(0).getCardNumber() > manager.potHighestValue())) {
+        if (this.hasSuit(placeable, playSuit) && (placeable.get(0).getCardNumber() > manager.potHighestValue())) {
             System.out.println("1");
             return playHighestSuit(playSuit);
         }
 
-        else if (this.hasSuit(playSuit)) {
+        else if (this.hasSuit(placeable, playSuit)) {
+            for (Card c : placeable) {
+                System.out.println(c);
+            }
             System.out.println("2");
             return playLowestSuit(placeable, manager.potHighestValue());
+        }
+
+        else if (this.hasCard(12, Card.Suit.SPADES) && hand.size() != 13)
+            return (new Card(12, Card.Suit.SPADES));
+        else if (manager.isInPlayersHands(12, Card.Suit.SPADES)) {
+            if (this.hasCard(14, Card.Suit.SPADES))
+                return (new Card(14, Card.Suit.SPADES));
+            else if (this.hasCard(13, Card.Suit.SPADES))
+                return (new Card(13, Card.Suit.SPADES));
         }
 
         // else play highest of suit that is the most dangerous (weights)
@@ -216,7 +232,7 @@ public class HeartsAI extends HeartsPlayer {
             Card.Suit prioritySuit = priorities.get(0);
             return playHighestSuit(prioritySuit);
         }
-        return placeable.get(placeable.size() - 1);
+        return hand.get(hand.size() - 1);
     }
 
     public boolean hasSuit(List<Card> placeable, Card.Suit suit) {
