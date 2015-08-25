@@ -80,6 +80,7 @@ public class SpadesActivity extends GameActivity {
                 for (int i = 0; i < 4; i++)
                     potClear();
                 displayPot();
+                displayEndPiles(scores);
             }
 
             displayHands(currentPlayerInteracting);
@@ -104,6 +105,9 @@ public class SpadesActivity extends GameActivity {
 
                 //Display the image buttons
                 displayEndPiles(scores);
+                for (Integer lol : scores) {
+                    System.out.println(scores);
+                }
                 displayHands(currentPlayerInteracting);
 
                 //Cycle through any AI players for the first non-AI player.
@@ -177,11 +181,14 @@ public class SpadesActivity extends GameActivity {
                 (ImageView)findViewById(R.id.topPile), (ImageView)findViewById(R.id.rightPile)};
 
         for(int i = 0; i < 4; i++) {
+
             //Update the score, but remove or update the pile if it exists.
-            if ((manager.getPlayers()[i].handsWon) > 0) {
-                scoreViews[i].setText(Integer.toString(manager.getPlayers()[i].handsWon));
+            if ((((SpadesPlayer)manager.getPlayers()[i]).obtained) > 0) {
+                pileViews[i].setImageResource(getResources().getIdentifier("cardback", "drawable", getPackageName()));
+                scoreViews[i].setText(Integer.toString(((SpadesPlayer)manager.getPlayers()[i]).obtained));
                 scoreViews[i].setVisibility(View.VISIBLE);
             } else {
+                pileViews[i].setImageResource(0);
                 scoreViews[i].setVisibility(View.INVISIBLE);
             }
         }
