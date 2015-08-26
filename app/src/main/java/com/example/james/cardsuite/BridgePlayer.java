@@ -22,6 +22,7 @@ public class BridgePlayer extends Player implements Serializable {
 			int difference = Math.abs(guess - obtained);
 			score = score - (int)Math.pow(2, difference);
 		}
+		scoreHistory.add(this.score);
 		guess = 0;
 		obtained = 0;
 		return false;
