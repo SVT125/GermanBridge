@@ -94,6 +94,7 @@ public class SpadesActivity extends GameActivity {
                 }
 
                 reset();
+                displayScoreTable();
 
                 for(int i = 3; i >= 0; i--) {
                     if(isBot[i])
