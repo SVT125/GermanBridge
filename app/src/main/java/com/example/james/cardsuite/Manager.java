@@ -29,7 +29,6 @@ public abstract class Manager implements Serializable {
 	public int getPotsFinished() {
 		return this.potsFinished;
 	}
-	public void newRound() { potsFinished++; }
 	public boolean isInPlayersHands(int cardNumber, Card.Suit suit) {
 		Card checkedCard = new Card(cardNumber,suit);
 		for(Player player : players)
