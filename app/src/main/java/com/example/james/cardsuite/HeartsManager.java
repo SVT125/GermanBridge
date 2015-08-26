@@ -38,7 +38,7 @@ public class HeartsManager extends Manager implements Serializable {
 	//Resets the state of the manager object for the next round.
 	public void reset() {
 		this.heartsBroken = false;
-		this.potsFinished = 0;
+		this.potsFinished++;
 		for (int i = 2; i < 15; i++) {
 			for (Card.Suit suits : Card.Suit.values()) {
 				deck.add(new Card(i, suits));
@@ -49,7 +49,6 @@ public class HeartsManager extends Manager implements Serializable {
 			players[i].organize();
 		}
 		usedCards.clear();
-		totalRoundCount++;
 	}
 
 	//Returns true if the game is over, when someone has hit 100 points.
