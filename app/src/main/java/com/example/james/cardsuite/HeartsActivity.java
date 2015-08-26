@@ -1,7 +1,5 @@
 package com.example.james.cardsuite;
 
-import android.animation.AnimatorInflater;
-import android.animation.AnimatorSet;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -197,33 +195,12 @@ public class HeartsActivity extends GameActivity {
             roundScores.add(((HeartsPlayer) manager.getPlayers()[i]).tallyRoundScore());
         displayEndPiles(roundScores);
         reset();
+        displayScoreTable();
     }
 
 
     public void chooseCards(Card chosenCard, int swapRound, View v) {
         if (chosenCard.isClicked == false) {
-            switch (currentPlayerInteracting) {
-                case 0:
-                    AnimatorSet selected_f = (AnimatorSet) AnimatorInflater.loadAnimator(this, R.anim.selected_forward);
-                    selected_f.setTarget(v);
-                    selected_f.start();
-                    break;
-                case 1:
-                    AnimatorSet selected_r = (AnimatorSet) AnimatorInflater.loadAnimator(this, R.anim.selected_right);
-                    selected_r.setTarget(v);
-                    selected_r.start();
-                    break;
-                case 2:
-                    AnimatorSet selected_b = (AnimatorSet) AnimatorInflater.loadAnimator(this, R.anim.selected_back);
-                    selected_b.setTarget(v);
-                    selected_b.start();
-                    break;
-                case 3:
-                    AnimatorSet selected_l = (AnimatorSet) AnimatorInflater.loadAnimator(this, R.anim.selected_left);
-                    selected_l.setTarget(v);
-                    selected_l.start();
-                    break;
-            }
             chosenCard.isClicked = true;
         } else {
             v.setBackgroundResource(0);
