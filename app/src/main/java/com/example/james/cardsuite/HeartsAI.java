@@ -98,7 +98,6 @@ public class HeartsAI extends HeartsPlayer {
             }
         });
         for (Card.Suit suit : suitWeight.keySet()) {
-            System.out.println(suitWeight.get(suit));
             if (suitWeight.get(suit) == 0) {
                 prioritySuits.remove(suit);
             }
@@ -195,7 +194,7 @@ public class HeartsAI extends HeartsPlayer {
 
         else if (this.hasCard(12, Card.Suit.SPADES) && hand.size() != 13)
             return (new Card(12, Card.Suit.SPADES));
-        
+
         else if (manager.isInPlayersHands(12, Card.Suit.SPADES)) {
             if (this.hasCard(14, Card.Suit.SPADES))
                 return (new Card(14, Card.Suit.SPADES));
