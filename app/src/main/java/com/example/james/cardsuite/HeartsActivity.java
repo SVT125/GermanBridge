@@ -173,7 +173,6 @@ public class HeartsActivity extends GameActivity {
         displayEndPiles(roundScores);
         manager.usedCards.addAll(manager.pot.values());
         manager.pot.clear();
-        manager.newRound();
     }
 
     public void finishedRound() {
