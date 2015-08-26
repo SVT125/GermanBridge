@@ -1,7 +1,5 @@
 package com.example.james.cardsuite;
 
-import android.util.Log;
-
 //Run this to test AI.
 public class AITester {
     private static final int maxNLevelDepth = 7, trialsRun = 100;

@@ -1,7 +1,5 @@
 package com.example.james.cardsuite;
 
-import android.util.Log;
-
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;

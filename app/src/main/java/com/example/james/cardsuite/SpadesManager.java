@@ -1,10 +1,5 @@
 package com.example.james.cardsuite;
 
-import android.app.Activity;
-import android.util.Log;
-import android.widget.TextView;
-
-import java.awt.font.TextAttribute;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
@@ -136,7 +131,6 @@ public class SpadesManager extends Manager implements Serializable {
 			}
 		}
 
-		System.out.println("wtf" + startPlayer);
 		((SpadesPlayer)players[startPlayer]).obtained++;
 		((SpadesPlayer)players[startPlayer]).totalObtained++;
 		((SpadesPlayer)players[startPlayer]).partner.totalObtained++;
