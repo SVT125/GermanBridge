@@ -7,6 +7,8 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -85,6 +87,7 @@ public class BridgeActivity extends GameActivity {
                 for (int i = 0; i < 4; i++)
                     potClear();
                 displayPot();
+                displayEndPiles(scores);
             }
 
             displayHands(currentPlayerInteracting);
@@ -182,10 +185,12 @@ public class BridgeActivity extends GameActivity {
 
         for(int i = 0; i < 4; i++) {
             //Update the score, but remove or update the pile if it exists.
-            if ((manager.getPlayers()[i].handsWon) > 0) {
-                scoreViews[i].setText(Integer.toString(manager.getPlayers()[i].handsWon));
+            if (((BridgePlayer)manager.getPlayers()[i]).obtained > 0) {
+                pileViews[i].setImageResource(getResources().getIdentifier("cardback", "drawable", getPackageName()));
+                scoreViews[i].setText(Integer.toString(((BridgePlayer)manager.getPlayers()[i]).obtained));
                 scoreViews[i].setVisibility(View.VISIBLE);
             } else {
+                pileViews[i].setImageResource(0);
                 scoreViews[i].setVisibility(View.INVISIBLE);
             }
         }
