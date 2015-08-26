@@ -6,8 +6,11 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Looper;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,6 +26,9 @@ import android.widget.TextView;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 public class BridgeActivity extends GameActivity {
     private int guess = -1;
@@ -150,6 +156,7 @@ public class BridgeActivity extends GameActivity {
     // This mutates currentPlayerInteracting (to the next non-AI player or player whose hand is empty) and the pot as it loops.
     public void executeAITurns() {
         int offset = 0;
+
         for(; offset < 4; offset++) {
             final int currentPlayer = (currentPlayerInteracting + offset) % manager.playerCount;
             //If the pot is already full, then we break and reset the manager (which will call this again to proceed through the AI).
@@ -160,19 +167,39 @@ public class BridgeActivity extends GameActivity {
             //If the player is a bot, commence AI movement and go to the next player; if they aren't a bot, break and leave at this player.
             if(manager.pot.get(currentPlayer) == null) {
                 if (isBot[currentPlayer] && manager.players[currentPlayer].hand.size() > 0) {
-                    displayHands(currentPlayer);
+                    final CountDownLatch latch = new CountDownLatch(1);
 
                     Card bestMove = BridgeAI.chooseMove(currentPlayer, (BridgeManager) manager, levelsToSearch);
                     int chosenAI = manager.players[currentPlayer].hand.indexOf(bestMove);
                     manager.potHandle(chosenAI, currentPlayer);
+
+                    new AsyncTask<Void,Void,Void>() {
+                        protected Void doInBackground(Void... params) {
+                            try {
+                                Thread.sleep(2500);
+                            }catch(InterruptedException ie) {
+                                ie.printStackTrace();
+                            }
+                            latch.countDown();
+                            return null;
+                        }
+                    }.execute();
+
+                    try {
+                        latch.await();
+                    }catch(InterruptedException ie) {
+                        ie.printStackTrace();
+                    }
+
                     for (int j = 0; j < 4; j++)
                         potClear();
                     displayPot();
-                    displayHands(currentPlayer);
+                    displayHands(currentPlayerInteracting);
                 } else
                     break;
             }
         }
+
         currentPlayerInteracting = (currentPlayerInteracting + offset) % manager.playerCount;
     }
 
