@@ -65,9 +65,9 @@ public class SpadesActivity extends GameActivity {
             int chosen = getCardIndex(v);
 
             manager.potHandle(chosen, currentPlayerInteracting);
+            displayPot();
             for (int i = 0; i < 4; i++)
                 potClear();
-            displayPot();
 
             executeAITurns();
 
