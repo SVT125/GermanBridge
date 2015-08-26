@@ -49,6 +49,7 @@ public class HeartsManager extends Manager implements Serializable {
 			players[i].organize();
 		}
 		usedCards.clear();
+		totalRoundCount++;
 	}
 
 	//Returns true if the game is over, when someone has hit 100 points.
