@@ -19,6 +19,7 @@ public class HeartsPlayer extends Player implements Serializable {
 			return true;
 		}
 		this.score += roundScore;
+		scoreHistory.add(this.score);
 		roundScore = 0;
 		return false;
 	}
