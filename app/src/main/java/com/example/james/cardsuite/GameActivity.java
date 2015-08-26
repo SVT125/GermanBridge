@@ -132,9 +132,9 @@ public abstract class GameActivity extends Activity {
     public void displayScoreTable() {
         String[] column = { "Player 1", "Player 2", "Player 3", "Player 4" };
         List<String> row = new ArrayList<>();
-        for (int i = 1; i <= manager.totalRoundCount; i++)
+        for (int i = 1; i <= manager.getPotsFinished() - 1; i++)
             row.add("Round " + (i));
-        System.out.println(manager.totalRoundCount);
+        System.out.println(manager.getPotsFinished());
 
         TableLayout tableLayout = new TableLayout(this);
         tableLayout.setLayoutParams(new LinearLayout.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.MATCH_PARENT));
