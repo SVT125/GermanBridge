@@ -7,6 +7,7 @@ public abstract class Player {
 	protected List<Card> hand;
 	protected int score, handsWon;
 	protected boolean isBot = false;
+	protected List<Integer> scoreHistory = new ArrayList<>();
 	
 	public abstract boolean scoreChange();
 	
