@@ -4,14 +4,23 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.media.SoundPool;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -118,6 +127,69 @@ public abstract class GameActivity extends Activity {
             potCard.setLayoutParams(params);
             potLayout.addView(potCard);
         }
+    }
+
+    public void displayScoreTable() {
+        String[] column = { "Player 1", "Player 2", "Player 3", "Player 4" };
+        List<String> row = new ArrayList<>();
+        for (int i = 1; i <= manager.totalRoundCount; i++)
+            row.add("Round " + (i));
+        System.out.println(manager.totalRoundCount);
+
+        TableLayout tableLayout = new TableLayout(this);
+        tableLayout.setLayoutParams(new LinearLayout.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.MATCH_PARENT));
+        LinearLayout.LayoutParams rowParams = new LinearLayout.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT,
+                AbsListView.LayoutParams.MATCH_PARENT);
+        rowParams.gravity = Gravity.CENTER_VERTICAL;
+        rowParams.setMargins(10, 5, 10, 5);
+
+
+        for (int i = 0; i <= row.size(); i++) {
+            TableRow tableRow = new TableRow(this);
+            tableRow.setLayoutParams(rowParams);
+
+            for (int j = 0; j <= column.length; j++) {
+
+                TextView textView = new TextView(this);
+                if (i == 0 && j == 0)
+                    textView.setText("");
+                else if (i == 0) {
+                    textView.setText(column[j - 1]);
+                    textView.setTypeface(null, Typeface.BOLD);
+                }
+                else if (j == 0) {
+                    textView.setText(row.get(i - 1));
+                    textView.setTypeface(null, Typeface.BOLD);
+                }
+                else if (i !=0 && j != 0)
+                    textView.setText(Integer.toString(manager.getPlayers()[j - 1].scoreHistory.get(i - 1)));
+
+                textView.setGravity(Gravity.CENTER);
+                textView.setPadding(30, 5, 5, 5);
+                textView.setTextSize(15);
+                tableRow.addView(textView);
+            }
+            tableLayout.addView(tableRow);
+        }
+
+        ScrollView sv = new ScrollView(this);
+        LinearLayout.LayoutParams scrollParams = new LinearLayout.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT,
+                AbsListView.LayoutParams.MATCH_PARENT);
+        sv.setPadding(10, 20, 10, 20);
+        sv.setLayoutParams(scrollParams);
+        sv.setSmoothScrollingEnabled(true);
+        sv.addView(tableLayout);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(sv);
+        builder.setTitle("Scoreboard");
+        builder.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder.show();
     }
 
     // Called at the end of a round when all four players have added their cards; clears the pot using given IDs 100-103.
