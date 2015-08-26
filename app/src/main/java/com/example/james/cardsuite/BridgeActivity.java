@@ -47,7 +47,7 @@ public class BridgeActivity extends GameActivity {
         }
         
         manager = new BridgeManager(currentPlayerInteracting);
-        manager.totalRoundCount = 12; // Change later for variable number of players
+        manager.totalRoundCount = 12;
 
         ImageView trumpView = (ImageView)findViewById(R.id.trumpView);
         trumpView.setVisibility(View.VISIBLE);
@@ -111,6 +111,7 @@ public class BridgeActivity extends GameActivity {
                 reset();
 
                 displayEndPiles(scores);
+                displayScoreTable();
 
                 //Cycle through any AI players for the first non-AI player.
                 executeAITurns();
