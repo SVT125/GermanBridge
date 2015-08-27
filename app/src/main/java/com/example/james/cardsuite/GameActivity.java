@@ -206,7 +206,7 @@ public abstract class GameActivity extends Activity {
     public abstract void reset();
 
     //Call when the hands have been updated and need be redisplayed.
-    public abstract void displayHands(int player);
+    public abstract void displayHands(int player, boolean cardsClickable);
 
     //Call when the end piles and the scores displayed on top of the piles need be redisplayed.
     public abstract void displayEndPiles(List<Integer> scores);

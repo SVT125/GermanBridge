@@ -37,7 +37,7 @@ public class HeartsActivity extends GameActivity {
             botHandle();
 
         else
-            displayHands(0);
+            displayHands(0,true);
     }
 
     @Override
@@ -85,7 +85,7 @@ public class HeartsActivity extends GameActivity {
             if (manager.getPlayers()[currentPlayerInteracting].isBot)
                 botHandle();
             else
-                displayHands(currentPlayerInteracting);
+                displayHands(currentPlayerInteracting,true);
 
             return;
         }
@@ -136,7 +136,7 @@ public class HeartsActivity extends GameActivity {
             if (manager.getPlayers()[currentPlayerInteracting].isBot)
                 botHandle();
             else
-                displayHands(currentPlayerInteracting);
+                displayHands(currentPlayerInteracting,true);
 
             return;
         } else {
@@ -252,7 +252,7 @@ public class HeartsActivity extends GameActivity {
         foundStartPlayer = false;
         currentPotTurn = 0;
         currentPlayerInteracting = 0;
-        displayHands(0);
+        displayHands(0,true);
         chosenLists.clear();
         chosenCards.clear();
     }
@@ -278,7 +278,7 @@ public class HeartsActivity extends GameActivity {
     }
 
     //Call when the hands have been updated and need be redisplayed.
-    public void displayHands(int player) {
+    public void displayHands(int player, boolean cardsClickable) {
         //Remove all old cards first
         if (buttonsPresent) {
             for (int i = 0; i < 52; i++) {
@@ -329,6 +329,8 @@ public class HeartsActivity extends GameActivity {
                 }
 
                 cardButton.setPadding(3, 3, 3, 3);
+                if(!cardsClickable)
+                    cardButton.setClickable(false);
 
                 switch (i) {
                     case 0:

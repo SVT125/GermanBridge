@@ -50,7 +50,7 @@ public class SpadesActivity extends GameActivity {
         }
         //Display the image buttons
         displayEndPiles(scores);
-        displayHands(currentPlayerInteracting);
+        displayHands(currentPlayerInteracting,true);
     }
 
     public void gameClick(View v) {
@@ -82,7 +82,7 @@ public class SpadesActivity extends GameActivity {
                 displayEndPiles(scores);
             }
 
-            displayHands(currentPlayerInteracting);
+            displayHands(currentPlayerInteracting,true);
 
             //If all the hands are exhausted, restart the entire game (until a score has reached 500).
             int lastPlayer = manager.startPlayer == 0 ? 3 : manager.startPlayer - 1;
@@ -108,12 +108,12 @@ public class SpadesActivity extends GameActivity {
                 for (Integer lol : scores) {
                     System.out.println(scores);
                 }
-                displayHands(currentPlayerInteracting);
+                displayHands(currentPlayerInteracting,true);
 
                 //Cycle through any AI players for the first non-AI player.
                 executeAITurns();
 
-                displayHands(currentPlayerInteracting);
+                displayHands(currentPlayerInteracting,true);
             }
 
             if(!(manager.isGameOver()))
@@ -157,7 +157,7 @@ public class SpadesActivity extends GameActivity {
             //If the player is a bot, commence AI movement and go to the next player; if they aren't a bot, break and leave at this player.
             if(manager.pot.get(currentPlayer) == null) {
                 if (isBot[currentPlayer] && manager.players[currentPlayer].hand.size() > 0) {
-                    displayHands(currentPlayer);
+                    displayHands(currentPlayer,true);
 
                     Card bestMove = SpadesAI.chooseMove(currentPlayer, (SpadesManager) manager, levelsToSearch);
                     int chosenAI = manager.players[currentPlayer].hand.indexOf(bestMove);
@@ -165,7 +165,7 @@ public class SpadesActivity extends GameActivity {
                     for (int j = 0; j < 4; j++)
                         potClear();
                     displayPot();
-                    displayHands(currentPlayer);
+                    displayHands(currentPlayer,true);
                 } else
                     break;
             }
@@ -196,7 +196,7 @@ public class SpadesActivity extends GameActivity {
 
     //Opens the guess dialog - fit for German Bridge for now.
     public void openGuessDialog(final int currentPlayer) {
-        displayHands(currentPlayer);
+        displayHands(currentPlayer,true);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this,android.R.style.Theme_Holo_Panel);
         builder.setCancelable(false);
@@ -252,7 +252,7 @@ public class SpadesActivity extends GameActivity {
     }
 
     //Call when the hands have been updated and need be redisplayed.
-    public void displayHands(int player) {
+    public void displayHands(int player, boolean cardsClickable) {
         //Remove all old cards first
         if(buttonsPresent) {
             for (int i = 0; i < 52; i++) {
@@ -309,6 +309,8 @@ public class SpadesActivity extends GameActivity {
                 }
 
                 cardButton.setPadding(3, 3, 3, 3);
+                if(!cardsClickable)
+                    cardButton.setClickable(false);
 
                 switch(i) {
                     case 0: restParams.setMargins(deltaX,95-deltaY,0,0);

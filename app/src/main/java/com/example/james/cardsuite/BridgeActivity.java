@@ -55,7 +55,7 @@ public class BridgeActivity extends GameActivity {
         }
         //Display the image buttons
         displayEndPiles(scores);
-        displayHands(currentPlayerInteracting);
+        displayHands(currentPlayerInteracting, true);
     }
 
     public void gameClick(View v) {
@@ -77,57 +77,56 @@ public class BridgeActivity extends GameActivity {
 
             executeAITurns();
 
-            //If the pot is full (all players have tossed a card), reset the pot, analyze it, find the new start player/winner of the pot.
-            if(manager.pot.size() == 4) {
-                manager.potAnalyze();
-                manager.pot = new HashMap<Integer,Card>();
-                currentPlayerInteracting = manager.startPlayer;
-                executeAITurns();
-                for (int i = 0; i < 4; i++)
-                    potClear();
-                displayPot();
-                displayEndPiles(scores);
-            }
-
-            displayHands(currentPlayerInteracting);
-
-            //Set up the next round, reset all variables.
-            int lastPlayer = manager.startPlayer == 0 ? 3 : manager.startPlayer - 1;
-            if(manager.getPlayers()[lastPlayer].hand.isEmpty()) {
-                scores.clear();
-                for (Player player : manager.players) {
-                    player.scoreChange();
-                    scores.add(player.score);
-                }
-
-                // resets deck, hands, etc. and increments round
-                reset();
-
-                displayEndPiles(scores);
-                displayScoreTable();
-
-                //Cycle through any AI players for the first non-AI player.
-                executeAITurns();
-
-                for(int i = 3; i >= 0; i--) {
-                    if(isBot[i])
-                        ((BridgePlayer)(manager.players[i])).guess = BridgeAI.getBid(i,(BridgeManager)manager);
-                    else
-                        openGuessDialog(i);
-                }
-
-                displayHands(currentPlayerInteracting);
-
-                //Redisplay the trump
-                ImageView trumpView = (ImageView)findViewById(R.id.trumpView);
-                Card trumpCard = ((BridgeManager)manager).trumpCard;
-                trumpView.setImageResource(getResources().getIdentifier(trumpCard.getAddress(), "drawable", getPackageName()));
-            }
-
-            //If this wasn't the last round, return; otherwise, the game is finished.
-            if(manager.potsFinished < manager.totalRoundCount - 1)
-                return;
+            updateGameState();
         }
+    }
+
+    public void updateGameState() {
+        //If the pot is full (all players have tossed a card), reset the pot, analyze it, find the new start player/winner of the pot.
+        if(manager.pot.size() == 4) {
+            manager.potAnalyze();
+            manager.pot = new HashMap<Integer,Card>();
+            currentPlayerInteracting = manager.startPlayer;
+            executeAITurns();
+            return;
+        }
+
+        //Set up the next round, reset all variables.
+        int lastPlayer = manager.startPlayer == 0 ? 3 : manager.startPlayer - 1;
+        if(manager.getPlayers()[lastPlayer].hand.isEmpty()) {
+            scores.clear();
+            for (Player player : manager.players) {
+                player.scoreChange();
+                scores.add(player.score);
+            }
+
+            // resets deck, hands, etc. and increments round
+            reset();
+
+            //Redisplay the trump
+            ImageView trumpView = (ImageView)findViewById(R.id.trumpView);
+            Card trumpCard = ((BridgeManager)manager).trumpCard;
+            trumpView.setImageResource(getResources().getIdentifier(trumpCard.getAddress(), "drawable", getPackageName()));
+
+            displayEndPiles(scores);
+            displayScoreTable();
+
+            for(int i = 3; i >= 0; i--) {
+                if(isBot[i])
+                    ((BridgePlayer)(manager.players[i])).guess = BridgeAI.getBid(i,(BridgeManager)manager);
+                else
+                    openGuessDialog(i);
+            }
+
+            //Cycle through any AI players for the first non-AI player.
+            //TODO - execute AI turns only if the bidding is done! When openGuessDialog properly shows players' cards, this needs to be updated.
+            executeAITurns();
+            return;
+        }
+
+        //If this wasn't the last round, return; otherwise, the game is finished.
+        if(manager.potsFinished < manager.totalRoundCount - 1)
+            return;
 
         // The game is done - pass all relevant information for results activity to display.
         // Passing manager just in case for future statistics if needbe.
@@ -140,10 +139,6 @@ public class BridgeActivity extends GameActivity {
         finish();
     }
 
-    public void updateGameState() {
-        
-    }
-
     // reshuffles deck, increments round count, resets all variables for the next round.
     public void reset() {
         manager.reset();
@@ -153,7 +148,7 @@ public class BridgeActivity extends GameActivity {
     // Executes AI moves for the next player onwards, stopping once we're on a player that isn't a bot.
     // This mutates currentPlayerInteracting (to the next non-AI player or player whose hand is empty) and the pot as it loops.
     public void executeAITurns() {
-        long currentTimeDelay = 250;
+        long currentTimeDelay = 350;
         int offset = 0;
 
         for(; offset < 4; offset++) {
@@ -179,17 +174,26 @@ public class BridgeActivity extends GameActivity {
                             for (int j = 0; j < 4; j++)
                                 potClear();
                             displayPot();
-                            displayHands(currentPlayerInteracting);
+                            displayHands(currentPlayerInteracting, false);
                         }
                     }, timeDelay);
                 } else
                     break;
 
-                currentTimeDelay += 250;
+                currentTimeDelay += 400 + r.nextInt(300) - 150; // delay of 400 +/- 150ms
             }
         }
 
         currentPlayerInteracting = (currentPlayerInteracting + offset) % manager.playerCount;
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                displayHands(currentPlayerInteracting, true);
+                updateGameState();
+                displayEndPiles(scores);
+            }
+        }, currentTimeDelay);
     }
 
     //Call when the end piles and the scores displayed on top of the piles need be redisplayed.
@@ -214,7 +218,7 @@ public class BridgeActivity extends GameActivity {
 
     //Opens the guess dialog - fit for German Bridge for now.
     public void openGuessDialog(final int currentPlayer) {
-        displayHands(currentPlayer);
+        displayHands(currentPlayer, true);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this,android.R.style.Theme_Holo_Panel);
         builder.setCancelable(false);
@@ -282,7 +286,8 @@ public class BridgeActivity extends GameActivity {
     }
 
     //Call when the hands have been updated and need be redisplayed.
-    public void displayHands(int player) {
+    //We add the cardsClickable flag for when the player waits for the AI to finish turns.
+    public void displayHands(int player, boolean cardsClickable) {
         //Remove all old cards first
         if(buttonsPresent) {
             for (int i = 0; i < 52; i++) {
@@ -339,6 +344,8 @@ public class BridgeActivity extends GameActivity {
                 }
 
                 cardButton.setPadding(3, 3, 3, 3);
+                if(!cardsClickable)
+                    cardButton.setClickable(false);
 
                 switch(i) {
                     case 0: restParams.setMargins(deltaX,95-deltaY,0,0);
