@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.media.SoundPool;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,11 +26,12 @@ import java.util.List;
 import java.util.Random;
 
 public abstract class GameActivity extends Activity {
+    public final int levelsToSearch = 3; //Parameter for AI that indicates how many levels down to search.
     protected Manager manager;
     protected int currentPlayerInteracting = 0;
     protected int currentPotTurn = 0;
     private int soundsLoaded = 0;
-    public final int levelsToSearch = 3; //Parameter for AI that indicates how many levels down to search.
+    protected long lastClickTime = 0;
     protected boolean[] isBot = new boolean[4];
     protected boolean foundStartPlayer = false, finishedSwapping = false, buttonsPresent = false, finishedLoading = false;
     public boolean initialOutputWritten = false;
@@ -134,7 +134,6 @@ public abstract class GameActivity extends Activity {
         List<String> row = new ArrayList<>();
         for (int i = 1; i <= manager.getPotsFinished() - 1; i++)
             row.add("Round " + (i));
-        System.out.println(manager.getPotsFinished());
 
         TableLayout tableLayout = new TableLayout(this);
         tableLayout.setLayoutParams(new LinearLayout.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.MATCH_PARENT));

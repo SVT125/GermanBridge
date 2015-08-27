@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -59,6 +60,12 @@ public class BridgeActivity extends GameActivity {
     }
 
     public void gameClick(View v) {
+        //Prevents spam-clicking before the last button click is done.
+        if (SystemClock.elapsedRealtime() - lastClickTime < 1750){
+            return;
+        }
+        lastClickTime = SystemClock.elapsedRealtime();
+
         super.gameClick(v);
         //Play sounds only if we're done swapping in hearts or are in any other game mode.
         if(finishedLoading) {
@@ -76,8 +83,6 @@ public class BridgeActivity extends GameActivity {
             displayPot();
 
             executeAITurns();
-
-            updateGameState();
         }
     }
 
@@ -125,7 +130,7 @@ public class BridgeActivity extends GameActivity {
         }
 
         //If this wasn't the last round, return; otherwise, the game is finished.
-        if(manager.potsFinished < manager.totalRoundCount - 1)
+        if(manager.potsFinished <= manager.totalRoundCount)
             return;
 
         // The game is done - pass all relevant information for results activity to display.
@@ -148,7 +153,7 @@ public class BridgeActivity extends GameActivity {
     // Executes AI moves for the next player onwards, stopping once we're on a player that isn't a bot.
     // This mutates currentPlayerInteracting (to the next non-AI player or player whose hand is empty) and the pot as it loops.
     public void executeAITurns() {
-        long currentTimeDelay = 350;
+        long currentTimeDelay = 250;
         int offset = 0;
 
         for(; offset < 4; offset++) {
@@ -180,7 +185,7 @@ public class BridgeActivity extends GameActivity {
                 } else
                     break;
 
-                currentTimeDelay += 400 + r.nextInt(300) - 150; // delay of 400 +/- 150ms
+                currentTimeDelay += 250;
             }
         }
 
@@ -189,9 +194,9 @@ public class BridgeActivity extends GameActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                displayHands(currentPlayerInteracting, true);
                 updateGameState();
                 displayEndPiles(scores);
+                displayHands(currentPlayerInteracting, true);
             }
         }, currentTimeDelay);
     }
@@ -218,7 +223,7 @@ public class BridgeActivity extends GameActivity {
 
     //Opens the guess dialog - fit for German Bridge for now.
     public void openGuessDialog(final int currentPlayer) {
-        displayHands(currentPlayer, true);
+        displayHands(currentPlayer, false);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this,android.R.style.Theme_Holo_Panel);
         builder.setCancelable(false);

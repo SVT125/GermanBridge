@@ -7,6 +7,8 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -50,10 +52,16 @@ public class SpadesActivity extends GameActivity {
         }
         //Display the image buttons
         displayEndPiles(scores);
-        displayHands(currentPlayerInteracting,true);
+        displayHands(currentPlayerInteracting, true);
     }
 
     public void gameClick(View v) {
+        //Prevents spam-clicking before the last button click is done.
+        if (SystemClock.elapsedRealtime() - lastClickTime < 1750){
+            return;
+        }
+        lastClickTime = SystemClock.elapsedRealtime();
+
         super.gameClick(v);
         //Play sounds only if we're done swapping in hearts or are in any other game mode.
         if(finishedLoading) {
@@ -70,55 +78,54 @@ public class SpadesActivity extends GameActivity {
 
             executeAITurns();
 
-            //If the pot is full (all players have tossed a card), reset the pot, analyze it, find the new start player/winner of the pot.
-            if(manager.pot.size() == 4) {
-                manager.potAnalyze();
-                manager.pot = new HashMap<Integer,Card>();
-                currentPlayerInteracting = manager.startPlayer;
-                executeAITurns();
-                for (int i = 0; i < 4; i++)
-                    potClear();
-                displayPot();
-                displayEndPiles(scores);
-            }
-
-            displayHands(currentPlayerInteracting,true);
-
-            //If all the hands are exhausted, restart the entire game (until a score has reached 500).
-            int lastPlayer = manager.startPlayer == 0 ? 3 : manager.startPlayer - 1;
-            if(manager.getPlayers()[lastPlayer].hand.isEmpty() && !manager.isGameOver()) {
-                List<Integer> scores = new ArrayList<Integer>();
-                for (Player player : manager.getPlayers()) {
-                    player.scoreChange();
-                    scores.add(player.score);
-                }
-
-                reset();
-                displayScoreTable();
-
-                for(int i = 3; i >= 0; i--) {
-                    if(isBot[i])
-                        ((SpadesPlayer) (manager.players[i])).bid = SpadesAI.getBid(i, (SpadesManager) manager);
-                    else
-                        openGuessDialog(i);
-                }
-
-                //Display the image buttons
-                displayEndPiles(scores);
-                for (Integer lol : scores) {
-                    System.out.println(scores);
-                }
-                displayHands(currentPlayerInteracting,true);
-
-                //Cycle through any AI players for the first non-AI player.
-                executeAITurns();
-
-                displayHands(currentPlayerInteracting,true);
-            }
-
-            if(!(manager.isGameOver()))
-                return;
+            updateGameState();
         }
+    }
+
+    public void updateGameState() {
+        //If the pot is full (all players have tossed a card), reset the pot, analyze it, find the new start player/winner of the pot.
+        if(manager.pot.size() == 4) {
+            manager.potAnalyze();
+            manager.pot = new HashMap<Integer,Card>();
+            currentPlayerInteracting = manager.startPlayer;
+            for (int i = 0; i < 4; i++)
+                potClear();
+            displayPot();
+            displayEndPiles(scores);
+            executeAITurns();
+            return;
+        }
+
+        //If all the hands are exhausted, restart the entire game (until a score has reached 500).
+        int lastPlayer = manager.startPlayer == 0 ? 3 : manager.startPlayer - 1;
+        if(manager.getPlayers()[lastPlayer].hand.isEmpty() && !manager.isGameOver()) {
+            List<Integer> scores = new ArrayList<Integer>();
+            for (Player player : manager.getPlayers()) {
+                player.scoreChange();
+                scores.add(player.score);
+            }
+
+            reset();
+            displayScoreTable();
+
+            for(int i = 3; i >= 0; i--) {
+                if(isBot[i])
+                    ((SpadesPlayer) (manager.players[i])).bid = SpadesAI.getBid(i, (SpadesManager) manager);
+                else
+                    openGuessDialog(i);
+            }
+
+            //Display the image buttons
+            displayEndPiles(scores);
+            displayHands(currentPlayerInteracting, false);
+
+            //Cycle through any AI players for the first non-AI player.
+            executeAITurns();
+            return;
+        }
+
+        if(!(manager.isGameOver()))
+            return;
 
         // The game is done - pass all relevant information for results activity to display.
         // Passing manager just in case for future statistics if needbe.
@@ -146,6 +153,7 @@ public class SpadesActivity extends GameActivity {
     // Executes AI moves for the next player onwards, stopping once we're on a player that isn't a bot.
     // This mutates currentPlayerInteracting (to the next non-AI player or player whose hand is empty) and the pot as it loops.
     public void executeAITurns() {
+        long currentTimeDelay = 250;
         int offset = 0;
         for(; offset < 4; offset++) {
             final int currentPlayer = (currentPlayerInteracting + offset) % manager.playerCount;
@@ -157,20 +165,38 @@ public class SpadesActivity extends GameActivity {
             //If the player is a bot, commence AI movement and go to the next player; if they aren't a bot, break and leave at this player.
             if(manager.pot.get(currentPlayer) == null) {
                 if (isBot[currentPlayer] && manager.players[currentPlayer].hand.size() > 0) {
-                    displayHands(currentPlayer,true);
+                    final long timeDelay = currentTimeDelay;
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            //After the delay, proceed the AI move.
+                            Card bestMove = SpadesAI.chooseMove(currentPlayer, (SpadesManager) manager, levelsToSearch);
+                            int chosenAI = manager.players[currentPlayer].hand.indexOf(bestMove);
+                            manager.potHandle(chosenAI, currentPlayer);
 
-                    Card bestMove = SpadesAI.chooseMove(currentPlayer, (SpadesManager) manager, levelsToSearch);
-                    int chosenAI = manager.players[currentPlayer].hand.indexOf(bestMove);
-                    manager.potHandle(chosenAI, currentPlayer);
-                    for (int j = 0; j < 4; j++)
-                        potClear();
-                    displayPot();
-                    displayHands(currentPlayer,true);
+                            for (int j = 0; j < 4; j++)
+                                potClear();
+                            displayPot();
+                            displayHands(currentPlayerInteracting, false);
+                        }
+                    }, timeDelay);
                 } else
                     break;
+
+                currentTimeDelay += 250;
             }
         }
         currentPlayerInteracting = (currentPlayerInteracting + offset) % manager.playerCount;
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                updateGameState();
+                displayEndPiles(scores);
+                displayHands(currentPlayerInteracting, true);
+            }
+        }, currentTimeDelay);
     }
 
     //Call when the end piles and the scores displayed on top of the piles need be redisplayed.
