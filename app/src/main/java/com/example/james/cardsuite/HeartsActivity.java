@@ -35,7 +35,6 @@ public class HeartsActivity extends GameActivity {
 
         if (manager.getPlayers()[0].isBot)
             botHandle();
-
         else
             displayHands(0,true);
     }
@@ -299,12 +298,17 @@ public class HeartsActivity extends GameActivity {
         //Now create the imagebuttons for each of the players.
         //Note: other possible param values for initialTheta scalar and deltaY scalar are (5,3).
         for (int i = 0; i < 4; i++) {
+            manager.players[i].organize();
             //The coordinate and angular offsets for every card. Theta is dependent on the number of cards in the hand.
             int deltaX = 0, deltaY;
             float initialTheta = (float) -4.6 * manager.getPlayers()[i].hand.size() / 2;
             for (int j = 0; j < manager.getPlayers()[i].hand.size(); j++) {
                 float theta = (float) (initialTheta + 4.6 * j);
                 deltaY = (int) (2.5 * (30 - Math.pow(j - manager.getPlayers()[i].hand.size() / 2, 2))); //Truncate the result of the offset
+
+                if(manager.getPlayers()[i].hand.size() % 2 != 0 && j == (manager.getPlayers()[i].hand.size()-1)/2)
+                    theta = 0;
+
                 RelativeLayout.LayoutParams restParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 
                 //How to treat and initialize the other cards depending on whether the current player or any other.
