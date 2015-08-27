@@ -32,33 +32,56 @@ public class BridgeActivity extends GameActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bridge);
 
-        Intent intent = getIntent();
-        this.isBot = intent.getBooleanArrayExtra("isBot");
-
-        //currentPlayerInteracting default-init'd to 0, we increment until we find a non-bot player.
-        while(isBot[currentPlayerInteracting]) {
-            currentPlayerInteracting++;
+        if (savedInstanceState != null) {
+            // Restore value of members from saved state
+            manager = savedInstanceState.getParcelable("manager");
+            currentPlayerInteracting = savedInstanceState.getInt("currentPlayer", 0);
+            currentPotTurn = savedInstanceState.getInt("currentPotTurn", 1);
+            buttonsPresent = savedInstanceState.getBoolean("buttonsPresent", false);
+            initialOutputWritten = savedInstanceState.getBoolean("initialOutputWritten", false);
+            foundStartPlayer = savedInstanceState.getBoolean("foundStartPlayer", false);
         }
-        
-        manager = new BridgeManager(currentPlayerInteracting);
-        manager.totalRoundCount = 12;
+        else {
 
-        ImageView trumpView = (ImageView)findViewById(R.id.trumpView);
-        trumpView.setVisibility(View.VISIBLE);
-        Card trumpCard = ((BridgeManager)manager).trumpCard;
-        trumpView.setImageResource(getResources().getIdentifier(trumpCard.getAddress(), "drawable", getPackageName()));
-        trumpView.setMaxHeight(115);
-        trumpView.setAdjustViewBounds(true);
+            Intent intent = getIntent();
+            this.isBot = intent.getBooleanArrayExtra("isBot");
 
-        for(int i = 3; i >= 0; i--) {
-            if(isBot[i])
-                ((BridgePlayer)(manager.players[i])).guess = BridgeAI.getBid(i,(BridgeManager)manager);
-            else
-                openGuessDialog(i);
+            //currentPlayerInteracting default-init'd to 0, we increment until we find a non-bot player.
+            while (isBot[currentPlayerInteracting]) {
+                currentPlayerInteracting++;
+            }
+
+            manager = new BridgeManager(currentPlayerInteracting);
+            manager.totalRoundCount = 12;
         }
-        //Display the image buttons
-        displayEndPiles(scores);
-        displayHands(currentPlayerInteracting, true);
+
+            ImageView trumpView = (ImageView) findViewById(R.id.trumpView);
+            trumpView.setVisibility(View.VISIBLE);
+            Card trumpCard = ((BridgeManager) manager).trumpCard;
+            trumpView.setImageResource(getResources().getIdentifier(trumpCard.getAddress(), "drawable", getPackageName()));
+            trumpView.setMaxHeight(115);
+            trumpView.setAdjustViewBounds(true);
+
+            for (int i = 3; i >= 0; i--) {
+                if (isBot[i])
+                    ((BridgePlayer) (manager.players[i])).guess = BridgeAI.getBid(i, (BridgeManager) manager);
+                else
+                    openGuessDialog(i);
+            }
+            //Display the image buttons
+            displayEndPiles(scores);
+            displayHands(currentPlayerInteracting, true);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedState) {
+        savedState.putParcelable("manager", (BridgeManager) manager);
+        savedState.putInt("currentPlayer", currentPlayerInteracting);
+        savedState.putInt("currentPotTurn", currentPotTurn);
+        savedState.putBoolean("foundStartPlayer", foundStartPlayer);
+        savedState.putBoolean("buttonsPresent", buttonsPresent);
+        savedState.putBoolean("initialOutputWritten", initialOutputWritten);
+        super.onSaveInstanceState(savedState);
     }
 
     public void gameClick(View v) {
