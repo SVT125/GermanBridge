@@ -34,7 +34,7 @@ public abstract class GameActivity extends Activity {
     protected long lastClickTime = 0;
     protected boolean[] isBot = new boolean[4];
     protected boolean foundStartPlayer = false, finishedSwapping = false, buttonsPresent = false, finishedLoading = false;
-    public boolean initialOutputWritten = false;
+    public boolean initialOutputWritten = false, isPaused = false;
     protected List<Integer> scores = new ArrayList<Integer>(), roundScores = new ArrayList<>();
     protected SoundPool[] soundPools = new SoundPool[] {new SoundPool.Builder().build(), new SoundPool.Builder().build(),
             new SoundPool.Builder().build(), new SoundPool.Builder().build()};
