@@ -47,7 +47,7 @@ public class BridgeActivity extends GameActivity {
         trumpView.setVisibility(View.VISIBLE);
         Card trumpCard = ((BridgeManager)manager).trumpCard;
         trumpView.setImageResource(getResources().getIdentifier(trumpCard.getAddress(), "drawable", getPackageName()));
-        trumpView.setMaxHeight(150);
+        trumpView.setMaxHeight(115);
         trumpView.setAdjustViewBounds(true);
 
         for(int i = 3; i >= 0; i--) {
@@ -114,7 +114,7 @@ public class BridgeActivity extends GameActivity {
             ImageView trumpView = (ImageView)findViewById(R.id.trumpView);
             Card trumpCard = ((BridgeManager)manager).trumpCard;
             trumpView.setImageResource(getResources().getIdentifier(trumpCard.getAddress(), "drawable", getPackageName()));
-            trumpView.setMaxHeight(150);
+            trumpView.setMaxHeight(115);
             trumpView.setAdjustViewBounds(true);
 
             displayEndPiles(scores);
@@ -214,7 +214,7 @@ public class BridgeActivity extends GameActivity {
 
         for(int i = 0; i < 4; i++) {
             //Update the score, but remove or update the pile if it exists.
-            pileViews[i].setMaxHeight(150);
+            pileViews[i].setMaxHeight(115);
             pileViews[i].setAdjustViewBounds(true);
             if (((BridgePlayer)manager.getPlayers()[i]).obtained > 0) {
                 pileViews[i].setImageResource(getResources().getIdentifier("cardback", "drawable", getPackageName()));
@@ -355,7 +355,7 @@ public class BridgeActivity extends GameActivity {
                 }
 
                 cardButton.setPadding(3, 3, 3, 3);
-                cardButton.setMaxHeight(150);
+                cardButton.setMaxHeight(115);
                 cardButton.setAdjustViewBounds(true);
                 if(!cardsClickable)
                     cardButton.setClickable(false);

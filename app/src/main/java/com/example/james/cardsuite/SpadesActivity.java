@@ -208,7 +208,7 @@ public class SpadesActivity extends GameActivity {
 
         for(int i = 0; i < 4; i++) {
             //Update the score, but remove or update the pile if it exists.
-            pileViews[i].setMaxHeight(150);
+            pileViews[i].setMaxHeight(115);
             pileViews[i].setAdjustViewBounds(true);
             if ((((SpadesPlayer)manager.getPlayers()[i]).obtained) > 0) {
                 pileViews[i].setImageResource(getResources().getIdentifier("cardback", "drawable", getPackageName()));
@@ -338,14 +338,14 @@ public class SpadesActivity extends GameActivity {
                 cardButton.setPadding(3, 3, 3, 3);
                 if(!cardsClickable)
                     cardButton.setClickable(false);
-                cardButton.setMaxHeight(150);
+                cardButton.setMaxHeight(115);
                 cardButton.setAdjustViewBounds(true);
 
                 switch(i) {
                     case 0: restParams.setMargins(deltaX,95-deltaY,0,0);
                         cardButton.setRotation(theta);
                         bottom.addView(cardButton, restParams); break;
-                    case 1: restParams.setMargins(100+deltaY,deltaX,0,0);
+                    case 1: restParams.setMargins(115+deltaY,deltaX,0,0);
                         cardButton.setRotation(90 + theta);
                         left.addView(cardButton, restParams); break;
                     case 2: restParams.setMargins(deltaX,60+deltaY,0,0);

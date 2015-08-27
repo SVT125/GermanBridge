@@ -105,7 +105,7 @@ public abstract class GameActivity extends Activity {
             int index = (manager.startPlayer + i) % 4;
             ImageView potCard = new ImageView(this);
             potCard.setImageResource(getResources().getIdentifier(manager.pot.get(index).getAddress(), "drawable", getPackageName()));
-            potCard.setMaxHeight(150);
+            potCard.setMaxHeight(115);
             potCard.setAdjustViewBounds(true);
 
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
