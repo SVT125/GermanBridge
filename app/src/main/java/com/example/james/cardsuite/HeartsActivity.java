@@ -266,6 +266,8 @@ public class HeartsActivity extends GameActivity {
 
         for (int i = 0; i < 4; i++) {
             //Update the score, but remove or update the pile if it exists.
+            pileViews[i].setMaxHeight(150);
+            pileViews[i].setAdjustViewBounds(true);
             if (scores.get(i) != 0) {
                 pileViews[i].setImageResource(getResources().getIdentifier("cardback", "drawable", getPackageName()));
                 scoreViews[i].setVisibility(View.VISIBLE);
@@ -331,6 +333,8 @@ public class HeartsActivity extends GameActivity {
                 cardButton.setPadding(3, 3, 3, 3);
                 if(!cardsClickable)
                     cardButton.setClickable(false);
+                cardButton.setMaxHeight(150);
+                cardButton.setAdjustViewBounds(true);
 
                 switch (i) {
                     case 0:
