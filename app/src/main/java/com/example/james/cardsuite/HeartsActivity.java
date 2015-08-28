@@ -7,6 +7,8 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -37,7 +39,7 @@ public class HeartsActivity extends GameActivity {
         displayEndPiles(scores);
 
         if (manager.getPlayers()[0].isBot)
-            botHandle();
+            botHandle(250);
         else
             displayHands(0,true);
     }
@@ -63,7 +65,6 @@ public class HeartsActivity extends GameActivity {
         }
 
         if (!(manager.isGameOver())) {
-
             // Handle player choosing cards
             int chosen = getCardIndex(v);
             Card chosenCard = manager.getPlayers()[currentPlayerInteracting].hand.get(chosen);
@@ -75,18 +76,18 @@ public class HeartsActivity extends GameActivity {
                     this.chooseCards(chosenCard, swapRound, v);
                 else
                     finishedSwapping = true;
-            }
-
-            else {
+            } else {
                 // handle cards being tossed in the pot until all cards are gone (13 turns).
                 manager.potHandle(chosen, currentPlayerInteracting);
+                displayHands(currentPlayerInteracting,false);
             }
+
             if (finishedSwapping && (manager.pot.size() > 0))
                 restOfRoundHandle();
 
-            if (manager.getPlayers()[currentPlayerInteracting].isBot)
-                botHandle();
-            else
+            if (manager.getPlayers()[currentPlayerInteracting].isBot) {
+                botHandle(250);
+            } else
                 displayHands(currentPlayerInteracting,true);
 
             return;
@@ -113,32 +114,57 @@ public class HeartsActivity extends GameActivity {
         }
     }
 
-
-    public void botHandle() {
+    public void botHandle(final long delay) {
         if (!manager.isGameOver()) {
             if (!finishedSwapping) {
-                int swapRound = manager.getPotsFinished() % 4;
+                final int swapRound = manager.getPotsFinished() % 4;
                 if (swapRound != 3) {
-                    List<Card> botChosen = ((HeartsAI) manager.getPlayers()[currentPlayerInteracting]).chooseSwap();
-                    chosenLists.add(botChosen);
-                    currentPlayerInteracting++;
-                    if (currentPlayerInteracting == 4)
-                        swapCards(swapRound);
-                }
-                else
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            List<Card> botChosen = ((HeartsAI) manager.getPlayers()[currentPlayerInteracting]).chooseSwap();
+                            chosenLists.add(botChosen);
+                            currentPlayerInteracting++;
+
+                            if (currentPlayerInteracting == 4)
+                                swapCards(swapRound);
+
+                            if (finishedSwapping && (manager.pot.size() > 0))
+                                restOfRoundHandle();
+
+                            if (manager.getPlayers()[currentPlayerInteracting].isBot)
+                                botHandle(250);
+                            else
+                                displayHands(currentPlayerInteracting, true);
+                        }
+                    }, delay);
+                } else
                     finishedSwapping = true;
-
             } else {
-                Card botMove = ((HeartsAI) manager.getPlayers()[currentPlayerInteracting]).makeMove(currentPlayerInteracting, manager.startPlayer, (HeartsManager) manager);
-                ((HeartsManager) manager).potHandle(botMove, currentPlayerInteracting);
-            }
-            if (finishedSwapping && (manager.pot.size() > 0))
-                restOfRoundHandle();
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Card botMove = ((HeartsAI) manager.getPlayers()[currentPlayerInteracting]).makeMove(currentPlayerInteracting, manager.startPlayer, (HeartsManager) manager);
+                        ((HeartsManager) manager).potHandle(botMove, currentPlayerInteracting);
+                        //displayHands(currentPlayerInteracting,false); //Display the last non-AI player's hand, updates the AI's hand after move.
 
-            if (manager.getPlayers()[currentPlayerInteracting].isBot)
-                botHandle();
-            else
-                displayHands(currentPlayerInteracting,true);
+                        int chosenSound = r.nextInt(3);
+                        soundPools[chosenSound].play(sounds[chosenSound], 1, 1, 0, 0, 1);
+
+                        if (finishedSwapping && (manager.pot.size() > 0))
+                            restOfRoundHandle();
+
+                        if (manager.getPlayers()[currentPlayerInteracting].isBot)
+                            botHandle(250);
+                        else
+                            displayHands(currentPlayerInteracting,true);
+                    }
+                }, delay);
+            }
+
+            //TODO - may need to copy and paste the above if statements here if code fails!
 
             return;
         } else {
@@ -157,6 +183,12 @@ public class HeartsActivity extends GameActivity {
     }
 
     public void gameClick(View v) {
+        //Prevents spam-clicking before the last button click is done.
+        if (SystemClock.elapsedRealtime() - lastClickTime < 1750){
+            return;
+        }
+        lastClickTime = SystemClock.elapsedRealtime();
+
         super.gameClick(v);
         this.playerHandle(v);
     }
@@ -198,7 +230,6 @@ public class HeartsActivity extends GameActivity {
         reset();
         displayScoreTable();
     }
-
 
     public void chooseCards(Card chosenCard, int swapRound, View v) {
         if (chosenCard.isClicked == false) {
