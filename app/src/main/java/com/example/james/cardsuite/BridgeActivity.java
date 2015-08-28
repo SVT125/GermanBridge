@@ -203,6 +203,9 @@ public class BridgeActivity extends GameActivity {
                             int chosenAI = manager.players[currentPlayer].hand.indexOf(bestMove);
                             manager.potHandle(chosenAI, currentPlayer);
 
+                            int chosenSound = r.nextInt(3);
+                            soundPools[chosenSound].play(sounds[chosenSound],1,1,0,0,1);
+
                             for (int j = 0; j < 4; j++)
                                 potClear();
                             displayPot();
