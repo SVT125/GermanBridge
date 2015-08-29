@@ -1,7 +1,5 @@
 package com.example.james.cardsuite;
 
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
@@ -61,13 +59,6 @@ public class HeartsManager extends Manager implements Serializable {
 				return true;
 
 		return false;
-	}
-	
-	public void saveGame(ObjectOutputStream objectOutput) throws IOException {
-		for (int i = 0; i < 4; i++) {
-			objectOutput.writeObject(players[i]);
-			((HeartsPlayer) players[i]).saveGame(objectOutput);
-		}
 	}
 
 	//Returns the index of player with the lowest score.
