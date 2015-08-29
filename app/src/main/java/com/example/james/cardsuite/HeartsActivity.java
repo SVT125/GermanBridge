@@ -2,6 +2,7 @@ package com.example.james.cardsuite;
 
 import android.animation.AnimatorInflater;
 import android.animation.AnimatorSet;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -9,7 +10,6 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +19,10 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,6 +65,8 @@ public class HeartsActivity extends GameActivity {
     public void onConfigurationChanged(Configuration config) {
         super.onConfigurationChanged(config);
     }
+
+    public void loadGame() {
     
         try {
             FileInputStream fis = this.openFileInput("save_hearts");
