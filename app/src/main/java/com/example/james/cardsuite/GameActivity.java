@@ -5,14 +5,12 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.media.Image;
 import android.media.SoundPool;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -22,11 +20,12 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public abstract class GameActivity extends Activity {
+public abstract class GameActivity extends Activity implements Serializable {
     public final int levelsToSearch = 3; //Parameter for AI that indicates how many levels down to search.
     protected Manager manager;
     protected int currentPlayerInteracting = 0;
