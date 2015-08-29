@@ -12,6 +12,13 @@ public class HeartsPlayer extends Player implements Serializable {
 		hand = new ArrayList<Card>();
 		endPile = new ArrayList<Card>();
 	}
+	
+	public void saveGame(ObjectOutputStream objectOutput) throws IOException {
+		objectOutput.writeInt(hand.size());
+		for (int i = 0; i < hand.size(); i++)
+			objectOutput.writeObject(hand.get(i));
+		objectOutput.writeBoolean(isBot);
+	}
 
 	// boolean returns true or false value depending on whether player has shot the moon or not
 	public boolean scoreChange() {
