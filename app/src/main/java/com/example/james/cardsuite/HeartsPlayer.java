@@ -1,4 +1,6 @@
 package com.example.james.cardsuite;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.*;
 
@@ -12,7 +14,7 @@ public class HeartsPlayer extends Player implements Serializable {
 		hand = new ArrayList<Card>();
 		endPile = new ArrayList<Card>();
 	}
-	
+
 	public void saveGame(ObjectOutputStream objectOutput) throws IOException {
 		objectOutput.writeInt(hand.size());
 		for (int i = 0; i < hand.size(); i++)
