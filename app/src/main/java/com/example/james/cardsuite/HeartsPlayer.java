@@ -1,7 +1,5 @@
 package com.example.james.cardsuite;
 
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,13 +13,6 @@ public class HeartsPlayer extends Player implements Serializable {
 	public HeartsPlayer() {
 		hand = new ArrayList<Card>();
 		endPile = new ArrayList<Card>();
-	}
-	
-	public void saveGame(ObjectOutputStream objectOutput) throws IOException {
-		objectOutput.writeInt(hand.size());
-		for (int i = 0; i < hand.size(); i++)
-			objectOutput.writeObject(hand.get(i));
-		objectOutput.writeBoolean(isBot);
 	}
 
 	// boolean returns true or false value depending on whether player has shot the moon or not
