@@ -137,7 +137,6 @@ public class SpadesManager extends Manager implements Serializable {
 			}
 		}
 
-		System.out.println("wtf" + startPlayer);
 		((SpadesPlayer)players[startPlayer]).obtained++;
 		((SpadesPlayer)players[startPlayer]).totalObtained++;
 		((SpadesPlayer)players[startPlayer]).partner.totalObtained++;
