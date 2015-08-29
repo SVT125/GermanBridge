@@ -13,14 +13,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RadioButton;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.TextView;
 
 public class MainActivity extends Activity {
 
     boolean[] isBot = new boolean[4];
+    boolean loadGame = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +38,31 @@ public class MainActivity extends Activity {
     }
 
     public void gameClick(final View v) {
+        savedGamePrompt(v);
+    }
+
+    public void savedGamePrompt(final View v) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this,android.R.style.Theme_Holo_Dialog_MinWidth);
+        builder.setTitle("Do you want to continue from a previous game?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                loadGame = true;
+                runGameActivity(v);
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                loadGame = false;
+                playerSelection(v);
+            }
+        });
+        builder.show();
+        onPause();
+    }
+
+    public void playerSelection(final View v) {
         final String[] choices = new String[4];
 
         choices[0] = "PLAYER 1";
@@ -120,6 +146,7 @@ public class MainActivity extends Activity {
 
         Intent intent = new Intent(MainActivity.this,executingActivity);
         intent.putExtra("isBot", isBot);
+        intent.putExtra("loadGame", loadGame);
         startActivity(intent);
         finish();
     }
