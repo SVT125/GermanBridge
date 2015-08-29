@@ -62,12 +62,12 @@ public class HeartsActivity extends GameActivity {
         super.onConfigurationChanged(config);
     }
     
-    public void loadGame() {
         try {
             FileInputStream fis = this.openFileInput("save_hearts");
             ObjectInputStream is = new ObjectInputStream(fis);
             this.manager = (HeartsManager) is.readObject();
             for (int i = 0; i < 4; i++) {
+                this.manager.players[i] = (HeartsPlayer)is.readObject();
                 int size = is.readInt();
                 this.manager.players[i].hand = new ArrayList<>();
                 for (int j = 0; j < size; j++) {
