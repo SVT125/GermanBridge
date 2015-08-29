@@ -1,5 +1,6 @@
 package com.example.james.cardsuite;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.Comparator;
 /**
  * Created by timothylam on 8/18/15.
  */
-public class HeartsAI extends HeartsPlayer {
+public class HeartsAI extends HeartsPlayer implements Serializable {
 
     private int gameMode = 0;
     private int difficulty = 0;
