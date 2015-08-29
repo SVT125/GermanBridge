@@ -18,6 +18,8 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import java.io.File;
+
 public class MainActivity extends Activity {
 
     boolean[] isBot = new boolean[4];
@@ -38,7 +40,14 @@ public class MainActivity extends Activity {
     }
 
     public void gameClick(final View v) {
-        savedGamePrompt(v);
+        if (v == findViewById(R.id.hearts_button) && (fileExists(this, "save_hearts")))
+            savedGamePrompt(v);
+        else if (v == findViewById(R.id.german_button) && (fileExists(this, "save_bridge")))
+            savedGamePrompt(v);
+        else if (v == findViewById(R.id.spades_button) && (fileExists(this, "save_spades")))
+            savedGamePrompt(v);
+        else
+            playerSelection(v);
     }
 
     public void savedGamePrompt(final View v) {
@@ -151,6 +160,14 @@ public class MainActivity extends Activity {
         finish();
     }
 
+    public boolean fileExists(Context context, String filename) {
+        File file = context.getFileStreamPath(filename);
+        if(file == null || !file.exists()) {
+            return false;
+        }
+        return true;
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -172,4 +189,5 @@ public class MainActivity extends Activity {
 
         return super.onOptionsItemSelected(item);
     }
+
 }
