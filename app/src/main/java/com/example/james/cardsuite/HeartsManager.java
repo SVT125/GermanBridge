@@ -1,8 +1,11 @@
 package com.example.james.cardsuite;
-import android.widget.TextView;
 
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 
 public class HeartsManager extends Manager implements Serializable {
