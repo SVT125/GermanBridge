@@ -7,7 +7,7 @@
     android:configChanges="orientation|keyboardHidden"
     android:weightSum="1"
     android:orientation="horizontal"
-    android:background="@drawable/test_background"
+    android:background="#fff2ee"
     android:baselineAligned="false">
 
     <LinearLayout
