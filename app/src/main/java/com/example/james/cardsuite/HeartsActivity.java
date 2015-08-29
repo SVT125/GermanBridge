@@ -21,7 +21,6 @@ import android.widget.TextView;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
@@ -66,55 +65,6 @@ public class HeartsActivity extends GameActivity implements Serializable {
     @Override
     public void onConfigurationChanged(Configuration config) {
         super.onConfigurationChanged(config);
-    }
-
-    public void loadGame() {
-    
-        try {
-            FileInputStream fis = this.openFileInput("save_hearts");
-            ObjectInputStream is = new ObjectInputStream(fis);
-            this.manager = (HeartsManager) is.readObject();
-            this.currentPlayerInteracting = is.readInt();
-            this.currentPotTurn = is.readInt();
-            this.foundStartPlayer = is.readBoolean();
-            this.finishedSwapping = is.readBoolean();
-            this.buttonsPresent = is.readBoolean();
-            this.initialOutputWritten = is.readBoolean();
-            this.scores = (List<Integer>) is.readObject();
-            this.roundScores = (List<Integer>) is.readObject();
-            for (int i = 0; i < 4; i++)
-                this.chosenLists.add((List<Card>) is.readObject());
-            is.close();
-            fis.close();
-        }
-        catch (Exception e) {
-            System.out.println(e);
-        }
-    }
-
-    public void saveGame() {
-        String filename = "save_hearts";
-        FileOutputStream outputStream;
-
-        try {
-            outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
-            ObjectOutputStream objectStream = new ObjectOutputStream(outputStream);
-            objectStream.writeObject(this.manager);
-            objectStream.writeInt(currentPlayerInteracting);
-            objectStream.writeInt(currentPotTurn);
-            objectStream.writeBoolean(foundStartPlayer);
-            objectStream.writeBoolean(finishedSwapping);
-            objectStream.writeBoolean(buttonsPresent);
-            objectStream.writeBoolean(initialOutputWritten);
-            objectStream.writeObject(scores);
-            objectStream.writeObject(roundScores);
-            for (int i = 0; i < 4; i++)
-                objectStream.writeObject(chosenLists.get(i));
-            outputStream.close();
-            objectStream.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     public void findStartPlayer() {
@@ -493,6 +443,55 @@ public class HeartsActivity extends GameActivity implements Serializable {
             }
         }
         buttonsPresent = true;
+    }
+
+    public void loadGame() {
+
+        try {
+            FileInputStream fis = this.openFileInput("save_hearts");
+            ObjectInputStream is = new ObjectInputStream(fis);
+            this.manager = (HeartsManager) is.readObject();
+            this.currentPlayerInteracting = is.readInt();
+            this.currentPotTurn = is.readInt();
+            this.foundStartPlayer = is.readBoolean();
+            this.finishedSwapping = is.readBoolean();
+            this.buttonsPresent = is.readBoolean();
+            this.initialOutputWritten = is.readBoolean();
+            this.scores = (List<Integer>) is.readObject();
+            this.roundScores = (List<Integer>) is.readObject();
+            for (int i = 0; i < 4; i++)
+                this.chosenLists.add((List<Card>) is.readObject());
+            is.close();
+            fis.close();
+        }
+        catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
+    public void saveGame() {
+        String filename = "save_hearts";
+        FileOutputStream outputStream;
+
+        try {
+            outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
+            ObjectOutputStream objectStream = new ObjectOutputStream(outputStream);
+            objectStream.writeObject(this.manager);
+            objectStream.writeInt(currentPlayerInteracting);
+            objectStream.writeInt(currentPotTurn);
+            objectStream.writeBoolean(foundStartPlayer);
+            objectStream.writeBoolean(finishedSwapping);
+            objectStream.writeBoolean(buttonsPresent);
+            objectStream.writeBoolean(initialOutputWritten);
+            objectStream.writeObject(scores);
+            objectStream.writeObject(roundScores);
+            for (int i = 0; i < 4; i++)
+                objectStream.writeObject(chosenLists.get(i));
+            outputStream.close();
+            objectStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     //Opens the guess dialog - inapplicable for hearts however, refactoring can be done to differentiate hearts from other games.
