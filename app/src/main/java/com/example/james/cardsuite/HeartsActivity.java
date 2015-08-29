@@ -21,12 +21,14 @@ import android.widget.TextView;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HeartsActivity extends GameActivity {
+public class HeartsActivity extends GameActivity implements Serializable {
     private boolean finishedSwapping = false;
     private List<List<Card>> chosenLists = new ArrayList<List<Card>>();
     private List<Card> chosenCards = new ArrayList<Card>();
@@ -72,20 +74,21 @@ public class HeartsActivity extends GameActivity {
             FileInputStream fis = this.openFileInput("save_hearts");
             ObjectInputStream is = new ObjectInputStream(fis);
             this.manager = (HeartsManager) is.readObject();
-            for (int i = 0; i < 4; i++) {
-                this.manager.players[i] = (HeartsPlayer)is.readObject();
-                int size = is.readInt();
-                this.manager.players[i].hand = new ArrayList<>();
-                for (int j = 0; j < size; j++) {
-                    this.manager.players[i].hand.add((Card)is.readObject());
-                }
-                this.manager.players[i].isBot = is.readBoolean();
-            }
+            this.currentPlayerInteracting = is.readInt();
+            this.currentPotTurn = is.readInt();
+            this.foundStartPlayer = is.readBoolean();
+            this.finishedSwapping = is.readBoolean();
+            this.buttonsPresent = is.readBoolean();
+            this.initialOutputWritten = is.readBoolean();
+            this.scores = (List<Integer>) is.readObject();
+            this.roundScores = (List<Integer>) is.readObject();
+            for (int i = 0; i < 4; i++)
+                this.chosenLists.add((List<Card>) is.readObject());
             is.close();
             fis.close();
         }
         catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
     }
 
@@ -97,7 +100,16 @@ public class HeartsActivity extends GameActivity {
             outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
             ObjectOutputStream objectStream = new ObjectOutputStream(outputStream);
             objectStream.writeObject(this.manager);
-            ((HeartsManager)manager).saveGame(objectStream);
+            objectStream.writeInt(currentPlayerInteracting);
+            objectStream.writeInt(currentPotTurn);
+            objectStream.writeBoolean(foundStartPlayer);
+            objectStream.writeBoolean(finishedSwapping);
+            objectStream.writeBoolean(buttonsPresent);
+            objectStream.writeBoolean(initialOutputWritten);
+            objectStream.writeObject(scores);
+            objectStream.writeObject(roundScores);
+            for (int i = 0; i < 4; i++)
+                objectStream.writeObject(chosenLists.get(i));
             outputStream.close();
             objectStream.close();
         } catch (Exception e) {
