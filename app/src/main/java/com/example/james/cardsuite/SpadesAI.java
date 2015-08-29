@@ -1,8 +1,9 @@
 package com.example.james.cardsuite;
 
+import java.io.Serializable;
 import java.util.Random;
 
-public class SpadesAI {
+public class SpadesAI implements Serializable{
     // Returns the suggested number of bids for the given player.
     // Calculated by finding the number of cards of the trump suit and subtracting by a random number [0-3].
     // TODO: Find a more comprehensive bidding function...
