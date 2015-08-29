@@ -103,8 +103,8 @@ public class BridgeActivity extends GameActivity {
         // players start putting cards into the pot and calculate score
         if(manager.potsFinished <= manager.totalRoundCount) {
             manager.potHandle(chosen, currentPlayerInteracting);
-            for (int i = 0; i < 4; i++)
-                potClear();
+
+            potClear();
             displayPot();
 
             executeAITurns();
@@ -206,8 +206,7 @@ public class BridgeActivity extends GameActivity {
                             int chosenSound = r.nextInt(3);
                             soundPools[chosenSound].play(sounds[chosenSound],1,1,0,0,1);
 
-                            for (int j = 0; j < 4; j++)
-                                potClear();
+                            potClear();
                             displayPot();
                             displayHands(currentPlayerInteracting, false);
                         }

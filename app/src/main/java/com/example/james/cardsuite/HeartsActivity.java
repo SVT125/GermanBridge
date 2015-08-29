@@ -99,8 +99,7 @@ public class HeartsActivity extends GameActivity {
 
     public void restOfRoundHandle() {
         if (currentPlayerInteracting == manager.startPlayer)
-            for (int i = 0; i < 4; i++)
-                potClear();
+            potClear();
 
         displayPot();
 

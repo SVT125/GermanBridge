@@ -145,6 +145,45 @@
                 android:layout_height="0dp"
                 android:layout_centerInParent="true" />
 
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/leftPotCard"
+                android:layout_marginRight="16dp"
+                android:rotation="90"
+                android:adjustViewBounds="true"
+                android:layout_centerInParent="true"
+                android:layout_toLeftOf="@id/anchor"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/topPotCard"
+                android:layout_marginBottom="8dp"
+                android:rotation="180"
+                android:adjustViewBounds="true"
+                android:layout_centerInParent="true"
+                android:layout_above="@id/anchor"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/rightPotCard"
+                android:layout_marginLeft="16dp"
+                android:rotation="270"
+                android:adjustViewBounds="true"
+                android:layout_centerInParent="true"
+                android:layout_toRightOf="@id/anchor"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/bottomPotCard"
+                android:layout_marginTop="8dp"
+                android:maxHeight="115dp"
+                android:adjustViewBounds="true"
+                android:layout_centerInParent="true"
+                android:layout_below="@id/anchor"/>
         </RelativeLayout>
 
         <LinearLayout

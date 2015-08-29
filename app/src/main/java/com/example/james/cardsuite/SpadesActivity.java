@@ -72,8 +72,7 @@ public class SpadesActivity extends GameActivity {
             int chosen = getCardIndex(v);
 
             manager.potHandle(chosen, currentPlayerInteracting);
-            for (int i = 0; i < 4; i++)
-                potClear();
+            potClear();
             displayPot();
 
             executeAITurns();
@@ -88,8 +87,7 @@ public class SpadesActivity extends GameActivity {
             manager.potAnalyze();
             manager.pot = new HashMap<Integer,Card>();
             currentPlayerInteracting = manager.startPlayer;
-            for (int i = 0; i < 4; i++)
-                potClear();
+            potClear();
             displayPot();
             displayEndPiles(scores);
             executeAITurns();
@@ -178,8 +176,7 @@ public class SpadesActivity extends GameActivity {
                             int chosenSound = r.nextInt(3);
                             soundPools[chosenSound].play(sounds[chosenSound],1,1,0,0,1);
 
-                            for (int j = 0; j < 4; j++)
-                                potClear();
+                            potClear();
                             displayPot();
                             displayHands(currentPlayerInteracting, false);
                         }

@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.media.Image;
 import android.media.SoundPool;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -103,31 +104,17 @@ public abstract class GameActivity extends Activity {
         RelativeLayout potLayout = (RelativeLayout)findViewById(R.id.potLayout);
         for(int i = 0; i < manager.pot.size(); i++) {
             int index = (manager.startPlayer + i) % 4;
-            ImageView potCard = new ImageView(this);
-            potCard.setImageResource(getResources().getIdentifier(manager.pot.get(index).getAddress(), "drawable", getPackageName()));
-            potCard.setMaxHeight(115);
-            potCard.setAdjustViewBounds(true);
-
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
-            params.addRule(RelativeLayout.CENTER_IN_PARENT);
+            ImageView potCard = null;
             switch(index) {
-                case 0: params.setMargins(0, 25, 0, 0);
-                    params.addRule(RelativeLayout.BELOW, R.id.anchor); break;
-                case 1: params.setMargins(0,0,45,0);
-                    params.addRule(RelativeLayout.LEFT_OF, R.id.anchor);
-                    potCard.setRotation(90); break;
-                case 2: params.setMargins(0,0,0,25);
-                    params.addRule(RelativeLayout.ABOVE, R.id.anchor);
-                    potCard.setRotation(180); break;
-                case 3: params.setMargins(45,0,0,0);
-                    params.addRule(RelativeLayout.RIGHT_OF, R.id.anchor);
-                    potCard.setRotation(270); break;
+                case 0: potCard = (ImageView)findViewById(R.id.bottomPotCard); break;
+                case 1: potCard = (ImageView)findViewById(R.id.leftPotCard); break;
+                case 2: potCard = (ImageView)findViewById(R.id.topPotCard); break;
+                case 3: potCard = (ImageView)findViewById(R.id.rightPotCard); break;
             }
 
+            potCard.setImageResource(getResources().getIdentifier(manager.pot.get(index).getAddress(), "drawable", getPackageName()));
+            potCard.setMaxHeight(115);
             potCard.setElevation(i);
-            potCard.setId(100 + index); //Set the convention that all the pot card views take values 100-103 for all 4 cards.
-            potCard.setLayoutParams(params);
-            potLayout.addView(potCard);
         }
     }
 
@@ -195,12 +182,10 @@ public abstract class GameActivity extends Activity {
 
     // Called at the end of a round when all four players have added their cards; clears the pot using given IDs 100-103.
     public void potClear() {
-        for(int i = 0; i < 4; i++) {
-            View view = findViewById(100 + i);
-            if(view != null)
-                ((ViewGroup) view.getParent()).removeView(view);
-        }
-
+        ((ImageView)findViewById(R.id.leftPotCard)).setImageResource(0);
+        ((ImageView)findViewById(R.id.topPotCard)).setImageResource(0);
+        ((ImageView)findViewById(R.id.rightPotCard)).setImageResource(0);
+        ((ImageView)findViewById(R.id.bottomPotCard)).setImageResource(0);
     }
 
     // reshuffles deck, increments round count, resets all variables for the next round.
