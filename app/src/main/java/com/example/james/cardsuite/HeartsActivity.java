@@ -33,20 +33,70 @@ public class HeartsActivity extends GameActivity {
         setContentView(R.layout.activity_hearts);
 
         Intent intent = getIntent();
-        this.isBot = intent.getBooleanArrayExtra("isBot");
+        boolean loadGame = intent.getBooleanExtra("loadGame", false);
+        if (loadGame) {
+            this.loadGame();
+            this.displayPot();
+        }
+        else {
+            this.isBot = intent.getBooleanArrayExtra("isBot");
+            manager = new HeartsManager(isBot);
+            currentPlayerInteracting = 0;
+        }
 
-        manager = new HeartsManager(isBot);
         displayEndPiles(scores);
-
-        if (manager.getPlayers()[0].isBot)
+        if (manager.getPlayers()[currentPlayerInteracting].isBot)
             botHandle(250);
         else
             displayHands(0,true);
     }
 
     @Override
+    public void onPause() {
+        saveGame();
+        super.onPause();
+    }
+
+    @Override
     public void onConfigurationChanged(Configuration config) {
         super.onConfigurationChanged(config);
+    }
+    
+    public void loadGame() {
+        try {
+            FileInputStream fis = this.openFileInput("save_hearts");
+            ObjectInputStream is = new ObjectInputStream(fis);
+            this.manager = (HeartsManager) is.readObject();
+            for (int i = 0; i < 4; i++) {
+                int size = is.readInt();
+                this.manager.players[i].hand = new ArrayList<>();
+                for (int j = 0; j < size; j++) {
+                    this.manager.players[i].hand.add((Card)is.readObject());
+                }
+                this.manager.players[i].isBot = is.readBoolean();
+            }
+            is.close();
+            fis.close();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void saveGame() {
+        String filename = "save_hearts";
+        FileOutputStream outputStream;
+
+        try {
+            outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
+            ObjectOutputStream objectStream = new ObjectOutputStream(outputStream);
+            objectStream.writeObject(this.manager);
+            ((HeartsManager)manager).saveGame(objectStream);
+            outputStream.close();
+            objectStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void findStartPlayer() {
