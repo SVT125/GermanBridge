@@ -1,8 +1,9 @@
 package com.example.james.cardsuite;
 
+import java.io.Serializable;
 import java.util.*;
 
-public abstract class Player {
+public abstract class Player implements Serializable {
 	
 	protected List<Card> hand;
 	protected int score, handsWon;
