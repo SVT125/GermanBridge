@@ -61,8 +61,10 @@ public class HeartsManager extends Manager implements Serializable {
 	}
 	
 	public void saveGame(ObjectOutputStream objectOutput) throws IOException {
-		for (int i = 0; i < 4; i++)
-			((HeartsPlayer)players[i]).saveGame(objectOutput);
+		for (int i = 0; i < 4; i++) {
+			objectOutput.writeObject(players[i]);
+			((HeartsPlayer) players[i]).saveGame(objectOutput);
+		}
 	}
 
 	//Returns the index of player with the lowest score.
