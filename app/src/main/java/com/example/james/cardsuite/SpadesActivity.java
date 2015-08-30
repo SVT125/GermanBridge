@@ -400,6 +400,7 @@ public class SpadesActivity extends GameActivity {
             this.roundScores = (List<Integer>) is.readObject();
             is.close();
             fis.close();
+            deleteFile("save_spades");
         }
         catch (Exception e) {
             System.out.println(e);
