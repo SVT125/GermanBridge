@@ -113,9 +113,21 @@ public class BridgeActivity extends GameActivity implements Serializable {
         //If the pot is full (all players have tossed a card), reset the pot, analyze it, find the new start player/winner of the pot.
         if (manager.pot.size() == 4) {
             manager.potAnalyze();
-            manager.pot = new HashMap<Integer, Card>();
             currentPlayerInteracting = manager.startPlayer;
-            executeAITurns();
+            GameAnimation.collectEndPile(BridgeActivity.this, currentPlayerInteracting);
+
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    manager.pot = new HashMap<Integer, Card>();
+                    potClear();
+                    displayPot();
+                    displayEndPiles(scores);
+
+                    executeAITurns();
+                }
+            }, 250);
             return;
         }
 
@@ -225,7 +237,6 @@ public class BridgeActivity extends GameActivity implements Serializable {
             @Override
             public void run() {
                 updateGameState();
-                displayEndPiles(scores);
                 displayHands(currentPlayerInteracting, true);
             }
         }, currentTimeDelay);

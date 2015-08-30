@@ -225,7 +225,6 @@ public class SpadesActivity extends GameActivity {
             @Override
             public void run() {
                 updateGameState();
-                displayEndPiles(scores);
                 displayHands(currentPlayerInteracting, true);
             }
         }, currentTimeDelay);
