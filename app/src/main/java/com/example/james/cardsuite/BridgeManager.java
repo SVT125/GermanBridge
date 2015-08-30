@@ -40,7 +40,6 @@ public class BridgeManager extends Manager implements Serializable {
 	public void reset() {
 		this.addedGuesses = 0;
 		deck.clear();
-		potsFinished++;
 		pot = new LinkedHashMap<Integer, Card>();
 		for (int i = 2; i < 15; i++) {
 			for (Card.Suit suits : Card.Suit.values()) {
