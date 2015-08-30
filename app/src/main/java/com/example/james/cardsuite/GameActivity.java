@@ -41,6 +41,7 @@ public abstract class GameActivity extends Activity implements Serializable {
     protected int[] sounds;
     protected SoundPool.OnLoadCompleteListener loadListener;
     protected Random r = new Random();
+    protected List<ImageView> cardViews = new ArrayList<ImageView>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -198,6 +199,14 @@ public abstract class GameActivity extends Activity implements Serializable {
 
     //Opens the guess dialog - fit for German Bridge for now.
     public abstract void openGuessDialog(final int currentPlayer);
+
+    public View findViewByCard(Card card) {
+        for(ImageView view : cardViews) {
+            if(view.getTag().equals(card))
+                return view;
+        }
+        return null;
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -27,6 +27,7 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -83,23 +84,24 @@ public class BridgeActivity extends GameActivity implements Serializable {
 
     public void gameClick(View v) {
         //Prevents spam-clicking before the last button click is done.
-        if (SystemClock.elapsedRealtime() - lastClickTime < 1750) {
+        if (SystemClock.elapsedRealtime() - lastClickTime < 1750){
             return;
         }
         lastClickTime = SystemClock.elapsedRealtime();
 
         super.gameClick(v);
         //Play sounds only if we're done swapping in hearts or are in any other game mode.
-        if (finishedLoading) {
+        if(finishedLoading) {
             int chosenSound = r.nextInt(3);
-            soundPools[chosenSound].play(sounds[chosenSound], 1, 1, 0, 0, 1);
+            soundPools[chosenSound].play(sounds[chosenSound],1,1,0,0,1);
         }
         //Get the index of the chosen card in the current player's hand.
         int chosen = getCardIndex(v);
 
         // players start putting cards into the pot and calculate score
-        if (manager.potsFinished <= manager.totalRoundCount) {
+        if(manager.potsFinished <= manager.totalRoundCount) {
             manager.potHandle(chosen, currentPlayerInteracting);
+            GameAnimation.placeCard(this,v,currentPlayerInteracting);
 
             potClear();
             displayPot();
@@ -180,15 +182,15 @@ public class BridgeActivity extends GameActivity implements Serializable {
         long currentTimeDelay = 250;
         int offset = 0;
 
-        for (; offset < 4; offset++) {
+        for(; offset < 4; offset++) {
             final int currentPlayer = (currentPlayerInteracting + offset) % manager.playerCount;
             //If the pot is already full, then we break and reset the manager (which will call this again to proceed through the AI).
-            if (manager.pot.size() == 4)
+            if(manager.pot.size() == 4)
                 break;
 
             //If the pot position for this player is empty, then they haven't gone yet.
             //If the player is a bot, commence AI movement and go to the next player; if they aren't a bot, break and leave at this player.
-            if (manager.pot.get(currentPlayer) == null) {
+            if(manager.pot.get(currentPlayer) == null) {
                 if (isBot[currentPlayer] && manager.players[currentPlayer].hand.size() > 0) {
                     final long timeDelay = currentTimeDelay;
                     Handler handler = new Handler();
@@ -198,10 +200,13 @@ public class BridgeActivity extends GameActivity implements Serializable {
                             //After the delay, proceed the AI move.
                             Card bestMove = BridgeAI.chooseMove(currentPlayer, (BridgeManager) manager, levelsToSearch);
                             int chosenAI = manager.players[currentPlayer].hand.indexOf(bestMove);
+
+                            ImageView cardView = (ImageView)findViewByCard(bestMove);
+                            GameAnimation.placeCard(BridgeActivity.this, cardView, currentPlayer);
                             manager.potHandle(chosenAI, currentPlayer);
 
                             int chosenSound = r.nextInt(3);
-                            soundPools[chosenSound].play(sounds[chosenSound], 1, 1, 0, 0, 1);
+                            soundPools[chosenSound].play(sounds[chosenSound],1,1,0,0,1);
 
                             potClear();
                             displayPot();
@@ -322,41 +327,43 @@ public class BridgeActivity extends GameActivity implements Serializable {
     //We add the cardsClickable flag for when the player waits for the AI to finish turns.
     public void displayHands(int player, boolean cardsClickable) {
         //Remove all old cards first
-        if (buttonsPresent) {
+        cardViews = new ArrayList<ImageView>();
+        if(buttonsPresent) {
             for (int i = 0; i < 52; i++) {
                 View view = findViewById(i);
-                if (view != null)
+                if(view != null)
                     ((ViewGroup) view.getParent()).removeView(view);
             }
         }
 
         int temporaryID = 0; //Temporary ID to be assigned to each card, to be reused.
-        RelativeLayout left = (RelativeLayout) findViewById(R.id.leftPlayerHandLayout),
-                top = (RelativeLayout) findViewById(R.id.topPlayerHandLayout),
-                right = (RelativeLayout) findViewById(R.id.rightPlayerHandLayout),
-                bottom = (RelativeLayout) findViewById(R.id.bottomPlayerHandLayout);
+        RelativeLayout left = (RelativeLayout)findViewById(R.id.leftPlayerHandLayout),
+                top = (RelativeLayout)findViewById(R.id.topPlayerHandLayout),
+                right = (RelativeLayout)findViewById(R.id.rightPlayerHandLayout),
+                bottom = (RelativeLayout)findViewById(R.id.bottomPlayerHandLayout);
 
         //Now create the imagebuttons for each of the players.
         //Note: other possible param values for initialTheta scalar and deltaY scalar are (5,3).
-        for (int i = 0; i < 4; i++) {
+        for(int i = 0; i < 4; i++) {
             manager.players[i].organize();
             //The coordinate and angular offsets for every card. Theta is dependent on the number of cards in the hand.
             int deltaX = 0, deltaY;
-            float initialTheta = (float) -4.6 * manager.getPlayers()[i].hand.size() / 2;
-            for (int j = 0; j < manager.getPlayers()[i].hand.size(); j++) {
-                float theta = (float) (initialTheta + 4.6 * j);
-                deltaY = (int) (2.5 * (30 - Math.pow(j - manager.getPlayers()[i].hand.size() / 2, 2))); //Truncate the result of the offset
+            float initialTheta= (float)-4.6*manager.getPlayers()[i].hand.size()/2;
+            for(int j = 0; j < manager.getPlayers()[i].hand.size(); j++) {
+                float theta = (float)(initialTheta + 4.6*j);
+                deltaY = (int)(2.5*(30 - Math.pow(j - manager.getPlayers()[i].hand.size()/2,2))); //Truncate the result of the offset
 
-                if (manager.getPlayers()[i].hand.size() % 2 != 0 && j == (manager.getPlayers()[i].hand.size() - 1) / 2)
+                if(manager.getPlayers()[i].hand.size() % 2 != 0 && j == (manager.getPlayers()[i].hand.size()-1)/2)
                     theta = 0;
 
-                RelativeLayout.LayoutParams restParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                RelativeLayout.LayoutParams restParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
 
                 //How to treat and initialize the other cards depending on whether the current player or any other.
                 ImageView cardButton;
-                if (i == player) {
+                if(i == player) {
+                    int imageId = getResources().getIdentifier(manager.getPlayers()[player].hand.get(j).getAddress(), "drawable", getPackageName());
                     cardButton = new ImageButton(this);
-                    cardButton.setImageResource(getResources().getIdentifier(manager.getPlayers()[player].hand.get(j).getAddress(), "drawable", getPackageName()));
+                    cardButton.setImageResource(imageId);
                     cardButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -366,44 +373,39 @@ public class BridgeActivity extends GameActivity implements Serializable {
 
                     //Tint and make the card unselectable if it's not meant to be.
                     Card selectCard = manager.getPlayers()[i].hand.get(j);
-                    if (!(manager.cardSelectable(selectCard, finishedSwapping, i))) {
+                    if(!(manager.cardSelectable(selectCard, finishedSwapping, i))) {
                         cardButton.setColorFilter(Color.parseColor("#78505050"), PorterDuff.Mode.SRC_ATOP);
                         cardButton.setClickable(false);
                     }
-                } else {
+                }
+                else {
                     cardButton = new ImageView(this);
                     cardButton.setImageResource(getResources().getIdentifier("cardback", "drawable", getPackageName()));
                 }
 
+                cardButton.setTag(manager.getPlayers()[i].hand.get(j));
                 cardButton.setPadding(3, 3, 3, 3);
                 cardButton.setMaxHeight(115);
                 cardButton.setAdjustViewBounds(true);
-                if (!cardsClickable)
+                if(!cardsClickable)
                     cardButton.setClickable(false);
 
-                switch (i) {
-                    case 0:
-                        restParams.setMargins(deltaX, 95 - deltaY, 0, 0);
+                switch(i) {
+                    case 0: restParams.setMargins(deltaX,95-deltaY,0,0);
                         cardButton.setRotation(theta);
-                        bottom.addView(cardButton, restParams);
-                        break;
-                    case 1:
-                        restParams.setMargins(100 + deltaY, deltaX, 0, 0);
+                        bottom.addView(cardButton, restParams); break;
+                    case 1: restParams.setMargins(100+deltaY,deltaX,0,0);
                         cardButton.setRotation(90 + theta);
-                        left.addView(cardButton, restParams);
-                        break;
-                    case 2:
-                        restParams.setMargins(deltaX, 60 + deltaY, 0, 0);
+                        left.addView(cardButton, restParams); break;
+                    case 2: restParams.setMargins(deltaX,60+deltaY,0,0);
                         cardButton.setRotation(180 - theta);
-                        top.addView(cardButton, restParams);
-                        break;
-                    case 3:
-                        restParams.setMargins(115 - deltaY, deltaX, 0, 0);
+                        top.addView(cardButton, restParams); break;
+                    case 3: restParams.setMargins(115-deltaY,deltaX,0,0);
                         cardButton.setRotation(90 - theta);
-                        right.addView(cardButton, restParams);
-                        break;
+                        right.addView(cardButton, restParams); break;
                 }
                 cardButton.setId(temporaryID++);
+                cardViews.add(cardButton);
 
                 //Set the deltaX/theta parameters for the next card/loop iteration.
                 //Consequence of more space horizontally than vertically; set smaller distance between cards vertically.
