@@ -1,6 +1,7 @@
 package com.example.james.cardsuite;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -21,6 +22,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,25 +39,38 @@ public class SpadesActivity extends GameActivity {
         setContentView(R.layout.activity_spades);
 
         Intent intent = getIntent();
-        this.isBot = intent.getBooleanArrayExtra("isBot");
+        boolean loadGame = intent.getBooleanExtra("loadGame", false);
 
-        //currentPlayerInteracting default-init'd to 0, we increment until we find a non-bot player.
-        while(isBot[currentPlayerInteracting]) {
-            currentPlayerInteracting++;
+        if (loadGame) {
+            this.loadGame();
+            displayPot();
         }
+        else {
+            this.isBot = intent.getBooleanArrayExtra("isBot");
+            //currentPlayerInteracting default-init'd to 0, we increment until we find a non-bot player.
+            while (isBot[currentPlayerInteracting]) {
+                currentPlayerInteracting++;
+            }
 
-        manager = new SpadesManager(currentPlayerInteracting);
-        manager.totalRoundCount = 12; // Change later for variable number of players
+            manager = new SpadesManager(currentPlayerInteracting);
+            manager.totalRoundCount = 12; // Change later for variable number of players
 
-        for(int i = 3; i >= 0; i--) {
-            if(isBot[i])
-                ((SpadesPlayer)(manager.players[i])).bid = SpadesAI.getBid(i,(SpadesManager)manager);
-            else
-                openGuessDialog(i);
+            for (int i = 3; i >= 0; i--) {
+                if (isBot[i])
+                    ((SpadesPlayer) (manager.players[i])).bid = SpadesAI.getBid(i, (SpadesManager) manager);
+                else
+                    openGuessDialog(i);
+            }
         }
         //Display the image buttons
         displayEndPiles(scores);
         displayHands(currentPlayerInteracting, true);
+    }
+
+    @Override
+    public void onPause() {
+        saveGame();
+        super.onPause();
     }
 
     public void gameClick(View v) {
@@ -363,6 +381,54 @@ public class SpadesActivity extends GameActivity {
             }
         }
         buttonsPresent = true;
+    }
+
+    public void loadGame() {
+
+        try {
+            FileInputStream fis = this.openFileInput("save_spades");
+            ObjectInputStream is = new ObjectInputStream(fis);
+            this.manager = (SpadesManager) is.readObject();
+            this.currentPlayerInteracting = is.readInt();
+            this.currentPotTurn = is.readInt();
+            this.foundStartPlayer = is.readBoolean();
+            this.finishedSwapping = is.readBoolean();
+            this.buttonsPresent = is.readBoolean();
+            this.initialOutputWritten = is.readBoolean();
+            this.isBot = (boolean[]) is.readObject();
+            this.scores = (List<Integer>) is.readObject();
+            this.roundScores = (List<Integer>) is.readObject();
+            is.close();
+            fis.close();
+        }
+        catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
+    public void saveGame() {
+        String filename = "save_spades";
+        FileOutputStream outputStream;
+
+        try {
+            outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
+            ObjectOutputStream objectStream = new ObjectOutputStream(outputStream);
+            objectStream.writeObject(this.manager);
+            objectStream.writeInt(currentPlayerInteracting);
+            objectStream.writeInt(currentPotTurn);
+            objectStream.writeBoolean(foundStartPlayer);
+            objectStream.writeBoolean(finishedSwapping);
+            objectStream.writeBoolean(buttonsPresent);
+            objectStream.writeBoolean(initialOutputWritten);
+            objectStream.writeObject(isBot);
+            objectStream.writeObject(scores);
+            objectStream.writeObject(roundScores);
+
+            outputStream.close();
+            objectStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
