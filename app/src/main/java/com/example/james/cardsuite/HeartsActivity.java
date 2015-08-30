@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
@@ -463,6 +464,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
                 this.chosenLists.add((List<Card>) is.readObject());
             is.close();
             fis.close();
+            deleteFile("save_hearts");
         }
         catch (Exception e) {
             System.out.println(e);
