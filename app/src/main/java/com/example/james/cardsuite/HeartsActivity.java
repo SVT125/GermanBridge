@@ -98,7 +98,11 @@ public class HeartsActivity extends GameActivity implements Serializable {
             } else {
                 // handle cards being tossed in the pot until all cards are gone (13 turns).
                 manager.potHandle(chosen, currentPlayerInteracting);
-                displayHands(currentPlayerInteracting,false);
+                GameAnimation.placeCard(HeartsActivity.this, v, currentPlayerInteracting);
+                displayHands(currentPlayerInteracting, false);
+
+                potClear();
+                displayPot();
             }
 
             if (finishedSwapping && (manager.pot.size() > 0))
@@ -166,7 +170,11 @@ public class HeartsActivity extends GameActivity implements Serializable {
                     public void run() {
                         Card botMove = ((HeartsAI) manager.getPlayers()[currentPlayerInteracting]).makeMove(currentPlayerInteracting, manager.startPlayer, (HeartsManager) manager);
                         ((HeartsManager) manager).potHandle(botMove, currentPlayerInteracting);
-                        //displayHands(currentPlayerInteracting,false); //Display the last non-AI player's hand, updates the AI's hand after move.
+
+                        ImageView cardView = (ImageView)findViewByCard(botMove);
+                        GameAnimation.placeCard(HeartsActivity.this, cardView, currentPlayerInteracting);
+                        potClear();
+                        displayPot();
 
                         int chosenSound = r.nextInt(3);
                         soundPools[chosenSound].play(sounds[chosenSound], 1, 1, 0, 0, 1);
@@ -202,7 +210,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
 
     public void gameClick(View v) {
         //Prevents spam-clicking before the last button click is done.
-        if (SystemClock.elapsedRealtime() - lastClickTime < 1750){
+        if ((!finishedSwapping && SystemClock.elapsedRealtime() - lastClickTime < 500) || SystemClock.elapsedRealtime() - lastClickTime < 1750){
             return;
         }
         lastClickTime = SystemClock.elapsedRealtime();
@@ -355,6 +363,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
     //Call when the hands have been updated and need be redisplayed.
     public void displayHands(int player, boolean cardsClickable) {
         //Remove all old cards first
+        cardViews = new ArrayList<ImageView>();
         if (buttonsPresent) {
             for (int i = 0; i < 52; i++) {
                 View view = findViewById(i);
@@ -408,6 +417,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
                     cardButton.setImageResource(getResources().getIdentifier("cardback", "drawable", getPackageName()));
                 }
 
+                cardButton.setTag(manager.getPlayers()[i].hand.get(j));
                 cardButton.setPadding(3, 3, 3, 3);
                 if(!cardsClickable)
                     cardButton.setClickable(false);
@@ -437,6 +447,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
                         break;
                 }
                 cardButton.setId(temporaryID++);
+                cardViews.add(cardButton);
 
                 //Set the deltaX/theta parameters for the next card/loop iteration.
                 //Consequence of more space horizontally than vertically; set smaller distance between cards vertically.
