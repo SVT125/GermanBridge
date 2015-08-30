@@ -1,14 +1,12 @@
 package com.example.james.cardsuite;
 
-import android.os.Parcelable;
-
-import android.os.Parcel;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-public class BridgeManager extends Manager implements Parcelable {
+public class BridgeManager extends Manager implements Serializable {
 
 	public int addedGuesses = 0;
 	public Card.Suit trumpSuit;
@@ -126,66 +124,5 @@ public class BridgeManager extends Manager implements Parcelable {
 		if (totalRoundCount == (52/playerCount)) return true;
 		return false;
 	}
-
-
-	// METHODS THAT MAKE BRIDGEMANAGER PARCELABLE
-	public void writeToParcel(Parcel out, int flags) {
-		out.writeInt(pot.size());
-		for (Entry<Integer, Card> entry : this.pot.entrySet()) {
-			out.writeInt(entry.getKey());
-			out.writeInt(entry.getValue().getCardNumber());
-			out.writeSerializable(entry.getValue().getSuit());
-		}
-		out.writeSerializable(this.startSuit);
-		out.writeInt(startPlayer);
-		out.writeInt(totalRoundCount);
-		out.writeInt(potsFinished);
-		out.writeInt(addedGuesses);
-		out.writeInt(usedCards.size());
-		for (Card card : usedCards) {
-			out.writeInt(card.getCardNumber());
-			out.writeSerializable(card.getSuit());
-		}
-		out.writeSerializable(trumpSuit);
-		out.writeInt(trumpCard.getCardNumber());
-		for (Player player : players) {
-			out.writeParcelable((BridgePlayer)player, flags);
-		}
-	}
-
-	public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
-		public BridgeManager createFromParcel(Parcel in) { return new BridgeManager(in); }
-		public BridgeManager[] newArray(int size) { return new BridgeManager[size]; }
-	};
-
-	private BridgeManager(Parcel in) {
-		int size = in.readInt();
-		this.pot = new LinkedHashMap<Integer, Card>();
-		for (int i = 0; i < size; i++) {
-			int player = in.readInt();
-			int cardNum = in.readInt();
-			Card.Suit cardSuit = (Card.Suit) in.readSerializable();
-			this.pot.put(player, new Card(cardNum, cardSuit));
-		}
-		startSuit = (Card.Suit) in.readSerializable();
-		startPlayer = in.readInt();
-		totalRoundCount = in.readInt();
-		potsFinished = in.readInt();
-		addedGuesses = in.readInt();
-		int size2 = in.readInt();
-		for (int i = 0; i < size2; i++) {
-			int cardNum = in.readInt();
-			Card.Suit cardSuit = (Card.Suit) in.readSerializable();
-			usedCards.add(new Card(cardNum, cardSuit));
-		}
-		trumpSuit = (Card.Suit) in.readSerializable();
-		trumpCard = new Card(in.readInt(), trumpSuit);
-		players = new BridgePlayer[playerCount];
-		for (int i = 0; i < 4; i++) {
-			players[i] = in.readParcelable(getClass().getClassLoader());
-		}
-	}
-
-	public int describeContents() { return 0; }
 
 }
