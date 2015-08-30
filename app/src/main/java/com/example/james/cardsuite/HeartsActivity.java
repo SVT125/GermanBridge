@@ -130,10 +130,6 @@ public class HeartsActivity extends GameActivity implements Serializable {
 
         if (manager.pot.size() == 4)
             endPot();
-
-        if (currentPotTurn == 13) {
-            finishedRound();
-        }
     }
 
     public void botHandle(final long delay) {
@@ -230,9 +226,20 @@ public class HeartsActivity extends GameActivity implements Serializable {
         for (int i = 0; i < manager.getPlayers().length; i++)
             roundScores.add(((HeartsPlayer) manager.getPlayers()[i]).tallyRoundScore());
 
-        displayEndPiles(roundScores);
-        manager.usedCards.addAll(manager.pot.values());
-        manager.pot.clear();
+        GameAnimation.collectEndPile(HeartsActivity.this, currentPlayerInteracting);
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                displayEndPiles(roundScores);
+                manager.usedCards.addAll(manager.pot.values());
+                manager.pot.clear();
+
+                if (currentPotTurn == 13)
+                    finishedRound();
+            }
+        },250);
     }
 
     public void finishedRound() {
