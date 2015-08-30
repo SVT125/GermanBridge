@@ -1,12 +1,12 @@
 package com.example.james.cardsuite;
 
-import android.app.Activity;
-import android.util.Log;
+import android.os.Handler;
 import android.view.View;
 import android.view.animation.TranslateAnimation;
+import android.widget.ImageView;
 
 public class GameAnimation {
-    public static void placeCard(Activity activity, View v, int player) {
+    public static void placeCard(GameActivity activity, View v, int player) {
         int[] potCoordinates = new int[2], cardCoordinates = new int[2];
         v.getLocationOnScreen(cardCoordinates);
         TranslateAnimation ta;
@@ -21,7 +21,7 @@ public class GameAnimation {
         v.startAnimation(ta);
     }
 
-    public static void collectEndPile(Activity activity, int winningPlayer) {
+    public static void collectEndPile(GameActivity activity, int winningPlayer) {
         int[] pileCoordinates = new int[2];
 
         switch(winningPlayer) {
@@ -73,6 +73,52 @@ public class GameAnimation {
             TranslateAnimation ta = new TranslateAnimation(0,finalCoordinates[0]-initialCoordinates[0],0,finalCoordinates[1]-initialCoordinates[1]);
             ta.setDuration(250);
             view.startAnimation(ta);
+        }
+    }
+
+    public static void dealCards(final GameActivity activity, Manager manager) {
+        int[] initialCoordinates = new int[2];
+        activity.findViewById(R.id.anchor).getLocationOnScreen(initialCoordinates);
+
+        ImageView imageView = new ImageView(activity.getApplicationContext());
+        imageView.setImageResource(activity.getResources().getIdentifier("cardback", "drawable", activity.getPackageName()));
+
+        for(int i = 0; i < 4; i++) {
+            int[] finalCoordinates = new int[2];
+            switch (i) {
+                case 0: activity.findViewById(R.id.bottomPlayerHandLayout).getLocationOnScreen(finalCoordinates); break;
+                case 1: activity.findViewById(R.id.leftPlayerHandLayout).getLocationOnScreen(finalCoordinates); break;
+                case 2: activity.findViewById(R.id.topPlayerHandLayout).getLocationOnScreen(finalCoordinates); break;
+                case 3: activity.findViewById(R.id.rightPlayerHandLayout).getLocationOnScreen(finalCoordinates); break;
+            }
+
+            int deltaX = 0, deltaY;
+            for(int j = 0; j < manager.players[i].hand.size(); j++) {
+                deltaY = (int) (2.5 * (30 - Math.pow(j - manager.getPlayers()[i].hand.size() / 2, 2))); //Truncate the result of the offset
+                switch(i) {
+                    case 0: finalCoordinates[0] += deltaX;
+                        finalCoordinates[1] += 95 - deltaY; break;
+                    case 1: finalCoordinates[0] += 100 + deltaY;
+                        finalCoordinates[1] += deltaX; break;
+                    case 2: finalCoordinates[0] += deltaX;
+                        finalCoordinates[1] += 60 + deltaY; break;
+                    case 3: finalCoordinates[0] += 115 - deltaY;
+                        finalCoordinates[1] += deltaX; break;
+                }
+
+                TranslateAnimation ta = new TranslateAnimation(0,finalCoordinates[0]-initialCoordinates[0],0,finalCoordinates[1]-initialCoordinates[1]);
+                ta.setDuration(100);
+                imageView.startAnimation(ta);
+
+                final int cardsDisplayed = j;
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        activity.displayIntermediateHands(cardsDisplayed);
+                    }
+                },100);
+            }
         }
     }
 }

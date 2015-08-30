@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.media.SoundPool;
 import android.os.Bundle;
@@ -11,7 +13,9 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -202,6 +206,81 @@ public abstract class GameActivity extends Activity implements Serializable {
 
     //Opens the guess dialog - fit for German Bridge for now.
     public abstract void openGuessDialog(final int currentPlayer);
+
+    public void displayIntermediateHands(int numCardsToDisplay) {
+        //Remove all old cards first
+        cardViews = new ArrayList<ImageView>();
+        if (buttonsPresent) {
+            for (int i = 0; i < 52; i++) {
+                View view = findViewById(i);
+                if (view != null)
+                    ((ViewGroup) view.getParent()).removeView(view);
+            }
+        }
+
+        int temporaryID = 0; //Temporary ID to be assigned to each card, to be reused.
+        RelativeLayout left = (RelativeLayout) findViewById(R.id.leftPlayerHandLayout),
+                top = (RelativeLayout) findViewById(R.id.topPlayerHandLayout),
+                right = (RelativeLayout) findViewById(R.id.rightPlayerHandLayout),
+                bottom = (RelativeLayout) findViewById(R.id.bottomPlayerHandLayout);
+
+        //Now create the imagebuttons for each of the players.
+        //Note: other possible param values for initialTheta scalar and deltaY scalar are (5,3).
+        for (int i = 0; i < 4; i++) {
+            manager.players[i].organize();
+            //The coordinate and angular offsets for every card. Theta is dependent on the number of cards in the hand.
+            int deltaX = 0, deltaY;
+            float initialTheta = (float) -4.6 * numCardsToDisplay / 2;
+            for (int j = 0; j < numCardsToDisplay; j++) {
+                float theta = (float) (initialTheta + 4.6 * j);
+                deltaY = (int) (2.5 * (30 - Math.pow(j - numCardsToDisplay / 2, 2))); //Truncate the result of the offset
+
+                if(numCardsToDisplay % 2 != 0 && j == (numCardsToDisplay-1)/2)
+                    theta = 0;
+
+                RelativeLayout.LayoutParams restParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+
+                //How to treat and initialize the other cards depending on whether the current player or any other.
+                ImageView cardButton = new ImageView(this);
+                cardButton.setImageResource(getResources().getIdentifier("cardback", "drawable", getPackageName()));
+
+                cardButton.setTag(manager.getPlayers()[i].hand.get(j));
+                cardButton.setPadding(3, 3, 3, 3);
+                cardButton.setMaxHeight(115);
+                cardButton.setAdjustViewBounds(true);
+
+                switch (i) {
+                    case 0:
+                        restParams.setMargins(deltaX, 95 - deltaY, 0, 0);
+                        cardButton.setRotation(theta);
+                        bottom.addView(cardButton, restParams);
+                        break;
+                    case 1:
+                        restParams.setMargins(100 + deltaY, deltaX, 0, 0);
+                        cardButton.setRotation(90 + theta);
+                        left.addView(cardButton, restParams);
+                        break;
+                    case 2:
+                        restParams.setMargins(deltaX, 60 + deltaY, 0, 0);
+                        cardButton.setRotation(180 - theta);
+                        top.addView(cardButton, restParams);
+                        break;
+                    case 3:
+                        restParams.setMargins(115 - deltaY, deltaX, 0, 0);
+                        cardButton.setRotation(90 - theta);
+                        right.addView(cardButton, restParams);
+                        break;
+                }
+                cardButton.setId(temporaryID++);
+                cardViews.add(cardButton);
+
+                //Set the deltaX/theta parameters for the next card/loop iteration.
+                //Consequence of more space horizontally than vertically; set smaller distance between cards vertically.
+                deltaX = (i % 2 == 0) ? deltaX + 60 : deltaX + 55;
+            }
+        }
+        buttonsPresent = true;
+    }
 
     public View findViewByCard(Card card) {
         for(ImageView view : cardViews) {
