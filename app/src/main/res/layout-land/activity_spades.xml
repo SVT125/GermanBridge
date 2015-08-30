@@ -8,7 +8,9 @@
     android:weightSum="1"
     android:orientation="horizontal"
     android:background="@drawable/test_background"
-    android:baselineAligned="false">
+    android:baselineAligned="false"
+    android:clipChildren="false"
+    android:clipToPadding="false">
 
     <LinearLayout
         android:orientation="horizontal"
@@ -16,7 +18,9 @@
         android:layout_height="fill_parent"
         android:id="@+id/leftPlayerLayout"
         android:layout_weight="0.41"
-        android:baselineAligned="false">
+        android:baselineAligned="false"
+        android:clipChildren="false"
+        android:clipToPadding="false">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -25,21 +29,28 @@
             android:id="@+id/leftPlayerCardsLayout"
             android:layout_weight=".155"
             android:layout_gravity="center_vertical"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:clipChildren="false"
+            android:clipToPadding="false">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight=".125"
                 android:id="@+id/leftPlayerHandLayout"
-                android:gravity="center_vertical|center_horizontal"></RelativeLayout>
+                android:gravity="center_vertical|center_horizontal"
+                android:clipChildren="false"
+                android:clipToPadding="false">
+            </RelativeLayout>
 
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight=".875"
                 android:id="@+id/leftPlayerPileLayout"
-                android:gravity="center_vertical|center_horizontal">
+                android:gravity="center_vertical|center_horizontal"
+                android:clipChildren="false"
+                android:clipToPadding="false">
 
                 <com.example.james.cardsuite.VerticalTextView
                     android:layout_width="wrap_content"
@@ -75,14 +86,18 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:id="@+id/centerLayout"
-        android:layout_weight="0.18">
+        android:layout_weight="0.18"
+        android:clipChildren="false"
+        android:clipToPadding="false">
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/topPlayerLayout"
-            android:layout_weight="0.375">
+            android:layout_weight="0.375"
+            android:clipChildren="false"
+            android:clipToPadding="false">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -90,13 +105,17 @@
                 android:layout_gravity="center_horizontal"
                 android:id="@+id/topPlayerCardsLayout"
                 android:layout_weight=".15"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:clipChildren="false"
+                android:clipToPadding="false">
 
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight=".875"
-                    android:id="@+id/topPlayerPileLayout">
+                    android:id="@+id/topPlayerPileLayout"
+                    android:clipChildren="false"
+                    android:clipToPadding="false">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -125,7 +144,10 @@
                     android:layout_height="match_parent"
                     android:layout_weight=".125"
                     android:id="@+id/topPlayerHandLayout"
-                    android:gravity="center_vertical|center_horizontal"></RelativeLayout>
+                    android:gravity="center_vertical|center_horizontal"
+                    android:clipChildren="false"
+                    android:clipToPadding="false">
+                </RelativeLayout>
             </LinearLayout>
 
         </LinearLayout>
@@ -135,7 +157,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/potLayout"
-            android:layout_weight="0.25">
+            android:layout_weight="0.25"
+            android:clipChildren="false"
+            android:clipToPadding="false">
 
             <ImageView
                 android:id="@+id/anchor"
@@ -190,22 +214,27 @@
             android:layout_height="match_parent"
             android:id="@+id/bottomPlayerLayout"
             android:layout_gravity="bottom|center_horizontal"
-            android:layout_weight="0.375">
+            android:layout_weight="0.375"
+            android:clipChildren="false"
+            android:clipToPadding="false">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/bottomPlayerCardsLayout"
                 android:layout_weight=".15"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:clipChildren="false"
+                android:clipToPadding="false">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight=".125"
                     android:id="@+id/bottomPlayerHandLayout"
-                    android:gravity="center_horizontal">
-
+                    android:gravity="center_horizontal"
+                    android:clipChildren="false"
+                    android:clipToPadding="false">
                 </RelativeLayout>
 
                 <FrameLayout
@@ -215,7 +244,9 @@
                     android:layout_alignParentStart="true"
                     android:layout_weight=".875"
                     android:id="@+id/bottomPlayerPileLayout"
-                    android:gravity="center_vertical|center_horizontal">
+                    android:gravity="center_vertical|center_horizontal"
+                    android:clipChildren="false"
+                    android:clipToPadding="false">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -250,7 +281,9 @@
         android:id="@+id/rightPlayerLayout"
         android:layout_gravity="center_vertical"
         android:layout_weight="0.41"
-        android:baselineAligned="false">
+        android:baselineAligned="false"
+        android:clipChildren="false"
+        android:clipToPadding="false">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -258,14 +291,18 @@
             android:layout_centerVertical="true"
             android:id="@+id/rightPlayerCardsLayout"
             android:layout_weight="0.15"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:clipChildren="false"
+            android:clipToPadding="false">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/optionsLayout"
                 android:layout_weight="4.25"
-                android:gravity="center_vertical|right">
+                android:gravity="center_vertical|right"
+                android:clipChildren="false"
+                android:clipToPadding="false">
 
                 <Button
                     style="?android:attr/buttonStyleSmall"
@@ -285,7 +322,9 @@
                 android:layout_height="match_parent"
                 android:layout_weight="4.2"
                 android:id="@+id/rightPlayerPileLayout"
-                android:gravity="center_vertical|center_horizontal">
+                android:gravity="center_vertical|center_horizontal"
+                android:clipChildren="false"
+                android:clipToPadding="false">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -317,7 +356,9 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:id="@+id/rightPlayerHandLayout"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                android:clipChildren="false"
+                android:clipToPadding="false">
 
             </RelativeLayout>
         </LinearLayout>

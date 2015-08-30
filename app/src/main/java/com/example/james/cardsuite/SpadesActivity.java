@@ -90,6 +90,8 @@ public class SpadesActivity extends GameActivity {
             int chosen = getCardIndex(v);
 
             manager.potHandle(chosen, currentPlayerInteracting);
+            GameAnimation.placeCard(SpadesActivity.this,v,currentPlayerInteracting);
+
             potClear();
             displayPot();
 
@@ -190,6 +192,9 @@ public class SpadesActivity extends GameActivity {
                             Card bestMove = SpadesAI.chooseMove(currentPlayer, (SpadesManager) manager, levelsToSearch);
                             int chosenAI = manager.players[currentPlayer].hand.indexOf(bestMove);
                             manager.potHandle(chosenAI, currentPlayer);
+
+                            ImageView cardView = (ImageView)findViewByCard(bestMove);
+                            GameAnimation.placeCard(SpadesActivity.this, cardView, currentPlayerInteracting);
 
                             int chosenSound = r.nextInt(3);
                             soundPools[chosenSound].play(sounds[chosenSound],1,1,0,0,1);
@@ -299,6 +304,7 @@ public class SpadesActivity extends GameActivity {
     //Call when the hands have been updated and need be redisplayed.
     public void displayHands(int player, boolean cardsClickable) {
         //Remove all old cards first
+        cardViews = new ArrayList<ImageView>();
         if(buttonsPresent) {
             for (int i = 0; i < 52; i++) {
                 View view = findViewById(i);
@@ -353,6 +359,7 @@ public class SpadesActivity extends GameActivity {
                     cardButton.setImageResource(getResources().getIdentifier("cardback", "drawable", getPackageName()));
                 }
 
+                cardButton.setTag(manager.getPlayers()[i].hand.get(j));
                 cardButton.setPadding(3, 3, 3, 3);
                 if(!cardsClickable)
                     cardButton.setClickable(false);
@@ -374,6 +381,7 @@ public class SpadesActivity extends GameActivity {
                         right.addView(cardButton, restParams); break;
                 }
                 cardButton.setId(temporaryID++);
+                cardViews.add(cardButton);
 
                 //Set the deltaX/theta parameters for the next card/loop iteration.
                 //Consequence of more space horizontally than vertically; set smaller distance between cards vertically.

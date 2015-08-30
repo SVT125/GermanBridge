@@ -47,7 +47,6 @@ public class BridgeActivity extends GameActivity implements Serializable {
             displayPot();
         }
         else {
-
             this.isBot = intent.getBooleanArrayExtra("isBot");
             //currentPlayerInteracting default-init'd to 0, we increment until we find a non-bot player.
             while (isBot[currentPlayerInteracting]) {
@@ -101,7 +100,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
         // players start putting cards into the pot and calculate score
         if(manager.potsFinished <= manager.totalRoundCount) {
             manager.potHandle(chosen, currentPlayerInteracting);
-            GameAnimation.placeCard(this,v,currentPlayerInteracting);
+            GameAnimation.placeCard(this, v, currentPlayerInteracting);
 
             potClear();
             displayPot();
@@ -361,9 +360,8 @@ public class BridgeActivity extends GameActivity implements Serializable {
                 //How to treat and initialize the other cards depending on whether the current player or any other.
                 ImageView cardButton;
                 if(i == player) {
-                    int imageId = getResources().getIdentifier(manager.getPlayers()[player].hand.get(j).getAddress(), "drawable", getPackageName());
                     cardButton = new ImageButton(this);
-                    cardButton.setImageResource(imageId);
+                    cardButton.setImageResource(getResources().getIdentifier(manager.getPlayers()[player].hand.get(j).getAddress(), "drawable", getPackageName()));
                     cardButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
