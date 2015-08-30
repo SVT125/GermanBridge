@@ -7,19 +7,25 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import java.io.FileInputStream;
@@ -139,30 +145,10 @@ public class BridgeActivity extends GameActivity implements Serializable {
                 player.scoreChange();
                 scores.add(player.score);
             }
-
-            // resets deck, hands, etc. and increments round
-            reset();
-
-            //Redisplay the trump
-            ImageView trumpView = (ImageView) findViewById(R.id.trumpView);
-            Card trumpCard = ((BridgeManager) manager).trumpCard;
-            trumpView.setImageResource(getResources().getIdentifier(trumpCard.getAddress(), "drawable", getPackageName()));
-            trumpView.setMaxHeight(115);
-            trumpView.setAdjustViewBounds(true);
-
+            manager.potsFinished++;
             displayEndPiles(scores);
             displayScoreTable();
 
-            for (int i = 3; i >= 0; i--) {
-                if (isBot[i])
-                    ((BridgePlayer) (manager.players[i])).guess = BridgeAI.getBid(i, (BridgeManager) manager);
-                else
-                    openGuessDialog(i);
-            }
-
-            //Cycle through any AI players for the first non-AI player.
-            //TODO - execute AI turns only if the bidding is done! When openGuessDialog properly shows players' cards, this needs to be updated.
-            executeAITurns();
             return;
         }
 
@@ -435,6 +421,87 @@ public class BridgeActivity extends GameActivity implements Serializable {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_bridge, menu);
         return true;
+    }
+
+    public void displayScoreTable() {
+        String[] column = { "Player 1", "Player 2", "Player 3", "Player 4" };
+        List<String> row = new ArrayList<>();
+        for (int i = 1; i <= manager.getPotsFinished() - 1; i++)
+            row.add("Round " + (i));
+
+        TableLayout tableLayout = new TableLayout(this);
+        tableLayout.setLayoutParams(new LinearLayout.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.MATCH_PARENT));
+        LinearLayout.LayoutParams rowParams = new LinearLayout.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT,
+                AbsListView.LayoutParams.MATCH_PARENT);
+        rowParams.gravity = Gravity.CENTER_VERTICAL;
+        rowParams.setMargins(10, 5, 10, 5);
+
+
+        for (int i = 0; i <= row.size(); i++) {
+            TableRow tableRow = new TableRow(this);
+            tableRow.setLayoutParams(rowParams);
+
+            for (int j = 0; j <= column.length; j++) {
+
+                TextView textView = new TextView(this);
+                if (i == 0 && j == 0)
+                    textView.setText("");
+                else if (i == 0) {
+                    textView.setText(column[j - 1]);
+                    textView.setTypeface(null, Typeface.BOLD);
+                }
+                else if (j == 0) {
+                    textView.setText(row.get(i - 1));
+                    textView.setTypeface(null, Typeface.BOLD);
+                }
+                else if (i !=0 && j != 0)
+                    textView.setText(Integer.toString(manager.getPlayers()[j - 1].scoreHistory.get(i - 1)));
+
+                textView.setGravity(Gravity.CENTER);
+                textView.setPadding(30, 5, 5, 5);
+                textView.setTextSize(15);
+                tableRow.addView(textView);
+            }
+            tableLayout.addView(tableRow);
+        }
+
+        ScrollView sv = new ScrollView(this);
+        LinearLayout.LayoutParams scrollParams = new LinearLayout.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT,
+                AbsListView.LayoutParams.MATCH_PARENT);
+        sv.setPadding(10, 20, 10, 20);
+        sv.setLayoutParams(scrollParams);
+        sv.setSmoothScrollingEnabled(true);
+        sv.addView(tableLayout);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(sv);
+        builder.setTitle("Scoreboard");
+        builder.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // resets deck, hands, etc. and increments round
+                reset();
+
+                //Redisplay the trump
+                ImageView trumpView = (ImageView) findViewById(R.id.trumpView);
+                Card trumpCard = ((BridgeManager) manager).trumpCard;
+                trumpView.setImageResource(getResources().getIdentifier(trumpCard.getAddress(), "drawable", getPackageName()));
+                trumpView.setMaxHeight(115);
+                trumpView.setAdjustViewBounds(true);
+
+                for (int i = 3; i >= 0; i--) {
+                    if (isBot[i])
+                        ((BridgePlayer) (manager.players[i])).guess = BridgeAI.getBid(i, (BridgeManager) manager);
+                    else
+                        openGuessDialog(i);
+                }
+
+                //Cycle through any AI players for the first non-AI player.
+                //TODO - execute AI turns only if the bidding is done! When openGuessDialog properly shows players' cards, this needs to be updated.
+                executeAITurns();
+            }
+        });
+        builder.show();
     }
 
     public void loadGame() {
