@@ -113,8 +113,19 @@ public abstract class GameActivity extends Activity implements Serializable {
             }
 
             potCard.setImageResource(getResources().getIdentifier(manager.pot.get(index).getAddress(), "drawable", getPackageName()));
+            potCard.setTag(getResources().getIdentifier(manager.pot.get(index).getAddress(), "drawable", getPackageName()));
             potCard.setMaxHeight(115);
             potCard.setElevation(i);
+        }
+    }
+
+    // Called at the end of a round when all four players have added their cards; clears the pot using given IDs 100-103.
+    public void potClear() {
+        RelativeLayout potLayout = (RelativeLayout)findViewById(R.id.potLayout);
+        for(int i = 0; i < potLayout.getChildCount(); i++) {
+            ImageView potView = (ImageView)potLayout.getChildAt(i);
+            potView.setImageResource(0);
+            potView.setTag(0);
         }
     }
 
@@ -178,14 +189,6 @@ public abstract class GameActivity extends Activity implements Serializable {
             }
         });
         builder.show();
-    }
-
-    // Called at the end of a round when all four players have added their cards; clears the pot using given IDs 100-103.
-    public void potClear() {
-        ((ImageView)findViewById(R.id.leftPotCard)).setImageResource(0);
-        ((ImageView)findViewById(R.id.topPotCard)).setImageResource(0);
-        ((ImageView)findViewById(R.id.rightPotCard)).setImageResource(0);
-        ((ImageView)findViewById(R.id.bottomPotCard)).setImageResource(0);
     }
 
     // reshuffles deck, increments round count, resets all variables for the next round.
