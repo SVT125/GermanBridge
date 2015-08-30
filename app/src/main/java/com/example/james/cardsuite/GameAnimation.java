@@ -24,7 +24,7 @@ public class GameAnimation {
     }
 
     public static void collectEndPile(Activity activity, int winningPlayer) {
-        int[] potCoordinates = new int[2], pileCoordinates = new int[2];
+        int[] pileCoordinates = new int[2];
 
         switch(winningPlayer) {
             case 0: activity.findViewById(R.id.bottomPile).getLocationOnScreen(pileCoordinates); break;
@@ -33,16 +33,23 @@ public class GameAnimation {
             case 3: activity.findViewById(R.id.rightPile).getLocationOnScreen(pileCoordinates); break;
         }
 
-        RelativeLayout potLayout = (RelativeLayout)activity.findViewById(R.id.potLayout);
+        for(int i = 0; i < 4; i++) {
+            int[] potCoordinates = new int[2];
+            View v = null;
+            switch(i) {
+                case 0: v = activity.findViewById(R.id.bottomPotCard); break;
+                case 1: v = activity.findViewById(R.id.leftPotCard); break;
+                case 2: v = activity.findViewById(R.id.topPotCard); break;
+                case 3: v = activity.findViewById(R.id.rightPotCard); break;
+            }
 
-        for(int i = 0; i < potLayout.getChildCount(); i++) {
-            View v = potLayout.getChildAt(i);
             if(v.getTag() == (Integer)0)
                 continue;
             v.getLocationOnScreen(potCoordinates);
 
-            TranslateAnimation ta = new TranslateAnimation(0,potCoordinates[0]-pileCoordinates[0],0,potCoordinates[1]-pileCoordinates[1]);
-            ta.setDuration(200);
+            Log.i("Winning player:",""+winningPlayer);
+            TranslateAnimation ta = new TranslateAnimation(0,pileCoordinates[0]-potCoordinates[0],0,pileCoordinates[1]-potCoordinates[1]);
+            ta.setDuration(250);
             v.startAnimation(ta);
         }
     }

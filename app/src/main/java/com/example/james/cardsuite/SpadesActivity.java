@@ -105,12 +105,21 @@ public class SpadesActivity extends GameActivity {
         //If the pot is full (all players have tossed a card), reset the pot, analyze it, find the new start player/winner of the pot.
         if(manager.pot.size() == 4) {
             manager.potAnalyze();
-            manager.pot = new HashMap<Integer,Card>();
             currentPlayerInteracting = manager.startPlayer;
-            potClear();
-            displayPot();
-            displayEndPiles(scores);
-            executeAITurns();
+            GameAnimation.collectEndPile(SpadesActivity.this, currentPlayerInteracting);
+
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    manager.pot = new HashMap<Integer, Card>();
+                    potClear();
+                    displayPot();
+                    displayEndPiles(scores);
+
+                    executeAITurns();
+                }
+            },250);
             return;
         }
 
@@ -247,6 +256,7 @@ public class SpadesActivity extends GameActivity {
     //Opens the guess dialog - fit for German Bridge for now.
     public void openGuessDialog(final int currentPlayer) {
         displayHands(currentPlayer,true);
+        guess = -1;
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this,android.R.style.Theme_Holo_Panel);
         builder.setCancelable(false);
