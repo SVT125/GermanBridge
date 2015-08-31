@@ -61,25 +61,25 @@ public class BridgeActivity extends GameActivity implements Serializable {
 
             manager = new BridgeManager(currentPlayerInteracting);
             manager.totalRoundCount = 12;
-            for (int i = 3; i >= 0; i--) {
-                if (isBot[i])
-                    ((BridgePlayer) (manager.players[i])).guess = BridgeAI.getBid(i, (BridgeManager) manager);
-                else
-                    openGuessDialog(i);
-            }
+
+            ImageView trumpView = (ImageView) findViewById(R.id.trumpView);
+            trumpView.setVisibility(View.VISIBLE);
+            Card trumpCard = ((BridgeManager) manager).trumpCard;
+            trumpView.setImageResource(getResources().getIdentifier(trumpCard.getAddress(), "drawable", getPackageName()));
+            trumpView.setMaxHeight(115);
+            trumpView.setAdjustViewBounds(true);
+
+            //Display the image buttons
+            displayEndPiles(scores);
+
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    dealCards();
+                }
+            },500);
         }
-
-        ImageView trumpView = (ImageView) findViewById(R.id.trumpView);
-        trumpView.setVisibility(View.VISIBLE);
-        Card trumpCard = ((BridgeManager) manager).trumpCard;
-        trumpView.setImageResource(getResources().getIdentifier(trumpCard.getAddress(), "drawable", getPackageName()));
-        trumpView.setMaxHeight(115);
-        trumpView.setAdjustViewBounds(true);
-
-        //Display the image buttons
-        displayEndPiles(scores);
-
-        //GameAnimation.dealCards(this, manager);
     }
 
     @Override
@@ -149,6 +149,14 @@ public class BridgeActivity extends GameActivity implements Serializable {
             manager.potsFinished++;
             displayEndPiles(scores);
             displayScoreTable();
+
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    dealCards();
+                }
+            }, 500);
 
             return;
         }
@@ -506,7 +514,42 @@ public class BridgeActivity extends GameActivity implements Serializable {
     }
 
     public void dealCards() {
-        //TODO
+        Handler handler = new Handler();
+        long currentTimeDelay = 0;
+        final int[] initialCoordinates = new int[2];
+        findViewById(R.id.anchor).getLocationOnScreen(initialCoordinates);
+
+        for(int j = 0; j < manager.players[0].hand.size(); j++) {
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    GameAnimation.dealSingleCards(BridgeActivity.this, initialCoordinates);
+                }
+            }, currentTimeDelay);
+
+            currentTimeDelay += 100;
+            final int cardsDisplayed = j;
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    displayIntermediateHands(cardsDisplayed);
+                }
+            },currentTimeDelay);
+        }
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                for (int i = 3; i >= 0; i--) {
+                    if (isBot[i])
+                        ((BridgePlayer) (manager.players[i])).guess = BridgeAI.getBid(i, (BridgeManager) manager);
+                    else
+                        openGuessDialog(i);
+                }
+
+                displayHands(currentPlayerInteracting, true);
+            }
+        },currentTimeDelay+100);
     }
 
     public void loadGame() {

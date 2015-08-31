@@ -131,6 +131,8 @@ public class SpadesActivity extends GameActivity {
             for (Player player : manager.getPlayers()) {
                 player.scoreChange();
                 scores.add(player.score);
+
+                executeAITurns();
             }
 
             reset();
