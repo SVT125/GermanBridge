@@ -135,20 +135,16 @@ public class SpadesActivity extends GameActivity {
 
             reset();
             displayScoreTable();
-
-            for(int i = 3; i >= 0; i--) {
-                if(isBot[i])
-                    ((SpadesPlayer) (manager.players[i])).bid = SpadesAI.getBid(i, (SpadesManager) manager);
-                else
-                    openGuessDialog(i);
-            }
-
-            //Display the image buttons
             displayEndPiles(scores);
-            displayHands(currentPlayerInteracting, false);
 
-            //Cycle through any AI players for the first non-AI player.
-            executeAITurns();
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    dealCards();
+                }
+            }, 500);
+
             return;
         }
 
