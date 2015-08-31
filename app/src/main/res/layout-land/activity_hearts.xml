@@ -159,7 +159,6 @@
             android:layout_height="match_parent"
             android:id="@+id/potLayout"
             android:layout_weight="0.25"
-            android:visibility="invisible"
             android:clipChildren="false"
             android:clipToPadding="false">
 
