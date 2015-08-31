@@ -66,6 +66,8 @@ public class SpadesActivity extends GameActivity {
                 }
             },500);
         }
+        displayEndPiles(scores);
+        displayHands(currentPlayerInteracting, true);
     }
 
     @Override
@@ -131,8 +133,6 @@ public class SpadesActivity extends GameActivity {
             for (Player player : manager.getPlayers()) {
                 player.scoreChange();
                 scores.add(player.score);
-
-                executeAITurns();
             }
 
             reset();
