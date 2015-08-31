@@ -44,6 +44,8 @@ public class SpadesActivity extends GameActivity {
         if (loadGame) {
             this.loadGame();
             displayPot();
+            displayEndPiles(scores);
+            displayHands(currentPlayerInteracting, true);
         }
         else {
             this.isBot = intent.getBooleanArrayExtra("isBot");
@@ -66,8 +68,6 @@ public class SpadesActivity extends GameActivity {
                 }
             },500);
         }
-        displayEndPiles(scores);
-        displayHands(currentPlayerInteracting, true);
     }
 
     @Override
