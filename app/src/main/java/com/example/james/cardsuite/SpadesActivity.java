@@ -109,9 +109,14 @@ public class SpadesActivity extends GameActivity {
         if(manager.pot.size() == 4) {
             manager.potAnalyze();
             currentPlayerInteracting = manager.startPlayer;
-            GameAnimation.collectEndPile(SpadesActivity.this, currentPlayerInteracting);
 
             Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    GameAnimation.collectEndPile(SpadesActivity.this, currentPlayerInteracting);
+                }
+            }, 50);
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {

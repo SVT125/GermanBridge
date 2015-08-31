@@ -121,9 +121,14 @@ public class BridgeActivity extends GameActivity implements Serializable {
         if (manager.pot.size() == 4) {
             manager.potAnalyze();
             currentPlayerInteracting = manager.startPlayer;
-            GameAnimation.collectEndPile(BridgeActivity.this, currentPlayerInteracting);
 
             Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    GameAnimation.collectEndPile(BridgeActivity.this, currentPlayerInteracting);
+                }
+            }, 50);
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {

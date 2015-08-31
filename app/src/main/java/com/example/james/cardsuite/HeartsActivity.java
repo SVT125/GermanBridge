@@ -10,6 +10,7 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -226,6 +227,8 @@ public class HeartsActivity extends GameActivity implements Serializable {
     }
 
     public void endPot() {
+        Handler handler = new Handler();
+
         currentPotTurn++;
         manager.potAnalyze(); //sets the new start player for the next pot
         currentPlayerInteracting = manager.startPlayer;
@@ -236,9 +239,13 @@ public class HeartsActivity extends GameActivity implements Serializable {
         for (int i = 0; i < manager.getPlayers().length; i++)
             roundScores.add(((HeartsPlayer) manager.getPlayers()[i]).tallyRoundScore());
 
-        GameAnimation.collectEndPile(HeartsActivity.this, currentPlayerInteracting);
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                GameAnimation.collectEndPile(HeartsActivity.this, currentPlayerInteracting);
+            }
+        },50);
 
-        Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
