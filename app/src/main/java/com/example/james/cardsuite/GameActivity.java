@@ -207,6 +207,8 @@ public abstract class GameActivity extends Activity implements Serializable {
     //Opens the guess dialog - fit for German Bridge for now.
     public abstract void openGuessDialog(final int currentPlayer);
 
+    public abstract void dealCards();
+
     public void displayIntermediateHands(int numCardsToDisplay) {
         //Remove all old cards first
         cardViews = new ArrayList<ImageView>();

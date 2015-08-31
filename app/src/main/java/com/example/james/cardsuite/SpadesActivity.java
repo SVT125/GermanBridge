@@ -55,16 +55,17 @@ public class SpadesActivity extends GameActivity {
             manager = new SpadesManager(currentPlayerInteracting);
             manager.totalRoundCount = 12; // Change later for variable number of players
 
-            for (int i = 3; i >= 0; i--) {
-                if (isBot[i])
-                    ((SpadesPlayer) (manager.players[i])).bid = SpadesAI.getBid(i, (SpadesManager) manager);
-                else
-                    openGuessDialog(i);
-            }
+            //Display the image buttons
+            displayEndPiles(scores);
+
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    dealCards();
+                }
+            },500);
         }
-        //Display the image buttons
-        displayEndPiles(scores);
-        displayHands(currentPlayerInteracting, true);
     }
 
     @Override
@@ -398,6 +399,45 @@ public class SpadesActivity extends GameActivity {
             }
         }
         buttonsPresent = true;
+    }
+
+    public void dealCards() {
+        Handler handler = new Handler();
+        long currentTimeDelay = 0;
+        final int[] initialCoordinates = new int[2];
+        findViewById(R.id.anchor).getLocationOnScreen(initialCoordinates);
+
+        for(int j = 0; j < manager.players[0].hand.size(); j++) {
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    GameAnimation.dealSingleCards(SpadesActivity.this, initialCoordinates);
+                }
+            }, currentTimeDelay);
+
+            currentTimeDelay += 100;
+            final int cardsDisplayed = j;
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    displayIntermediateHands(cardsDisplayed);
+                }
+            },currentTimeDelay);
+        }
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                for (int i = 3; i >= 0; i--) {
+                    if (isBot[i])
+                        ((SpadesPlayer) (manager.players[i])).bid = SpadesAI.getBid(i, (SpadesManager) manager);
+                    else
+                        openGuessDialog(i);
+                }
+
+                displayHands(currentPlayerInteracting, true);
+            }
+        },currentTimeDelay+100);
     }
 
     public void loadGame() {

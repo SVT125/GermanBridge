@@ -239,7 +239,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
                 if (currentPotTurn == 13)
                     finishedRound();
             }
-        },250);
+        }, 250);
     }
 
     public void finishedRound() {
@@ -462,6 +462,10 @@ public class HeartsActivity extends GameActivity implements Serializable {
             }
         }
         buttonsPresent = true;
+    }
+
+    public void dealCards() {
+        //TODO
     }
 
     public void loadGame() {

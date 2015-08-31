@@ -78,7 +78,8 @@ public class BridgeActivity extends GameActivity implements Serializable {
 
         //Display the image buttons
         displayEndPiles(scores);
-        displayHands(currentPlayerInteracting, true);
+
+        //GameAnimation.dealCards(this, manager);
     }
 
     @Override
@@ -502,6 +503,10 @@ public class BridgeActivity extends GameActivity implements Serializable {
             }
         });
         builder.show();
+    }
+
+    public void dealCards() {
+        //TODO
     }
 
     public void loadGame() {
