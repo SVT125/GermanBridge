@@ -31,7 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class SpadesActivity extends GameActivity {
-    private int guess = -1;
+    private int guess = -1, guessCount = 0, botCount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +53,10 @@ public class SpadesActivity extends GameActivity {
             while (isBot[currentPlayerInteracting]) {
                 currentPlayerInteracting++;
             }
+
+            for(int i = 0; i < 4; i++)
+                if(isBot[i])
+                    botCount++;
 
             manager = new SpadesManager(currentPlayerInteracting);
             manager.totalRoundCount = 12; // Change later for variable number of players
@@ -306,6 +310,20 @@ public class SpadesActivity extends GameActivity {
                                         ((SpadesPlayer) manager.players[1]).bid + ((SpadesPlayer) manager.players[3]).bid; break;
                             }
                             d.dismiss();
+
+                            int player = (currentPlayer+1)%4;
+                            while(isBot[player]) {
+                                player = (player+1)%4;
+                            }
+
+                            guessCount++;
+
+                            if(guessCount == 4 - botCount) {
+                                currentPlayerInteracting = manager.findStartPlayer();
+                                displayHands(manager.findStartPlayer(),true);
+                                guessCount = 0;
+                            } else
+                                openGuessDialog(player);
                         }
                     }
                 });
@@ -431,14 +449,11 @@ public class SpadesActivity extends GameActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                for (int i = 3; i >= 0; i--) {
-                    if (isBot[i])
-                        ((SpadesPlayer) (manager.players[i])).bid = SpadesAI.getBid(i, (SpadesManager) manager);
-                    else
-                        openGuessDialog(i);
+                int player = 0;
+                while(isBot[player]) {
+                    player++;
                 }
-
-                displayHands(currentPlayerInteracting, true);
+                openGuessDialog(player);
             }
         },currentTimeDelay+100);
     }
