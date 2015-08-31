@@ -51,10 +51,24 @@ public class HeartsActivity extends GameActivity implements Serializable {
         }
 
         displayEndPiles(scores);
-        if (manager.getPlayers()[currentPlayerInteracting].isBot)
-            botHandle(250);
-        else
-            displayHands(0,true);
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                dealCards();
+            }
+        }, 500);
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (manager.getPlayers()[currentPlayerInteracting].isBot)
+                    botHandle(250);
+                else
+                    displayHands(0,true);
+            }
+        },3000);
     }
 
     @Override
@@ -185,10 +199,6 @@ public class HeartsActivity extends GameActivity implements Serializable {
                     }
                 }, delay);
             }
-
-            //TODO - may need to copy and paste the above if statements here if code fails!
-
-            return;
         } else {
             endGame();
         }
@@ -340,9 +350,9 @@ public class HeartsActivity extends GameActivity implements Serializable {
         foundStartPlayer = false;
         currentPotTurn = 0;
         currentPlayerInteracting = 0;
-        displayHands(0,true);
         chosenLists.clear();
         chosenCards.clear();
+        dealCards();
     }
 
     //Call when the end piles and the scores displayed on top of the piles need be redisplayed.
@@ -465,7 +475,35 @@ public class HeartsActivity extends GameActivity implements Serializable {
     }
 
     public void dealCards() {
-        //TODO
+        Handler handler = new Handler();
+        long currentTimeDelay = 0;
+        final int[] initialCoordinates = new int[2];
+        findViewById(R.id.anchor).getLocationOnScreen(initialCoordinates);
+
+        for(int j = 0; j < manager.players[0].hand.size(); j++) {
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    GameAnimation.dealSingleCards(HeartsActivity.this, initialCoordinates);
+                }
+            }, currentTimeDelay);
+
+            currentTimeDelay += 100;
+            final int cardsDisplayed = j;
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    displayIntermediateHands(cardsDisplayed);
+                }
+            },currentTimeDelay);
+        }
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                displayHands(currentPlayerInteracting, true);
+            }
+        },currentTimeDelay+100);
     }
 
     public void loadGame() {
