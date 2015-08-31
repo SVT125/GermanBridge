@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.media.SoundPool;
 import android.os.Bundle;
@@ -15,7 +13,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -32,8 +29,7 @@ import java.util.Random;
 public abstract class GameActivity extends Activity implements Serializable {
     public final int levelsToSearch = 3; //Parameter for AI that indicates how many levels down to search.
     protected Manager manager;
-    protected int currentPlayerInteracting = 0;
-    protected int currentPotTurn = 0;
+    protected int currentPlayerInteracting = 0, currentPotTurn = 0;
     private int soundsLoaded = 0;
     protected long lastClickTime = 0;
     protected boolean[] isBot = new boolean[4];
@@ -70,7 +66,7 @@ public abstract class GameActivity extends Activity implements Serializable {
     }
 
     public void menuClick(View v) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this,android.R.style.Theme_Holo_Dialog_MinWidth);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, android.R.style.Theme_Holo_Dialog_MinWidth);
         builder.setTitle("Are you sure you want to exit the game?");
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override

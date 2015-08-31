@@ -38,7 +38,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class BridgeActivity extends GameActivity implements Serializable {
-    private int guess = -1;
+    private int guess = -1, guessCount = 0, botCount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +58,10 @@ public class BridgeActivity extends GameActivity implements Serializable {
             while (isBot[currentPlayerInteracting]) {
                 currentPlayerInteracting++;
             }
+
+            for(int i = 0; i < 4; i++)
+                if(isBot[i])
+                    botCount++;
 
             manager = new BridgeManager(currentPlayerInteracting);
             manager.totalRoundCount = 12;
@@ -326,6 +330,20 @@ public class BridgeActivity extends GameActivity implements Serializable {
                             ((BridgePlayer) manager.players[currentPlayer]).guess = guess;
 
                             d.dismiss();
+
+                            int player = (currentPlayer+1)%4;
+                            while(isBot[player]) {
+                                player = (player+1)%4;
+                            }
+
+                            guessCount++;
+
+                            if(guessCount == 4 - botCount) {
+                                currentPlayerInteracting = manager.findStartPlayer();
+                                displayHands(manager.findStartPlayer(),true);
+                                guessCount = 0;
+                            } else
+                                openGuessDialog(player);
                         }
                     }
                 });
@@ -503,12 +521,11 @@ public class BridgeActivity extends GameActivity implements Serializable {
                 trumpView.setMaxHeight(115);
                 trumpView.setAdjustViewBounds(true);
 
-                for (int i = 3; i >= 0; i--) {
-                    if (isBot[i])
-                        ((BridgePlayer) (manager.players[i])).guess = BridgeAI.getBid(i, (BridgeManager) manager);
-                    else
-                        openGuessDialog(i);
+                int player = 0;
+                while(isBot[player]) {
+                    player++;
                 }
+                openGuessDialog(player);
 
                 //Cycle through any AI players for the first non-AI player.
                 //TODO - execute AI turns only if the bidding is done! When openGuessDialog properly shows players' cards, this needs to be updated.
@@ -545,14 +562,11 @@ public class BridgeActivity extends GameActivity implements Serializable {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                for (int i = 3; i >= 0; i--) {
-                    if (isBot[i])
-                        ((BridgePlayer) (manager.players[i])).guess = BridgeAI.getBid(i, (BridgeManager) manager);
-                    else
-                        openGuessDialog(i);
+                int player = 0;
+                while(isBot[player]) {
+                    player++;
                 }
-
-                displayHands(currentPlayerInteracting, true);
+                openGuessDialog(player);
             }
         },currentTimeDelay+100);
     }
