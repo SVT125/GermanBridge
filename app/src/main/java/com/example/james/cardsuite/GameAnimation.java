@@ -2,11 +2,15 @@ package com.example.james.cardsuite;
 
 import android.animation.AnimatorInflater;
 import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewPropertyAnimator;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+
+import java.util.Map;
 
 public class GameAnimation {
     public static void placeCard(GameActivity activity, View v, int player) {
@@ -68,18 +72,18 @@ public class GameAnimation {
         return selectedAnimation;
     }
 
-    public static void swapCards(HeartsActivity activity, int currentPlayer, int swapRound, View v, View v2, View v3) {
-        int receivingHand = 0;
-        switch(swapRound) {
-            case 0: receivingHand = receivingHand == 0 ? 2 : receivingHand - 1; break;
-            case 1: receivingHand = (receivingHand+1)%3; break;
-            case 2: receivingHand = (receivingHand+2)%3; break;
-        }
+    public static void swapCards(HeartsActivity activity, int swapRound, Map<Pair<Integer,View>,AnimatorSet> animations) {
+        for(Pair<Integer,View> key : animations.keySet()) {
+            int receivingHand = key.move;
+            switch(swapRound) {
+                case 0: receivingHand = receivingHand == 0 ? 3 : receivingHand - 1; break;
+                case 1: receivingHand = (receivingHand+1)%4; break;
+                case 2: receivingHand = (receivingHand+2)%4; break;
+            }
 
-        int[] initialCoordinates, finalCoordinates;
-        for(View view : new View[]{v,v2,v3}) {
-            initialCoordinates = finalCoordinates = new int[2];
-            view.getLocationOnScreen(initialCoordinates);
+            int[] initialCoordinates = new int[2], finalCoordinates = new int[2];
+            key.values.getLocationOnScreen(initialCoordinates);
+
             switch(receivingHand) {
                 case 0: activity.findViewById(R.id.bottomPlayerHandLayout).getLocationOnScreen(finalCoordinates); break;
                 case 1: activity.findViewById(R.id.leftPlayerHandLayout).getLocationOnScreen(finalCoordinates); break;
@@ -87,9 +91,10 @@ public class GameAnimation {
                 case 3: activity.findViewById(R.id.rightPlayerHandLayout).getLocationOnScreen(finalCoordinates); break;
             }
 
-            TranslateAnimation ta = new TranslateAnimation(0,finalCoordinates[0]-initialCoordinates[0],0,finalCoordinates[1]-initialCoordinates[1]);
-            ta.setDuration(250);
-            view.startAnimation(ta);
+            ViewPropertyAnimator animator = key.values.animate().setDuration(100).translationXBy(finalCoordinates[0] - initialCoordinates[0])
+                    .translationYBy(finalCoordinates[1] - initialCoordinates[1]);
+            animations.get(key).end();
+            animator.start();
         }
     }
 

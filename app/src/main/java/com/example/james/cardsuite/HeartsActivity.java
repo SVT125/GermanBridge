@@ -338,6 +338,9 @@ public class HeartsActivity extends GameActivity implements Serializable {
             manager.swapCards(chosenLists.get(i), i, swapRound);
             manager.getPlayers()[i].organize();
         }
+
+        GameAnimation.swapCards(this,swapRound,animationsActive);
+
         finishedSwapping = true;
         findStartPlayer();
     }
