@@ -218,7 +218,8 @@ public class SpadesActivity extends GameActivity {
 
                             potClear();
                             displayPot();
-                            displayHands(currentPlayerInteracting, false);
+                            if (!manager.players[currentPlayerInteracting].isBot)
+                                displayHands(currentPlayerInteracting, true);
                         }
                     }, timeDelay);
                 } else
@@ -233,7 +234,8 @@ public class SpadesActivity extends GameActivity {
             @Override
             public void run() {
                 updateGameState();
-                displayHands(currentPlayerInteracting, true);
+                if (!manager.players[currentPlayerInteracting].isBot)
+                    displayHands(currentPlayerInteracting, true);
             }
         }, currentTimeDelay);
     }
@@ -466,6 +468,7 @@ public class SpadesActivity extends GameActivity {
             this.manager = (SpadesManager) is.readObject();
             this.currentPlayerInteracting = is.readInt();
             this.currentPotTurn = is.readInt();
+            this.botCount = is.readInt();
             this.foundStartPlayer = is.readBoolean();
             this.finishedSwapping = is.readBoolean();
             this.buttonsPresent = is.readBoolean();
@@ -486,12 +489,14 @@ public class SpadesActivity extends GameActivity {
         String filename = "save_spades";
         FileOutputStream outputStream;
 
+
         try {
             outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
             ObjectOutputStream objectStream = new ObjectOutputStream(outputStream);
             objectStream.writeObject(this.manager);
             objectStream.writeInt(currentPlayerInteracting);
             objectStream.writeInt(currentPotTurn);
+            objectStream.writeInt(botCount);
             objectStream.writeBoolean(foundStartPlayer);
             objectStream.writeBoolean(finishedSwapping);
             objectStream.writeBoolean(buttonsPresent);
