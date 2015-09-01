@@ -159,13 +159,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
             displayEndPiles(scores);
             displayScoreTable();
 
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    dealCards();
-                }
-            }, 500);
+
 
             return;
         }
@@ -525,7 +519,14 @@ public class BridgeActivity extends GameActivity implements Serializable {
                 while(isBot[player]) {
                     player++;
                 }
-                openGuessDialog(player);
+
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        dealCards();
+                    }
+                }, 500);
 
                 //Cycle through any AI players for the first non-AI player.
                 //TODO - execute AI turns only if the bidding is done! When openGuessDialog properly shows players' cards, this needs to be updated.
@@ -579,6 +580,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
             this.manager = (BridgeManager) is.readObject();
             this.currentPlayerInteracting = is.readInt();
             this.currentPotTurn = is.readInt();
+            this.botCount = is.readInt();
             this.foundStartPlayer = is.readBoolean();
             this.finishedSwapping = is.readBoolean();
             this.buttonsPresent = is.readBoolean();
@@ -604,6 +606,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
             objectStream.writeObject(this.manager);
             objectStream.writeInt(currentPlayerInteracting);
             objectStream.writeInt(currentPotTurn);
+            objectStream.writeInt(botCount);
             objectStream.writeBoolean(foundStartPlayer);
             objectStream.writeBoolean(finishedSwapping);
             objectStream.writeBoolean(buttonsPresent);
