@@ -28,12 +28,15 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class HeartsActivity extends GameActivity implements Serializable {
     private boolean finishedSwapping = false;
     private List<List<Card>> chosenLists = new ArrayList<List<Card>>();
     private List<Card> chosenCards = new ArrayList<Card>();
+    Map<Pair<Integer,View>,AnimatorSet> animationsActive = new HashMap<Pair<Integer,View>,AnimatorSet>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,8 +129,9 @@ public class HeartsActivity extends GameActivity implements Serializable {
 
             if (manager.getPlayers()[currentPlayerInteracting].isBot) {
                 botHandle(250);
-            } else
+            } else if(finishedSwapping){
                 displayHands(currentPlayerInteracting,true);
+            }
 
             return;
         }
@@ -158,6 +162,12 @@ public class HeartsActivity extends GameActivity implements Serializable {
                         @Override
                         public void run() {
                             List<Card> botChosen = ((HeartsAI) manager.getPlayers()[currentPlayerInteracting]).chooseSwap();
+
+                            for(int i = 0; i < botChosen.size(); i++)
+                                animationsActive.put(new Pair<Integer, View>(currentPlayerInteracting,findViewByCard(botChosen.get(i))),
+                                        GameAnimation.selectSwappedCard(HeartsActivity.this,
+                                                findViewByCard(botChosen.get(i)),currentPlayerInteracting));
+
                             chosenLists.add(botChosen);
                             currentPlayerInteracting++;
 
@@ -218,7 +228,8 @@ public class HeartsActivity extends GameActivity implements Serializable {
 
     public void gameClick(View v) {
         //Prevents spam-clicking before the last button click is done.
-        if ((!finishedSwapping && SystemClock.elapsedRealtime() - lastClickTime < 250) || SystemClock.elapsedRealtime() - lastClickTime < 1750){
+        if ((!finishedSwapping && SystemClock.elapsedRealtime() - lastClickTime < 1000) ||
+                (finishedSwapping && SystemClock.elapsedRealtime() - lastClickTime < 1750)){
             return;
         }
         lastClickTime = SystemClock.elapsedRealtime();
@@ -286,10 +297,12 @@ public class HeartsActivity extends GameActivity implements Serializable {
         if (chosenCard.isClicked == false) {
             chosenCard.isClicked = true;
             v.setBackgroundResource(R.drawable.card_border);
-            GameAnimation.selectSwappedCard(this, v, currentPlayerInteracting);
+            animationsActive.put(new Pair<Integer, View>(currentPlayerInteracting,findViewByCard(chosenCard)), GameAnimation.
+                    selectSwappedCard(this, v, currentPlayerInteracting));
         } else {
             v.setBackgroundResource(0);
             chosenCard.isClicked = false;
+            animationsActive.remove(new Pair<Integer,View>(currentPlayerInteracting,v));
         }
 
         if (!finishedSwapping) {
@@ -333,6 +346,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
     public void reset() {
         manager.reset();
         finishedSwapping = false;
+        animationsActive = new HashMap<Pair<Integer,View>,AnimatorSet>();
         initialOutputWritten = false;
         buttonsPresent = false;
         foundStartPlayer = false;

@@ -54,7 +54,7 @@ public class GameAnimation {
         }
     }
 
-    public static void selectSwappedCard(GameActivity activity, View v, int currentPlayer) {
+    public static AnimatorSet selectSwappedCard(HeartsActivity activity, View v, int currentPlayer) {
         AnimatorSet selectedAnimation = null;
         switch(currentPlayer){
             case 0: selectedAnimation = (AnimatorSet) AnimatorInflater.loadAnimator(activity, R.anim.selected_forward); break;
@@ -65,6 +65,7 @@ public class GameAnimation {
 
         selectedAnimation.setTarget(v);
         selectedAnimation.start();
+        return selectedAnimation;
     }
 
     public static void swapCards(HeartsActivity activity, int currentPlayer, int swapRound, View v, View v2, View v3) {
