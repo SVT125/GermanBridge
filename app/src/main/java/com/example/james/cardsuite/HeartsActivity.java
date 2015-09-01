@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.TranslateAnimation;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -67,9 +68,9 @@ public class HeartsActivity extends GameActivity implements Serializable {
                 if (manager.getPlayers()[currentPlayerInteracting].isBot)
                     botHandle(250);
                 else
-                    displayHands(0,true);
+                    displayHands(0, true);
             }
-        },3000);
+        }, 3000);
     }
 
     @Override
@@ -217,7 +218,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
 
     public void gameClick(View v) {
         //Prevents spam-clicking before the last button click is done.
-        if ((!finishedSwapping && SystemClock.elapsedRealtime() - lastClickTime < 500) || SystemClock.elapsedRealtime() - lastClickTime < 1750){
+        if ((!finishedSwapping && SystemClock.elapsedRealtime() - lastClickTime < 250) || SystemClock.elapsedRealtime() - lastClickTime < 1750){
             return;
         }
         lastClickTime = SystemClock.elapsedRealtime();
@@ -284,28 +285,8 @@ public class HeartsActivity extends GameActivity implements Serializable {
     public void chooseCards(Card chosenCard, int swapRound, View v) {
         if (chosenCard.isClicked == false) {
             chosenCard.isClicked = true;
-            switch(currentPlayerInteracting){
-                case 0:
-                    AnimatorSet selected_f = (AnimatorSet) AnimatorInflater.loadAnimator(this, R.anim.selected_forward);
-                    selected_f.setTarget(v);
-                    selected_f.start();
-                    break;
-                case 1:
-                    AnimatorSet selected_r = (AnimatorSet) AnimatorInflater.loadAnimator(this, R.anim.selected_right);
-                    selected_r.setTarget(v);
-                    selected_r.start();
-                    break;
-                case 2:
-                    AnimatorSet selected_b = (AnimatorSet) AnimatorInflater.loadAnimator(this, R.anim.selected_back);
-                    selected_b.setTarget(v);
-                    selected_b.start();
-                    break;
-                case 3:
-                    AnimatorSet selected_l = (AnimatorSet) AnimatorInflater.loadAnimator(this, R.anim.selected_left);
-                    selected_l.setTarget(v);
-                    selected_l.start();
-                    break;
-            }
+            v.setBackgroundResource(R.drawable.card_border);
+            GameAnimation.selectSwappedCard(this, v, currentPlayerInteracting);
         } else {
             v.setBackgroundResource(0);
             chosenCard.isClicked = false;

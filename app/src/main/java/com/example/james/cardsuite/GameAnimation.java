@@ -1,7 +1,7 @@
 package com.example.james.cardsuite;
 
-import android.os.Handler;
-import android.util.Log;
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.TranslateAnimation;
@@ -52,6 +52,19 @@ public class GameAnimation {
             ta.setDuration(250);
             v.startAnimation(ta);
         }
+    }
+
+    public static void selectSwappedCard(GameActivity activity, View v, int currentPlayer) {
+        AnimatorSet selectedAnimation = null;
+        switch(currentPlayer){
+            case 0: selectedAnimation = (AnimatorSet) AnimatorInflater.loadAnimator(activity, R.anim.selected_forward); break;
+            case 1: selectedAnimation = (AnimatorSet) AnimatorInflater.loadAnimator(activity, R.anim.selected_right); break;
+            case 2: selectedAnimation = (AnimatorSet) AnimatorInflater.loadAnimator(activity, R.anim.selected_back); break;
+            case 3: selectedAnimation = (AnimatorSet) AnimatorInflater.loadAnimator(activity, R.anim.selected_left); break;
+        }
+
+        selectedAnimation.setTarget(v);
+        selectedAnimation.start();
     }
 
     public static void swapCards(HeartsActivity activity, int currentPlayer, int swapRound, View v, View v2, View v3) {
