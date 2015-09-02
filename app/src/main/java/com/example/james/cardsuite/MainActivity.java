@@ -72,12 +72,11 @@ public class MainActivity extends Activity {
     }
 
     public void playerSelection(final View v) {
-        final String[] choices = new String[4];
+        final String[] choices = new String[3];
 
-        choices[0] = "PLAYER 1";
-        choices[1] = "PLAYER 2";
-        choices[2] = "PLAYER 3";
-        choices[3] = "PLAYER 4";
+        choices[0] = "PLAYER 2";
+        choices[1] = "PLAYER 3";
+        choices[2] = "PLAYER 4";
 
         isBot[0] = false;
         isBot[1] = isBot[2] = isBot[3] = true;
@@ -98,16 +97,12 @@ public class MainActivity extends Activity {
                 RadioButton playerButton = (RadioButton)v.findViewById(R.id.playerButton);
                 RadioButton botButton = (RadioButton)v.findViewById(R.id.botButton);
 
-                if(position == 0) {
-                    playerButton.setChecked(true);
-                }
-
                 playerButton.setTag(position);
                 playerButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         selectedPosition = (Integer)view.getTag();
-                        isBot[selectedPosition] = false;
+                        isBot[selectedPosition + 1] = false;
                     }
                 });
 
@@ -120,7 +115,7 @@ public class MainActivity extends Activity {
                     @Override
                     public void onClick(View view) {
                         selectedPosition = (Integer)view.getTag();
-                        isBot[selectedPosition] = true;
+                        isBot[selectedPosition + 1] = true;
                     }
                 });
                 return v;
