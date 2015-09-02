@@ -1,6 +1,5 @@
 package com.example.james.cardsuite;
 
-import android.animation.AnimatorInflater;
 import android.animation.AnimatorSet;
 import android.content.Context;
 import android.content.Intent;
@@ -10,18 +9,15 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.TranslateAnimation;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
@@ -129,8 +125,10 @@ public class HeartsActivity extends GameActivity implements Serializable {
 
             if (manager.getPlayers()[currentPlayerInteracting].isBot) {
                 botHandle(250);
-            } else if(finishedSwapping){
+            } else if(chosenCards.size() == 3){
                 displayHands(currentPlayerInteracting,true);
+                if (!(chosenLists.size() == 4))
+                    chosenCards.clear();
             }
 
             return;
@@ -205,10 +203,10 @@ public class HeartsActivity extends GameActivity implements Serializable {
                         if (finishedSwapping && (manager.pot.size() > 0))
                             restOfRoundHandle();
 
-                        if (manager.getPlayers()[currentPlayerInteracting].isBot)
-                            botHandle(250);
-                        else
-                            displayHands(currentPlayerInteracting,true);
+                            if (manager.getPlayers()[currentPlayerInteracting].isBot)
+                                botHandle(250);
+                            else
+                                displayHands(currentPlayerInteracting, true);
                     }
                 }, delay);
             }
@@ -325,7 +323,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
                 List<Card> tempCards = new ArrayList<>();
                 tempCards.addAll(chosenCards);
                 chosenLists.add(tempCards);
-                chosenCards.clear();
+
             }
             currentPlayerInteracting++;
 
