@@ -101,7 +101,6 @@ public abstract class GameActivity extends Activity implements Serializable {
 
     // Called when a player places a valid card into the pot; updates the images in the pot
     public void displayPot() {
-        RelativeLayout potLayout = (RelativeLayout)findViewById(R.id.potLayout);
         for(int i = 0; i < manager.pot.size(); i++) {
             int index = (manager.startPlayer + i) % 4;
             ImageView potCard = null;

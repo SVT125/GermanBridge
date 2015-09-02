@@ -121,6 +121,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
     }
 
     public void updateGameState() {
+        final int lastPlayer = manager.startPlayer == 0 ? 3 : manager.startPlayer - 1;
         //If the pot is full (all players have tossed a card), reset the pot, analyze it, find the new start player/winner of the pot.
         if (manager.pot.size() == 4) {
             manager.potAnalyze();
@@ -140,15 +141,16 @@ public class BridgeActivity extends GameActivity implements Serializable {
                     potClear();
                     displayPot();
                     displayEndPiles(scores);
-
-                    executeAITurns();
+                    if(!manager.getPlayers()[lastPlayer].hand.isEmpty())
+                        executeAITurns();
                 }
             }, 250);
-            return;
+
+            if(!manager.getPlayers()[lastPlayer].hand.isEmpty())
+                return;
         }
 
         //Set up the next round, reset all variables.
-        int lastPlayer = manager.startPlayer == 0 ? 3 : manager.startPlayer - 1;
         if (manager.getPlayers()[lastPlayer].hand.isEmpty()) {
             scores.clear();
             for (Player player : manager.players) {
@@ -158,8 +160,6 @@ public class BridgeActivity extends GameActivity implements Serializable {
             manager.potsFinished++;
             displayEndPiles(scores);
             displayScoreTable();
-
-
 
             return;
         }
@@ -215,7 +215,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
                             manager.potHandle(chosenAI, currentPlayer);
 
                             int chosenSound = r.nextInt(3);
-                            soundPools[chosenSound].play(sounds[chosenSound],1,1,0,0,1);
+                            soundPools[chosenSound].play(sounds[chosenSound], 1, 1, 0, 0, 1);
 
                             potClear();
                             displayPot();
@@ -230,12 +230,14 @@ public class BridgeActivity extends GameActivity implements Serializable {
         }
 
         currentPlayerInteracting = (currentPlayerInteracting + offset) % manager.playerCount;
+        //The last non-bot player to display, since currentPlayerInteracting will be reset to the new start player.
+        final int playerToDisplay = currentPlayerInteracting;
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 updateGameState();
-                displayHands(currentPlayerInteracting, true);
+                displayHands(playerToDisplay, true);
             }
         }, currentTimeDelay);
     }
@@ -333,8 +335,9 @@ public class BridgeActivity extends GameActivity implements Serializable {
                             guessCount++;
 
                             if(guessCount == 4 - botCount) {
-                                currentPlayerInteracting = manager.findStartPlayer();
-                                displayHands(manager.findStartPlayer(),true);
+                                currentPlayerInteracting = manager.startPlayer;
+                                executeAITurns();
+
                                 guessCount = 0;
                             } else
                                 openGuessDialog(player);
@@ -527,10 +530,6 @@ public class BridgeActivity extends GameActivity implements Serializable {
                         dealCards();
                     }
                 }, 500);
-
-                //Cycle through any AI players for the first non-AI player.
-                //TODO - execute AI turns only if the bidding is done! When openGuessDialog properly shows players' cards, this needs to be updated.
-                executeAITurns();
             }
         });
         builder.show();

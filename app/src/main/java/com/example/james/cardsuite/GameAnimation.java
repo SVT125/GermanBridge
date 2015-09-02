@@ -90,7 +90,7 @@ public class GameAnimation {
                 case 3: activity.findViewById(R.id.rightPlayerHandLayout).getLocationOnScreen(finalCoordinates); break;
             }
 
-            ViewPropertyAnimator animator = key.values.animate().setDuration(100).translationXBy(finalCoordinates[0] - initialCoordinates[0])
+            ViewPropertyAnimator animator = key.values.animate().setDuration(150).translationXBy(finalCoordinates[0] - initialCoordinates[0])
                     .translationYBy(finalCoordinates[1] - initialCoordinates[1]);
             animations.get(key).end();
             animator.start();
