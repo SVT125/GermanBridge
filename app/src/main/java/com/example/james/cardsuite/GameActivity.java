@@ -282,7 +282,7 @@ public abstract class GameActivity extends Activity implements Serializable {
 
     public View findViewByCard(Card card) {
         for(ImageView view : cardViews) {
-            if(view.getTag().equals(card))
+            if(((Card)view.getTag()).equals(card))
                 return view;
         }
         return null;
