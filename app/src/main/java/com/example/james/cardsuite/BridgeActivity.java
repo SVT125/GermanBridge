@@ -133,7 +133,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
                 public void run() {
                     GameAnimation.collectEndPile(BridgeActivity.this, currentPlayerInteracting);
                 }
-            }, 50);
+            }, 175);
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {

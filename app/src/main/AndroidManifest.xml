@@ -9,7 +9,7 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".MainActivity"
-            android:configChanges="orientation|keyboard|keyboardHidden|screenLayout|uiMode|smallestScreenSize|screenSize|layoutDirection"
+            android:configChanges="mcc|mnc|locale|touchscreen|navigation|fontScale|orientation|keyboard|keyboardHidden|screenLayout|uiMode|smallestScreenSize|screenSize|layoutDirection"
             android:label="@string/app_name"
             android:screenOrientation="sensorLandscape"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
@@ -21,7 +21,7 @@
         </activity>
         <activity
             android:name=".ResultsActivity"
-            android:configChanges="orientation|keyboard|keyboardHidden|screenLayout|uiMode|smallestScreenSize|screenSize|layoutDirection"
+            android:configChanges="mcc|mnc|locale|touchscreen|navigation|fontScale|orientation|keyboard|keyboardHidden|screenLayout|uiMode|smallestScreenSize|screenSize|layoutDirection"
             android:label="@string/title_activity_results"
             android:screenOrientation="sensorLandscape"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
@@ -29,21 +29,21 @@
         <activity
             android:name=".HeartsActivity"
             android:screenOrientation="sensorLandscape"
-            android:configChanges="orientation|keyboard|keyboardHidden|screenLayout|uiMode|smallestScreenSize|screenSize|layoutDirection"
+            android:configChanges="mcc|mnc|locale|touchscreen|navigation|fontScale|orientation|keyboard|keyboardHidden|screenLayout|uiMode|smallestScreenSize|screenSize|layoutDirection"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar"
             android:label="@string/title_activity_hearts" >
         </activity>
         <activity
             android:name=".BridgeActivity"
             android:screenOrientation="sensorLandscape"
-            android:configChanges="orientation|keyboard|keyboardHidden|screenLayout|uiMode|smallestScreenSize|screenSize|layoutDirection"
+            android:configChanges="mcc|mnc|locale|touchscreen|navigation|fontScale|orientation|keyboard|keyboardHidden|screenLayout|uiMode|smallestScreenSize|screenSize|layoutDirection"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar"
             android:label="@string/title_activity_bridge" >
         </activity>
         <activity
             android:name=".SpadesActivity"
             android:screenOrientation="sensorLandscape"
-            android:configChanges="orientation|keyboard|keyboardHidden|screenLayout|uiMode|smallestScreenSize|screenSize|layoutDirection"
+            android:configChanges="mcc|mnc|locale|touchscreen|navigation|fontScale|orientation|keyboard|keyboardHidden|screenLayout|uiMode|smallestScreenSize|screenSize|layoutDirection"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar"
             android:label="@string/title_activity_spades" >
         </activity>
