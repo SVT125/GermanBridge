@@ -1,10 +1,5 @@
 package com.example.james.cardsuite;
 
-import android.app.Activity;
-import android.util.Log;
-import android.widget.TextView;
-
-import java.awt.font.TextAttribute;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
@@ -99,7 +94,7 @@ public class SpadesManager extends Manager implements Serializable {
 	}
 
 	public boolean cardSelectable(Card card, boolean finishedSwapping, int currentPlayer) {
-		if (currentPlayer == startPlayer && players[currentPlayer].hand.size() == 4)
+		if (currentPlayer == startPlayer && players[currentPlayer].hand.size() == 5)
 			return true;
 		if (currentPlayer == startPlayer && !spadesBroken && card.getSuit().equals(Card.Suit.SPADES))
 			return false;
