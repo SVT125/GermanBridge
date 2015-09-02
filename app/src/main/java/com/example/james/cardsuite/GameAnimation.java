@@ -2,7 +2,6 @@ package com.example.james.cardsuite;
 
 import android.animation.AnimatorInflater;
 import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;

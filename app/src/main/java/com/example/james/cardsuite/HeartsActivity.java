@@ -191,6 +191,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
                     @Override
                     public void run() {
                         Card botMove = ((HeartsAI) manager.getPlayers()[currentPlayerInteracting]).makeMove(currentPlayerInteracting, manager.startPlayer, (HeartsManager) manager);
+
                         ((HeartsManager) manager).potHandle(botMove, currentPlayerInteracting);
 
                         ImageView cardView = (ImageView)findViewByCard(botMove);
@@ -294,7 +295,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
     }
 
     public void chooseCards(Card chosenCard, int swapRound, View v) {
-        if (chosenCard.isClicked == false) {
+        if (!chosenCard.isClicked) {
             chosenCard.isClicked = true;
             v.setBackgroundResource(R.drawable.card_border);
             animationsActive.put(new Pair<Integer, View>(currentPlayerInteracting,findViewByCard(chosenCard)), GameAnimation.

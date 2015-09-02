@@ -45,7 +45,7 @@ public abstract class Player implements Serializable {
 
 	public boolean hasCard(int num, Card.Suit suit) {
 		for (Card card1 : hand) {
-			if (card1.equals(num, suit))
+			if (card1.equals(new Card(num, suit)))
 				return true;
 		}
 		return false;

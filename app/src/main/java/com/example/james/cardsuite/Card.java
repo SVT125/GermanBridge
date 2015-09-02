@@ -28,8 +28,8 @@ public class Card implements Serializable {
 		return 1;
 	}
 
-	public boolean equals(int cardNum, Suit cardSuit) {
-		if (this.cardNumber == cardNum && suit.equals(cardSuit))
+	public boolean equals(Card card) {
+		if (this.cardNumber == card.cardNumber && suit.equals(card.suit))
 			return true;
 		return false;
 	}
