@@ -13,20 +13,24 @@
     <TextView android:text="@string/welcome_title" android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/greetingView"
-        android:layout_centerHorizontal="true"
-        android:textSize="26dp" />
+        android:textSize="26dp"
+        android:layout_marginTop="40dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/german_bridge_title"
         android:id="@+id/german_button"
-        android:layout_below="@+id/greetingView"
-        android:layout_centerHorizontal="true"
         android:onClick="gameClick"
         android:background="@drawable/button_background"
-        android:layout_marginTop="12.5dp"
-        android:nestedScrollingEnabled="false" />
+        android:nestedScrollingEnabled="false"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="120dp"
+        android:textStyle="bold"
+        android:textSize="24dp" />
 
     <Button
         android:layout_width="wrap_content"
@@ -34,10 +38,11 @@
         android:text="@string/hearts_title"
         android:id="@+id/hearts_button"
         android:onClick="gameClick"
-        android:layout_below="@+id/german_button"
-        android:layout_centerHorizontal="true"
         android:background="@drawable/button_background"
-        android:layout_marginTop="5dp" />
+        android:layout_alignTop="@+id/german_button"
+        android:layout_toStartOf="@+id/greetingView"
+        android:textStyle="bold"
+        android:textSize="24dp" />
 
     <Button
         android:layout_width="wrap_content"
@@ -45,10 +50,23 @@
         android:text="@string/spades_title"
         android:id="@+id/spades_button"
         android:onClick="gameClick"
-        android:layout_below="@+id/hearts_button"
-        android:layout_centerHorizontal="true"
         android:background="@drawable/button_background"
-        android:layout_marginTop="5dp"
-        android:nestedScrollingEnabled="false" />
+        android:nestedScrollingEnabled="false"
+        android:layout_alignTop="@+id/german_button"
+        android:layout_toEndOf="@+id/greetingView"
+        android:textStyle="bold"
+        android:textSize="24dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Settings"
+        android:id="@+id/settings_button"
+        android:onClick="settingsClick"
+        android:background="@drawable/button_background"
+        android:layout_marginBottom="35dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:textSize="14dp" />
 
 </RelativeLayout>
