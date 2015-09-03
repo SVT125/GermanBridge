@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.preference.PreferenceFragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -51,9 +52,8 @@ public class MainActivity extends Activity {
     }
 
     public void settingsClick(View v) {
-        Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+        Intent intent = new Intent(MainActivity.this, com.example.james.cardsuite.SettingsActivity.class);
         startActivity(intent);
-        finish();
     }
 
     public void savedGamePrompt(final View v) {
@@ -167,6 +167,14 @@ public class MainActivity extends Activity {
             return false;
         }
         return true;
+    }
+
+    public static class SettingsActivity extends PreferenceFragment {
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.preferences);
+        }
     }
 
     @Override
