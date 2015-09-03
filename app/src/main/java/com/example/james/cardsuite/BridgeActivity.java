@@ -541,29 +541,33 @@ public class BridgeActivity extends GameActivity implements Serializable {
         findViewById(R.id.anchor).getLocationOnScreen(initialCoordinates);
 
         for(int j = 0; j < manager.players[0].hand.size(); j++) {
-            final int cardsDisplayed = j;
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    GameAnimation.dealSingleCards(BridgeActivity.this, new Runnable() {
-                        @Override
-                        public void run() {
-                            displayIntermediateHands(cardsDisplayed);
-
-                            if(cardsDisplayed == manager.players[0].hand.size()-1) {
-                                int player = 0;
-                                while(isBot[player]) {
-                                    player++;
-                                }
-                                openGuessDialog(player);
-                            }
-                        }
-                    },initialCoordinates);
+                    GameAnimation.dealSingleCards(BridgeActivity.this, initialCoordinates);
                 }
             }, currentTimeDelay);
 
             currentTimeDelay += 100;
+            final int cardsDisplayed = j;
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    displayIntermediateHands(cardsDisplayed);
+                }
+            },currentTimeDelay);
         }
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                int player = 0;
+                while(isBot[player]) {
+                    player++;
+                }
+                openGuessDialog(player);
+            }
+        },currentTimeDelay+100);
     }
 
     public void loadGame() {

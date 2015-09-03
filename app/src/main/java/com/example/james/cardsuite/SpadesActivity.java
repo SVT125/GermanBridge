@@ -438,31 +438,34 @@ public class SpadesActivity extends GameActivity {
         final int[] initialCoordinates = new int[2];
         findViewById(R.id.anchor).getLocationOnScreen(initialCoordinates);
 
-        final int originalHandSize = manager.players[0].hand.size();
         for(int j = 0; j < manager.players[0].hand.size(); j++) {
-            final int cardsDisplayed = j;
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    GameAnimation.dealSingleCards(SpadesActivity.this, new Runnable() {
-                        @Override
-                        public void run() {
-                            displayIntermediateHands(cardsDisplayed);
-
-                            if(cardsDisplayed == originalHandSize-1) {
-                                int player = 0;
-                                while(isBot[player]) {
-                                    player++;
-                                }
-                                openGuessDialog(player);
-                            }
-                        }
-                    },initialCoordinates);
+                    GameAnimation.dealSingleCards(SpadesActivity.this, initialCoordinates);
                 }
             }, currentTimeDelay);
 
             currentTimeDelay += 100;
+            final int cardsDisplayed = j;
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    displayIntermediateHands(cardsDisplayed);
+                }
+            },currentTimeDelay);
         }
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                int player = 0;
+                while(isBot[player]) {
+                    player++;
+                }
+                openGuessDialog(player);
+            }
+        },currentTimeDelay+100);
     }
 
     public void loadGame() {
