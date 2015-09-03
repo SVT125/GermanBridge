@@ -120,8 +120,6 @@ public class HeartsActivity extends GameActivity implements Serializable {
                 if (!(chosenLists.size() == 4))
                     chosenCards.clear();
             }
-
-            return;
         }
         else {
             endGame();

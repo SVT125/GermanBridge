@@ -63,6 +63,7 @@ public class SpadesActivity extends GameActivity {
             //Display the image buttons
             displayEndPiles(scores);
 
+            //Artificial delay added so that this runs after onCreate finishes and the views' coordinates are defined.
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -106,6 +107,7 @@ public class SpadesActivity extends GameActivity {
         }
     }
 
+    // Updates the game state; after the player moves, the code cycles between executing AI turns/updating the game state until done.
     public void updateGameState() {
         final int lastPlayer = manager.startPlayer == 0 ? 3 : manager.startPlayer - 1;
         //If the pot is full (all players have tossed a card), reset the pot, analyze it, find the new start player/winner of the pot.
@@ -170,7 +172,7 @@ public class SpadesActivity extends GameActivity {
         }
     }
 
-    // Executes AI moves for the next player onwards, stopping once we're on a player that isn't a bot.
+    // Executes AI moves for the next player onwards, stopping once we're on a player that isn't a bot or the pot is already full.
     // This mutates currentPlayerInteracting (to the next non-AI player or player whose hand is empty) and the pot as it loops.
     public void executeAITurns() {
         long currentTimeDelay = 250;
@@ -185,7 +187,6 @@ public class SpadesActivity extends GameActivity {
             //If the player is a bot, commence AI movement and go to the next player; if they aren't a bot, break and leave at this player.
             if(manager.pot.get(currentPlayer) == null) {
                 if (isBot[currentPlayer] && manager.players[currentPlayer].hand.size() > 0) {
-                    final long timeDelay = currentTimeDelay;
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -208,7 +209,7 @@ public class SpadesActivity extends GameActivity {
                             if (!manager.players[currentPlayerInteracting].isBot)
                                 displayHands(currentPlayerInteracting, true);
                         }
-                    }, timeDelay);
+                    }, currentTimeDelay);
                 } else
                     break;
 
@@ -216,7 +217,9 @@ public class SpadesActivity extends GameActivity {
             }
         }
         currentPlayerInteracting = (currentPlayerInteracting + offset) % manager.playerCount;
+
         //The last non-bot player to display, since currentPlayerInteracting will be reset to the new start player.
+        //TODO - Handler exists only to update game state after all AI is done - can be eliminated if offset is calculated before.
         final int playerToDisplay = currentPlayerInteracting;
         handler.postDelayed(new Runnable() {
             @Override
@@ -465,7 +468,7 @@ public class SpadesActivity extends GameActivity {
             deleteFile("save_spades");
         }
         catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
     }
 
