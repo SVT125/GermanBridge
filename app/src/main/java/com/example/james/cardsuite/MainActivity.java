@@ -50,6 +50,12 @@ public class MainActivity extends Activity {
             playerSelection(v);
     }
 
+    public void settingsClick(View v) {
+        Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
     public void savedGamePrompt(final View v) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this,android.R.style.Theme_Holo_Dialog_MinWidth);
         builder.setTitle("Do you want to continue from a previous game?");
