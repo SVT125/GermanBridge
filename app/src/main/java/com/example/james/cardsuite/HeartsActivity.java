@@ -7,7 +7,6 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.SystemClock;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -53,7 +52,6 @@ public class HeartsActivity extends GameActivity implements Serializable {
 
         displayEndPiles(scores);
 
-        Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -143,7 +141,6 @@ public class HeartsActivity extends GameActivity implements Serializable {
             if (!finishedSwapping) {
                 final int swapRound = manager.getPotsFinished() % 4;
                 if (swapRound != 3) {
-                    Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -172,7 +169,6 @@ public class HeartsActivity extends GameActivity implements Serializable {
                 } else
                     finishedSwapping = true;
             } else {
-                Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -226,8 +222,6 @@ public class HeartsActivity extends GameActivity implements Serializable {
     }
 
     public void endPot() {
-        Handler handler = new Handler();
-
         currentPotTurn++;
         manager.potAnalyze(); //sets the new start player for the next pot
         currentPlayerInteracting = manager.startPlayer;
@@ -465,7 +459,6 @@ public class HeartsActivity extends GameActivity implements Serializable {
     }
 
     public void dealCards() {
-        Handler handler = new Handler();
         long currentTimeDelay = 0;
         final int[] initialCoordinates = new int[2];
         findViewById(R.id.anchor).getLocationOnScreen(initialCoordinates);
