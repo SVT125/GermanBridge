@@ -118,7 +118,8 @@ public class GameAnimation {
     }
 
     // Deals one card to each of the 4 players at the same time.
-    public static void dealSingleCards(GameActivity activity, int[] initialCoordinates) {
+    // If a Runnable is specified, it will run after the last of the 4 card animations (choice is arbitrary).
+    public static void dealSingleCards(GameActivity activity, final Runnable endAction, int[] initialCoordinates) {
         int[][] finalCoordinatesArray = new int[][] {new int[2], new int[2], new int[2], new int[2]};
         activity.findViewById(R.id.bottomPlayerHandLayout).getLocationOnScreen(finalCoordinatesArray[0]);
         finalCoordinatesArray[0][0] += activity.findViewById(R.id.bottomPlayerHandLayout).getWidth()/2;
@@ -131,7 +132,8 @@ public class GameAnimation {
         activity.findViewById(R.id.rightPlayerHandLayout).getLocationOnScreen(finalCoordinatesArray[3]);
         finalCoordinatesArray[3][1] += activity.findViewById(R.id.rightPlayerHandLayout).getHeight()/2;
 
-        for(int[] finalCoordinates : finalCoordinatesArray) {
+        for(int i = 0; i < 4; i++) {
+            final int currentIndex = i;
             final ImageView imageView = new ImageView(activity.getApplicationContext());
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
@@ -142,12 +144,17 @@ public class GameAnimation {
             imageView.setAdjustViewBounds(true);
             ((RelativeLayout) activity.findViewById(R.id.potLayout)).addView(imageView);
 
-            imageView.animate().setDuration(100).translationXBy(finalCoordinates[0] - initialCoordinates[0])
-                    .translationYBy(finalCoordinates[1] - initialCoordinates[1])
+            imageView.animate().setDuration(100).translationXBy(finalCoordinatesArray[i][0] - initialCoordinates[0])
+                    .translationYBy(finalCoordinatesArray[i][1] - initialCoordinates[1])
                     .withEndAction(new Runnable() {
                         @Override
                         public void run() {
                             ((ViewGroup) imageView.getParent()).removeView(imageView);
+
+                            //If there isn't a runnable specified or this is the "last of the animations", run the end action.
+                            //The choice of index was arbitrary, used only to enforce that 1 of the 4 animations would run the action.
+                            if(endAction != null && currentIndex == 3)
+                                handler.post(endAction);
                         }
                     }).start();
         }
