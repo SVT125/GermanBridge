@@ -120,21 +120,20 @@ public class SpadesActivity extends GameActivity {
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    GameAnimation.collectEndPile(SpadesActivity.this, currentPlayerInteracting);
+                    GameAnimation.collectEndPile(SpadesActivity.this, new Runnable() {
+                        @Override
+                        public void run() {
+                            manager.pot = new HashMap<Integer, Card>();
+                            potClear();
+                            displayPot();
+                            displayEndPiles(scores);
+
+                            if(!manager.getPlayers()[lastPlayer].hand.isEmpty())
+                                executeAITurns();
+                        }
+                    },currentPlayerInteracting);
                 }
             }, 75);
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    manager.pot = new HashMap<Integer, Card>();
-                    potClear();
-                    displayPot();
-                    displayEndPiles(scores);
-
-                    if(!manager.getPlayers()[lastPlayer].hand.isEmpty())
-                        executeAITurns();
-                }
-            },250);
 
             if(!manager.getPlayers()[lastPlayer].hand.isEmpty())
                 return;

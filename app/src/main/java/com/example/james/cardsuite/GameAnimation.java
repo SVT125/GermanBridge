@@ -2,9 +2,11 @@ package com.example.james.cardsuite;
 
 import android.animation.AnimatorInflater;
 import android.animation.AnimatorSet;
+import android.os.Handler;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
+import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -12,22 +14,26 @@ import android.widget.RelativeLayout;
 import java.util.Map;
 
 public class GameAnimation {
+    public static Handler handler = new Handler();
+
     public static void placeCard(GameActivity activity, View v, int player) {
         int[] potCoordinates = new int[2], cardCoordinates = new int[2];
         v.getLocationOnScreen(cardCoordinates);
         TranslateAnimation ta;
+
         switch(player) {
             case 0: activity.findViewById(R.id.bottomPotCard).getLocationOnScreen(potCoordinates); break;
             case 1: activity.findViewById(R.id.leftPotCard).getLocationOnScreen(potCoordinates); break;
             case 2: activity.findViewById(R.id.topPotCard).getLocationOnScreen(potCoordinates); break;
             case 3: activity.findViewById(R.id.rightPotCard).getLocationOnScreen(potCoordinates); break;
         }
+
         ta = new TranslateAnimation(0,potCoordinates[0]-cardCoordinates[0],0,potCoordinates[1]-cardCoordinates[1]);
         ta.setDuration(150);
         v.startAnimation(ta);
     }
 
-    public static void collectEndPile(GameActivity activity, int winningPlayer) {
+    public static void collectEndPile(GameActivity activity, final Runnable endAction, int winningPlayer) {
         int[] pileCoordinates = new int[2];
 
         switch(winningPlayer) {
@@ -53,6 +59,20 @@ public class GameAnimation {
 
             TranslateAnimation ta = new TranslateAnimation(0,pileCoordinates[0]-potCoordinates[0],0,pileCoordinates[1]-potCoordinates[1]);
             ta.setDuration(250);
+            if(endAction != null) {
+                ta.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {}
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        handler.post(endAction);
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {}
+                });
+            }
             v.startAnimation(ta);
         }
     }

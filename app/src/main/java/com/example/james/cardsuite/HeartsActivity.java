@@ -253,21 +253,19 @@ public class HeartsActivity extends GameActivity implements Serializable {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                GameAnimation.collectEndPile(HeartsActivity.this, currentPlayerInteracting);
+                GameAnimation.collectEndPile(HeartsActivity.this, new Runnable() {
+                    @Override
+                    public void run() {
+                        displayEndPiles(roundScores);
+                        manager.usedCards.addAll(manager.pot.values());
+                        manager.pot.clear();
+
+                        if (currentPotTurn == 13)
+                            finishedRound();
+                    }
+                },currentPlayerInteracting);
             }
         },75);
-
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                displayEndPiles(roundScores);
-                manager.usedCards.addAll(manager.pot.values());
-                manager.pot.clear();
-
-                if (currentPotTurn == 13)
-                    finishedRound();
-            }
-        }, 250);
     }
 
     public void finishedRound() {

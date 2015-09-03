@@ -131,20 +131,19 @@ public class BridgeActivity extends GameActivity implements Serializable {
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    GameAnimation.collectEndPile(BridgeActivity.this, currentPlayerInteracting);
+                    GameAnimation.collectEndPile(BridgeActivity.this, new Runnable() {
+                        @Override
+                        public void run() {
+                            manager.pot = new HashMap<Integer, Card>();
+                            potClear();
+                            displayPot();
+                            displayEndPiles(scores);
+                            if(!manager.getPlayers()[lastPlayer].hand.isEmpty())
+                                executeAITurns();
+                        }
+                    },currentPlayerInteracting);
                 }
             }, 75);
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    manager.pot = new HashMap<Integer, Card>();
-                    potClear();
-                    displayPot();
-                    displayEndPiles(scores);
-                    if(!manager.getPlayers()[lastPlayer].hand.isEmpty())
-                        executeAITurns();
-                }
-            }, 250);
 
             if(!manager.getPlayers()[lastPlayer].hand.isEmpty())
                 return;
