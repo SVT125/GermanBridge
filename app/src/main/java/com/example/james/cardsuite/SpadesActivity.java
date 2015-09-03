@@ -113,41 +113,36 @@ public class SpadesActivity extends GameActivity {
             manager.potAnalyze();
             currentPlayerInteracting = manager.startPlayer;
 
-            handler.postDelayed(new Runnable() {
+            GameAnimation.collectEndPile(SpadesActivity.this, new Runnable() {
                 @Override
                 public void run() {
-                    GameAnimation.collectEndPile(SpadesActivity.this, new Runnable() {
-                        @Override
-                        public void run() {
-                            manager.pot = new HashMap<Integer, Card>();
-                            potClear();
-                            displayPot();
-                            displayEndPiles(scores);
+                    manager.pot = new HashMap<Integer, Card>();
+                    potClear();
+                    displayPot();
+                    displayEndPiles(scores);
 
-                            if(!manager.getPlayers()[lastPlayer].hand.isEmpty())
-                                executeAITurns();
-                            else if(!manager.isGameOver()) {
-                                List<Integer> scores = new ArrayList<Integer>();
-                                for (Player player : manager.getPlayers()) {
-                                    player.scoreChange();
-                                    scores.add(player.score);
-                                }
-
-                                reset();
-
-                                final List<Integer> finalScores = scores;
-                                displayScoreTable(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        displayEndPiles(finalScores);
-                                        dealCards();
-                                    }
-                                });
-                            }
+                    if(!manager.getPlayers()[lastPlayer].hand.isEmpty())
+                        executeAITurns();
+                    else if(!manager.isGameOver()) {
+                        List<Integer> scores = new ArrayList<Integer>();
+                        for (Player player : manager.getPlayers()) {
+                            player.scoreChange();
+                            scores.add(player.score);
                         }
-                    },currentPlayerInteracting);
+
+                        reset();
+
+                        final List<Integer> finalScores = scores;
+                        displayScoreTable(new Runnable() {
+                            @Override
+                            public void run() {
+                                displayEndPiles(finalScores);
+                                dealCards();
+                            }
+                        });
+                    }
                 }
-            }, 75);
+            },currentPlayerInteracting);
         }
 
         if(manager.isGameOver()) {

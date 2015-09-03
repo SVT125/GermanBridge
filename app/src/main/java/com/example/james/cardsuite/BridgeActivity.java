@@ -124,33 +124,28 @@ public class BridgeActivity extends GameActivity implements Serializable {
             manager.potAnalyze();
             currentPlayerInteracting = manager.startPlayer;
 
-            handler.postDelayed(new Runnable() {
+            GameAnimation.collectEndPile(BridgeActivity.this, new Runnable() {
                 @Override
                 public void run() {
-                    GameAnimation.collectEndPile(BridgeActivity.this, new Runnable() {
-                        @Override
-                        public void run() {
-                            manager.pot = new HashMap<Integer, Card>();
-                            potClear();
-                            displayPot();
-                            displayEndPiles(scores);
-                            if (!manager.getPlayers()[lastPlayer].hand.isEmpty())
-                                executeAITurns();
-                            else {
-                                scores.clear();
-                                for (Player player : manager.players) {
-                                    player.scoreChange();
-                                    scores.add(player.score);
-                                }
-                                manager.potsFinished++;
-                                displayEndPiles(scores);
-                                displayScoreTable(null);
-                            }
-
+                    manager.pot = new HashMap<Integer, Card>();
+                    potClear();
+                    displayPot();
+                    displayEndPiles(scores);
+                    if (!manager.getPlayers()[lastPlayer].hand.isEmpty())
+                        executeAITurns();
+                    else {
+                        scores.clear();
+                        for (Player player : manager.players) {
+                            player.scoreChange();
+                            scores.add(player.score);
                         }
-                    }, currentPlayerInteracting);
+                        manager.potsFinished++;
+                        displayEndPiles(scores);
+                        displayScoreTable(null);
+                    }
+
                 }
-            }, 75);
+            }, currentPlayerInteracting);
         }
 
         //If this wasn't the last round, return; otherwise, the game is finished.
