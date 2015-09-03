@@ -122,7 +122,7 @@ public class SpadesActivity extends GameActivity {
                 public void run() {
                     GameAnimation.collectEndPile(SpadesActivity.this, currentPlayerInteracting);
                 }
-            }, 175);
+            }, 75);
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -135,6 +135,7 @@ public class SpadesActivity extends GameActivity {
                         executeAITurns();
                 }
             },250);
+
             if(!manager.getPlayers()[lastPlayer].hand.isEmpty())
                 return;
         }
@@ -159,21 +160,21 @@ public class SpadesActivity extends GameActivity {
                 }
             }, 500);
 
-            return;
+            if(!(manager.isGameOver()))
+                return;
         }
 
-        if(!(manager.isGameOver()))
-            return;
-
-        // The game is done - pass all relevant information for results activity to display.
-        // Passing manager just in case for future statistics if needbe.
-        Intent intent = new Intent(SpadesActivity.this, ResultsActivity.class);
-        intent.putExtra("manager", manager);
-        intent.putExtra("players", manager.getPlayers());
-        intent.putExtra("scores", new int[]{manager.players[0].score, manager.players[1].score,
-                manager.players[2].score, manager.players[3].score});
-        startActivity(intent);
-        finish();
+        if(manager.isGameOver()) {
+            // The game is done - pass all relevant information for results activity to display.
+            // Passing manager just in case for future statistics if needbe.
+            Intent intent = new Intent(SpadesActivity.this, ResultsActivity.class);
+            intent.putExtra("manager", manager);
+            intent.putExtra("players", manager.getPlayers());
+            intent.putExtra("scores", new int[]{manager.players[0].score, manager.players[1].score,
+                    manager.players[2].score, manager.players[3].score});
+            startActivity(intent);
+            finish();
+        }
     }
 
     // reshuffles deck, increments round count, resets all variables for the next round.
@@ -208,14 +209,12 @@ public class SpadesActivity extends GameActivity {
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            for(Card card : manager.players[currentPlayer].hand)
-                                    Log.i("Hand card",""+card);
+
                             //After the delay, proceed the AI move.
                             Card bestMove = SpadesAI.chooseMove(currentPlayer, (SpadesManager) manager, levelsToSearch);
 
-                            Log.i("AI card", "" + bestMove);
-
                             int chosenAI = manager.players[currentPlayer].hand.indexOf(bestMove);
+
                             manager.potHandle(chosenAI, currentPlayer);
 
                             ImageView cardView = (ImageView)findViewByCard(bestMove);

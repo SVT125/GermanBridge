@@ -255,7 +255,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
             public void run() {
                 GameAnimation.collectEndPile(HeartsActivity.this, currentPlayerInteracting);
             }
-        },175);
+        },75);
 
         handler.postDelayed(new Runnable() {
             @Override
