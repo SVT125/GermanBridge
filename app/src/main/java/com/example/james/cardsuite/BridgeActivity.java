@@ -45,7 +45,6 @@ public class BridgeActivity extends GameActivity implements Serializable {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bridge);
 
-
         Intent intent = getIntent();
         boolean loadGame = intent.getBooleanExtra("loadGame", false);
         if (loadGame) {
@@ -138,29 +137,23 @@ public class BridgeActivity extends GameActivity implements Serializable {
                             potClear();
                             displayPot();
                             displayEndPiles(scores);
-                            if(!manager.getPlayers()[lastPlayer].hand.isEmpty())
+                            if (!manager.getPlayers()[lastPlayer].hand.isEmpty())
                                 executeAITurns();
+                            else {
+                                scores.clear();
+                                for (Player player : manager.players) {
+                                    player.scoreChange();
+                                    scores.add(player.score);
+                                }
+                                manager.potsFinished++;
+                                displayEndPiles(scores);
+                                displayScoreTable();
+                            }
+
                         }
-                    },currentPlayerInteracting);
+                    }, currentPlayerInteracting);
                 }
             }, 75);
-
-            if(!manager.getPlayers()[lastPlayer].hand.isEmpty())
-                return;
-        }
-
-        //Set up the next round, reset all variables.
-        if (manager.getPlayers()[lastPlayer].hand.isEmpty()) {
-            scores.clear();
-            for (Player player : manager.players) {
-                player.scoreChange();
-                scores.add(player.score);
-            }
-            manager.potsFinished++;
-            displayEndPiles(scores);
-            displayScoreTable();
-
-            return;
         }
 
         //If this wasn't the last round, return; otherwise, the game is finished.

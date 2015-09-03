@@ -10,7 +10,6 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -98,7 +97,7 @@ public class SpadesActivity extends GameActivity {
             int chosen = getCardIndex(v);
 
             manager.potHandle(chosen, currentPlayerInteracting);
-            GameAnimation.placeCard(SpadesActivity.this,v,currentPlayerInteracting);
+            GameAnimation.placeCard(SpadesActivity.this, v, currentPlayerInteracting);
 
             potClear();
             displayPot();
@@ -130,37 +129,29 @@ public class SpadesActivity extends GameActivity {
 
                             if(!manager.getPlayers()[lastPlayer].hand.isEmpty())
                                 executeAITurns();
+                            else if(!manager.isGameOver()) {
+                                List<Integer> scores = new ArrayList<Integer>();
+                                for (Player player : manager.getPlayers()) {
+                                    player.scoreChange();
+                                    scores.add(player.score);
+                                }
+
+                                reset();
+                                displayScoreTable();
+                                displayEndPiles(scores);
+
+                                Handler handler = new Handler();
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        dealCards();
+                                    }
+                                }, 500);
+                            }
                         }
                     },currentPlayerInteracting);
                 }
             }, 75);
-
-            if(!manager.getPlayers()[lastPlayer].hand.isEmpty())
-                return;
-        }
-
-        //If all the hands are exhausted, restart the entire game (until a score has reached 500).
-        if(manager.getPlayers()[lastPlayer].hand.isEmpty() && !manager.isGameOver()) {
-            List<Integer> scores = new ArrayList<Integer>();
-            for (Player player : manager.getPlayers()) {
-                player.scoreChange();
-                scores.add(player.score);
-            }
-
-            reset();
-            displayScoreTable();
-            displayEndPiles(scores);
-
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    dealCards();
-                }
-            }, 500);
-
-            if(!(manager.isGameOver()))
-                return;
         }
 
         if(manager.isGameOver()) {

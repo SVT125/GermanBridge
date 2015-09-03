@@ -59,7 +59,9 @@ public class GameAnimation {
 
             TranslateAnimation ta = new TranslateAnimation(0,pileCoordinates[0]-potCoordinates[0],0,pileCoordinates[1]-potCoordinates[1]);
             ta.setDuration(250);
-            if(endAction != null) {
+
+            //Condition (i == 3) is arbitrary; enforce that the Runnable is only run once of the 4 animations.
+            if(endAction != null && i == 3) {
                 ta.setAnimationListener(new Animation.AnimationListener() {
                     @Override
                     public void onAnimationStart(Animation animation) {}
