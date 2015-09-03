@@ -52,6 +52,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
 
         displayEndPiles(scores);
 
+        //Artificial delay added so that this runs after onCreate finishes and the views' coordinates are defined.
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -232,22 +233,17 @@ public class HeartsActivity extends GameActivity implements Serializable {
         for (int i = 0; i < manager.getPlayers().length; i++)
             roundScores.add(((HeartsPlayer) manager.getPlayers()[i]).tallyRoundScore());
 
-        handler.postDelayed(new Runnable() {
+        GameAnimation.collectEndPile(HeartsActivity.this, new Runnable() {
             @Override
             public void run() {
-                GameAnimation.collectEndPile(HeartsActivity.this, new Runnable() {
-                    @Override
-                    public void run() {
-                        displayEndPiles(roundScores);
-                        manager.usedCards.addAll(manager.pot.values());
-                        manager.pot.clear();
+                displayEndPiles(roundScores);
+                manager.usedCards.addAll(manager.pot.values());
+                manager.pot.clear();
 
-                        if (currentPotTurn == 13)
-                            finishedRound();
-                    }
-                }, currentPlayerInteracting);
+                if (currentPotTurn == 13)
+                    finishedRound();
             }
-        }, 75);
+        }, currentPlayerInteracting);
     }
 
     public void finishedRound() {
