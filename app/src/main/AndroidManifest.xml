@@ -47,6 +47,13 @@
             android:theme="@android:style/Theme.Holo.Light.NoActionBar"
             android:label="@string/title_activity_spades" >
         </activity>
+        <activity
+            android:name=".SettingsActivity"
+            android:screenOrientation="sensorLandscape"
+            android:configChanges="mcc|mnc|locale|touchscreen|navigation|fontScale|orientation|keyboard|keyboardHidden|screenLayout|uiMode|smallestScreenSize|screenSize|layoutDirection"
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar"
+            android:label="title_activity_settings" >
+        </activity>
     </application>
 
 </manifest>
