@@ -60,16 +60,6 @@ public class HeartsActivity extends GameActivity implements Serializable {
                 dealCards();
             }
         }, 500);
-
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (manager.getPlayers()[currentPlayerInteracting].isBot)
-                    botHandle(250);
-                else
-                    displayHands(0, true);
-            }
-        }, 3000);
     }
 
     @Override
@@ -263,9 +253,9 @@ public class HeartsActivity extends GameActivity implements Serializable {
                         if (currentPotTurn == 13)
                             finishedRound();
                     }
-                },currentPlayerInteracting);
+                }, currentPlayerInteracting);
             }
-        },75);
+        }, 75);
     }
 
     public void finishedRound() {
@@ -336,7 +326,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
             manager.getPlayers()[i].organize();
         }
 
-        GameAnimation.swapCards(this,swapRound,animationsActive);
+        GameAnimation.swapCards(this, swapRound, animationsActive);
 
         finishedSwapping = true;
         findStartPlayer();
@@ -483,29 +473,28 @@ public class HeartsActivity extends GameActivity implements Serializable {
         findViewById(R.id.anchor).getLocationOnScreen(initialCoordinates);
 
         for(int j = 0; j < manager.players[0].hand.size(); j++) {
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    GameAnimation.dealSingleCards(HeartsActivity.this, initialCoordinates);
-                }
-            }, currentTimeDelay);
-
-            currentTimeDelay += 100;
             final int cardsDisplayed = j;
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    displayIntermediateHands(cardsDisplayed);
-                }
-            },currentTimeDelay);
-        }
+                    GameAnimation.dealSingleCards(HeartsActivity.this, new Runnable() {
+                        @Override
+                        public void run() {
+                            displayIntermediateHands(cardsDisplayed);
 
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                displayHands(currentPlayerInteracting, true);
-            }
-        },currentTimeDelay+100);
+                            if(cardsDisplayed == manager.players[0].hand.size()-1) {
+                                if (manager.getPlayers()[currentPlayerInteracting].isBot)
+                                    botHandle(250);
+                                else
+                                    displayHands(currentPlayerInteracting, true);
+                            }
+                        }
+                    },initialCoordinates);
+                }
+            }, currentTimeDelay);
+
+            currentTimeDelay += 100;
+        }
     }
 
     public void loadGame() {
