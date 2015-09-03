@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.media.SoundPool;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -42,6 +43,7 @@ public abstract class GameActivity extends Activity implements Serializable {
     protected SoundPool.OnLoadCompleteListener loadListener;
     protected Random r = new Random();
     protected List<ImageView> cardViews = new ArrayList<ImageView>();
+    protected Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,7 +130,7 @@ public abstract class GameActivity extends Activity implements Serializable {
         }
     }
 
-    public void displayScoreTable() {
+    public void displayScoreTable(final Runnable closeAction) {
         String[] column = { "Player 1", "Player 2", "Player 3", "Player 4" };
         List<String> row = new ArrayList<>();
         for (int i = 1; i <= manager.getPotsFinished() - 1; i++)
@@ -184,7 +186,8 @@ public abstract class GameActivity extends Activity implements Serializable {
         builder.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
+                if(closeAction != null)
+                    handler.post(closeAction);
             }
         });
         builder.show();

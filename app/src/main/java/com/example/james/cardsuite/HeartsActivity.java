@@ -277,7 +277,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
             roundScores.add(((HeartsPlayer) manager.getPlayers()[i]).tallyRoundScore());
         displayEndPiles(roundScores);
         reset();
-        displayScoreTable();
+        displayScoreTable(null);
     }
 
     public void chooseCards(Card chosenCard, int swapRound, View v) {

@@ -9,7 +9,6 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.SystemClock;
 import android.view.Gravity;
 import android.view.Menu;
@@ -75,7 +74,6 @@ public class BridgeActivity extends GameActivity implements Serializable {
             //Display the image buttons
             displayEndPiles(scores);
 
-            Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -126,7 +124,6 @@ public class BridgeActivity extends GameActivity implements Serializable {
             manager.potAnalyze();
             currentPlayerInteracting = manager.startPlayer;
 
-            Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -147,7 +144,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
                                 }
                                 manager.potsFinished++;
                                 displayEndPiles(scores);
-                                displayScoreTable();
+                                displayScoreTable(null);
                             }
 
                         }
@@ -194,7 +191,6 @@ public class BridgeActivity extends GameActivity implements Serializable {
             if(manager.pot.get(currentPlayer) == null) {
                 if (isBot[currentPlayer] && manager.players[currentPlayer].hand.size() > 0) {
                     final long timeDelay = currentTimeDelay;
-                    Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -224,7 +220,6 @@ public class BridgeActivity extends GameActivity implements Serializable {
         currentPlayerInteracting = (currentPlayerInteracting + offset) % manager.playerCount;
         //The last non-bot player to display, since currentPlayerInteracting will be reset to the new start player.
         final int playerToDisplay = currentPlayerInteracting;
-        Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -444,7 +439,8 @@ public class BridgeActivity extends GameActivity implements Serializable {
         return true;
     }
 
-    public void displayScoreTable() {
+    @Override
+    public void displayScoreTable(Runnable closeAction) {
         String[] column = { "Player 1", "Player 2", "Player 3", "Player 4" };
         List<String> row = new ArrayList<>();
         for (int i = 1; i <= manager.getPotsFinished() - 1; i++)
@@ -515,20 +511,13 @@ public class BridgeActivity extends GameActivity implements Serializable {
                     player++;
                 }
 
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        dealCards();
-                    }
-                }, 500);
+                dealCards();
             }
         });
         builder.show();
     }
 
     public void dealCards() {
-        Handler handler = new Handler();
         long currentTimeDelay = 0;
         final int[] initialCoordinates = new int[2];
         findViewById(R.id.anchor).getLocationOnScreen(initialCoordinates);

@@ -8,7 +8,6 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.SystemClock;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -64,7 +63,6 @@ public class SpadesActivity extends GameActivity {
             //Display the image buttons
             displayEndPiles(scores);
 
-            Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -115,7 +113,6 @@ public class SpadesActivity extends GameActivity {
             manager.potAnalyze();
             currentPlayerInteracting = manager.startPlayer;
 
-            Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -137,16 +134,15 @@ public class SpadesActivity extends GameActivity {
                                 }
 
                                 reset();
-                                displayScoreTable();
-                                displayEndPiles(scores);
 
-                                Handler handler = new Handler();
-                                handler.postDelayed(new Runnable() {
+                                final List<Integer> finalScores = scores;
+                                displayScoreTable(new Runnable() {
                                     @Override
                                     public void run() {
+                                        displayEndPiles(finalScores);
                                         dealCards();
                                     }
-                                }, 500);
+                                });
                             }
                         }
                     },currentPlayerInteracting);
@@ -195,7 +191,6 @@ public class SpadesActivity extends GameActivity {
             if(manager.pot.get(currentPlayer) == null) {
                 if (isBot[currentPlayer] && manager.players[currentPlayer].hand.size() > 0) {
                     final long timeDelay = currentTimeDelay;
-                    Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -228,7 +223,6 @@ public class SpadesActivity extends GameActivity {
         currentPlayerInteracting = (currentPlayerInteracting + offset) % manager.playerCount;
         //The last non-bot player to display, since currentPlayerInteracting will be reset to the new start player.
         final int playerToDisplay = currentPlayerInteracting;
-        Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -424,7 +418,6 @@ public class SpadesActivity extends GameActivity {
     }
 
     public void dealCards() {
-        Handler handler = new Handler();
         long currentTimeDelay = 0;
         final int[] initialCoordinates = new int[2];
         findViewById(R.id.anchor).getLocationOnScreen(initialCoordinates);
