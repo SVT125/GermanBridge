@@ -230,10 +230,10 @@ public abstract class GameActivity extends Activity implements Serializable {
             manager.players[i].organize();
             //The coordinate and angular offsets for every card. Theta is dependent on the number of cards in the hand.
             int deltaX = 0, deltaY;
-            float initialTheta = (float) -4.6 * numCardsToDisplay / 2;
+            float initialTheta = (float) -2.25 * numCardsToDisplay / 2;
             for (int j = 0; j < numCardsToDisplay; j++) {
-                float theta = (float) (initialTheta + 4.6 * j);
-                deltaY = (int) (2.5 * (30 - Math.pow(j - numCardsToDisplay / 2, 2))); //Truncate the result of the offset
+                float theta = (float) (initialTheta + 2.25 * j);
+                deltaY = (int) (1.2 * (17.5 - Math.pow(j - numCardsToDisplay / 2, 2))); //Truncate the result of the offset
 
                 if(numCardsToDisplay % 2 != 0 && j == (numCardsToDisplay-1)/2)
                     theta = 0;
@@ -256,7 +256,7 @@ public abstract class GameActivity extends Activity implements Serializable {
                         bottom.addView(cardButton, restParams);
                         break;
                     case 1:
-                        restParams.setMargins(100 + deltaY, deltaX, 0, 0);
+                        restParams.setMargins(225 + deltaY, deltaX, 0, 0);
                         cardButton.setRotation(90 + theta);
                         left.addView(cardButton, restParams);
                         break;
@@ -266,7 +266,7 @@ public abstract class GameActivity extends Activity implements Serializable {
                         top.addView(cardButton, restParams);
                         break;
                     case 3:
-                        restParams.setMargins(115 - deltaY, deltaX, 0, 0);
+                        restParams.setMargins(25-deltaY, deltaX, 0, 0);
                         cardButton.setRotation(90 - theta);
                         right.addView(cardButton, restParams);
                         break;

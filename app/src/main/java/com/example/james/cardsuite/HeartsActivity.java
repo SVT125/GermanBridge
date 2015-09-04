@@ -295,7 +295,6 @@ public class HeartsActivity extends GameActivity implements Serializable {
 
             //TODO - Return the view to its original position.
 
-            v.setBackgroundResource(0);
             chosenCard.isClicked = false;
         }
 
@@ -400,10 +399,10 @@ public class HeartsActivity extends GameActivity implements Serializable {
             manager.players[i].organize();
             //The coordinate and angular offsets for every card. Theta is dependent on the number of cards in the hand.
             int deltaX = 0, deltaY;
-            float initialTheta = (float) -4.6 * manager.getPlayers()[i].hand.size() / 2;
+            float initialTheta = (float) -2.25 * manager.getPlayers()[i].hand.size() / 2;
             for (int j = 0; j < manager.getPlayers()[i].hand.size(); j++) {
-                float theta = (float) (initialTheta + 4.6 * j);
-                deltaY = (int) (2.5 * (30 - Math.pow(j - manager.getPlayers()[i].hand.size() / 2, 2))); //Truncate the result of the offset
+                float theta = (float) (initialTheta + 2.25 * j);
+                deltaY = (int) (1.2 * (17.5 - Math.pow(j - manager.getPlayers()[i].hand.size() / 2, 2))); //Truncate the result of the offset
 
                 if(manager.getPlayers()[i].hand.size() % 2 != 0 && j == (manager.getPlayers()[i].hand.size()-1)/2)
                     theta = 0;
@@ -415,6 +414,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
                 if (i == player) {
                     cardButton = new ImageButton(this);
                     cardButton.setImageResource(getResources().getIdentifier(manager.getPlayers()[player].hand.get(j).getAddress(), "drawable", getPackageName()));
+                    cardButton.setBackgroundResource(R.drawable.card_border);
                     cardButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -434,7 +434,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
                 }
 
                 cardButton.setTag(manager.getPlayers()[i].hand.get(j));
-                cardButton.setPadding(3, 3, 3, 3);
+                cardButton.setPadding(1,1,1,1);
                 if(!cardsClickable)
                     cardButton.setClickable(false);
                 cardButton.setMaxHeight(115);
@@ -447,7 +447,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
                         bottom.addView(cardButton, restParams);
                         break;
                     case 1:
-                        restParams.setMargins(100 + deltaY, deltaX, 0, 0);
+                        restParams.setMargins(225 + deltaY, deltaX, 0, 0);
                         cardButton.setRotation(90 + theta);
                         left.addView(cardButton, restParams);
                         break;
@@ -457,7 +457,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
                         top.addView(cardButton, restParams);
                         break;
                     case 3:
-                        restParams.setMargins(115 - deltaY, deltaX, 0, 0);
+                        restParams.setMargins(25-deltaY, deltaX, 0, 0);
                         cardButton.setRotation(90 - theta);
                         right.addView(cardButton, restParams);
                         break;
