@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 public class HeartsActivity extends GameActivity implements Serializable {
-    private boolean finishedSwapping = false, finishedSwapProcessing = true;
+    private boolean finishedSwapping = false, finishedSwapProcessing = true, finishedClickProcessing = true;
     private List<List<Card>> chosenLists = new ArrayList<List<Card>>();
     private List<Card> chosenCards = new ArrayList<Card>();
     Map<Pair<Integer,View>,AnimatorSet> animationsActive = new HashMap<Pair<Integer,View>,AnimatorSet>();
@@ -115,8 +115,10 @@ public class HeartsActivity extends GameActivity implements Serializable {
 
                         if (manager.getPlayers()[currentPlayerInteracting].isBot) {
                             botHandle(250);
-                        } else
+                        } else {
                             displayHands(currentPlayerInteracting, true);
+                            finishedClickProcessing = true;
+                        }
                     }
                 },currentPlayerInteracting);
             }
@@ -129,6 +131,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
                 displayHands(currentPlayerInteracting,true);
                 if (!(chosenLists.size() == 4))
                     chosenCards.clear();
+                finishedClickProcessing = true;
             }
         }
         else {
@@ -198,8 +201,10 @@ public class HeartsActivity extends GameActivity implements Serializable {
 
                                 if (manager.getPlayers()[currentPlayerInteracting].isBot)
                                     botHandle(250);
-                                else
+                                else {
                                     displayHands(currentPlayerInteracting, true);
+                                    finishedClickProcessing = true;
+                                }
                             }
                         },currentPlayerInteracting);
 
@@ -225,10 +230,10 @@ public class HeartsActivity extends GameActivity implements Serializable {
         //Prevents spam-clicking before the last button click is done.
         //There's still a time limit enforced just in case the booleans aren't set to false before next click (optional precaution).
         if ((!finishedSwapping && !finishedSwapProcessing && SystemClock.elapsedRealtime() - lastClickTime < 200) ||
-                (finishedSwapping && SystemClock.elapsedRealtime() - lastClickTime < 1750)){
+                (finishedSwapping && !finishedClickProcessing && SystemClock.elapsedRealtime() - lastClickTime < 200)){
             return;
         }
-        finishedSwapProcessing = false;
+        finishedSwapProcessing = finishedClickProcessing = false;
         lastClickTime = SystemClock.elapsedRealtime();
 
         super.gameClick(v);
