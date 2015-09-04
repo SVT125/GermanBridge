@@ -1,9 +1,6 @@
 package com.example.james.cardsuite;
 
-import android.animation.Animator;
 import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -31,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 public class HeartsActivity extends GameActivity implements Serializable {
-    private boolean finishedSwapping = false;
+    private boolean finishedSwapping = false, finishedSwapProcessing = true;
     private List<List<Card>> chosenLists = new ArrayList<List<Card>>();
     private List<Card> chosenCards = new ArrayList<Card>();
     Map<Pair<Integer,View>,AnimatorSet> animationsActive = new HashMap<Pair<Integer,View>,AnimatorSet>();
@@ -226,10 +223,12 @@ public class HeartsActivity extends GameActivity implements Serializable {
 
     public void gameClick(View v) {
         //Prevents spam-clicking before the last button click is done.
-        if ((!finishedSwapping && SystemClock.elapsedRealtime() - lastClickTime < 1000) ||
+        //There's still a time limit enforced just in case the booleans aren't set to false before next click (optional precaution).
+        if ((!finishedSwapping && !finishedSwapProcessing && SystemClock.elapsedRealtime() - lastClickTime < 200) ||
                 (finishedSwapping && SystemClock.elapsedRealtime() - lastClickTime < 1750)){
             return;
         }
+        finishedSwapProcessing = false;
         lastClickTime = SystemClock.elapsedRealtime();
 
         super.gameClick(v);
@@ -312,8 +311,10 @@ public class HeartsActivity extends GameActivity implements Serializable {
                     chosenCards.add(chosenCard);
                 }
 
-                if (chosenCards.size() < 3)
+                if (chosenCards.size() < 3) {
+                    finishedSwapProcessing = true;
                     return;
+                }
 
                 List<Card> tempCards = new ArrayList<>();
                 tempCards.addAll(chosenCards);
@@ -324,6 +325,8 @@ public class HeartsActivity extends GameActivity implements Serializable {
 
             if (currentPlayerInteracting == 4)
                 swapCards(swapRound);
+            else
+                finishedSwapProcessing = true;
         }
     }
 
@@ -337,6 +340,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
 
         finishedSwapping = true;
         findStartPlayer();
+        finishedSwapProcessing = true;
     }
 
     // reshuffles deck, increments round count, resets all variables for the next round.
