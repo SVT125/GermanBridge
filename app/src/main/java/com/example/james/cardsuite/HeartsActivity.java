@@ -1,6 +1,9 @@
 package com.example.james.cardsuite;
 
+import android.animation.Animator;
 import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -285,13 +288,15 @@ public class HeartsActivity extends GameActivity implements Serializable {
     public void chooseCards(Card chosenCard, int swapRound, View v) {
         if (!chosenCard.isClicked) {
             chosenCard.isClicked = true;
-            v.setBackgroundResource(R.drawable.card_border);
             animationsActive.put(new Pair<Integer, View>(currentPlayerInteracting,findViewByCard(chosenCard)), GameAnimation.
                     selectSwappedCard(this, v, currentPlayerInteracting));
         } else {
+            AnimatorSet set = animationsActive.remove(new Pair<Integer, View>(currentPlayerInteracting, findViewByCard(chosenCard)));
+
+            //TODO - Return the view to its original position.
+
             v.setBackgroundResource(0);
             chosenCard.isClicked = false;
-            animationsActive.remove(new Pair<Integer,View>(currentPlayerInteracting,v));
         }
 
         if (!finishedSwapping) {
