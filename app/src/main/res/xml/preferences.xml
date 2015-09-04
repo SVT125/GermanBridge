@@ -1,40 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory
-        android:title="Game Settings" >
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="Settings">
+    <PreferenceCategory android:title="Game Settings">
         <PreferenceScreen
             android:key="volume_settings"
-            android:title="Volume" >
-
+            android:title="Volume">
+            <PreferenceCategory
+                android:title="Volume" >
+            <com.example.james.cardsuite.SeekbarPreference
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:title="MASTER"></com.example.james.cardsuite.SeekbarPreference>
+            <com.example.james.cardsuite.SeekbarPreference
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:title="MUSIC"></com.example.james.cardsuite.SeekbarPreference>
+            <com.example.james.cardsuite.SeekbarPreference
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:title="SFX"></com.example.james.cardsuite.SeekbarPreference>
+            </PreferenceCategory>
         </PreferenceScreen>
         <PreferenceScreen
             android:key="graphics_settings"
-            android:title="Graphics"  >
+            android:title="Graphics">
 
             <!-- You can place more preferences here that will be shown on the next screen. -->
 
         </PreferenceScreen>
     </PreferenceCategory>
-    <PreferenceCategory
-        android:title="Game Mechanics" >
+    <PreferenceCategory android:title="Game Mechanics">
         <PreferenceScreen
             android:key="hearts_settings"
-            android:title="Hearts"  >
+            android:title="Hearts">
 
             <!-- You can place more preferences here that will be shown on the next screen. -->
 
         </PreferenceScreen>
         <PreferenceScreen
             android:key="bridge_settings"
-            android:title="Bridge"  >
+            android:title="Bridge">
 
             <!-- You can place more preferences here that will be shown on the next screen. -->
 
         </PreferenceScreen>
         <PreferenceScreen
             android:key="spades_settings"
-            android:title="Spades"  >
+            android:title="Spades">
 
             <!-- You can place more preferences here that will be shown on the next screen. -->
 
