@@ -102,19 +102,30 @@ public class HeartsActivity extends GameActivity implements Serializable {
             } else {
                 // handle cards being tossed in the pot until all cards are gone (13 turns).
                 manager.potHandle(chosen, currentPlayerInteracting);
-                GameAnimation.placeCard(HeartsActivity.this, v, currentPlayerInteracting);
-                displayHands(currentPlayerInteracting, false);
+                GameAnimation.placeCard(HeartsActivity.this, v, new Runnable() {
+                    @Override
+                    public void run() {
+                        displayHands(currentPlayerInteracting, false);
 
-                potClear();
-                displayPot();
+                        potClear();
+                        displayPot();
+
+                        if(manager.pot.size() > 0)
+                            restOfRoundHandle();
+
+                        if (manager.getPlayers()[currentPlayerInteracting].isBot) {
+                            botHandle(250);
+                        } else
+                            displayHands(currentPlayerInteracting, true);
+                    }
+                },currentPlayerInteracting);
             }
 
-            if (finishedSwapping && (manager.pot.size() > 0))
-                restOfRoundHandle();
-
-            if (manager.getPlayers()[currentPlayerInteracting].isBot) {
+            //We copy the code block above because if we're done swapping, we want to continue execution ONLY when the animation is done.
+            if (!finishedSwapping && manager.getPlayers()[currentPlayerInteracting].isBot) {
                 botHandle(250);
-            } else if(chosenCards.size() == 3){
+            } else if(!finishedSwapping && chosenCards.size() == 3){
+                //This is only executed to display the hand of the next player during the swapping phase/end of turn in game phase.
                 displayHands(currentPlayerInteracting,true);
                 if (!(chosenLists.size() == 4))
                     chosenCards.clear();
@@ -126,11 +137,6 @@ public class HeartsActivity extends GameActivity implements Serializable {
     }
 
     public void restOfRoundHandle() {
-        if (currentPlayerInteracting == manager.startPlayer)
-            potClear();
-
-        displayPot();
-
         currentPlayerInteracting = (currentPlayerInteracting + 1) % 4;
 
         if (manager.pot.size() == 4)
@@ -178,20 +184,25 @@ public class HeartsActivity extends GameActivity implements Serializable {
                         ((HeartsManager) manager).potHandle(botMove, currentPlayerInteracting);
 
                         ImageView cardView = (ImageView)findViewByCard(botMove);
-                        GameAnimation.placeCard(HeartsActivity.this, cardView, currentPlayerInteracting);
-                        potClear();
-                        displayPot();
+                        GameAnimation.placeCard(HeartsActivity.this, cardView, new Runnable() {
+                            @Override
+                            public void run() {
+                                potClear();
+                                displayPot();
 
-                        int chosenSound = r.nextInt(3);
-                        soundPools[chosenSound].play(sounds[chosenSound], 1, 1, 0, 0, 1);
+                                int chosenSound = r.nextInt(3);
+                                soundPools[chosenSound].play(sounds[chosenSound], 1, 1, 0, 0, 1);
 
-                        if (finishedSwapping && (manager.pot.size() > 0))
-                            restOfRoundHandle();
+                                if (finishedSwapping && (manager.pot.size() > 0))
+                                    restOfRoundHandle();
 
-                            if (manager.getPlayers()[currentPlayerInteracting].isBot)
-                                botHandle(250);
-                            else
-                                displayHands(currentPlayerInteracting, true);
+                                if (manager.getPlayers()[currentPlayerInteracting].isBot)
+                                    botHandle(250);
+                                else
+                                    displayHands(currentPlayerInteracting, true);
+                            }
+                        },currentPlayerInteracting);
+
                     }
                 }, delay);
             }
@@ -225,6 +236,8 @@ public class HeartsActivity extends GameActivity implements Serializable {
     public void endPot() {
         currentPotTurn++;
         manager.potAnalyze(); //sets the new start player for the next pot
+        manager.pot.clear();
+
         currentPlayerInteracting = manager.startPlayer;
         for (Card c : manager.pot.values())
             ((HeartsPlayer) manager.getPlayers()[manager.startPlayer]).endPile.add(c);
@@ -238,7 +251,8 @@ public class HeartsActivity extends GameActivity implements Serializable {
             public void run() {
                 displayEndPiles(roundScores);
                 manager.usedCards.addAll(manager.pot.values());
-                manager.pot.clear();
+                potClear();
+                displayPot();
 
                 if (currentPotTurn == 13)
                     finishedRound();

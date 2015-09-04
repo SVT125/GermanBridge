@@ -16,7 +16,7 @@ import java.util.Map;
 public class GameAnimation {
     public static Handler handler = new Handler();
 
-    public static void placeCard(GameActivity activity, View v, int player) {
+    public static void placeCard(GameActivity activity, View v, final Runnable endAction, int player) {
         int[] potCoordinates = new int[2], cardCoordinates = new int[2];
         v.getLocationOnScreen(cardCoordinates);
         TranslateAnimation ta;
@@ -30,6 +30,24 @@ public class GameAnimation {
 
         ta = new TranslateAnimation(0,potCoordinates[0]-cardCoordinates[0],0,potCoordinates[1]-cardCoordinates[1]);
         ta.setDuration(150);
+        if(endAction != null) {
+            ta.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    handler.post(endAction);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+        }
         v.startAnimation(ta);
     }
 

@@ -96,7 +96,7 @@ public class SpadesActivity extends GameActivity {
             int chosen = getCardIndex(v);
 
             manager.potHandle(chosen, currentPlayerInteracting);
-            GameAnimation.placeCard(SpadesActivity.this, v, currentPlayerInteracting);
+            GameAnimation.placeCard(SpadesActivity.this, v, null, currentPlayerInteracting);
 
             potClear();
             displayPot();
@@ -199,7 +199,7 @@ public class SpadesActivity extends GameActivity {
                             manager.potHandle(chosenAI, currentPlayer);
 
                             ImageView cardView = (ImageView)findViewByCard(bestMove);
-                            GameAnimation.placeCard(SpadesActivity.this, cardView, currentPlayerInteracting);
+                            GameAnimation.placeCard(SpadesActivity.this, cardView, null, currentPlayerInteracting);
 
                             int chosenSound = r.nextInt(3);
                             soundPools[chosenSound].play(sounds[chosenSound],1,1,0,0,1);

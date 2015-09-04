@@ -109,7 +109,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
         // players start putting cards into the pot and calculate score
         if(manager.potsFinished <= manager.totalRoundCount) {
             manager.potHandle(chosen, currentPlayerInteracting);
-            GameAnimation.placeCard(this, v, currentPlayerInteracting);
+            GameAnimation.placeCard(this, v, null, currentPlayerInteracting);
 
             potClear();
             displayPot();
@@ -195,7 +195,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
                             int chosenAI = manager.players[currentPlayer].hand.indexOf(bestMove);
 
                             ImageView cardView = (ImageView)findViewByCard(bestMove);
-                            GameAnimation.placeCard(BridgeActivity.this, cardView, currentPlayer);
+                            GameAnimation.placeCard(BridgeActivity.this, cardView, null, currentPlayer);
                             manager.potHandle(chosenAI, currentPlayer);
 
                             int chosenSound = r.nextInt(3);
