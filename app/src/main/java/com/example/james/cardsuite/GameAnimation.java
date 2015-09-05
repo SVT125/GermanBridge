@@ -21,12 +21,15 @@ public class GameAnimation {
         v.getLocationOnScreen(cardCoordinates);
         TranslateAnimation ta;
 
+        View potCard = null;
         switch(player) {
-            case 0: activity.findViewById(R.id.bottomPotCard).getLocationOnScreen(potCoordinates); break;
-            case 1: activity.findViewById(R.id.leftPotCard).getLocationOnScreen(potCoordinates); break;
-            case 2: activity.findViewById(R.id.topPotCard).getLocationOnScreen(potCoordinates); break;
-            case 3: activity.findViewById(R.id.rightPotCard).getLocationOnScreen(potCoordinates); break;
+            case 0: potCard = activity.findViewById(R.id.bottomPotCard); break;
+            case 1: potCard = activity.findViewById(R.id.leftPotCard); break;
+            case 2: potCard = activity.findViewById(R.id.topPotCard); break;
+            case 3: potCard = activity.findViewById(R.id.rightPotCard); break;
         }
+
+        potCard.getLocationOnScreen(potCoordinates);
 
         ta = new TranslateAnimation(0,potCoordinates[0]-cardCoordinates[0],0,potCoordinates[1]-cardCoordinates[1]);
         ta.setDuration(150);
@@ -54,12 +57,15 @@ public class GameAnimation {
     public static void collectEndPile(GameActivity activity, final Runnable endAction, int winningPlayer) {
         int[] pileCoordinates = new int[2];
 
+        View pile = null;
         switch(winningPlayer) {
-            case 0: activity.findViewById(R.id.bottomPile).getLocationOnScreen(pileCoordinates); break;
-            case 1: activity.findViewById(R.id.leftPile).getLocationOnScreen(pileCoordinates); break;
-            case 2: activity.findViewById(R.id.topPile).getLocationOnScreen(pileCoordinates); break;
-            case 3: activity.findViewById(R.id.rightPile).getLocationOnScreen(pileCoordinates); break;
+            case 0: pile = activity.findViewById(R.id.bottomPile); break;
+            case 1: pile = activity.findViewById(R.id.leftPile); break;
+            case 2: pile = activity.findViewById(R.id.topPile); break;
+            case 3: pile = activity.findViewById(R.id.rightPile); break;
         }
+
+        pile.getLocationOnScreen(pileCoordinates);
 
         for(int i = 0; i < 4; i++) {
             int[] potCoordinates = new int[2];
@@ -123,13 +129,16 @@ public class GameAnimation {
             int[] initialCoordinates = new int[2], finalCoordinates = new int[2];
             key.values.getLocationOnScreen(initialCoordinates);
 
+            View layout = null;
             switch(receivingHand) {
-                case 0: activity.findViewById(R.id.bottomPlayerHandLayout).getLocationOnScreen(finalCoordinates); break;
-                case 1: activity.findViewById(R.id.leftPlayerHandLayout).getLocationOnScreen(finalCoordinates); break;
-                case 2: activity.findViewById(R.id.topPlayerHandLayout).getLocationOnScreen(finalCoordinates); break;
-                case 3: activity.findViewById(R.id.rightPlayerHandLayout).getLocationOnScreen(finalCoordinates); break;
+                case 0: layout = activity.findViewById(R.id.bottomPlayerHandLayout); break;
+                case 1: layout = activity.findViewById(R.id.leftPlayerHandLayout); break;
+                case 2: layout = activity.findViewById(R.id.topPlayerHandLayout); break;
+                case 3: layout = activity.findViewById(R.id.rightPlayerHandLayout); break;
             }
 
+            layout.getLocationOnScreen(finalCoordinates);
+            
             ViewPropertyAnimator animator = key.values.animate().setDuration(150).translationXBy(finalCoordinates[0] - initialCoordinates[0])
                     .translationYBy(finalCoordinates[1] - initialCoordinates[1]);
             animations.get(key).end();
@@ -141,14 +150,19 @@ public class GameAnimation {
     // If a Runnable is specified, it will run after the last of the 4 card animations (choice is arbitrary).
     public static void dealSingleCards(GameActivity activity, final Runnable endAction, int[] initialCoordinates) {
         int[][] finalCoordinatesArray = new int[][] {new int[2], new int[2], new int[2], new int[2]};
+
         activity.findViewById(R.id.bottomPlayerHandLayout).getLocationOnScreen(finalCoordinatesArray[0]);
         finalCoordinatesArray[0][0] += activity.findViewById(R.id.bottomPlayerHandLayout).getWidth()/2;
+
         activity.findViewById(R.id.leftPlayerHandLayout).getLocationOnScreen(finalCoordinatesArray[1]);
         finalCoordinatesArray[1][0] += activity.findViewById(R.id.leftPlayerHandLayout).getWidth();
+
         finalCoordinatesArray[1][1] += activity.findViewById(R.id.leftPlayerHandLayout).getHeight()/2;
         activity.findViewById(R.id.topPlayerHandLayout).getLocationOnScreen(finalCoordinatesArray[2]);
+
         finalCoordinatesArray[2][0] += activity.findViewById(R.id.topPlayerHandLayout).getWidth()/2;
         finalCoordinatesArray[2][1] += activity.findViewById(R.id.topPlayerHandLayout).getHeight();
+
         activity.findViewById(R.id.rightPlayerHandLayout).getLocationOnScreen(finalCoordinatesArray[3]);
         finalCoordinatesArray[3][1] += activity.findViewById(R.id.rightPlayerHandLayout).getHeight()/2;
 

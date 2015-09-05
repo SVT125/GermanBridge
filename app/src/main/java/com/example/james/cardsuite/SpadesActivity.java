@@ -199,7 +199,7 @@ public class SpadesActivity extends GameActivity {
                             manager.potHandle(chosenAI, currentPlayer);
 
                             ImageView cardView = (ImageView)findViewByCard(bestMove);
-                            GameAnimation.placeCard(SpadesActivity.this, cardView, null, currentPlayerInteracting);
+                            GameAnimation.placeCard(SpadesActivity.this, cardView, null, currentPlayer);
 
                             int chosenSound = r.nextInt(3);
                             soundPools[chosenSound].play(sounds[chosenSound],1,1,0,0,1);
