@@ -1,9 +1,6 @@
 package com.example.james.cardsuite;
 
-import android.animation.Animator;
 import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -239,15 +236,19 @@ public class HeartsActivity extends GameActivity implements Serializable {
     public void endPot() {
         currentPotTurn++;
         manager.potAnalyze(); //sets the new start player for the next pot
-        manager.pot.clear();
+
 
         currentPlayerInteracting = manager.startPlayer;
-        for (Card c : manager.pot.values())
+        for (Card c : manager.pot.values()) {
             ((HeartsPlayer) manager.getPlayers()[manager.startPlayer]).endPile.add(c);
+        }
+
+        manager.pot.clear();
 
         roundScores.clear();
-        for (int i = 0; i < manager.getPlayers().length; i++)
+        for (int i = 0; i < manager.getPlayers().length; i++) {
             roundScores.add(((HeartsPlayer) manager.getPlayers()[i]).tallyRoundScore());
+        }
 
         GameAnimation.collectEndPile(HeartsActivity.this, new Runnable() {
             @Override
