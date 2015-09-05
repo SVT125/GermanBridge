@@ -37,7 +37,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight=".125"
+                android:layout_weight=".2"
                 android:id="@+id/leftPlayerHandLayout"
                 android:gravity="center_vertical|center_horizontal"
                 android:clipChildren="false"
@@ -47,7 +47,7 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight=".875"
+                android:layout_weight=".8"
                 android:id="@+id/leftPlayerPileLayout"
                 android:gravity="center_vertical|center_horizontal"
                 android:clipChildren="false"
@@ -113,7 +113,7 @@
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight=".875"
+                    android:layout_weight=".75"
                     android:id="@+id/topPlayerPileLayout"
                     android:clipChildren="false"
                     android:clipToPadding="false">
@@ -127,7 +127,7 @@
                         android:textSize="12dp"
                         android:typeface="serif"
                         android:elevation="1dp"
-                        android:layout_gravity="center"
+                        android:layout_gravity="center|right"
                         android:autoText="false"
                         android:background="@drawable/small_button_background"
                         android:visibility="visible" />
@@ -137,13 +137,13 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/topPile"
                         android:layout_centerInParent="true"
-                        android:layout_gravity="center" />
+                        android:layout_gravity="center|right" />
                 </FrameLayout>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight=".125"
+                    android:layout_weight=".25"
                     android:id="@+id/topPlayerHandLayout"
                     android:gravity="center_vertical|center_horizontal"
                     android:clipChildren="false"
@@ -231,7 +231,7 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight=".125"
+                    android:layout_weight=".25"
                     android:id="@+id/bottomPlayerHandLayout"
                     android:gravity="center_horizontal"
                     android:clipChildren="false"
@@ -243,7 +243,7 @@
                     android:layout_height="match_parent"
                     android:layout_centerVertical="true"
                     android:layout_alignParentStart="true"
-                    android:layout_weight=".875"
+                    android:layout_weight=".75"
                     android:id="@+id/bottomPlayerPileLayout"
                     android:gravity="center_vertical|center_horizontal"
                     android:clipChildren="false"
@@ -259,7 +259,7 @@
                         android:layout_centerHorizontal="true"
                         android:textSize="12dp"
                         android:typeface="serif"
-                        android:layout_gravity="center"
+                        android:layout_gravity="left|center"
                         android:elevation="1dp"
                         android:background="@drawable/small_button_background" />
 
@@ -269,7 +269,7 @@
                         android:id="@+id/bottomPile"
                         android:layout_centerVertical="true"
                         android:layout_centerHorizontal="true"
-                        android:layout_gravity="center" />
+                        android:layout_gravity="left|center" />
                 </FrameLayout>
             </LinearLayout>
         </LinearLayout>
@@ -300,7 +300,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/optionsLayout"
-                android:layout_weight="4.25"
+                android:layout_weight="7.25"
                 android:gravity="center_vertical|right"
                 android:clipChildren="false"
                 android:clipToPadding="false">
@@ -321,7 +321,7 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="4.2"
+                android:layout_weight="6.5"
                 android:id="@+id/rightPlayerPileLayout"
                 android:gravity="center_vertical|center_horizontal"
                 android:clipChildren="false"
@@ -355,7 +355,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_weight="1.75"
                 android:id="@+id/rightPlayerHandLayout"
                 android:gravity="center_vertical"
                 android:clipChildren="false"
