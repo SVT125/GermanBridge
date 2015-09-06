@@ -136,13 +136,6 @@ public class HeartsActivity extends GameActivity implements Serializable {
         }
     }
 
-    public void restOfRoundHandle() {
-        currentPlayerInteracting = (currentPlayerInteracting + 1) % 4;
-
-        if (manager.pot.size() == 4)
-            endPot();
-    }
-
     public void botHandle(final long delay) {
         if (!manager.isGameOver()) {
             if (!finishedSwapping) {
@@ -209,6 +202,13 @@ public class HeartsActivity extends GameActivity implements Serializable {
         } else {
             endGame();
         }
+    }
+
+    public void restOfRoundHandle() {
+        currentPlayerInteracting = (currentPlayerInteracting + 1) % 4;
+
+        if (manager.pot.size() == 4)
+            endPot();
     }
 
     public void endGame() {
@@ -296,6 +296,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
 
             //TODO - Return the view to its original position.
 
+            set.end();
             chosenCard.isClicked = false;
         }
 
@@ -318,7 +319,6 @@ public class HeartsActivity extends GameActivity implements Serializable {
                 List<Card> tempCards = new ArrayList<>();
                 tempCards.addAll(chosenCards);
                 chosenLists.add(tempCards);
-
             }
             currentPlayerInteracting++;
 
@@ -333,10 +333,16 @@ public class HeartsActivity extends GameActivity implements Serializable {
             manager.getPlayers()[i].organize();
         }
 
-        GameAnimation.swapCards(this, swapRound, animationsActive);
+        GameAnimation.swapCards(this, swapRound, new Runnable() {
+            @Override
+            public void run() {
+                //This is run under the assumption the start player will be found below as the animation is run.
+                displayHands(currentPlayerInteracting,true);
+            }
+        },animationsActive);
 
-        finishedSwapping = true;
         findStartPlayer();
+        finishedSwapping = true;
     }
 
     // reshuffles deck, increments round count, resets all variables for the next round.

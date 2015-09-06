@@ -11,7 +11,9 @@ import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 public class GameAnimation {
     public static Handler handler = new Handler();
@@ -117,9 +119,11 @@ public class GameAnimation {
         return selectedAnimation;
     }
 
-    public static void swapCards(HeartsActivity activity, int swapRound, Map<Pair<Integer,View>,AnimatorSet> animations) {
-        for(Pair<Integer,View> key : animations.keySet()) {
-            int receivingHand = key.move;
+    public static void swapCards(HeartsActivity activity, int swapRound, Runnable endAction, Map<Pair<Integer,View>,AnimatorSet> animations) {
+        Set<Pair<Integer,View>> keySet = animations.keySet();
+        Iterator<Pair<Integer,View>> iter = keySet.iterator();
+        while(iter.hasNext()) {
+            int receivingHand = iter.next().move;
             switch(swapRound) {
                 case 0: receivingHand = receivingHand == 0 ? 3 : receivingHand - 1; break;
                 case 1: receivingHand = (receivingHand+1)%4; break;
@@ -127,7 +131,7 @@ public class GameAnimation {
             }
 
             int[] initialCoordinates = new int[2], finalCoordinates = new int[2];
-            key.values.getLocationOnScreen(initialCoordinates);
+            iter.next().values.getLocationOnScreen(initialCoordinates);
 
             View layout = null;
             switch(receivingHand) {
@@ -139,9 +143,11 @@ public class GameAnimation {
 
             layout.getLocationOnScreen(finalCoordinates);
             
-            ViewPropertyAnimator animator = key.values.animate().setDuration(150).translationXBy(finalCoordinates[0] - initialCoordinates[0])
+            ViewPropertyAnimator animator = iter.next().values.animate().setDuration(150).translationXBy(finalCoordinates[0] - initialCoordinates[0])
                     .translationYBy(finalCoordinates[1] - initialCoordinates[1]);
-            animations.get(key).end();
+            animations.get(iter.next()).end();
+            if(!iter.hasNext() && endAction != null)
+                animator.withEndAction(endAction);
             animator.start();
         }
     }
