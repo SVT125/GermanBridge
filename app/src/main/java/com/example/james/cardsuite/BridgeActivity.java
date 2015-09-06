@@ -61,6 +61,16 @@ public class BridgeActivity extends GameActivity implements Serializable {
                 if(isBot[i])
                     botCount++;
 
+            //Find the first and last nonbot players for later ease of use.
+            for(int i = 0; i < 4; i++) {
+                if(!foundFirstNonBot && !isBot[i]) {
+                    firstNonBot = i;
+                    foundFirstNonBot = true;
+                } else if(!isBot[i]) {
+                    lastNonBot = i;
+                }
+            }
+
             manager = new BridgeManager(currentPlayerInteracting);
             manager.totalRoundCount = 12;
 
@@ -555,6 +565,8 @@ public class BridgeActivity extends GameActivity implements Serializable {
             this.currentPlayerInteracting = is.readInt();
             this.currentPotTurn = is.readInt();
             this.botCount = is.readInt();
+            this.firstNonBot = is.readInt();
+            this.lastNonBot = is.readInt();
             this.foundStartPlayer = is.readBoolean();
             this.finishedSwapping = is.readBoolean();
             this.buttonsPresent = is.readBoolean();
@@ -581,6 +593,8 @@ public class BridgeActivity extends GameActivity implements Serializable {
             objectStream.writeInt(currentPlayerInteracting);
             objectStream.writeInt(currentPotTurn);
             objectStream.writeInt(botCount);
+            objectStream.writeInt(firstNonBot);
+            objectStream.writeInt(lastNonBot);
             objectStream.writeBoolean(foundStartPlayer);
             objectStream.writeBoolean(finishedSwapping);
             objectStream.writeBoolean(buttonsPresent);
