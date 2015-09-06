@@ -307,8 +307,8 @@
 
                 <ImageButton
                     style="?android:attr/buttonStyleSmall"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:id="@+id/button"
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
