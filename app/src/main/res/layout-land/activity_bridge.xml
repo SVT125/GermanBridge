@@ -334,7 +334,7 @@
                     android:id="@+id/button"
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
-                    android:background="@drawable/small_button_background"
+                    android:background="@drawable/menubutton"
                     android:textSize="10dp"
                     android:onClick="menuClick" />
             </RelativeLayout>
