@@ -38,7 +38,7 @@ public abstract class GameActivity extends Activity implements Serializable {
     protected long lastClickTime = 0;
     protected boolean[] isBot = new boolean[4];
     protected boolean foundStartPlayer = false, finishedSwapping = false, buttonsPresent = false, finishedLoading = false;
-    public boolean initialOutputWritten = false, isPaused = false;
+    public boolean initialOutputWritten = false, isPaused = false, foundFirstNonBot = false;
     protected List<Integer> scores = new ArrayList<Integer>(), roundScores = new ArrayList<>();
     protected SoundPool[] soundPools = new SoundPool[] {new SoundPool.Builder().build(), new SoundPool.Builder().build(),
             new SoundPool.Builder().build(), new SoundPool.Builder().build()};
@@ -67,16 +67,6 @@ public abstract class GameActivity extends Activity implements Serializable {
 
         for (int i = 0; i < 4; i++) {
             scores.add(0);
-        }
-
-        //Find the first and last nonbot players for later ease of use.
-        boolean foundFirstNonBot = false;
-        for(int i = 0; i < 4; i++) {
-            if(!foundFirstNonBot && !isBot[i]) {
-                firstNonBot = i;
-                foundFirstNonBot = true;
-            } else if(!isBot[i])
-                lastNonBot = i;
         }
     }
 
