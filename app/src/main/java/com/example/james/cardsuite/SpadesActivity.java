@@ -57,6 +57,16 @@ public class SpadesActivity extends GameActivity {
                 if(isBot[i])
                     botCount++;
 
+            //Find the first and last nonbot players for later ease of use.
+            for(int i = 0; i < 4; i++) {
+                if(!foundFirstNonBot && !isBot[i]) {
+                    firstNonBot = i;
+                    foundFirstNonBot = true;
+                } else if(!isBot[i]) {
+                    lastNonBot = i;
+                }
+            }
+
             manager = new SpadesManager(currentPlayerInteracting);
             manager.totalRoundCount = 12; // Change later for variable number of players
 
@@ -459,6 +469,8 @@ public class SpadesActivity extends GameActivity {
             this.currentPlayerInteracting = is.readInt();
             this.currentPotTurn = is.readInt();
             this.botCount = is.readInt();
+            this.firstNonBot = is.readInt();
+            this.lastNonBot = is.readInt();
             this.foundStartPlayer = is.readBoolean();
             this.finishedSwapping = is.readBoolean();
             this.buttonsPresent = is.readBoolean();
@@ -487,6 +499,8 @@ public class SpadesActivity extends GameActivity {
             objectStream.writeInt(currentPlayerInteracting);
             objectStream.writeInt(currentPotTurn);
             objectStream.writeInt(botCount);
+            objectStream.writeInt(firstNonBot);
+            objectStream.writeInt(lastNonBot);
             objectStream.writeBoolean(foundStartPlayer);
             objectStream.writeBoolean(finishedSwapping);
             objectStream.writeBoolean(buttonsPresent);
