@@ -188,7 +188,7 @@ public class GameAnimation {
             imageView.setAdjustViewBounds(true);
             ((RelativeLayout) activity.findViewById(R.id.potLayout)).addView(imageView);
 
-            imageView.animate().setDuration(100).translationXBy(finalCoordinatesArray[i][0] - initialCoordinates[0])
+            imageView.animate().setDuration(75).translationXBy(finalCoordinatesArray[i][0] - initialCoordinates[0])
                     .translationYBy(finalCoordinatesArray[i][1] - initialCoordinates[1])
                     .withEndAction(new Runnable() {
                         @Override

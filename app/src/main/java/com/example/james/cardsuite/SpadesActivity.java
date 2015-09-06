@@ -444,7 +444,7 @@ public class SpadesActivity extends GameActivity {
                 }
             }, currentTimeDelay);
 
-            currentTimeDelay += 100;
+            currentTimeDelay += 75;
         }
     }
 

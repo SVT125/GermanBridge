@@ -506,7 +506,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
                 }
             }, currentTimeDelay);
 
-            currentTimeDelay += 100;
+            currentTimeDelay += 75;
         }
     }
 

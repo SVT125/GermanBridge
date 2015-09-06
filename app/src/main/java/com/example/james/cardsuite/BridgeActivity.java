@@ -542,7 +542,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
                 }
             }, currentTimeDelay);
 
-            currentTimeDelay += 100;
+            currentTimeDelay += 75;
         }
     }
 
