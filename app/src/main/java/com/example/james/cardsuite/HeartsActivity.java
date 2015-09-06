@@ -239,9 +239,10 @@ public class HeartsActivity extends GameActivity implements Serializable {
 
 
         currentPlayerInteracting = manager.startPlayer;
-        for (Card c : manager.pot.values()) {
-            ((HeartsPlayer) manager.getPlayers()[manager.startPlayer]).endPile.add(c);
-        }
+        HeartsPlayer winPlayer = (HeartsPlayer) manager.getPlayers()[manager.startPlayer];
+        winPlayer.obtainedCards = true;
+        for (Card c : manager.pot.values())
+            winPlayer.endPile.add(c);
 
         manager.pot.clear();
 
@@ -339,7 +340,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
                 //This is run under the assumption the start player will be found below as the animation is run.
                 displayHands(firstNonBot, true);
             }
-        },animationsActive);
+        }, animationsActive);
 
         findStartPlayer();
         finishedSwapping = true;
@@ -371,14 +372,16 @@ public class HeartsActivity extends GameActivity implements Serializable {
             //Update the score, but remove or update the pile if it exists.
             pileViews[i].setMaxHeight(115);
             pileViews[i].setAdjustViewBounds(true);
-            if (scores.get(i) != 0) {
+            if (((HeartsPlayer)manager.getPlayers()[i]).obtainedCards)
                 pileViews[i].setImageResource(getResources().getIdentifier("cardback", "drawable", getPackageName()));
+            else
+                pileViews[i].setImageResource(0);
+            if (scores.get(i) != 0) {
                 scoreViews[i].setVisibility(View.VISIBLE);
                 scoreViews[i].setText(Integer.toString(scores.get(i)));
-            } else {
-                pileViews[i].setImageResource(0);
-                scoreViews[i].setVisibility(View.INVISIBLE);
             }
+            else
+                scoreViews[i].setVisibility(View.INVISIBLE);
         }
     }
 
