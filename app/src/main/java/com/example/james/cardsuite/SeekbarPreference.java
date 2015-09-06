@@ -3,7 +3,12 @@ package com.example.james.cardsuite;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.TypedArray;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
+import android.graphics.drawable.LayerDrawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.RoundRectShape;
 import android.preference.Preference;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -68,6 +73,14 @@ public class SeekbarPreference extends Preference
         bar.setProgress((int) this.oldValue);
         bar.setLayoutParams(barParams);
         bar.setOnSeekBarChangeListener(this);
+        LayerDrawable ld = (LayerDrawable) bar.getProgressDrawable();
+        ld.setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_IN);
+        float[] outR = new float[] {10,10,10,10,10,10,10,10};
+        ShapeDrawable thumb = new ShapeDrawable(new RoundRectShape(outR, null, null));
+        thumb.setIntrinsicHeight(50);
+        thumb.setIntrinsicWidth(10);
+        thumb.getPaint().setColor(Color.LTGRAY);
+        bar.setThumb(thumb);
 
         this.monitorBox = new TextView(getContext());
         this.monitorBox.setTextSize(12);
