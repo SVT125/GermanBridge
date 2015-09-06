@@ -2,6 +2,7 @@ package com.example.james.cardsuite;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -9,11 +10,13 @@ import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -78,6 +81,52 @@ public abstract class GameActivity extends Activity implements Serializable {
     }
 
     public void menuClick(View v) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, android.R.style.Theme_Holo_Dialog_MinWidth);
+        builder.setTitle("Pause Screen");
+        LayoutInflater inflater = (LayoutInflater)getApplicationContext().getSystemService
+                (Context.LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.pause_screen,null);
+        builder.setView(view);
+        builder.setCancelable(false);
+        final AlertDialog dlg = builder.create();
+
+        Button gameReturn = (Button) view.findViewById(R.id.return_game);
+        Button displayScores = (Button) view.findViewById(R.id.display_scores);
+        Button settings = (Button) view.findViewById(R.id.in_game_settings);
+        Button exitMenu = (Button) view.findViewById(R.id.menu_button);
+
+        gameReturn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                dlg.dismiss();
+            }
+        });
+        displayScores.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                displayScoreTable(null);
+                dlg.dismiss();
+            }
+        });
+        settings.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                runSettings();
+            }
+        });
+        exitMenu.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                dlg.dismiss();
+                promptExit(v);
+            }
+        });
+        dlg.show();
+
+    }
+
+    public void runSettings() {
+        Intent intent = new Intent(GameActivity.this, com.example.james.cardsuite.SettingsActivity.class);
+        startActivity(intent);
+    }
+
+    public void promptExit(View v) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, android.R.style.Theme_Holo_Dialog_MinWidth);
         builder.setTitle("Are you sure you want to exit the game?");
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
