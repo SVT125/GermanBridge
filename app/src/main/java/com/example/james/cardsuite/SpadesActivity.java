@@ -96,14 +96,17 @@ public class SpadesActivity extends GameActivity {
             int chosen = getCardIndex(v);
 
             manager.potHandle(chosen, currentPlayerInteracting);
-            GameAnimation.placeCard(SpadesActivity.this, v, null, currentPlayerInteracting);
+            GameAnimation.placeCard(SpadesActivity.this, v, new Runnable() {
+                @Override
+                public void run() {
+                    potClear();
+                    displayPot();
 
-            potClear();
-            displayPot();
+                    executeAITurns();
 
-            executeAITurns();
-
-            updateGameState();
+                    updateGameState();
+                }
+            }, currentPlayerInteracting);
         }
     }
 
@@ -190,7 +193,6 @@ public class SpadesActivity extends GameActivity {
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-
                             //After the delay, proceed the AI move.
                             Card bestMove = SpadesAI.chooseMove(currentPlayer, (SpadesManager) manager, levelsToSearch);
 
@@ -228,7 +230,7 @@ public class SpadesActivity extends GameActivity {
                 if (!manager.players[currentPlayerInteracting].isBot)
                     displayHands(playerToDisplay, true);
             }
-        }, currentTimeDelay);
+        }, currentTimeDelay+250);
     }
 
     //Call when the end piles and the scores displayed on top of the piles need be redisplayed.
