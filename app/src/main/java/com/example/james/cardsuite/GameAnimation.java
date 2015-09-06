@@ -134,17 +134,20 @@ public class GameAnimation {
 
             int[] initialCoordinates = new int[2], finalCoordinates = new int[2];
             key.values.getLocationOnScreen(initialCoordinates);
-
-            View layout = null;
+            
             switch(receivingHand) {
-                case 0: layout = activity.findViewById(R.id.bottomPlayerHandLayout); break;
-                case 1: layout = activity.findViewById(R.id.leftPlayerHandLayout); break;
-                case 2: layout = activity.findViewById(R.id.topPlayerHandLayout); break;
-                case 3: layout = activity.findViewById(R.id.rightPlayerHandLayout); break;
+                case 0: activity.findViewById(R.id.bottomPlayerHandLayout).getLocationOnScreen(finalCoordinates);
+                    finalCoordinates[0] += activity.findViewById(R.id.bottomPlayerHandLayout).getWidth()/2; break;
+                case 1: activity.findViewById(R.id.leftPlayerHandLayout).getLocationOnScreen(finalCoordinates);
+                    finalCoordinates[0] += activity.findViewById(R.id.leftPlayerHandLayout).getWidth();
+                    finalCoordinates[1] += activity.findViewById(R.id.leftPlayerHandLayout).getHeight()/2; break;
+                case 2: activity.findViewById(R.id.topPlayerHandLayout).getLocationOnScreen(finalCoordinates);
+                    finalCoordinates[0] += activity.findViewById(R.id.topPlayerHandLayout).getWidth()/2;
+                    finalCoordinates[1] += activity.findViewById(R.id.topPlayerHandLayout).getHeight(); break;
+                case 3: activity.findViewById(R.id.rightPlayerHandLayout).getLocationOnScreen(finalCoordinates);
+                    finalCoordinates[1] += activity.findViewById(R.id.rightPlayerHandLayout).getHeight()/2; break;
             }
 
-            layout.getLocationOnScreen(finalCoordinates);
-            
             ViewPropertyAnimator animator = key.values.animate().setDuration(150).translationXBy(finalCoordinates[0] - initialCoordinates[0])
                     .translationYBy(finalCoordinates[1] - initialCoordinates[1]);
             animations.get(key).end();
@@ -164,10 +167,9 @@ public class GameAnimation {
 
         activity.findViewById(R.id.leftPlayerHandLayout).getLocationOnScreen(finalCoordinatesArray[1]);
         finalCoordinatesArray[1][0] += activity.findViewById(R.id.leftPlayerHandLayout).getWidth();
-
         finalCoordinatesArray[1][1] += activity.findViewById(R.id.leftPlayerHandLayout).getHeight()/2;
-        activity.findViewById(R.id.topPlayerHandLayout).getLocationOnScreen(finalCoordinatesArray[2]);
 
+        activity.findViewById(R.id.topPlayerHandLayout).getLocationOnScreen(finalCoordinatesArray[2]);
         finalCoordinatesArray[2][0] += activity.findViewById(R.id.topPlayerHandLayout).getWidth()/2;
         finalCoordinatesArray[2][1] += activity.findViewById(R.id.topPlayerHandLayout).getHeight();
 

@@ -30,7 +30,7 @@ import java.util.Random;
 public abstract class GameActivity extends Activity implements Serializable {
     public final int levelsToSearch = 3; //Parameter for AI that indicates how many levels down to search.
     protected Manager manager;
-    protected int currentPlayerInteracting = 0, currentPotTurn = 0;
+    protected int currentPlayerInteracting = 0, currentPotTurn = 0, firstNonBot = 0, lastNonBot = 0;
     private int soundsLoaded = 0;
     protected long lastClickTime = 0;
     protected boolean[] isBot = new boolean[4];
@@ -64,6 +64,16 @@ public abstract class GameActivity extends Activity implements Serializable {
 
         for (int i = 0; i < 4; i++) {
             scores.add(0);
+        }
+
+        //Find the first and last nonbot players for later ease of use.
+        boolean foundFirstNonBot = false;
+        for(int i = 0; i < 4; i++) {
+            if(!foundFirstNonBot && !isBot[i]) {
+                firstNonBot = i;
+                foundFirstNonBot = true;
+            } else if(!isBot[i])
+                lastNonBot = i;
         }
     }
 
