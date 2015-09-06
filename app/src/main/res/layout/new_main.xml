@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="16dp"
+    android:paddingBottom="16dp" tools:context=".MainActivity"
+    android:gravity="center"
+    android:id="@+id/mainLayout"
+    android:screenOrientation="landscape"
+    android:configChanges="orientation|keyboardHidden"
+    android:background="#fff2ee"
+    android:keepScreenOn="true"
+    android:transitionGroup="false">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/main"
+        android:clickable="false"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <TextView android:text="CARD SUITE" android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/newgreeting"
+            android:textSize="40dp"
+            android:textIsSelectable="false"
+            android:textStyle="bold"
+            android:focusableInTouchMode="false"
+            android:textColor="#373d5e"
+            android:layout_above="@+id/play"
+            android:layout_alignEnd="@+id/settings_button"
+            android:layout_marginBottom="21dp" />
+
+        <ImageButton
+            android:layout_width="150dp"
+            android:layout_height="75dp"
+            android:text="New Button"
+            android:id="@+id/play"
+            android:onClick="overlayClick"
+            android:background="@drawable/play"
+            android:layout_above="@+id/settings_button"
+            android:layout_centerHorizontal="true" />
+
+        <ImageButton
+            android:layout_width="225dp"
+            android:layout_height="75dp"
+            android:text="New Button"
+            android:id="@+id/settings_button"
+            android:onClick="settingsClick"
+            android:background="@drawable/settings"
+            android:layout_marginBottom="32dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/overlay"
+        android:background="@drawable/overlaymain"
+        android:backgroundTintMode="multiply"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:visibility="invisible">
+
+
+        <ImageButton
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:id="@+id/german_button"
+            android:onClick="gameClick"
+            android:background="@drawable/bridge"
+            android:layout_gravity="center_vertical" />
+
+        <ImageButton
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:id="@+id/hearts_button"
+            android:onClick="gameClick"
+            android:background="@drawable/heart"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp" />
+
+        <ImageButton
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:id="@+id/spades_button"
+            android:onClick="gameClick"
+            android:background="@drawable/spades"
+            android:layout_gravity="center_vertical" />
+    </LinearLayout>
+
+</RelativeLayout>

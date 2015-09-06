@@ -29,10 +29,11 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.new_main);
 
-        TextView greetingView = (TextView)findViewById(R.id.greetingView);
-        greetingView.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Asimov.ttf"));
+        Typeface font = Typeface.createFromAsset(getAssets(), "SigniaPro-Regular.ttf");
+        TextView greetingView = (TextView)findViewById(R.id.newgreeting);
+        greetingView.setTypeface(font);
     }
 
     @Override
@@ -54,6 +55,11 @@ public class MainActivity extends Activity {
     public void settingsClick(View v) {
         Intent intent = new Intent(MainActivity.this, com.example.james.cardsuite.SettingsActivity.class);
         startActivity(intent);
+    }
+
+    public void overlayClick(View v) {
+        View view = findViewById(R.id.overlay);
+        view.setVisibility(0);
     }
 
     public void savedGamePrompt(final View v) {
