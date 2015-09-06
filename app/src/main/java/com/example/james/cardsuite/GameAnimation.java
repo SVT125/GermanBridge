@@ -123,7 +123,9 @@ public class GameAnimation {
         Set<Pair<Integer,View>> keySet = animations.keySet();
         Iterator<Pair<Integer,View>> iter = keySet.iterator();
         while(iter.hasNext()) {
-            int receivingHand = iter.next().move;
+            Pair<Integer,View> key = iter.next();
+
+            int receivingHand = key.move;
             switch(swapRound) {
                 case 0: receivingHand = receivingHand == 0 ? 3 : receivingHand - 1; break;
                 case 1: receivingHand = (receivingHand+1)%4; break;
@@ -131,7 +133,7 @@ public class GameAnimation {
             }
 
             int[] initialCoordinates = new int[2], finalCoordinates = new int[2];
-            iter.next().values.getLocationOnScreen(initialCoordinates);
+            key.values.getLocationOnScreen(initialCoordinates);
 
             View layout = null;
             switch(receivingHand) {
@@ -143,9 +145,9 @@ public class GameAnimation {
 
             layout.getLocationOnScreen(finalCoordinates);
             
-            ViewPropertyAnimator animator = iter.next().values.animate().setDuration(150).translationXBy(finalCoordinates[0] - initialCoordinates[0])
+            ViewPropertyAnimator animator = key.values.animate().setDuration(150).translationXBy(finalCoordinates[0] - initialCoordinates[0])
                     .translationYBy(finalCoordinates[1] - initialCoordinates[1]);
-            animations.get(iter.next()).end();
+            animations.get(key).end();
             if(!iter.hasNext() && endAction != null)
                 animator.withEndAction(endAction);
             animator.start();
