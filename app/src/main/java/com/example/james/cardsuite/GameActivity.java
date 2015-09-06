@@ -41,7 +41,8 @@ public abstract class GameActivity extends Activity implements Serializable {
     public boolean initialOutputWritten = false, isPaused = false, foundFirstNonBot = false;
     protected List<Integer> scores = new ArrayList<Integer>(), roundScores = new ArrayList<>();
     protected SoundPool[] soundPools = new SoundPool[] {new SoundPool.Builder().build(), new SoundPool.Builder().build(),
-            new SoundPool.Builder().build(), new SoundPool.Builder().build()};
+            new SoundPool.Builder().build(), new SoundPool.Builder().build(), new SoundPool.Builder().build(),
+            new SoundPool.Builder().build()};
     protected int[] sounds;
     protected SoundPool.OnLoadCompleteListener loadListener;
     protected Random r = new Random();
@@ -54,7 +55,8 @@ public abstract class GameActivity extends Activity implements Serializable {
 
         //Play the sound of a card being played, unless it's hearts wherein it might be bid for swapping (different sound used).
         sounds = new int[] {soundPools[0].load(this,R.raw.cardplace1,1), soundPools[1].load(this,R.raw.cardplace2,1),
-                soundPools[2].load(this,R.raw.cardplace3,1), soundPools[3].load(this,R.raw.swapcardselect,1)};
+                soundPools[2].load(this, R.raw.cardplace3, 1), soundPools[3].load(this,R.raw.swapcardselect,1),
+                soundPools[4].load(this,R.raw.dealcards,1), soundPools[5].load(this,R.raw.swapcardsaround,1)};
         loadListener = new SoundPool.OnLoadCompleteListener() {
             @Override
             public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {

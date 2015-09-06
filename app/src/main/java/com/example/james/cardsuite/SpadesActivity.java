@@ -434,6 +434,7 @@ public class SpadesActivity extends GameActivity {
         findViewById(R.id.anchor).getLocationOnScreen(initialCoordinates);
 
         final int originalHandSize = manager.players[0].hand.size();
+        soundPools[4].play(sounds[4],1,1,0,-1,1);
         for(int j = 0; j < manager.players[0].hand.size(); j++) {
             final int cardsDisplayed = j;
             handler.postDelayed(new Runnable() {
@@ -458,6 +459,13 @@ public class SpadesActivity extends GameActivity {
 
             currentTimeDelay += 75;
         }
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                soundPools[4].stop(sounds[4]);
+            }
+        },currentTimeDelay);
     }
 
     public void loadGame() {

@@ -343,9 +343,12 @@ public class HeartsActivity extends GameActivity implements Serializable {
             manager.getPlayers()[i].organize();
         }
 
+        soundPools[5].play(sounds[5],1,1,0,-1,1);
         GameAnimation.swapCards(this, swapRound, new Runnable() {
             @Override
             public void run() {
+                soundPools[5].stop(sounds[5]);
+                
                 //This is run under the assumption the start player will be found below as the animation is run.
                 displayHands(firstNonBot, true);
             }
@@ -496,7 +499,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
         long currentTimeDelay = 0;
         final int[] initialCoordinates = new int[2];
         findViewById(R.id.anchor).getLocationOnScreen(initialCoordinates);
-
+        soundPools[4].play(sounds[4], 1, 1, 0, -1, 1);
         for(int j = 0; j < manager.players[0].hand.size(); j++) {
             final int cardsDisplayed = j;
             handler.postDelayed(new Runnable() {
@@ -520,6 +523,13 @@ public class HeartsActivity extends GameActivity implements Serializable {
 
             currentTimeDelay += 75;
         }
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                soundPools[4].stop(sounds[4]);
+            }
+        },currentTimeDelay);
     }
 
     public void loadGame() {
