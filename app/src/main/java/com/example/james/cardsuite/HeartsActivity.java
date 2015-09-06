@@ -48,6 +48,15 @@ public class HeartsActivity extends GameActivity implements Serializable {
             this.isBot = intent.getBooleanArrayExtra("isBot");
             manager = new HeartsManager(isBot);
             currentPlayerInteracting = 0;
+            //Find the first and last nonbot players for later ease of use.
+            for(int i = 0; i < 4; i++) {
+                if(!foundFirstNonBot && !isBot[i]) {
+                    firstNonBot = i;
+                    foundFirstNonBot = true;
+                } else if(!isBot[i]) {
+                    lastNonBot = i;
+                }
+            }
         }
 
         displayEndPiles(scores);
@@ -124,11 +133,10 @@ public class HeartsActivity extends GameActivity implements Serializable {
             //We copy the code block above because if we're done swapping, we want to continue execution ONLY when the animation is done.
             if (!finishedSwapping && manager.getPlayers()[currentPlayerInteracting].isBot) {
                 botHandle(250);
-            } else if(!finishedSwapping && chosenCards.size() == 3){
+            } else if(!finishedSwapping && currentPlayerInteracting == lastNonBot && chosenCards.size() == 0){
                 //This is only executed to display the hand of the next player during the swapping phase/end of turn in game phase.
                 displayHands(currentPlayerInteracting,true);
-                if (!(chosenLists.size() == 4))
-                    chosenCards.clear();
+                System.out.println("lolololololol");
             }
         }
         else {
@@ -183,6 +191,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
                                 potClear();
                                 displayPot();
 
+                                displayHands(lastNonBot, false);
                                 int chosenSound = r.nextInt(3);
                                 soundPools[chosenSound].play(sounds[chosenSound], 1, 1, 0, 0, 1);
 
@@ -521,6 +530,8 @@ public class HeartsActivity extends GameActivity implements Serializable {
             this.manager = (HeartsManager) is.readObject();
             this.currentPlayerInteracting = is.readInt();
             this.currentPotTurn = is.readInt();
+            this.firstNonBot = is.readInt();
+            this.lastNonBot = is.readInt();
             this.foundStartPlayer = is.readBoolean();
             this.finishedSwapping = is.readBoolean();
             this.buttonsPresent = is.readBoolean();
@@ -548,6 +559,8 @@ public class HeartsActivity extends GameActivity implements Serializable {
             objectStream.writeObject(this.manager);
             objectStream.writeInt(currentPlayerInteracting);
             objectStream.writeInt(currentPotTurn);
+            objectStream.writeInt(firstNonBot);
+            objectStream.writeInt(lastNonBot);
             objectStream.writeBoolean(foundStartPlayer);
             objectStream.writeBoolean(finishedSwapping);
             objectStream.writeBoolean(buttonsPresent);
