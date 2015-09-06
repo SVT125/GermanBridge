@@ -9,6 +9,7 @@ public class HeartsPlayer extends Player implements Serializable {
 	// added endPile to count scores of each player at the end of every round
 	protected List<Card> endPile;
 	protected int roundScore = 0;
+	boolean obtainedCards = false;
 	
 	public HeartsPlayer() {
 		hand = new ArrayList<Card>();
@@ -23,6 +24,7 @@ public class HeartsPlayer extends Player implements Serializable {
 		this.score += roundScore;
 		scoreHistory.add(this.score);
 		roundScore = 0;
+		obtainedCards = false;
 		return false;
 	}
 
