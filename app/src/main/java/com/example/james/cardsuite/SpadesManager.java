@@ -1,5 +1,7 @@
 package com.example.james.cardsuite;
 
+import android.util.Log;
+
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
@@ -67,7 +69,7 @@ public class SpadesManager extends Manager implements Serializable {
 	}
 
 	public int findStartPlayer() {
-		this.startPlayer = potsFinished % 4 - 1;
+		this.startPlayer = (potsFinished + 1)% 4;
 		return this.startPlayer;
 	}
 
