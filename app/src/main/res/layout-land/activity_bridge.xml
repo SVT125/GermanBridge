@@ -326,11 +326,10 @@
                 android:clipChildren="false"
                 android:clipToPadding="false">
 
-                <Button
+                <ImageButton
                     style="?android:attr/buttonStyleSmall"
-                    android:layout_width="wrap_content"
+                    android:layout_width="25dp"
                     android:layout_height="25dp"
-                    android:text="Menu"
                     android:id="@+id/button"
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
