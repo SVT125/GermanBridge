@@ -108,10 +108,10 @@ public class GameAnimation {
     public static AnimatorSet selectSwappedCard(HeartsActivity activity, View v, int currentPlayer) {
         AnimatorSet selectedAnimation = null;
         switch(currentPlayer){
-            case 0: selectedAnimation = (AnimatorSet) AnimatorInflater.loadAnimator(activity, R.anim.selected_forward); break;
-            case 1: selectedAnimation = (AnimatorSet) AnimatorInflater.loadAnimator(activity, R.anim.selected_right); break;
-            case 2: selectedAnimation = (AnimatorSet) AnimatorInflater.loadAnimator(activity, R.anim.selected_back); break;
-            case 3: selectedAnimation = (AnimatorSet) AnimatorInflater.loadAnimator(activity, R.anim.selected_left); break;
+            case 0: selectedAnimation = (AnimatorSet) AnimatorInflater.loadAnimator(activity, R.anim.selected_bottom); break;
+            case 1: selectedAnimation = (AnimatorSet) AnimatorInflater.loadAnimator(activity, R.anim.selected_left); break;
+            case 2: selectedAnimation = (AnimatorSet) AnimatorInflater.loadAnimator(activity, R.anim.selected_top); break;
+            case 3: selectedAnimation = (AnimatorSet) AnimatorInflater.loadAnimator(activity, R.anim.selected_right); break;
         }
 
         selectedAnimation.setTarget(v);
@@ -134,7 +134,7 @@ public class GameAnimation {
 
             int[] initialCoordinates = new int[2], finalCoordinates = new int[2];
             key.values.getLocationOnScreen(initialCoordinates);
-            
+
             switch(receivingHand) {
                 case 0: activity.findViewById(R.id.bottomPlayerHandLayout).getLocationOnScreen(finalCoordinates);
                     finalCoordinates[0] += activity.findViewById(R.id.bottomPlayerHandLayout).getWidth()/2; break;
