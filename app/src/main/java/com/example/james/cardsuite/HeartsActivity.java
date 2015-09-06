@@ -337,7 +337,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
             @Override
             public void run() {
                 //This is run under the assumption the start player will be found below as the animation is run.
-                displayHands(currentPlayerInteracting,true);
+                displayHands(firstNonBot, true);
             }
         },animationsActive);
 
