@@ -37,7 +37,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight=".175"
+                android:layout_weight=".2"
                 android:id="@+id/leftPlayerHandLayout"
                 android:gravity="center_vertical|center_horizontal"
                 android:clipChildren="false"
@@ -47,7 +47,7 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight=".825"
+                android:layout_weight=".8"
                 android:id="@+id/leftPlayerPileLayout"
                 android:gravity="center_vertical|center_horizontal"
                 android:clipChildren="false"
@@ -96,7 +96,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/topPlayerLayout"
-            android:layout_weight="0.25"
+            android:layout_weight="0.29"
             android:clipChildren="false"
             android:clipToPadding="false">
 
@@ -159,7 +159,7 @@
             android:layout_gravity="center_horizontal"
             android:id="@+id/trumpLayout"
             android:gravity="center_vertical|center_horizontal"
-            android:layout_weight="0.3"
+            android:layout_weight="0.325"
             android:clipChildren="false"
             android:clipToPadding="false">
 
@@ -178,7 +178,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/potLayout"
-            android:layout_weight="0.25"
+            android:layout_weight="0.26"
             android:clipChildren="false"
             android:clipToPadding="false">
 
@@ -235,7 +235,7 @@
             android:layout_height="match_parent"
             android:id="@+id/bottomPlayerLayout"
             android:layout_gravity="bottom|center_horizontal"
-            android:layout_weight="0.25"
+            android:layout_weight="0.29"
             android:clipChildren="false"
             android:clipToPadding="false">
 
@@ -322,7 +322,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/optionsLayout"
-                android:layout_weight="7.5"
+                android:layout_weight="7.25"
                 android:gravity="center_vertical|right"
                 android:clipChildren="false"
                 android:clipToPadding="false">
@@ -342,7 +342,7 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="7.25"
+                android:layout_weight="6.5"
                 android:id="@+id/rightPlayerPileLayout"
                 android:gravity="center_vertical|center_horizontal"
                 android:clipChildren="false"
@@ -376,7 +376,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1.5"
+                android:layout_weight="1.75"
                 android:id="@+id/rightPlayerHandLayout"
                 android:gravity="center_vertical"
                 android:clipChildren="false"
