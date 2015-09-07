@@ -78,7 +78,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
             trumpView.setVisibility(View.VISIBLE);
             Card trumpCard = ((BridgeManager) manager).trumpCard;
             trumpView.setImageResource(getResources().getIdentifier(trumpCard.getAddress(), "drawable", getPackageName()));
-            trumpView.setMaxHeight(115);
+            trumpView.setMaxHeight(150);
             trumpView.setAdjustViewBounds(true);
 
             //Display the image buttons
@@ -245,7 +245,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
 
         for (int i = 0; i < 4; i++) {
             //Update the score, but remove or update the pile if it exists.
-            pileViews[i].setMaxHeight(115);
+            pileViews[i].setMaxHeight(150);
             pileViews[i].setAdjustViewBounds(true);
             if (((BridgePlayer) manager.getPlayers()[i]).obtained > 0) {
                 pileViews[i].setImageResource(getResources().getIdentifier("cardback", "drawable", getPackageName()));
@@ -405,7 +405,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
 
                 cardButton.setTag(manager.getPlayers()[i].hand.get(j));
                 cardButton.setPadding(1,1,1,1);
-                cardButton.setMaxHeight(115);
+                cardButton.setMaxHeight(150);
                 cardButton.setAdjustViewBounds(true);
                 if(!cardsClickable)
                     cardButton.setClickable(false);
@@ -511,7 +511,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
                 ImageView trumpView = (ImageView) findViewById(R.id.trumpView);
                 Card trumpCard = ((BridgeManager) manager).trumpCard;
                 trumpView.setImageResource(getResources().getIdentifier(trumpCard.getAddress(), "drawable", getPackageName()));
-                trumpView.setMaxHeight(115);
+                trumpView.setMaxHeight(150);
                 trumpView.setAdjustViewBounds(true);
 
                 int player = 0;

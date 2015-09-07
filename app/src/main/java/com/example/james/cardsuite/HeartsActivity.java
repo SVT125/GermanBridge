@@ -382,7 +382,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
 
         for (int i = 0; i < 4; i++) {
             //Update the score, but remove or update the pile if it exists.
-            pileViews[i].setMaxHeight(115);
+            pileViews[i].setMaxHeight(150);
             pileViews[i].setAdjustViewBounds(true);
             if (((HeartsPlayer)manager.getPlayers()[i]).obtainedCards)
                 pileViews[i].setImageResource(getResources().getIdentifier("cardback", "drawable", getPackageName()));
@@ -459,7 +459,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
                 cardButton.setPadding(1,1,1,1);
                 if(!cardsClickable)
                     cardButton.setClickable(false);
-                cardButton.setMaxHeight(115);
+                cardButton.setMaxHeight(150);
                 cardButton.setAdjustViewBounds(true);
 
                 switch (i) {

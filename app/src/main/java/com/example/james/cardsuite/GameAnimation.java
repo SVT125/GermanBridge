@@ -184,7 +184,7 @@ public class GameAnimation {
 
             imageView.setLayoutParams(params);
             imageView.setImageResource(activity.getResources().getIdentifier("cardback", "drawable", activity.getPackageName()));
-            imageView.setMaxHeight(115);
+            imageView.setMaxHeight(150);
             imageView.setAdjustViewBounds(true);
             ((RelativeLayout) activity.findViewById(R.id.potLayout)).addView(imageView);
 

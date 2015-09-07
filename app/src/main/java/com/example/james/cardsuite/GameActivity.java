@@ -166,7 +166,7 @@ public abstract class GameActivity extends Activity implements Serializable {
 
             potCard.setImageResource(getResources().getIdentifier(manager.pot.get(index).getAddress(), "drawable", getPackageName()));
             potCard.setTag(getResources().getIdentifier(manager.pot.get(index).getAddress(), "drawable", getPackageName()));
-            potCard.setMaxHeight(115);
+            potCard.setMaxHeight(150);
             potCard.setElevation(i);
         }
     }
@@ -297,7 +297,7 @@ public abstract class GameActivity extends Activity implements Serializable {
 
                 cardButton.setTag(manager.getPlayers()[i].hand.get(j));
                 cardButton.setPadding(3, 3, 3, 3);
-                cardButton.setMaxHeight(115);
+                cardButton.setMaxHeight(150);
                 cardButton.setAdjustViewBounds(true);
 
                 switch (i) {
