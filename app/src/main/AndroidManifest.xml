@@ -6,13 +6,15 @@
         android:allowBackup="true"
         android:icon="@drawable/spade"
         android:label="@string/app_name"
-        android:theme="@style/MyAppTheme" >
+        android:theme="@style/MyAppTheme">
+
         <activity
             android:name=".MainActivity"
             android:configChanges="mcc|mnc|locale|touchscreen|navigation|fontScale|orientation|keyboard|keyboardHidden|screenLayout|uiMode|smallestScreenSize|screenSize|layoutDirection"
             android:label="@string/app_name"
             android:screenOrientation="sensorLandscape"
-            android:theme="@style/android:Theme.Holo.Light.NoActionBar" >
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,35 +26,38 @@
             android:configChanges="mcc|mnc|locale|touchscreen|navigation|fontScale|orientation|keyboard|keyboardHidden|screenLayout|uiMode|smallestScreenSize|screenSize|layoutDirection"
             android:label="@string/title_activity_results"
             android:screenOrientation="sensorLandscape"
-            android:theme="@style/android:Theme.Holo.Light.NoActionBar" >
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
         </activity>
         <activity
             android:name=".HeartsActivity"
             android:screenOrientation="sensorLandscape"
             android:configChanges="mcc|mnc|locale|touchscreen|navigation|fontScale|orientation|keyboard|keyboardHidden|screenLayout|uiMode|smallestScreenSize|screenSize|layoutDirection"
-            android:theme="@style/android:Theme.Holo.Light.NoActionBar"
-            android:label="@string/title_activity_hearts" >
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar"
+            android:label="@string/title_activity_hearts">
+
         </activity>
         <activity
             android:name=".BridgeActivity"
             android:screenOrientation="sensorLandscape"
             android:configChanges="mcc|mnc|locale|touchscreen|navigation|fontScale|orientation|keyboard|keyboardHidden|screenLayout|uiMode|smallestScreenSize|screenSize|layoutDirection"
-            android:theme="@style/android:Theme.Holo.Light.NoActionBar"
-            android:label="@string/title_activity_bridge" >
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar"
+            android:label="@string/title_activity_bridge">
         </activity>
         <activity
             android:name=".SpadesActivity"
             android:screenOrientation="sensorLandscape"
             android:configChanges="mcc|mnc|locale|touchscreen|navigation|fontScale|orientation|keyboard|keyboardHidden|screenLayout|uiMode|smallestScreenSize|screenSize|layoutDirection"
-            android:theme="@style/android:Theme.Holo.Light.NoActionBar"
-            android:label="@string/title_activity_spades" >
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar"
+            android:label="@string/title_activity_spades">
+
         </activity>
         <activity
             android:name=".SettingsActivity"
             android:screenOrientation="sensorLandscape"
             android:configChanges="mcc|mnc|locale|touchscreen|navigation|fontScale|orientation|keyboard|keyboardHidden|screenLayout|uiMode|smallestScreenSize|screenSize|layoutDirection"
-            android:theme="@style/android:Theme.Holo.Light.NoActionBar"
-            android:label="title_activity_settings" >
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar"
+            android:label="title_activity_settings">
+
         </activity>
     </application>
 
