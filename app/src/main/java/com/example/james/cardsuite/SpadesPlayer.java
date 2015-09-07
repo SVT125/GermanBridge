@@ -17,6 +17,14 @@ public class SpadesPlayer extends Player implements Serializable {
 	// PROBABLY VERY ERROR PRONE; BUG FIXES PROBABLY NECESSARY
 	public boolean scoreChange() {
 
+		System.out.println(bid);
+		System.out.println(totalBid);
+		System.out.println(bags);
+		System.out.println(obtained);
+		System.out.println(totalObtained);
+
+		int previousBags = bags;
+
 		// if person gets 0 hands
 		if (obtained == 0) {
 			if (blindNil) { this.score += 200; partner.score += 200; }
@@ -27,6 +35,7 @@ public class SpadesPlayer extends Player implements Serializable {
 			else {
 				this.score += (10 * totalBid);
 				this.bags += (totalObtained - totalBid);
+				this.score += (bags - previousBags);
 			}
 		}
 		if (this.bags >= 10) {
@@ -36,7 +45,6 @@ public class SpadesPlayer extends Player implements Serializable {
 
 		totalObtained = 0;
 		obtained = 0;
-		bags = 0;
 		handsWon = 0;
 		scoreHistory.add(this.score);
 
