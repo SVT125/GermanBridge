@@ -469,7 +469,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
                         bottom.addView(cardButton, restParams);
                         break;
                     case 1:
-                        restParams.setMargins(225 + deltaY, deltaX, 0, 0);
+                        restParams.setMargins(100 + deltaY, deltaX, 0, 0);
                         cardButton.setRotation(90 + theta);
                         left.addView(cardButton, restParams);
                         break;
@@ -479,7 +479,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
                         top.addView(cardButton, restParams);
                         break;
                     case 3:
-                        restParams.setMargins(25-deltaY, deltaX, 0, 0);
+                        restParams.setMargins(110-deltaY, deltaX, 0, 0);
                         cardButton.setRotation(90 - theta);
                         right.addView(cardButton, restParams);
                         break;
