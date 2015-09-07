@@ -321,20 +321,26 @@ public class BridgeActivity extends GameActivity implements Serializable {
 
                             d.dismiss();
 
-                            int player = (currentPlayer + 1) % 4;
-                            while (isBot[player]) {
-                                player = (player + 1) % 4;
-                            }
-
                             guessCount++;
-
-                            if (guessCount == 4 - botCount) {
+                            if (guessCount == 4) {
                                 currentPlayerInteracting = manager.findStartPlayer();
                                 executeAITurns();
-
                                 guessCount = 0;
-                            } else
-                                openGuessDialog(player);
+                                return;
+                            }
+                            int player = (currentPlayer+1)%4;
+                            while(isBot[player]) {
+                                ((BridgePlayer)manager.getPlayers()[player]).guess = BridgeAI.getBid(player, (BridgeManager)manager);
+                                guessCount++;
+                                if (guessCount == 4) {
+                                    currentPlayerInteracting = manager.findStartPlayer();
+                                    executeAITurns();
+                                    guessCount = 0;
+                                    return;
+                                }
+                                player = (player+1)%4;
+                            }
+                            openGuessDialog(player);
                         }
                     }
                 });
@@ -514,11 +520,6 @@ public class BridgeActivity extends GameActivity implements Serializable {
                 trumpView.setMaxHeight(150);
                 trumpView.setAdjustViewBounds(true);
 
-                int player = 0;
-                while(isBot[player]) {
-                    player++;
-                }
-
                 dealCards();
             }
         });
@@ -541,9 +542,11 @@ public class BridgeActivity extends GameActivity implements Serializable {
                             displayIntermediateHands(cardsDisplayed);
 
                             if(cardsDisplayed == manager.players[0].hand.size()-1) {
-                                int player = 0;
+                                int player = manager.findStartPlayer();
                                 while(isBot[player]) {
-                                    player++;
+                                    ((BridgePlayer)manager.getPlayers()[player]).guess = BridgeAI.getBid(player, (BridgeManager)manager);
+                                    guessCount++;
+                                    player = (player + 1) % 4;
                                 }
                                 openGuessDialog(player);
                             }
@@ -574,6 +577,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
             this.botCount = is.readInt();
             this.firstNonBot = is.readInt();
             this.lastNonBot = is.readInt();
+            this.guessCount = is.readInt();
             this.foundStartPlayer = is.readBoolean();
             this.finishedSwapping = is.readBoolean();
             this.buttonsPresent = is.readBoolean();
@@ -602,6 +606,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
             objectStream.writeInt(botCount);
             objectStream.writeInt(firstNonBot);
             objectStream.writeInt(lastNonBot);
+            objectStream.writeInt(guessCount);
             objectStream.writeBoolean(foundStartPlayer);
             objectStream.writeBoolean(finishedSwapping);
             objectStream.writeBoolean(buttonsPresent);
