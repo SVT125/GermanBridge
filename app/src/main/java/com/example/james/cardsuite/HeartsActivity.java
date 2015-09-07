@@ -268,7 +268,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
                 potClear();
                 displayPot();
 
-                if (currentPotTurn == 13)
+                if (currentPotTurn == 12)
                     finishedRound();
             }
         }, currentPlayerInteracting);
