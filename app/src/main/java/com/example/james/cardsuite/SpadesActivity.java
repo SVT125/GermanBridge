@@ -48,10 +48,6 @@ public class SpadesActivity extends GameActivity {
         }
         else {
             this.isBot = intent.getBooleanArrayExtra("isBot");
-            //currentPlayerInteracting default-init'd to 0, we increment until we find a non-bot player.
-            while (isBot[currentPlayerInteracting]) {
-                currentPlayerInteracting++;
-            }
 
             for(int i = 0; i < 4; i++)
                 if(isBot[i])
@@ -316,19 +312,27 @@ public class SpadesActivity extends GameActivity {
                             }
                             d.dismiss();
 
-                            int player = (currentPlayer+1)%4;
-                            while(isBot[player]) {
-                                player = (player+1)%4;
-                            }
-
                             guessCount++;
-
-                            if(guessCount == 4 - botCount) {
+                            if (guessCount == 4) {
                                 currentPlayerInteracting = manager.findStartPlayer();
                                 executeAITurns();
                                 guessCount = 0;
-                            } else
-                                openGuessDialog(player);
+                                return;
+                            }
+                            int player = (currentPlayer+1)%4;
+                            while(isBot[player]) {
+                                ((SpadesPlayer)manager.getPlayers()[player]).bid = SpadesAI.getBid(player, (SpadesManager)manager);
+                                guessCount++;
+                                if (guessCount == 4) {
+                                    currentPlayerInteracting = manager.findStartPlayer();
+                                    executeAITurns();
+                                    guessCount = 0;
+                                    return;
+                                }
+                                player = (player+1)%4;
+                            }
+
+                            openGuessDialog(player);
                         }
                     }
                 });
@@ -446,9 +450,11 @@ public class SpadesActivity extends GameActivity {
                             displayIntermediateHands(cardsDisplayed);
 
                             if(cardsDisplayed == originalHandSize-1) {
-                                int player = 0;
+                                int player = manager.findStartPlayer();
                                 while(isBot[player]) {
-                                    player++;
+                                    ((SpadesPlayer)manager.getPlayers()[player]).bid = SpadesAI.getBid(player, (SpadesManager)manager);
+                                    guessCount++;
+                                    player = (player + 1) % 4;
                                 }
                                 openGuessDialog(player);
                             }
@@ -479,6 +485,7 @@ public class SpadesActivity extends GameActivity {
             this.botCount = is.readInt();
             this.firstNonBot = is.readInt();
             this.lastNonBot = is.readInt();
+            this.guessCount = is.readInt();
             this.foundStartPlayer = is.readBoolean();
             this.finishedSwapping = is.readBoolean();
             this.buttonsPresent = is.readBoolean();
@@ -509,6 +516,7 @@ public class SpadesActivity extends GameActivity {
             objectStream.writeInt(botCount);
             objectStream.writeInt(firstNonBot);
             objectStream.writeInt(lastNonBot);
+            objectStream.writeInt(guessCount);
             objectStream.writeBoolean(foundStartPlayer);
             objectStream.writeBoolean(finishedSwapping);
             objectStream.writeBoolean(buttonsPresent);
