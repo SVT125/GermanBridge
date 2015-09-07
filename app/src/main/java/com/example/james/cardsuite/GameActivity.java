@@ -9,6 +9,7 @@ import android.graphics.Typeface;
 import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -154,6 +155,9 @@ public abstract class GameActivity extends Activity implements Serializable {
 
     // Called when a player places a valid card into the pot; updates the images in the pot
     public void displayPot() {
+        for(Integer key : manager.pot.keySet())
+            Log.i("Pot card", "Player:" + key + "|Card: " + manager.pot.get(key));
+
         for(int i = 0; i < manager.pot.size(); i++) {
             int index = (manager.startPlayer + i) % 4;
             ImageView potCard = null;
