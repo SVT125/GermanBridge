@@ -137,7 +137,7 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/topPile"
                         android:layout_centerInParent="true"
-                        android:layout_gravity="center|right" />
+                        android:layout_gravity="center" />
                 </FrameLayout>
 
                 <RelativeLayout
@@ -269,7 +269,7 @@
                         android:id="@+id/bottomPile"
                         android:layout_centerVertical="true"
                         android:layout_centerHorizontal="true"
-                        android:layout_gravity="left|center" />
+                        android:layout_gravity="center" />
                 </FrameLayout>
             </LinearLayout>
         </LinearLayout>
