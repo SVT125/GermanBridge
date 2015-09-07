@@ -12,7 +12,7 @@ public class SpadesAI implements Serializable{
         //Count the number of applicable cards towards winning the pot - we know the count is less than the potsFinished/total hand size.
         int trumpCount = 0;
         for(Card card : manager.players[currentPlayer].hand)
-            if(card.getSuit() == Card.Suit.SPADES)
+            if(card.getSuit().equals(Card.Suit.SPADES))
                 trumpCount++;
 
         int cap = trumpCount/3, guessedBid = manager.getPlayers()[currentPlayer].hand.size() - manager.addedGuesses;
