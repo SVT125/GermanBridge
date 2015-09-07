@@ -136,7 +136,6 @@ public class HeartsActivity extends GameActivity implements Serializable {
             } else if(!finishedSwapping && currentPlayerInteracting == lastNonBot && chosenCards.size() == 0){
                 //This is only executed to display the hand of the next player during the swapping phase/end of turn in game phase.
                 displayHands(currentPlayerInteracting,true);
-                System.out.println("lolololololol");
             }
         }
         else {
@@ -246,7 +245,6 @@ public class HeartsActivity extends GameActivity implements Serializable {
         currentPotTurn++;
         manager.potAnalyze(); //sets the new start player for the next pot
 
-
         currentPlayerInteracting = manager.startPlayer;
         HeartsPlayer winPlayer = (HeartsPlayer) manager.getPlayers()[manager.startPlayer];
         winPlayer.obtainedCards = true;
@@ -268,10 +266,10 @@ public class HeartsActivity extends GameActivity implements Serializable {
                 potClear();
                 displayPot();
 
-                if (currentPotTurn == 12)
-                    finishedRound();
             }
         }, currentPlayerInteracting);
+        if (currentPotTurn == 13)
+            finishedRound();
     }
 
     public void finishedRound() {
