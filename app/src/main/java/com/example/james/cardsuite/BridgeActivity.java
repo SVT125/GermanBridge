@@ -265,7 +265,6 @@ public class BridgeActivity extends GameActivity implements Serializable {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this, android.R.style.Theme_Holo_Panel);
         builder.setCancelable(false);
-        builder.setTitle("Player " + (currentPlayer + 1) + " bids");
         HorizontalScrollView horizontalScrollView = new HorizontalScrollView(this);
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.HORIZONTAL);
@@ -329,7 +328,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
                             guessCount++;
 
                             if(guessCount == 4 - botCount) {
-                                currentPlayerInteracting = manager.startPlayer;
+                                currentPlayerInteracting = manager.findStartPlayer();
                                 executeAITurns();
 
                                 guessCount = 0;
@@ -340,6 +339,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
                 });
             }
         });
+        d.getWindow().setGravity(Gravity.TOP);
         d.show();
     }
 
@@ -411,17 +411,17 @@ public class BridgeActivity extends GameActivity implements Serializable {
                     cardButton.setClickable(false);
 
                 switch(i) {
-                    case 0: restParams.setMargins(deltaX,65-deltaY,0,0);
+                    case 0: restParams.setMargins(deltaX,95-deltaY,0,0);
                         cardButton.setRotation(theta);
                         bottom.addView(cardButton, restParams); break;
                     case 1: restParams.setMargins(100+deltaY,deltaX,0,0);
                         cardButton.setRotation(90 + theta);
                         left.addView(cardButton, restParams); break;
-                    case 2: restParams.setMargins(deltaX,deltaY,0,0);
+                    case 2: restParams.setMargins(deltaX,60+deltaY,0,0);
                         cardButton.setRotation(180 - theta);
                         top.addView(cardButton, restParams); break;
                     case 3: restParams.setMargins(110-deltaY,deltaX,0,0);
-                        cardButton.setRotation(270 - theta);
+                        cardButton.setRotation(90 - theta);
                         right.addView(cardButton, restParams); break;
                 }
                 cardButton.setId(temporaryID++);
