@@ -326,6 +326,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
 
                 List<Card> tempCards = new ArrayList<>();
                 tempCards.addAll(chosenCards);
+                chosenCards.clear();
                 chosenLists.add(tempCards);
             }
             currentPlayerInteracting++;
