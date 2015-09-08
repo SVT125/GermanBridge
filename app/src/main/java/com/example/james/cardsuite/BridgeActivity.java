@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -261,7 +262,6 @@ public class BridgeActivity extends GameActivity implements Serializable {
     //Opens the guess dialog - fit for German Bridge for now.
     public void openGuessDialog(final int currentPlayer) {
         displayHands(currentPlayer, false);
-        guess = -1;
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false);
@@ -280,12 +280,24 @@ public class BridgeActivity extends GameActivity implements Serializable {
         text.setPadding(5, 5, 5, 5);
         text.setTypeface(null, Typeface.BOLD);
         builder.setCustomTitle(text);
+        Button[] buttons = new Button[manager.potsFinished + 1];
 
         for (int i = 0; i <= manager.potsFinished; i++) {
             final RadioButton button = new RadioButton(this);
             button.setText(Integer.toString(i));
             button.setTag(i);
+            buttons[i] = button;
             group.addView(button);
+        }
+
+        layout.addView(group);
+        layout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        horizontalScrollView.addView(layout);
+        horizontalScrollView.setLayoutParams(new AbsListView.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        builder.setView(horizontalScrollView);
+        final AlertDialog d = builder.create();
+
+        for (final Button button : buttons) {
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -293,6 +305,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
                         manager.addedGuesses += guess;
                         ((BridgePlayer) manager.players[currentPlayer]).guess = guess;
 
+                        d.dismiss();
                         guessCount++;
                         if (guessCount == 4) {
                             currentPlayerInteracting = manager.findStartPlayer();
@@ -319,13 +332,6 @@ public class BridgeActivity extends GameActivity implements Serializable {
                 }
             });
         }
-
-        layout.addView(group);
-        layout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        horizontalScrollView.addView(layout);
-        horizontalScrollView.setLayoutParams(new AbsListView.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        builder.setView(horizontalScrollView);
-        AlertDialog d = builder.create();
 
         d.getWindow().setLayout(findViewById(R.id.potLayout).getWidth(), findViewById(R.id.potLayout).getHeight());
         d.show();
@@ -543,20 +549,11 @@ public class BridgeActivity extends GameActivity implements Serializable {
         try {
             FileInputStream fis = this.openFileInput("save_bridge");
             ObjectInputStream is = new ObjectInputStream(fis);
+            super.loadGame(is);
             this.manager = (BridgeManager) is.readObject();
-            this.currentPlayerInteracting = is.readInt();
-            this.currentPotTurn = is.readInt();
             this.botCount = is.readInt();
-            this.firstNonBot = is.readInt();
-            this.lastNonBot = is.readInt();
             this.guessCount = is.readInt();
-            this.foundStartPlayer = is.readBoolean();
-            this.finishedSwapping = is.readBoolean();
-            this.buttonsPresent = is.readBoolean();
-            this.initialOutputWritten = is.readBoolean();
-            this.isBot = (boolean[]) is.readObject();
-            this.scores = (List<Integer>) is.readObject();
-            this.roundScores = (List<Integer>) is.readObject();
+            this.guess = is.readInt();
             is.close();
             fis.close();
             deleteFile("save_bridge");
@@ -572,21 +569,11 @@ public class BridgeActivity extends GameActivity implements Serializable {
         try {
             outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
             ObjectOutputStream objectStream = new ObjectOutputStream(outputStream);
+            super.saveGame(objectStream);
             objectStream.writeObject(this.manager);
-            objectStream.writeInt(currentPlayerInteracting);
-            objectStream.writeInt(currentPotTurn);
             objectStream.writeInt(botCount);
-            objectStream.writeInt(firstNonBot);
-            objectStream.writeInt(lastNonBot);
             objectStream.writeInt(guessCount);
-            objectStream.writeBoolean(foundStartPlayer);
-            objectStream.writeBoolean(finishedSwapping);
-            objectStream.writeBoolean(buttonsPresent);
-            objectStream.writeBoolean(initialOutputWritten);
-            objectStream.writeObject(isBot);
-            objectStream.writeObject(scores);
-            objectStream.writeObject(roundScores);
-
+            objectStream.writeInt(guess);
             outputStream.close();
             objectStream.close();
         } catch (Exception e) {

@@ -66,7 +66,7 @@ public class MainActivity extends Activity {
     }
 
     public void savedGamePrompt(final View v) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this,android.R.style.Theme_Holo_Dialog_MinWidth);
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this,R.style.MyAppTheme));
         builder.setTitle("Do you want to continue from a previous game?");
         builder.setNegativeButton("Yes", new DialogInterface.OnClickListener() {
             @Override
