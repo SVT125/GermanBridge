@@ -374,7 +374,7 @@ public class SpadesActivity extends GameActivity {
                 if(manager.getPlayers()[i].hand.size() % 2 != 0 && j == (manager.getPlayers()[i].hand.size()-1)/2)
                     theta = 0;
 
-                RelativeLayout.LayoutParams restParams = new RelativeLayout.LayoutParams(103,149);
+                RelativeLayout.LayoutParams restParams = new RelativeLayout.LayoutParams(cardWidthPX,cardHeightPX);
 
                 //How to treat and initialize the other cards depending on whether the current player or any other.
                 ImageView cardButton;
@@ -406,7 +406,7 @@ public class SpadesActivity extends GameActivity {
                 if(!cardsClickable)
                     cardButton.setClickable(false);
                 cardButton.setMaxHeight(150);
-                cardButton.setAdjustViewBounds(true);
+                cardButton.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
                 switch(i) {
                     case 0: restParams.setMargins(deltaX,100-deltaY,0,0);

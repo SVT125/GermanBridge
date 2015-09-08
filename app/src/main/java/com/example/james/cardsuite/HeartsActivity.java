@@ -428,7 +428,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
                 if(manager.getPlayers()[i].hand.size() % 2 != 0 && j == (manager.getPlayers()[i].hand.size()-1)/2)
                     theta = 0;
 
-                RelativeLayout.LayoutParams restParams = new RelativeLayout.LayoutParams(103, 149);
+                RelativeLayout.LayoutParams restParams = new RelativeLayout.LayoutParams(cardWidthPX, cardHeightPX);
 
                 //How to treat and initialize the other cards depending on whether the current player or any other.
                 ImageView cardButton;
@@ -455,11 +455,11 @@ public class HeartsActivity extends GameActivity implements Serializable {
                 }
 
                 cardButton.setTag(manager.getPlayers()[i].hand.get(j));
-                cardButton.setPadding(1,1,1,1);
+                cardButton.setPadding(1, 1, 1, 1);
                 if(!cardsClickable)
                     cardButton.setClickable(false);
                 cardButton.setMaxHeight(150);
-                cardButton.setAdjustViewBounds(true);
+                cardButton.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
                 switch (i) {
                     case 0:
