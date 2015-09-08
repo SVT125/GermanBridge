@@ -262,7 +262,6 @@ public class BridgeActivity extends GameActivity implements Serializable {
     //Opens the guess dialog - fit for German Bridge for now.
     public void openGuessDialog(final int currentPlayer) {
         displayHands(currentPlayer, false);
-        guess = -1;
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false);
