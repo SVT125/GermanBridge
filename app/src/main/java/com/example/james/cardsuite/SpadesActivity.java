@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -401,7 +402,7 @@ public class SpadesActivity extends GameActivity {
                 }
 
                 cardButton.setTag(manager.getPlayers()[i].hand.get(j));
-                cardButton.setPadding(1,1,1,1);
+                cardButton.setPadding(1, 1, 1, 1);
                 if(!cardsClickable)
                     cardButton.setClickable(false);
                 cardButton.setMaxHeight(150);

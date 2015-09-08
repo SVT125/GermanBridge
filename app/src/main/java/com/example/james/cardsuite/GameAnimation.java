@@ -6,7 +6,10 @@ import android.os.Handler;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
+import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.RotateAnimation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -22,16 +25,23 @@ public class GameAnimation {
         int[] potCoordinates = new int[2], cardCoordinates = new int[2];
         v.getLocationOnScreen(cardCoordinates);
         TranslateAnimation ta;
+        RotateAnimation ra = null;
 
         View potCard = null;
         switch(player) {
-            case 0: potCard = activity.findViewById(R.id.bottomPotCard); break;
-            case 1: potCard = activity.findViewById(R.id.leftPotCard); break;
-            case 2: potCard = activity.findViewById(R.id.topPotCard); break;
-            case 3: potCard = activity.findViewById(R.id.rightPotCard); break;
+            case 0: potCard = activity.findViewById(R.id.bottomPotCard);
+                ra = new RotateAnimation(0,v.getRotation()); break;
+            case 1: potCard = activity.findViewById(R.id.leftPotCard);
+                ra = new RotateAnimation(0,90+v.getRotation()); break;
+            case 2: potCard = activity.findViewById(R.id.topPotCard);
+                ra = new RotateAnimation(0,180-v.getRotation()); break;
+            case 3: potCard = activity.findViewById(R.id.rightPotCard);
+                ra = new RotateAnimation(0,270-v.getRotation()); break;
         }
 
         potCard.getLocationOnScreen(potCoordinates);
+
+        AnimationSet set = new AnimationSet(true);
 
         ta = new TranslateAnimation(0,potCoordinates[0]-cardCoordinates[0],0,potCoordinates[1]-cardCoordinates[1]);
         ta.setDuration(150);
@@ -53,7 +63,11 @@ public class GameAnimation {
                 }
             });
         }
-        v.startAnimation(ta);
+
+        set.addAnimation(ra);
+        set.addAnimation(ta);
+
+        v.startAnimation(set);
     }
 
     public static void collectEndPile(GameActivity activity, final Runnable endAction, int winningPlayer) {
