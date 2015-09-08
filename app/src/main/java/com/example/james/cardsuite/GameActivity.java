@@ -293,7 +293,7 @@ public abstract class GameActivity extends Activity implements Serializable {
                 if(numCardsToDisplay % 2 != 0 && j == (numCardsToDisplay-1)/2)
                     theta = 0;
 
-                RelativeLayout.LayoutParams restParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                RelativeLayout.LayoutParams restParams = new RelativeLayout.LayoutParams(103, 149);
 
                 //How to treat and initialize the other cards depending on whether the current player or any other.
                 ImageView cardButton = new ImageView(this);
@@ -306,7 +306,7 @@ public abstract class GameActivity extends Activity implements Serializable {
 
                 switch (i) {
                     case 0:
-                        restParams.setMargins(deltaX, 65 - deltaY, 0, 0);
+                        restParams.setMargins(deltaX, 100 - deltaY, 0, 0);
                         cardButton.setRotation(theta);
                         bottom.addView(cardButton, restParams);
                         break;

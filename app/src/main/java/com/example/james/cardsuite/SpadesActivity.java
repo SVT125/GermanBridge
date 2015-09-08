@@ -374,7 +374,7 @@ public class SpadesActivity extends GameActivity {
                 if(manager.getPlayers()[i].hand.size() % 2 != 0 && j == (manager.getPlayers()[i].hand.size()-1)/2)
                     theta = 0;
 
-                RelativeLayout.LayoutParams restParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
+                RelativeLayout.LayoutParams restParams = new RelativeLayout.LayoutParams(103,149);
 
                 //How to treat and initialize the other cards depending on whether the current player or any other.
                 ImageView cardButton;
@@ -409,7 +409,7 @@ public class SpadesActivity extends GameActivity {
                 cardButton.setAdjustViewBounds(true);
 
                 switch(i) {
-                    case 0: restParams.setMargins(deltaX,65-deltaY,0,0);
+                    case 0: restParams.setMargins(deltaX,100-deltaY,0,0);
                         cardButton.setRotation(theta);
                         bottom.addView(cardButton, restParams); break;
                     case 1: restParams.setMargins(100+deltaY,deltaX,0,0);
@@ -424,7 +424,6 @@ public class SpadesActivity extends GameActivity {
                 }
                 cardButton.setId(temporaryID++);
                 cardViews.add(cardButton);
-
                 //Set the deltaX/theta parameters for the next card/loop iteration.
                 //Consequence of more space horizontally than vertically; set smaller distance between cards vertically.
                 deltaX = (i % 2 == 0) ? deltaX + 60 : deltaX + 55;
