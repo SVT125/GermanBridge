@@ -557,20 +557,10 @@ public class BridgeActivity extends GameActivity implements Serializable {
         try {
             FileInputStream fis = this.openFileInput("save_bridge");
             ObjectInputStream is = new ObjectInputStream(fis);
+            super.loadGame(is);
             this.manager = (BridgeManager) is.readObject();
-            this.currentPlayerInteracting = is.readInt();
-            this.currentPotTurn = is.readInt();
             this.botCount = is.readInt();
-            this.firstNonBot = is.readInt();
-            this.lastNonBot = is.readInt();
             this.guessCount = is.readInt();
-            this.foundStartPlayer = is.readBoolean();
-            this.finishedSwapping = is.readBoolean();
-            this.buttonsPresent = is.readBoolean();
-            this.initialOutputWritten = is.readBoolean();
-            this.isBot = (boolean[]) is.readObject();
-            this.scores = (List<Integer>) is.readObject();
-            this.roundScores = (List<Integer>) is.readObject();
             is.close();
             fis.close();
             deleteFile("save_bridge");
@@ -586,21 +576,10 @@ public class BridgeActivity extends GameActivity implements Serializable {
         try {
             outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
             ObjectOutputStream objectStream = new ObjectOutputStream(outputStream);
+            super.saveGame(objectStream);
             objectStream.writeObject(this.manager);
-            objectStream.writeInt(currentPlayerInteracting);
-            objectStream.writeInt(currentPotTurn);
             objectStream.writeInt(botCount);
-            objectStream.writeInt(firstNonBot);
-            objectStream.writeInt(lastNonBot);
             objectStream.writeInt(guessCount);
-            objectStream.writeBoolean(foundStartPlayer);
-            objectStream.writeBoolean(finishedSwapping);
-            objectStream.writeBoolean(buttonsPresent);
-            objectStream.writeBoolean(initialOutputWritten);
-            objectStream.writeObject(isBot);
-            objectStream.writeObject(scores);
-            objectStream.writeObject(roundScores);
-
             outputStream.close();
             objectStream.close();
         } catch (Exception e) {
