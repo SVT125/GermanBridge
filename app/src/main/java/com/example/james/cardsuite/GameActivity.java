@@ -313,7 +313,7 @@ public abstract class GameActivity extends Activity implements Serializable {
 
                 switch (i) {
                     case 0:
-                        restParams.setMargins(deltaX, 100 - deltaY, 0, 0);
+                        restParams.setMargins(deltaX, 65 - deltaY, 0, 0);
                         cardButton.setRotation(theta);
                         bottom.addView(cardButton, restParams);
                         break;
