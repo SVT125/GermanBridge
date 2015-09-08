@@ -273,6 +273,14 @@ public class BridgeActivity extends GameActivity implements Serializable {
 
         RadioGroup group = new RadioGroup(this);
         group.setOrientation(RadioGroup.HORIZONTAL);
+
+        TextView text = new TextView(this);
+        text.setText("Player " + (currentPlayer + 1) + " bid");
+        text.setTextSize(16);
+        text.setPadding(5, 5, 5, 5);
+        text.setTypeface(null, Typeface.BOLD);
+        builder.setCustomTitle(text);
+
         for (int i = 0; i <= manager.potsFinished; i++) {
             final RadioButton button = new RadioButton(this);
             button.setText(Integer.toString(i));
@@ -313,10 +321,12 @@ public class BridgeActivity extends GameActivity implements Serializable {
         }
 
         layout.addView(group);
+        layout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         horizontalScrollView.addView(layout);
+        horizontalScrollView.setLayoutParams(new AbsListView.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         builder.setView(horizontalScrollView);
-
         AlertDialog d = builder.create();
+
         d.getWindow().setLayout(findViewById(R.id.potLayout).getWidth(), findViewById(R.id.potLayout).getHeight());
         d.show();
     }
@@ -512,7 +522,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    soundPools[4].play(sounds[4], 1, 1, 0, 0, 1);
+                    soundPools[4].play(sounds[4], 1, 1, 0, -1, 1);
                     GameAnimation.dealSingleCards(BridgeActivity.this, new Runnable() {
                         @Override
                         public void run() {
