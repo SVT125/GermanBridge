@@ -7,7 +7,6 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,6 +30,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
     private boolean finishedSwapping = false;
     private List<List<Card>> chosenLists = new ArrayList<List<Card>>();
     private List<Card> chosenCards = new ArrayList<Card>();
+    private boolean canClick = true;
     Map<Pair<Integer,View>,AnimatorSet> animationsActive = new HashMap<Pair<Integer,View>,AnimatorSet>();
 
     @Override
@@ -91,7 +91,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
 
     public void playerHandle(View v) {
         //Play sounds only if we're done swapping in hearts or are in any other game mode.
-        if ((finishedLoading && finishedSwapping)) {
+        if (finishedLoading && finishedSwapping) {
             int chosenSound = r.nextInt(3);
             soundPools[chosenSound].play(sounds[chosenSound], 1, 1, 0, 0, 1);
         }
@@ -104,10 +104,13 @@ public class HeartsActivity extends GameActivity implements Serializable {
             if (!finishedSwapping) {
                 // Handle the player swapping cards
                 int swapRound = manager.getPotsFinished() % 4;
-                if (swapRound != 3)
+                if (swapRound != 3) {
                     this.chooseCards(chosenCard, swapRound, v);
-                else
+                }
+                else {
                     finishedSwapping = true;
+                    canClick = true;
+                }
             } else {
                 // handle cards being tossed in the pot until all cards are gone (13 turns).
                 manager.potHandle(chosen, currentPlayerInteracting);
@@ -124,8 +127,10 @@ public class HeartsActivity extends GameActivity implements Serializable {
 
                         if (manager.getPlayers()[currentPlayerInteracting].isBot) {
                             botHandle(250);
-                        } else
+                        } else {
                             displayHands(currentPlayerInteracting, true);
+                            canClick = true;
+                        }
                     }
                 },currentPlayerInteracting);
             }
@@ -138,9 +143,8 @@ public class HeartsActivity extends GameActivity implements Serializable {
                 displayHands(currentPlayerInteracting,true);
             }
         }
-        else {
+        else
             endGame();
-        }
     }
 
     public void botHandle(final long delay) {
@@ -169,8 +173,10 @@ public class HeartsActivity extends GameActivity implements Serializable {
 
                             if (manager.getPlayers()[currentPlayerInteracting].isBot)
                                 botHandle(250);
-                            else
+                            else {
                                 displayHands(currentPlayerInteracting, true);
+                                canClick = true;
+                            }
                         }
                     }, delay);
                 } else
@@ -199,8 +205,10 @@ public class HeartsActivity extends GameActivity implements Serializable {
 
                                 if (manager.getPlayers()[currentPlayerInteracting].isBot)
                                     botHandle(250);
-                                else
+                                else {
                                     displayHands(currentPlayerInteracting, true);
+                                    canClick = true;
+                                }
                             }
                         },currentPlayerInteracting);
 
@@ -231,11 +239,10 @@ public class HeartsActivity extends GameActivity implements Serializable {
 
     public void gameClick(View v) {
         //Prevents spam-clicking before the last button click is done.
-        if ((!finishedSwapping && SystemClock.elapsedRealtime() - lastClickTime < 1000) ||
-                (finishedSwapping && SystemClock.elapsedRealtime() - lastClickTime < 1750)){
+        if (!canClick){
             return;
         }
-        lastClickTime = SystemClock.elapsedRealtime();
+        canClick = false;
 
         super.gameClick(v);
         this.playerHandle(v);
@@ -321,8 +328,10 @@ public class HeartsActivity extends GameActivity implements Serializable {
                     chosenCards.add(chosenCard);
                 }
 
-                if (chosenCards.size() < 3)
+                if (chosenCards.size() < 3) {
+                    canClick = true;
                     return;
+                }
 
                 List<Card> tempCards = new ArrayList<>();
                 tempCards.addAll(chosenCards);
@@ -350,6 +359,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
                 
                 //This is run under the assumption the start player will be found below as the animation is run.
                 displayHands(firstNonBot, true);
+                canClick = true;
             }
         }, animationsActive);
 
