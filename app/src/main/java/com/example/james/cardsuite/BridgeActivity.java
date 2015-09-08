@@ -16,11 +16,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TableLayout;
@@ -49,24 +50,23 @@ public class BridgeActivity extends GameActivity implements Serializable {
         if (loadGame) {
             this.loadGame();
             displayPot();
-        }
-        else {
+        } else {
             this.isBot = intent.getBooleanArrayExtra("isBot");
             //currentPlayerInteracting default-init'd to 0, we increment until we find a non-bot player.
             while (isBot[currentPlayerInteracting]) {
                 currentPlayerInteracting++;
             }
 
-            for(int i = 0; i < 4; i++)
-                if(isBot[i])
+            for (int i = 0; i < 4; i++)
+                if (isBot[i])
                     botCount++;
 
             //Find the first and last nonbot players for later ease of use.
-            for(int i = 0; i < 4; i++) {
-                if(!foundFirstNonBot && !isBot[i]) {
+            for (int i = 0; i < 4; i++) {
+                if (!foundFirstNonBot && !isBot[i]) {
                     firstNonBot = i;
                     foundFirstNonBot = true;
-                } else if(!isBot[i]) {
+                } else if (!isBot[i]) {
                     lastNonBot = i;
                 }
             }
@@ -90,7 +90,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
                 public void run() {
                     dealCards();
                 }
-            },500);
+            }, 500);
         }
     }
 
@@ -102,22 +102,22 @@ public class BridgeActivity extends GameActivity implements Serializable {
 
     public void gameClick(View v) {
         //Prevents spam-clicking before the last button click is done.
-        if (SystemClock.elapsedRealtime() - lastClickTime < 1750){
+        if (SystemClock.elapsedRealtime() - lastClickTime < 1750) {
             return;
         }
         lastClickTime = SystemClock.elapsedRealtime();
 
         super.gameClick(v);
         //Play sounds only if we're done swapping in hearts or are in any other game mode.
-        if(finishedLoading) {
+        if (finishedLoading) {
             int chosenSound = r.nextInt(3);
-            soundPools[chosenSound].play(sounds[chosenSound],1,1,0,0,1);
+            soundPools[chosenSound].play(sounds[chosenSound], 1, 1, 0, 0, 1);
         }
         //Get the index of the chosen card in the current player's hand.
         int chosen = getCardIndex(v);
 
         // players start putting cards into the pot and calculate score
-        if(manager.potsFinished <= manager.totalRoundCount) {
+        if (manager.potsFinished <= manager.totalRoundCount) {
             manager.potHandle(chosen, currentPlayerInteracting);
             GameAnimation.placeCard(this, v, null, currentPlayerInteracting);
 
@@ -187,15 +187,15 @@ public class BridgeActivity extends GameActivity implements Serializable {
         long currentTimeDelay = 250;
         int offset = 0;
 
-        for(; offset < 4; offset++) {
+        for (; offset < 4; offset++) {
             final int currentPlayer = (currentPlayerInteracting + offset) % manager.playerCount;
             //If the pot is already full, then we break and reset the manager (which will call this again to proceed through the AI).
-            if(manager.pot.size() == 4)
+            if (manager.pot.size() == 4)
                 break;
 
             //If the pot position for this player is empty, then they haven't gone yet.
             //If the player is a bot, commence AI movement and go to the next player; if they aren't a bot, break and leave at this player.
-            if(manager.pot.get(currentPlayer) == null) {
+            if (manager.pot.get(currentPlayer) == null) {
                 if (isBot[currentPlayer] && manager.players[currentPlayer].hand.size() > 0) {
                     handler.postDelayed(new Runnable() {
                         @Override
@@ -204,7 +204,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
                             Card bestMove = BridgeAI.chooseMove(currentPlayer, (BridgeManager) manager, levelsToSearch);
                             int chosenAI = manager.players[currentPlayer].hand.indexOf(bestMove);
 
-                            ImageView cardView = (ImageView)findViewByCard(bestMove);
+                            ImageView cardView = (ImageView) findViewByCard(bestMove);
                             GameAnimation.placeCard(BridgeActivity.this, cardView, null, currentPlayer);
                             manager.potHandle(chosenAI, currentPlayer);
 
@@ -263,64 +263,38 @@ public class BridgeActivity extends GameActivity implements Serializable {
         displayHands(currentPlayer, false);
         guess = -1;
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, android.R.style.Theme_Holo_Panel);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false);
-        builder.setTitle("Player " + (currentPlayer + 1) + " bids");
         HorizontalScrollView horizontalScrollView = new HorizontalScrollView(this);
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.HORIZONTAL);
 
-        if (currentPlayer == (manager.startPlayer + 3) % 4) {
-            for (int i = 0; i <= manager.potsFinished; i++) {
-                Button guessButton = new Button(this);
-                guessButton.setText(Integer.toString(i));
-                if (i != manager.getPlayers()[currentPlayer].hand.size() - manager.addedGuesses) {
-                    guessButton.setBackgroundResource(R.drawable.guess_selectable);
-                    guessButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            guess = Integer.parseInt(((TextView) v).getText().toString());
+        guess = -1;
+
+        RadioGroup group = new RadioGroup(this);
+        group.setOrientation(RadioGroup.HORIZONTAL);
+        for (int i = 0; i <= manager.potsFinished; i++) {
+            final RadioButton button = new RadioButton(this);
+            button.setText(Integer.toString(i));
+            button.setTag(i);
+            group.addView(button);
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (guess == (Integer) button.getTag()) {
+                        manager.addedGuesses += guess;
+                        ((BridgePlayer) manager.players[currentPlayer]).guess = guess;
+
+                        guessCount++;
+                        if (guessCount == 4) {
+                            currentPlayerInteracting = manager.findStartPlayer();
+                            executeAITurns();
+                            guessCount = 0;
+                            return;
                         }
-                    });
-                } else {
-                    guessButton.setClickable(false);
-                    guessButton.setBackgroundResource(R.drawable.guess_nonselectable);
-                }
-                layout.addView(guessButton);
-            }
-        } else {
-            for (int j = 0; j <= manager.potsFinished; j++) {
-                Button guessButton = new Button(this);
-                guessButton.setText(Integer.toString(j));
-                guessButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        guess = Integer.parseInt(((TextView) v).getText().toString());
-                    }
-                });
-                layout.addView(guessButton);
-            }
-        }
-
-        horizontalScrollView.addView(layout);
-        builder.setView(horizontalScrollView);
-        builder.setPositiveButton("OK", null);
-
-        final AlertDialog d = builder.create();
-
-        d.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialog) {
-                Button okButton = d.getButton(AlertDialog.BUTTON_POSITIVE);
-                okButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (guess != -1) {
-                            manager.addedGuesses += guess;
-                            ((BridgePlayer) manager.players[currentPlayer]).guess = guess;
-
-                            d.dismiss();
-
+                        int player = (currentPlayer+1)%4;
+                        while(isBot[player]) {
+                            ((BridgePlayer)manager.getPlayers()[player]).guess = BridgeAI.getBid(player, (BridgeManager)manager);
                             guessCount++;
                             if (guessCount == 4) {
                                 currentPlayerInteracting = manager.findStartPlayer();
@@ -328,24 +302,22 @@ public class BridgeActivity extends GameActivity implements Serializable {
                                 guessCount = 0;
                                 return;
                             }
-                            int player = (currentPlayer+1)%4;
-                            while(isBot[player]) {
-                                ((BridgePlayer)manager.getPlayers()[player]).guess = BridgeAI.getBid(player, (BridgeManager)manager);
-                                guessCount++;
-                                if (guessCount == 4) {
-                                    currentPlayerInteracting = manager.findStartPlayer();
-                                    executeAITurns();
-                                    guessCount = 0;
-                                    return;
-                                }
-                                player = (player+1)%4;
-                            }
-                            openGuessDialog(player);
+                            player = (player+1)%4;
                         }
+                        openGuessDialog(player);
+                    } else {
+                        guess = (Integer) button.getTag();
                     }
-                });
-            }
-        });
+                }
+            });
+        }
+
+        layout.addView(group);
+        horizontalScrollView.addView(layout);
+        builder.setView(horizontalScrollView);
+
+        AlertDialog d = builder.create();
+        d.getWindow().setLayout(findViewById(R.id.potLayout).getWidth(), findViewById(R.id.potLayout).getHeight());
         d.show();
     }
 
@@ -354,39 +326,39 @@ public class BridgeActivity extends GameActivity implements Serializable {
     public void displayHands(int player, boolean cardsClickable) {
         //Remove all old cards first
         cardViews = new ArrayList<ImageView>();
-        if(buttonsPresent) {
+        if (buttonsPresent) {
             for (int i = 0; i < 52; i++) {
                 View view = findViewById(i);
-                if(view != null)
+                if (view != null)
                     ((ViewGroup) view.getParent()).removeView(view);
             }
         }
 
         int temporaryID = 0; //Temporary ID to be assigned to each card, to be reused.
-        RelativeLayout left = (RelativeLayout)findViewById(R.id.leftPlayerHandLayout),
-                top = (RelativeLayout)findViewById(R.id.topPlayerHandLayout),
-                right = (RelativeLayout)findViewById(R.id.rightPlayerHandLayout),
-                bottom = (RelativeLayout)findViewById(R.id.bottomPlayerHandLayout);
+        RelativeLayout left = (RelativeLayout) findViewById(R.id.leftPlayerHandLayout),
+                top = (RelativeLayout) findViewById(R.id.topPlayerHandLayout),
+                right = (RelativeLayout) findViewById(R.id.rightPlayerHandLayout),
+                bottom = (RelativeLayout) findViewById(R.id.bottomPlayerHandLayout);
 
         //Now create the imagebuttons for each of the players.
         //Note: other possible param values for initialTheta scalar and deltaY scalar are (5,3).
-        for(int i = 0; i < 4; i++) {
+        for (int i = 0; i < 4; i++) {
             manager.players[i].organize();
             //The coordinate and angular offsets for every card. Theta is dependent on the number of cards in the hand.
             int deltaX = 0, deltaY;
-            float initialTheta= (float)-2.25*manager.getPlayers()[i].hand.size()/2;
-            for(int j = 0; j < manager.getPlayers()[i].hand.size(); j++) {
-                float theta = (float)(initialTheta + 2.25*j);
-                deltaY = (int)(1.2*(17.5 - Math.pow(j - manager.getPlayers()[i].hand.size()/2,2))); //Truncate the result of the offset
+            float initialTheta = (float) -2.25 * manager.getPlayers()[i].hand.size() / 2;
+            for (int j = 0; j < manager.getPlayers()[i].hand.size(); j++) {
+                float theta = (float) (initialTheta + 2.25 * j);
+                deltaY = (int) (1.2 * (17.5 - Math.pow(j - manager.getPlayers()[i].hand.size() / 2, 2))); //Truncate the result of the offset
 
-                if(manager.getPlayers()[i].hand.size() % 2 != 0 && j == (manager.getPlayers()[i].hand.size()-1)/2)
+                if (manager.getPlayers()[i].hand.size() % 2 != 0 && j == (manager.getPlayers()[i].hand.size() - 1) / 2)
                     theta = 0;
 
-                RelativeLayout.LayoutParams restParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
+                RelativeLayout.LayoutParams restParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 
                 //How to treat and initialize the other cards depending on whether the current player or any other.
                 ImageView cardButton;
-                if(i == player) {
+                if (i == player) {
                     cardButton = new ImageButton(this);
                     cardButton.setImageResource(getResources().getIdentifier(manager.getPlayers()[player].hand.get(j).getAddress(), "drawable", getPackageName()));
                     cardButton.setBackgroundResource(R.drawable.card_border);
@@ -399,36 +371,43 @@ public class BridgeActivity extends GameActivity implements Serializable {
 
                     //Tint and make the card unselectable if it's not meant to be.
                     Card selectCard = manager.getPlayers()[i].hand.get(j);
-                    if(!(manager.cardSelectable(selectCard, finishedSwapping, i))) {
+                    if (!(manager.cardSelectable(selectCard, finishedSwapping, i))) {
                         cardButton.setColorFilter(Color.parseColor("#78505050"), PorterDuff.Mode.SRC_ATOP);
                         cardButton.setClickable(false);
                     }
-                }
-                else {
+                } else {
                     cardButton = new ImageView(this);
                     cardButton.setImageResource(getResources().getIdentifier("cardback", "drawable", getPackageName()));
                 }
 
                 cardButton.setTag(manager.getPlayers()[i].hand.get(j));
-                cardButton.setPadding(1,1,1,1);
+                cardButton.setPadding(1, 1, 1, 1);
                 cardButton.setMaxHeight(150);
                 cardButton.setAdjustViewBounds(true);
-                if(!cardsClickable)
+                if (!cardsClickable)
                     cardButton.setClickable(false);
 
-                switch(i) {
-                    case 0: restParams.setMargins(deltaX,65-deltaY,0,0);
+                switch (i) {
+                    case 0:
+                        restParams.setMargins(deltaX, 65 - deltaY, 0, 0);
                         cardButton.setRotation(theta);
-                        bottom.addView(cardButton, restParams); break;
-                    case 1: restParams.setMargins(100+deltaY,deltaX,0,0);
+                        bottom.addView(cardButton, restParams);
+                        break;
+                    case 1:
+                        restParams.setMargins(100 + deltaY, deltaX, 0, 0);
                         cardButton.setRotation(90 + theta);
-                        left.addView(cardButton, restParams); break;
-                    case 2: restParams.setMargins(deltaX,deltaY,0,0);
+                        left.addView(cardButton, restParams);
+                        break;
+                    case 2:
+                        restParams.setMargins(deltaX, deltaY, 0, 0);
                         cardButton.setRotation(180 - theta);
-                        top.addView(cardButton, restParams); break;
-                    case 3: restParams.setMargins(110-deltaY,deltaX,0,0);
+                        top.addView(cardButton, restParams);
+                        break;
+                    case 3:
+                        restParams.setMargins(110 - deltaY, deltaX, 0, 0);
                         cardButton.setRotation(270 - theta);
-                        right.addView(cardButton, restParams); break;
+                        right.addView(cardButton, restParams);
+                        break;
                 }
                 cardButton.setId(temporaryID++);
                 cardViews.add(cardButton);
@@ -455,7 +434,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
 
     @Override
     public void displayScoreTable(Runnable closeAction) {
-        String[] column = { "Player 1", "Player 2", "Player 3", "Player 4" };
+        String[] column = {"Player 1", "Player 2", "Player 3", "Player 4"};
         List<String> row = new ArrayList<>();
         for (int i = 1; i <= manager.getPotsFinished() - 1; i++)
             row.add("Round " + (i));
@@ -480,12 +459,10 @@ public class BridgeActivity extends GameActivity implements Serializable {
                 else if (i == 0) {
                     textView.setText(column[j - 1]);
                     textView.setTypeface(null, Typeface.BOLD);
-                }
-                else if (j == 0) {
+                } else if (j == 0) {
                     textView.setText(row.get(i - 1));
                     textView.setTypeface(null, Typeface.BOLD);
-                }
-                else if (i !=0 && j != 0)
+                } else if (i != 0 && j != 0)
                     textView.setText(Integer.toString(manager.getPlayers()[j - 1].scoreHistory.get(i - 1)));
 
                 textView.setGravity(Gravity.CENTER);
@@ -530,40 +507,33 @@ public class BridgeActivity extends GameActivity implements Serializable {
         long currentTimeDelay = 0;
         final int[] initialCoordinates = new int[2];
         findViewById(R.id.anchor).getLocationOnScreen(initialCoordinates);
-        soundPools[4].play(sounds[4], 1, 1, 0, -1, 1);
-        for(int j = 0; j < manager.players[0].hand.size(); j++) {
+        for (int j = 0; j < manager.players[0].hand.size(); j++) {
             final int cardsDisplayed = j;
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
+                    soundPools[4].play(sounds[4], 1, 1, 0, -1, 1);
                     GameAnimation.dealSingleCards(BridgeActivity.this, new Runnable() {
                         @Override
                         public void run() {
                             displayIntermediateHands(cardsDisplayed);
 
-                            if(cardsDisplayed == manager.players[0].hand.size()-1) {
+                            if (cardsDisplayed == manager.players[0].hand.size() - 1) {
                                 int player = manager.findStartPlayer();
-                                while(isBot[player]) {
-                                    ((BridgePlayer)manager.getPlayers()[player]).guess = BridgeAI.getBid(player, (BridgeManager)manager);
+                                while (isBot[player]) {
+                                    ((BridgePlayer) manager.getPlayers()[player]).guess = BridgeAI.getBid(player, (BridgeManager) manager);
                                     guessCount++;
                                     player = (player + 1) % 4;
                                 }
                                 openGuessDialog(player);
                             }
                         }
-                    },initialCoordinates);
+                    }, initialCoordinates);
                 }
             }, currentTimeDelay);
 
             currentTimeDelay += 75;
         }
-
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                soundPools[4].stop(sounds[4]);
-            }
-        },currentTimeDelay);
     }
 
     public void loadGame() {
