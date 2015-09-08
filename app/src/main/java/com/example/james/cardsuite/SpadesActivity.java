@@ -9,7 +9,6 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -471,20 +470,11 @@ public class SpadesActivity extends GameActivity {
         try {
             FileInputStream fis = this.openFileInput("save_spades");
             ObjectInputStream is = new ObjectInputStream(fis);
+            super.loadGame(is);
             this.manager = (SpadesManager) is.readObject();
-            this.currentPlayerInteracting = is.readInt();
-            this.currentPotTurn = is.readInt();
             this.botCount = is.readInt();
-            this.firstNonBot = is.readInt();
-            this.lastNonBot = is.readInt();
             this.guessCount = is.readInt();
-            this.foundStartPlayer = is.readBoolean();
-            this.finishedSwapping = is.readBoolean();
-            this.buttonsPresent = is.readBoolean();
-            this.initialOutputWritten = is.readBoolean();
-            this.isBot = (boolean[]) is.readObject();
-            this.scores = (List<Integer>) is.readObject();
-            this.roundScores = (List<Integer>) is.readObject();
+            this.guess = is.readInt();
             is.close();
             fis.close();
             deleteFile("save_spades");
@@ -498,24 +488,14 @@ public class SpadesActivity extends GameActivity {
         String filename = "save_spades";
         FileOutputStream outputStream;
 
-
         try {
             outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
             ObjectOutputStream objectStream = new ObjectOutputStream(outputStream);
+            super.saveGame(objectStream);
             objectStream.writeObject(this.manager);
-            objectStream.writeInt(currentPlayerInteracting);
-            objectStream.writeInt(currentPotTurn);
             objectStream.writeInt(botCount);
-            objectStream.writeInt(firstNonBot);
-            objectStream.writeInt(lastNonBot);
             objectStream.writeInt(guessCount);
-            objectStream.writeBoolean(foundStartPlayer);
-            objectStream.writeBoolean(finishedSwapping);
-            objectStream.writeBoolean(buttonsPresent);
-            objectStream.writeBoolean(initialOutputWritten);
-            objectStream.writeObject(isBot);
-            objectStream.writeObject(scores);
-            objectStream.writeObject(roundScores);
+            objectStream.writeInt(guess);
 
             outputStream.close();
             objectStream.close();
