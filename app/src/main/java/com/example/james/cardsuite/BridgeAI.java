@@ -1,5 +1,7 @@
 package com.example.james.cardsuite;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 // The German Bridge AI. Heuristic eval function sourced mostly from http://www.fongboy.com/programs/Whist/whist_paper.pdf with Luckhardt/Irani's MaxN algorithm.
@@ -9,23 +11,55 @@ public class BridgeAI {
     // Calculated by finding the number of cards of the trump suit and subtracting by a random number [0-3].
     public static int getBid(int currentPlayer, BridgeManager manager) {
         //Count the number of applicable cards towards winning the pot - we know the count is less than the potsFinished/total hand size.
-        int trumpCount = 0;
-        for(Card card : manager.players[currentPlayer].hand)
-            if(card.getSuit().equals(manager.trumpSuit))
-                trumpCount++;
+        List<Integer> trumpNums = new ArrayList<>();
+        for (Card card : manager.players[currentPlayer].hand)
+            if (card.getSuit().equals(manager.trumpSuit))
+                trumpNums.add(card.getCardNumber());
 
-        int cap = trumpCount/3, guessedBid = manager.getPlayers()[currentPlayer].hand.size() - manager.addedGuesses;
-        Random r = new Random();
-        while(guessedBid == manager.getPlayers()[currentPlayer].hand.size() - manager.addedGuesses) {
-            if(cap == 0) {
-                guessedBid = 0;
-                break;
-            } else {
-                guessedBid = trumpCount - r.nextInt(cap);
-                cap++; //If the same guesses are being made, increment the random weight.
+        double trumpBid = 0;
+        if (trumpNums.contains(14) && trumpNums.contains(12) && trumpNums.size() > 2)
+            trumpBid += 2;
+        else {
+            if (trumpNums.contains(14))
+                trumpBid++;
+            if (trumpNums.contains(12) && trumpNums.size() > 2)
+                trumpBid++;
+        }
+        if (trumpNums.contains(13) && trumpNums.contains(11) && trumpNums.size() > 3)
+            trumpBid += 2;
+        else if (trumpNums.contains(13) && trumpNums.size() > 1)
+            trumpBid++;
+        if (trumpNums.size() > 3)
+            trumpBid = trumpBid + 1 + ((trumpNums.size() - 4) / 2);
+
+        for (Card.Suit suit : Card.Suit.values()) {
+            if (!(suit.equals(manager.trumpSuit))) {
+                trumpBid += suitBids(suit, currentPlayer, manager, trumpBid < trumpNums.size());
             }
         }
-        return guessedBid;
+
+        return (int)Math.round(trumpBid);
+    }
+
+    public static double suitBids(Card.Suit suit, int currentPlayer, BridgeManager manager, boolean extraTrump) {
+        double bid = 0;
+        List<Integer> suitNums = new ArrayList<>();
+        for (Card card : manager.players[currentPlayer].hand)
+            if (card.getSuit().equals(suit))
+                suitNums.add(card.getCardNumber());
+
+        if (suitNums.size() == 0 && extraTrump)
+            return 1.5;
+        else if (suitNums.size() == 1 && extraTrump)
+            return 1;
+        if (suitNums.contains(14))
+            bid += 1;
+        if (suitNums.contains(13) && suitNums.size() > 1)
+            bid += 1;
+        if (suitNums.contains(12) && suitNums.size() > 2)
+            bid += 0.5;
+
+        return bid;
     }
 
     // Returns the best possible move for the given player and state of game using the recursive maxN algorithm.
