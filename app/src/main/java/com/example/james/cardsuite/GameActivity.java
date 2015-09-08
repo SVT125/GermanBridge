@@ -27,6 +27,8 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -342,6 +344,42 @@ public abstract class GameActivity extends Activity implements Serializable {
             }
         }
         buttonsPresent = true;
+    }
+
+    public void loadGame(ObjectInputStream is) {
+        try {
+            this.currentPlayerInteracting = is.readInt();
+            this.currentPotTurn = is.readInt();
+            this.firstNonBot = is.readInt();
+            this.lastNonBot = is.readInt();
+            this.foundStartPlayer = is.readBoolean();
+            this.finishedSwapping = is.readBoolean();
+            this.buttonsPresent = is.readBoolean();
+            this.initialOutputWritten = is.readBoolean();
+            this.isBot = (boolean[]) is.readObject();
+            this.scores = (List<Integer>) is.readObject();
+            this.roundScores = (List<Integer>) is.readObject();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
+    public void saveGame(ObjectOutputStream objectStream) {
+        try {
+            objectStream.writeInt(currentPlayerInteracting);
+            objectStream.writeInt(currentPotTurn);
+            objectStream.writeInt(firstNonBot);
+            objectStream.writeInt(lastNonBot);
+            objectStream.writeBoolean(foundStartPlayer);
+            objectStream.writeBoolean(finishedSwapping);
+            objectStream.writeBoolean(buttonsPresent);
+            objectStream.writeBoolean(initialOutputWritten);
+            objectStream.writeObject(isBot);
+            objectStream.writeObject(scores);
+            objectStream.writeObject(roundScores);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public View findViewByCard(Card card) {
