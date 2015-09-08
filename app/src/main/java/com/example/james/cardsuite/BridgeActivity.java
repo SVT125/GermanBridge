@@ -561,6 +561,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
             this.manager = (BridgeManager) is.readObject();
             this.botCount = is.readInt();
             this.guessCount = is.readInt();
+            this.guess = is.readInt();
             is.close();
             fis.close();
             deleteFile("save_bridge");
@@ -580,6 +581,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
             objectStream.writeObject(this.manager);
             objectStream.writeInt(botCount);
             objectStream.writeInt(guessCount);
+            objectStream.writeInt(guess);
             outputStream.close();
             objectStream.close();
         } catch (Exception e) {
