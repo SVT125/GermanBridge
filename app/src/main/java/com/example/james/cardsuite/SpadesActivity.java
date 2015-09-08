@@ -2,22 +2,25 @@ package com.example.james.cardsuite;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -45,20 +48,19 @@ public class SpadesActivity extends GameActivity {
             displayPot();
             displayEndPiles(scores);
             displayHands(currentPlayerInteracting, true);
-        }
-        else {
+        } else {
             this.isBot = intent.getBooleanArrayExtra("isBot");
 
-            for(int i = 0; i < 4; i++)
-                if(isBot[i])
+            for (int i = 0; i < 4; i++)
+                if (isBot[i])
                     botCount++;
 
             //Find the first and last nonbot players for later ease of use.
-            for(int i = 0; i < 4; i++) {
-                if(!foundFirstNonBot && !isBot[i]) {
+            for (int i = 0; i < 4; i++) {
+                if (!foundFirstNonBot && !isBot[i]) {
                     firstNonBot = i;
                     foundFirstNonBot = true;
-                } else if(!isBot[i]) {
+                } else if (!isBot[i]) {
                     lastNonBot = i;
                 }
             }
@@ -75,7 +77,7 @@ public class SpadesActivity extends GameActivity {
                 public void run() {
                     dealCards();
                 }
-            },500);
+            }, 500);
         }
     }
 
@@ -87,18 +89,18 @@ public class SpadesActivity extends GameActivity {
 
     public void gameClick(View v) {
         //Prevents spam-clicking before the last button click is done.
-        if (SystemClock.elapsedRealtime() - lastClickTime < 1750){
+        if (SystemClock.elapsedRealtime() - lastClickTime < 1750) {
             return;
         }
         lastClickTime = SystemClock.elapsedRealtime();
 
         super.gameClick(v);
         //Play sounds only if we're done swapping in hearts or are in any other game mode.
-        if(finishedLoading) {
+        if (finishedLoading) {
             int chosenSound = r.nextInt(3);
             soundPools[chosenSound].play(sounds[chosenSound], 1, 1, 0, 0, 1);
         }
-        if(!(manager.isGameOver())) {
+        if (!(manager.isGameOver())) {
             int chosen = getCardIndex(v);
 
             manager.potHandle(chosen, currentPlayerInteracting);
@@ -120,7 +122,7 @@ public class SpadesActivity extends GameActivity {
     public void updateGameState() {
         final int lastPlayer = manager.startPlayer == 0 ? 3 : manager.startPlayer - 1;
         //If the pot is full (all players have tossed a card), reset the pot, analyze it, find the new start player/winner of the pot.
-        if(manager.pot.size() == 4) {
+        if (manager.pot.size() == 4) {
             manager.potAnalyze();
             currentPlayerInteracting = manager.startPlayer;
 
@@ -132,9 +134,9 @@ public class SpadesActivity extends GameActivity {
                     displayPot();
                     displayEndPiles(scores);
 
-                    if(!manager.getPlayers()[lastPlayer].hand.isEmpty())
+                    if (!manager.getPlayers()[lastPlayer].hand.isEmpty())
                         executeAITurns();
-                    else if(!manager.isGameOver()) {
+                    else if (!manager.isGameOver()) {
                         List<Integer> scores = new ArrayList<Integer>();
                         for (Player player : manager.getPlayers()) {
                             player.scoreChange();
@@ -153,10 +155,10 @@ public class SpadesActivity extends GameActivity {
                         });
                     }
                 }
-            },currentPlayerInteracting);
+            }, currentPlayerInteracting);
         }
 
-        if(manager.isGameOver()) {
+        if (manager.isGameOver()) {
             // The game is done - pass all relevant information for results activity to display.
             // Passing manager just in case for future statistics if needbe.
             Intent intent = new Intent(SpadesActivity.this, ResultsActivity.class);
@@ -172,11 +174,13 @@ public class SpadesActivity extends GameActivity {
     // reshuffles deck, increments round count, resets all variables for the next round.
     public void reset() {
         manager.reset();
-        finishedSwapping = false; buttonsPresent = false;
-        currentPotTurn = 0; currentPlayerInteracting = 0;
+        finishedSwapping = false;
+        buttonsPresent = false;
+        currentPotTurn = 0;
+        currentPlayerInteracting = 0;
 
         //currentPlayerInteracting default-init'd to 0, we increment until we find a non-bot player.
-        while(isBot[currentPlayerInteracting]) {
+        while (isBot[currentPlayerInteracting]) {
             currentPlayerInteracting++;
         }
     }
@@ -186,15 +190,15 @@ public class SpadesActivity extends GameActivity {
     public void executeAITurns() {
         long currentTimeDelay = 250;
         int offset = 0;
-        for(; offset < 4; offset++) {
+        for (; offset < 4; offset++) {
             final int currentPlayer = (currentPlayerInteracting + offset) % manager.playerCount;
             //If the pot is already full, then we break and reset the manager (which will call this again to proceed through the AI).
-            if(manager.pot.size() == 4)
+            if (manager.pot.size() == 4)
                 break;
 
             //If the pot position for this player is empty, then they haven't gone yet.
             //If the player is a bot, commence AI movement and go to the next player; if they aren't a bot, break and leave at this player.
-            if(manager.pot.get(currentPlayer) == null) {
+            if (manager.pot.get(currentPlayer) == null) {
                 if (isBot[currentPlayer] && manager.players[currentPlayer].hand.size() > 0) {
                     handler.postDelayed(new Runnable() {
                         @Override
@@ -206,11 +210,11 @@ public class SpadesActivity extends GameActivity {
 
                             manager.potHandle(chosenAI, currentPlayer);
 
-                            ImageView cardView = (ImageView)findViewByCard(bestMove);
+                            ImageView cardView = (ImageView) findViewByCard(bestMove);
                             GameAnimation.placeCard(SpadesActivity.this, cardView, null, currentPlayer);
 
                             int chosenSound = r.nextInt(3);
-                            soundPools[chosenSound].play(sounds[chosenSound],1,1,0,0,1);
+                            soundPools[chosenSound].play(sounds[chosenSound], 1, 1, 0, 0, 1);
 
                             potClear();
                             displayPot();
@@ -236,23 +240,23 @@ public class SpadesActivity extends GameActivity {
                 if (!manager.players[currentPlayerInteracting].isBot)
                     displayHands(playerToDisplay, true);
             }
-        }, currentTimeDelay+250);
+        }, currentTimeDelay + 250);
     }
 
     //Call when the end piles and the scores displayed on top of the piles need be redisplayed.
     public void displayEndPiles(List<Integer> scores) {
-        TextView[] scoreViews = new TextView[] {(TextView)findViewById(R.id.bottomScore), (TextView)findViewById(R.id.leftScore),
-                (TextView)findViewById(R.id.topScore), (TextView)findViewById(R.id.rightScore)};
-        ImageView[] pileViews = new ImageView[] {(ImageView)findViewById(R.id.bottomPile), (ImageView)findViewById(R.id.leftPile),
-                (ImageView)findViewById(R.id.topPile), (ImageView)findViewById(R.id.rightPile)};
+        TextView[] scoreViews = new TextView[]{(TextView) findViewById(R.id.bottomScore), (TextView) findViewById(R.id.leftScore),
+                (TextView) findViewById(R.id.topScore), (TextView) findViewById(R.id.rightScore)};
+        ImageView[] pileViews = new ImageView[]{(ImageView) findViewById(R.id.bottomPile), (ImageView) findViewById(R.id.leftPile),
+                (ImageView) findViewById(R.id.topPile), (ImageView) findViewById(R.id.rightPile)};
 
-        for(int i = 0; i < 4; i++) {
+        for (int i = 0; i < 4; i++) {
             //Update the score, but remove or update the pile if it exists.
             pileViews[i].setMaxHeight(150);
             pileViews[i].setAdjustViewBounds(true);
-            if ((((SpadesPlayer)manager.getPlayers()[i]).obtained) > 0) {
+            if ((((SpadesPlayer) manager.getPlayers()[i]).obtained) > 0) {
                 pileViews[i].setImageResource(getResources().getIdentifier("cardback", "drawable", getPackageName()));
-                scoreViews[i].setText(Integer.toString(((SpadesPlayer)manager.getPlayers()[i]).obtained));
+                scoreViews[i].setText(Integer.toString(((SpadesPlayer) manager.getPlayers()[i]).obtained));
                 scoreViews[i].setVisibility(View.VISIBLE);
             } else {
                 pileViews[i].setImageResource(0);
@@ -261,57 +265,62 @@ public class SpadesActivity extends GameActivity {
         }
     }
 
-    //Opens the guess dialog - fit for German Bridge for now.
     public void openGuessDialog(final int currentPlayer) {
-        displayHands(currentPlayer,true);
-        guess = -1;
+        displayHands(currentPlayer, false);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this,android.R.style.Theme_Holo_Panel);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false);
-        builder.setTitle("Player " + (currentPlayer + 1) + " bids");
         HorizontalScrollView horizontalScrollView = new HorizontalScrollView(this);
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.HORIZONTAL);
 
-        for (int i = 0; i <= manager.players[currentPlayer].hand.size(); i++) {
-            Button guessButton = new Button(this);
-            guessButton.setText(Integer.toString(i));
-            guessButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    guess = Integer.parseInt(((TextView) v).getText().toString());
-                }
-            });
-            layout.addView(guessButton);
+        guess = -1;
+
+        RadioGroup group = new RadioGroup(this);
+        group.setOrientation(RadioGroup.HORIZONTAL);
+
+        TextView text = new TextView(this);
+        text.setText("Player " + (currentPlayer + 1) + " bid");
+        text.setTextSize(16);
+        text.setPadding(5, 5, 5, 5);
+        text.setTypeface(null, Typeface.BOLD);
+        builder.setCustomTitle(text);
+        Button[] buttons = new Button[14];
+
+        for (int i = 0; i <= 13; i++) {
+            final RadioButton button = new RadioButton(this);
+            button.setText(Integer.toString(i));
+            button.setTag(i);
+            buttons[i] = button;
+            group.addView(button);
         }
 
+        layout.addView(group);
+        layout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         horizontalScrollView.addView(layout);
+        horizontalScrollView.setLayoutParams(new AbsListView.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         builder.setView(horizontalScrollView);
-        builder.setPositiveButton("OK", null);
-
         final AlertDialog d = builder.create();
 
-        d.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialog) {
-                Button okButton = d.getButton(AlertDialog.BUTTON_POSITIVE);
-                okButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (guess != -1) {
-                            ((SpadesPlayer) manager.players[currentPlayer]).bid = guess;
-                            switch(currentPlayer) {
-                                case 0: ((SpadesPlayer) manager.players[0]).totalBid = ((SpadesPlayer) manager.players[2]).totalBid =
-                                        ((SpadesPlayer) manager.players[0]).bid + ((SpadesPlayer) manager.players[2]).bid; break;
-                                case 1: ((SpadesPlayer) manager.players[1]).totalBid = ((SpadesPlayer) manager.players[3]).totalBid =
-                                        ((SpadesPlayer) manager.players[1]).bid + ((SpadesPlayer) manager.players[3]).bid; break;
-                                case 2: ((SpadesPlayer) manager.players[0]).totalBid = ((SpadesPlayer) manager.players[2]).totalBid =
-                                        ((SpadesPlayer) manager.players[0]).bid + ((SpadesPlayer) manager.players[2]).bid; break;
-                                case 3: ((SpadesPlayer) manager.players[1]).totalBid = ((SpadesPlayer) manager.players[3]).totalBid =
-                                        ((SpadesPlayer) manager.players[1]).bid + ((SpadesPlayer) manager.players[3]).bid; break;
-                            }
-                            d.dismiss();
+        for (final Button button : buttons) {
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (guess == (Integer) button.getTag()) {
+                        manager.addedGuesses += guess;
+                        ((SpadesPlayer) manager.players[currentPlayer]).bid = guess;
 
+                        d.dismiss();
+                        guessCount++;
+                        if (guessCount == 4) {
+                            currentPlayerInteracting = manager.findStartPlayer();
+                            executeAITurns();
+                            guessCount = 0;
+                            return;
+                        }
+                        int player = (currentPlayer + 1) % 4;
+                        while (isBot[player]) {
+                            ((SpadesPlayer) manager.getPlayers()[player]).bid = SpadesAI.getBid(player, (SpadesManager) manager);
                             guessCount++;
                             if (guessCount == 4) {
                                 currentPlayerInteracting = manager.findStartPlayer();
@@ -319,25 +328,17 @@ public class SpadesActivity extends GameActivity {
                                 guessCount = 0;
                                 return;
                             }
-                            int player = (currentPlayer+1)%4;
-                            while(isBot[player]) {
-                                ((SpadesPlayer)manager.getPlayers()[player]).bid = SpadesAI.getBid(player, (SpadesManager)manager);
-                                guessCount++;
-                                if (guessCount == 4) {
-                                    currentPlayerInteracting = manager.findStartPlayer();
-                                    executeAITurns();
-                                    guessCount = 0;
-                                    return;
-                                }
-                                player = (player+1)%4;
-                            }
-
-                            openGuessDialog(player);
+                            player = (player + 1) % 4;
                         }
+                        openGuessDialog(player);
+                    } else {
+                        guess = (Integer) button.getTag();
                     }
-                });
-            }
-        });
+                }
+            });
+        }
+
+        d.getWindow().setLayout(findViewById(R.id.potLayout).getWidth(), findViewById(R.id.potLayout).getHeight());
         d.show();
     }
 
@@ -345,39 +346,39 @@ public class SpadesActivity extends GameActivity {
     public void displayHands(int player, boolean cardsClickable) {
         //Remove all old cards first
         cardViews = new ArrayList<ImageView>();
-        if(buttonsPresent) {
+        if (buttonsPresent) {
             for (int i = 0; i < 52; i++) {
                 View view = findViewById(i);
-                if(view != null)
+                if (view != null)
                     ((ViewGroup) view.getParent()).removeView(view);
             }
         }
 
         int temporaryID = 0; //Temporary ID to be assigned to each card, to be reused.
-        RelativeLayout left = (RelativeLayout)findViewById(R.id.leftPlayerHandLayout),
-                top = (RelativeLayout)findViewById(R.id.topPlayerHandLayout),
-                right = (RelativeLayout)findViewById(R.id.rightPlayerHandLayout),
-                bottom = (RelativeLayout)findViewById(R.id.bottomPlayerHandLayout);
+        RelativeLayout left = (RelativeLayout) findViewById(R.id.leftPlayerHandLayout),
+                top = (RelativeLayout) findViewById(R.id.topPlayerHandLayout),
+                right = (RelativeLayout) findViewById(R.id.rightPlayerHandLayout),
+                bottom = (RelativeLayout) findViewById(R.id.bottomPlayerHandLayout);
 
         //Now create the imagebuttons for each of the players.
         //Note: other possible param values for initialTheta scalar and deltaY scalar are (5,3).
-        for(int i = 0; i < 4; i++) {
+        for (int i = 0; i < 4; i++) {
             manager.players[i].organize();
             //The coordinate and angular offsets for every card. Theta is dependent on the number of cards in the hand.
             int deltaX = 0, deltaY;
-            float initialTheta= (float)-2.25*manager.getPlayers()[i].hand.size()/2;
-            for(int j = 0; j < manager.getPlayers()[i].hand.size(); j++) {
-                float theta = (float)(initialTheta + 2.25*j);
-                deltaY = (int)(1.2*(17.5 - Math.pow(j - manager.getPlayers()[i].hand.size()/2,2))); //Truncate the result of the offset
+            float initialTheta = (float) -2.25 * manager.getPlayers()[i].hand.size() / 2;
+            for (int j = 0; j < manager.getPlayers()[i].hand.size(); j++) {
+                float theta = (float) (initialTheta + 2.25 * j);
+                deltaY = (int) (1.2 * (17.5 - Math.pow(j - manager.getPlayers()[i].hand.size() / 2, 2))); //Truncate the result of the offset
 
-                if(manager.getPlayers()[i].hand.size() % 2 != 0 && j == (manager.getPlayers()[i].hand.size()-1)/2)
+                if (manager.getPlayers()[i].hand.size() % 2 != 0 && j == (manager.getPlayers()[i].hand.size() - 1) / 2)
                     theta = 0;
 
-                RelativeLayout.LayoutParams restParams = new RelativeLayout.LayoutParams(cardWidthPX,cardHeightPX);
+                RelativeLayout.LayoutParams restParams = new RelativeLayout.LayoutParams(cardWidthPX, cardHeightPX);
 
                 //How to treat and initialize the other cards depending on whether the current player or any other.
                 ImageView cardButton;
-                if(i == player) {
+                if (i == player) {
                     cardButton = new ImageButton(this);
                     cardButton.setImageResource(getResources().getIdentifier(manager.getPlayers()[player].hand.get(j).getAddress(), "drawable", getPackageName()));
                     cardButton.setBackgroundResource(R.drawable.card_border);
@@ -390,36 +391,43 @@ public class SpadesActivity extends GameActivity {
 
                     //Tint and make the card unselectable if it's not meant to be.
                     Card selectCard = manager.getPlayers()[i].hand.get(j);
-                    if(!(manager.cardSelectable(selectCard, finishedSwapping, i))) {
+                    if (!(manager.cardSelectable(selectCard, finishedSwapping, i))) {
                         cardButton.setColorFilter(Color.parseColor("#78505050"), PorterDuff.Mode.SRC_ATOP);
                         cardButton.setClickable(false);
                     }
-                }
-                else {
+                } else {
                     cardButton = new ImageView(this);
                     cardButton.setImageResource(getResources().getIdentifier("cardback", "drawable", getPackageName()));
                 }
 
                 cardButton.setTag(manager.getPlayers()[i].hand.get(j));
                 cardButton.setPadding(1, 1, 1, 1);
-                if(!cardsClickable)
+                if (!cardsClickable)
                     cardButton.setClickable(false);
                 cardButton.setMaxHeight(150);
                 cardButton.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
-                switch(i) {
-                    case 0: restParams.setMargins(deltaX,65-deltaY,0,0);
+                switch (i) {
+                    case 0:
+                        restParams.setMargins(deltaX, 65 - deltaY, 0, 0);
                         cardButton.setRotation(theta);
-                        bottom.addView(cardButton, restParams); break;
-                    case 1: restParams.setMargins(100+deltaY,deltaX,0,0);
+                        bottom.addView(cardButton, restParams);
+                        break;
+                    case 1:
+                        restParams.setMargins(100 + deltaY, deltaX, 0, 0);
                         cardButton.setRotation(90 + theta);
-                        left.addView(cardButton, restParams); break;
-                    case 2: restParams.setMargins(deltaX,deltaY,0,0);
+                        left.addView(cardButton, restParams);
+                        break;
+                    case 2:
+                        restParams.setMargins(deltaX, deltaY, 0, 0);
                         cardButton.setRotation(180 - theta);
-                        top.addView(cardButton, restParams); break;
-                    case 3: restParams.setMargins(110-deltaY,deltaX,0,0);
+                        top.addView(cardButton, restParams);
+                        break;
+                    case 3:
+                        restParams.setMargins(110 - deltaY, deltaX, 0, 0);
                         cardButton.setRotation(270 - theta);
-                        right.addView(cardButton, restParams); break;
+                        right.addView(cardButton, restParams);
+                        break;
                 }
                 cardButton.setId(temporaryID++);
                 cardViews.add(cardButton);
@@ -436,7 +444,7 @@ public class SpadesActivity extends GameActivity {
         final int[] initialCoordinates = new int[2];
         findViewById(R.id.anchor).getLocationOnScreen(initialCoordinates);
         final int originalHandSize = manager.players[0].hand.size();
-        for(int j = 0; j < manager.players[0].hand.size(); j++) {
+        for (int j = 0; j < manager.players[0].hand.size(); j++) {
             final int cardsDisplayed = j;
             handler.postDelayed(new Runnable() {
                 @Override
@@ -447,17 +455,17 @@ public class SpadesActivity extends GameActivity {
                         public void run() {
                             displayIntermediateHands(cardsDisplayed);
 
-                            if(cardsDisplayed == originalHandSize-1) {
+                            if (cardsDisplayed == originalHandSize - 1) {
                                 int player = manager.findStartPlayer();
-                                while(isBot[player]) {
-                                    ((SpadesPlayer)manager.getPlayers()[player]).bid = SpadesAI.getBid(player, (SpadesManager)manager);
+                                while (isBot[player]) {
+                                    ((SpadesPlayer) manager.getPlayers()[player]).bid = SpadesAI.getBid(player, (SpadesManager) manager);
                                     guessCount++;
                                     player = (player + 1) % 4;
                                 }
                                 openGuessDialog(player);
                             }
                         }
-                    },initialCoordinates);
+                    }, initialCoordinates);
                 }
             }, currentTimeDelay);
 
@@ -478,8 +486,7 @@ public class SpadesActivity extends GameActivity {
             is.close();
             fis.close();
             deleteFile("save_spades");
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
