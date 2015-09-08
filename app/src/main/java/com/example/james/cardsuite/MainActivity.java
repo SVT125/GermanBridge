@@ -6,9 +6,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -137,8 +140,7 @@ public class MainActivity extends Activity {
 
         ListView players = new ListView(this);
         players.setAdapter(adapter);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.MyAppTheme));
         builder.setView(players);
         builder.setTitle("Select players or bots");
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
