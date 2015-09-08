@@ -397,27 +397,19 @@ public class BridgeActivity extends GameActivity implements Serializable {
                     cardButton.setClickable(false);
                 cardButton.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
-                switch (i) {
-                    case 0:
-                        restParams.setMargins(deltaX, 65 - deltaY, 0, 0);
+                switch(i) {
+                    case 0: restParams.setMargins(deltaX,-deltaY,0,0);
                         cardButton.setRotation(theta);
-                        bottom.addView(cardButton, restParams);
-                        break;
-                    case 1:
-                        restParams.setMargins(100 + deltaY, deltaX, 0, 0);
+                        bottom.addView(cardButton, restParams); break;
+                    case 1: restParams.setMargins(deltaY,deltaX,0,0);
                         cardButton.setRotation(90 + theta);
-                        left.addView(cardButton, restParams);
-                        break;
-                    case 2:
-                        restParams.setMargins(deltaX, deltaY, 0, 0);
+                        left.addView(cardButton, restParams); break;
+                    case 2: restParams.setMargins(deltaX,deltaY,0,0);
                         cardButton.setRotation(180 - theta);
-                        top.addView(cardButton, restParams);
-                        break;
-                    case 3:
-                        restParams.setMargins(110 - deltaY, deltaX, 0, 0);
+                        top.addView(cardButton, restParams); break;
+                    case 3: restParams.setMargins(-deltaY,deltaX,0,0);
                         cardButton.setRotation(270 - theta);
-                        right.addView(cardButton, restParams);
-                        break;
+                        right.addView(cardButton, restParams); break;
                 }
                 cardButton.setId(temporaryID++);
                 cardViews.add(cardButton);

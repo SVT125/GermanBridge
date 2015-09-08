@@ -3,6 +3,7 @@ package com.example.james.cardsuite;
 import android.animation.AnimatorInflater;
 import android.animation.AnimatorSet;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
@@ -27,16 +28,12 @@ public class GameAnimation {
         TranslateAnimation ta;
         RotateAnimation ra = null;
 
-        View potCard = null;
+        View potCard = activity.findViewById(R.id.anchor);
         switch(player) {
-            case 0: potCard = activity.findViewById(R.id.bottomPotCard);
-                ra = new RotateAnimation(0,v.getRotation()); break;
-            case 1: potCard = activity.findViewById(R.id.leftPotCard);
-                ra = new RotateAnimation(0,90+v.getRotation()); break;
-            case 2: potCard = activity.findViewById(R.id.topPotCard);
-                ra = new RotateAnimation(0,180-v.getRotation()); break;
-            case 3: potCard = activity.findViewById(R.id.rightPotCard);
-                ra = new RotateAnimation(0,270-v.getRotation()); break;
+            case 0: ra = new RotateAnimation(0,v.getRotation()); break;
+            case 1: ra = new RotateAnimation(0,90+v.getRotation()); break;
+            case 2: ra = new RotateAnimation(0,180-v.getRotation()); break;
+            case 3: ra = new RotateAnimation(0,270-v.getRotation()); break;
         }
 
         potCard.getLocationOnScreen(potCoordinates);
