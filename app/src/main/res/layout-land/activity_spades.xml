@@ -68,7 +68,7 @@
                     android:elevation="1dp"
                     android:background="@drawable/small_button_background"
                     android:textIsSelectable="false"
-                    android:layout_marginLeft="-45dp" />
+                    android:layout_marginLeft="-50dp" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -78,7 +78,7 @@
                     android:layout_centerHorizontal="true"
                     android:rotation="90"
                     android:layout_gravity="center"
-                    android:layout_marginLeft="-45dp" />
+                    android:layout_marginLeft="-50dp" />
             </FrameLayout>
         </LinearLayout>
 
@@ -341,7 +341,7 @@
                     android:layout_centerHorizontal="true"
                     android:rotation="270"
                     android:layout_gravity="center"
-                    android:layout_marginRight="-45dp" />
+                    android:layout_marginRight="-40dp" />
 
                 <com.example.james.cardsuite.VerticalTextView
                     android:layout_width="wrap_content"
@@ -357,7 +357,7 @@
                     android:layout_gravity="center"
                     android:elevation="1dp"
                     android:background="@drawable/small_button_background"
-                    android:layout_marginRight="-45dp" />
+                    android:layout_marginRight="-40dp" />
             </FrameLayout>
 
             <RelativeLayout
