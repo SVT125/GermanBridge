@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -280,12 +281,24 @@ public class BridgeActivity extends GameActivity implements Serializable {
         text.setPadding(5, 5, 5, 5);
         text.setTypeface(null, Typeface.BOLD);
         builder.setCustomTitle(text);
+        Button[] buttons = new Button[manager.potsFinished + 1];
 
         for (int i = 0; i <= manager.potsFinished; i++) {
             final RadioButton button = new RadioButton(this);
             button.setText(Integer.toString(i));
             button.setTag(i);
+            buttons[i] = button;
             group.addView(button);
+        }
+
+        layout.addView(group);
+        layout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        horizontalScrollView.addView(layout);
+        horizontalScrollView.setLayoutParams(new AbsListView.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        builder.setView(horizontalScrollView);
+        final AlertDialog d = builder.create();
+
+        for (final Button button : buttons) {
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -293,6 +306,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
                         manager.addedGuesses += guess;
                         ((BridgePlayer) manager.players[currentPlayer]).guess = guess;
 
+                        d.dismiss();
                         guessCount++;
                         if (guessCount == 4) {
                             currentPlayerInteracting = manager.findStartPlayer();
@@ -319,13 +333,6 @@ public class BridgeActivity extends GameActivity implements Serializable {
                 }
             });
         }
-
-        layout.addView(group);
-        layout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        horizontalScrollView.addView(layout);
-        horizontalScrollView.setLayoutParams(new AbsListView.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        builder.setView(horizontalScrollView);
-        AlertDialog d = builder.create();
 
         d.getWindow().setLayout(findViewById(R.id.potLayout).getWidth(), findViewById(R.id.potLayout).getHeight());
         d.show();
