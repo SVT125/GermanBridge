@@ -43,7 +43,7 @@ public abstract class GameActivity extends Activity implements Serializable {
     protected List<Integer> scores = new ArrayList<Integer>(), roundScores = new ArrayList<>();
     protected SoundPool[] soundPools = new SoundPool[] {new SoundPool.Builder().build(), new SoundPool.Builder().build(),
             new SoundPool.Builder().build(), new SoundPool.Builder().build(), new SoundPool.Builder().build(),
-            new SoundPool.Builder().build()};
+            new SoundPool.Builder().setMaxStreams(13).build()};
     protected int[] sounds;
     protected SoundPool.OnLoadCompleteListener loadListener;
     protected Random r = new Random();
