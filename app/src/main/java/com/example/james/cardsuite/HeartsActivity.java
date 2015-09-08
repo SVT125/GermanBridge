@@ -529,17 +529,9 @@ public class HeartsActivity extends GameActivity implements Serializable {
         try {
             FileInputStream fis = this.openFileInput("save_hearts");
             ObjectInputStream is = new ObjectInputStream(fis);
+            super.loadGame(is);
             this.manager = (HeartsManager) is.readObject();
-            this.currentPlayerInteracting = is.readInt();
-            this.currentPotTurn = is.readInt();
-            this.firstNonBot = is.readInt();
-            this.lastNonBot = is.readInt();
-            this.foundStartPlayer = is.readBoolean();
             this.finishedSwapping = is.readBoolean();
-            this.buttonsPresent = is.readBoolean();
-            this.initialOutputWritten = is.readBoolean();
-            this.scores = (List<Integer>) is.readObject();
-            this.roundScores = (List<Integer>) is.readObject();
             for (int i = 0; i < 4; i++)
                 this.chosenLists.add((List<Card>) is.readObject());
             is.close();
@@ -558,17 +550,9 @@ public class HeartsActivity extends GameActivity implements Serializable {
         try {
             outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
             ObjectOutputStream objectStream = new ObjectOutputStream(outputStream);
+            super.saveGame(objectStream);
             objectStream.writeObject(this.manager);
-            objectStream.writeInt(currentPlayerInteracting);
-            objectStream.writeInt(currentPotTurn);
-            objectStream.writeInt(firstNonBot);
-            objectStream.writeInt(lastNonBot);
-            objectStream.writeBoolean(foundStartPlayer);
             objectStream.writeBoolean(finishedSwapping);
-            objectStream.writeBoolean(buttonsPresent);
-            objectStream.writeBoolean(initialOutputWritten);
-            objectStream.writeObject(scores);
-            objectStream.writeObject(roundScores);
             for (int i = 0; i < 4; i++)
                 objectStream.writeObject(chosenLists.get(i));
             outputStream.close();
