@@ -67,7 +67,8 @@
                     android:elegantTextHeight="false"
                     android:elevation="1dp"
                     android:background="@drawable/small_button_background"
-                    android:textIsSelectable="false" />
+                    android:textIsSelectable="false"
+                    android:layout_marginLeft="-45dp" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -76,7 +77,8 @@
                     android:layout_centerVertical="true"
                     android:layout_centerHorizontal="true"
                     android:rotation="90"
-                    android:layout_gravity="center" />
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="-45dp" />
             </FrameLayout>
         </LinearLayout>
 
@@ -131,14 +133,16 @@
                         android:layout_gravity="center"
                         android:autoText="false"
                         android:background="@drawable/small_button_background"
-                        android:visibility="visible" />
+                        android:visibility="visible"
+                        android:layout_marginTop="-35dp" />
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/topPile"
                         android:layout_centerInParent="true"
-                        android:layout_gravity="center" />
+                        android:layout_gravity="center"
+                        android:layout_marginTop="-35dp" />
                 </FrameLayout>
 
                 <RelativeLayout
@@ -263,7 +267,8 @@
                         android:typeface="serif"
                         android:layout_gravity="center"
                         android:elevation="1dp"
-                        android:background="@drawable/small_button_background" />
+                        android:background="@drawable/small_button_background"
+                        android:layout_marginBottom="-35dp" />
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -271,7 +276,8 @@
                         android:id="@+id/bottomPile"
                         android:layout_centerVertical="true"
                         android:layout_centerHorizontal="true"
-                        android:layout_gravity="center" />
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="-35dp" />
                 </FrameLayout>
             </LinearLayout>
         </LinearLayout>
@@ -335,7 +341,8 @@
                     android:layout_centerVertical="true"
                     android:layout_centerHorizontal="true"
                     android:rotation="270"
-                    android:layout_gravity="center" />
+                    android:layout_gravity="center"
+                    android:layout_marginRight="-45dp" />
 
                 <com.example.james.cardsuite.VerticalTextView
                     android:layout_width="wrap_content"
@@ -350,7 +357,8 @@
                     android:typeface="serif"
                     android:layout_gravity="center"
                     android:elevation="1dp"
-                    android:background="@drawable/small_button_background" />
+                    android:background="@drawable/small_button_background"
+                    android:layout_marginRight="-45dp" />
             </FrameLayout>
 
             <RelativeLayout
