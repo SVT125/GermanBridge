@@ -319,7 +319,7 @@
                     android:id="@+id/button"
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
-                    android:background="@drawable/menubutton"
+                    android:background="@drawable/pause"
                     android:textSize="10dp"
                     android:onClick="menuClick" />
             </RelativeLayout>
