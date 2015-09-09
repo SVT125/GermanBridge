@@ -18,6 +18,8 @@ public class SpadesPlayer extends Player implements Serializable {
 	public boolean scoreChange() {
 
 		int previousBags = bags;
+		System.out.println(bid);
+		System.out.println(totalBid);
 
 		// if person gets 0 hands
 		if (obtained == 0) {
@@ -40,6 +42,8 @@ public class SpadesPlayer extends Player implements Serializable {
 		totalObtained = 0;
 		obtained = 0;
 		handsWon = 0;
+		bid = 0;
+		totalBid = 0;
 		scoreHistory.add(this.score);
 
 		return false;
