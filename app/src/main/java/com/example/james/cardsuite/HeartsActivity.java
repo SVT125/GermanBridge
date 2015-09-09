@@ -356,7 +356,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
             @Override
             public void run() {
                 soundPools[5].stop(sounds[5]);
-                
+
                 //This is run under the assumption the start player will be found below as the animation is run.
                 displayHands(firstNonBot, true);
                 canClick = true;
@@ -534,7 +534,8 @@ public class HeartsActivity extends GameActivity implements Serializable {
             super.loadGame(is);
             this.manager = (HeartsManager) is.readObject();
             this.finishedSwapping = is.readBoolean();
-            for (int i = 0; i < 4; i++)
+            int size = is.readInt();
+            for (int i = 0; i < size; i++)
                 this.chosenLists.add((List<Card>) is.readObject());
             is.close();
             fis.close();
@@ -555,10 +556,14 @@ public class HeartsActivity extends GameActivity implements Serializable {
             super.saveGame(objectStream);
             objectStream.writeObject(this.manager);
             objectStream.writeBoolean(finishedSwapping);
-            for (int i = 0; i < 4; i++)
+            objectStream.writeInt(chosenLists.size());
+            for (int i = 0; i < chosenLists.size(); i++)
                 objectStream.writeObject(chosenLists.get(i));
-            outputStream.close();
+            for (Card c : manager.getPlayers()[currentPlayerInteracting].hand)
+                if (c.isClicked)
+                    c.isClicked = false;
             objectStream.close();
+            outputStream.close();
         } catch (Exception e) {
             e.printStackTrace();
         }

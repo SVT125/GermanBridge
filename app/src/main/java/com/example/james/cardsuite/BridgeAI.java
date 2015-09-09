@@ -37,8 +37,15 @@ public class BridgeAI {
                 trumpBid += suitBids(suit, currentPlayer, manager, trumpBid < trumpNums.size());
             }
         }
-
-        return (int)Math.round(trumpBid);
+        if (currentPlayer == (manager.startPlayer + 3) % 4) {
+            if ((trumpBid + manager.addedGuesses) == manager.potsFinished + 1) {
+                if (trumpBid == 0)
+                    return 1;
+                else
+                    return (int)(trumpBid - 1);
+            }
+        }
+        return (int)trumpBid;
     }
 
     public static double suitBids(Card.Suit suit, int currentPlayer, BridgeManager manager, boolean extraTrump) {

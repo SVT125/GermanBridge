@@ -74,25 +74,23 @@ public class BridgeActivity extends GameActivity implements Serializable {
 
             manager = new BridgeManager(currentPlayerInteracting);
             manager.totalRoundCount = 12;
-
-            ImageView trumpView = (ImageView) findViewById(R.id.trumpView);
-            trumpView.setVisibility(View.VISIBLE);
-            Card trumpCard = ((BridgeManager) manager).trumpCard;
-            trumpView.setImageResource(getResources().getIdentifier(trumpCard.getAddress(), "drawable", getPackageName()));
-            trumpView.setMaxHeight(150);
-            trumpView.setAdjustViewBounds(true);
-
-            //Display the image buttons
-            displayEndPiles(scores);
-
-            //Artificial delay added so that this runs after onCreate finishes and the views' coordinates are defined.
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    dealCards();
-                }
-            }, 500);
         }
+        ImageView trumpView = (ImageView) findViewById(R.id.trumpView);
+        trumpView.setVisibility(View.VISIBLE);
+        Card trumpCard = ((BridgeManager) manager).trumpCard;
+        trumpView.setImageResource(getResources().getIdentifier(trumpCard.getAddress(), "drawable", getPackageName()));
+        trumpView.setMaxHeight(150);
+        trumpView.setAdjustViewBounds(true);
+        //Display the image buttons
+        displayEndPiles(scores);
+
+        //Artificial delay added so that this runs after onCreate finishes and the views' coordinates are defined.
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                dealCards();
+            }
+        }, 500);
     }
 
     @Override
@@ -178,6 +176,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
 
     // reshuffles deck, increments round count, resets all variables for the next round.
     public void reset() {
+        guessCount = 0;
         manager.reset();
         manager.addedGuesses = 0;
     }
@@ -310,7 +309,6 @@ public class BridgeActivity extends GameActivity implements Serializable {
                         if (guessCount == 4) {
                             currentPlayerInteracting = manager.findStartPlayer();
                             executeAITurns();
-                            guessCount = 0;
                             return;
                         }
                         int player = (currentPlayer+1)%4;
@@ -320,7 +318,6 @@ public class BridgeActivity extends GameActivity implements Serializable {
                             if (guessCount == 4) {
                                 currentPlayerInteracting = manager.findStartPlayer();
                                 executeAITurns();
-                                guessCount = 0;
                                 return;
                             }
                             player = (player+1)%4;
@@ -574,8 +571,8 @@ public class BridgeActivity extends GameActivity implements Serializable {
             objectStream.writeInt(botCount);
             objectStream.writeInt(guessCount);
             objectStream.writeInt(guess);
-            outputStream.close();
             objectStream.close();
+            outputStream.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
