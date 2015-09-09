@@ -505,8 +505,8 @@ public class SpadesActivity extends GameActivity {
             objectStream.writeInt(guessCount);
             objectStream.writeInt(guess);
 
-            outputStream.close();
             objectStream.close();
+            outputStream.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
