@@ -147,7 +147,7 @@ public class MainActivity extends Activity {
                 runGameActivity(v);
             }
         });
-        builder.setNegativeButton("Back", new DialogInterface.OnClickListener() {
+        builder.setNeutralButton("Back", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
