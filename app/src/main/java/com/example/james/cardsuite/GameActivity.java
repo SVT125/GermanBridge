@@ -41,7 +41,7 @@ public abstract class GameActivity extends Activity implements Serializable {
     private int soundsLoaded = 0;
     protected long lastClickTime = 0;
     protected boolean[] isBot = new boolean[4];
-    protected boolean foundStartPlayer = false, finishedSwapping = false, buttonsPresent = false, finishedLoading = false;
+    protected boolean foundStartPlayer = false, finishedSwapping = false, buttonsPresent = false, finishedLoading = false, canClick = true;
     public boolean initialOutputWritten = false, isPaused = false, foundFirstNonBot = false;
     protected List<Integer> scores = new ArrayList<Integer>(), roundScores = new ArrayList<>();
     protected SoundPool[] soundPools = new SoundPool[] {new SoundPool.Builder().build(), new SoundPool.Builder().build(),

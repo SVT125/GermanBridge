@@ -487,7 +487,6 @@ public class BridgeActivity extends GameActivity implements Serializable {
         sv.addView(tableLayout);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setCancelable(false);
         builder.setView(sv);
         builder.setTitle("Scoreboard");
         builder.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
@@ -518,7 +517,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    soundPools[4].play(sounds[4], 1, 1, 0, -1, 1);
+                    soundPools[4].play(sounds[4], 1, 1, 0, 1, 1);
                     GameAnimation.dealSingleCards(BridgeActivity.this, new Runnable() {
                         @Override
                         public void run() {
