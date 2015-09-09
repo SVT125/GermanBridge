@@ -245,6 +245,7 @@ public abstract class GameActivity extends Activity implements Serializable {
         sv.addView(tableLayout);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
         builder.setView(sv);
         builder.setTitle("Scoreboard");
         builder.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
