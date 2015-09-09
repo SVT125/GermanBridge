@@ -109,8 +109,8 @@ public class SpadesManager extends Manager implements Serializable {
 	public void addBids() {
 		((SpadesPlayer)(getPlayers()[0])).totalBid = ((SpadesPlayer)(getPlayers()[0])).bid + ((SpadesPlayer)(getPlayers()[2])).bid;
 		((SpadesPlayer)(getPlayers()[2])).totalBid = ((SpadesPlayer)(getPlayers()[0])).bid + ((SpadesPlayer)(getPlayers()[2])).bid;
-		((SpadesPlayer)(getPlayers()[0])).totalBid = ((SpadesPlayer)(getPlayers()[1])).bid + ((SpadesPlayer)(getPlayers()[3])).bid;
-		((SpadesPlayer)(getPlayers()[2])).totalBid = ((SpadesPlayer)(getPlayers()[1])).bid + ((SpadesPlayer)(getPlayers()[3])).bid;
+		((SpadesPlayer)(getPlayers()[1])).totalBid = ((SpadesPlayer)(getPlayers()[1])).bid + ((SpadesPlayer)(getPlayers()[3])).bid;
+		((SpadesPlayer)(getPlayers()[3])).totalBid = ((SpadesPlayer)(getPlayers()[1])).bid + ((SpadesPlayer)(getPlayers()[3])).bid;
 	}
 	
 	public void potAnalyze() {

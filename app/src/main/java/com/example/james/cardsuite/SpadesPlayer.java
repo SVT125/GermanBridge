@@ -13,8 +13,7 @@ public class SpadesPlayer extends Player implements Serializable {
 		hand = new ArrayList<Card>();
 		this.score = 0;
 	}
-	
-	// PROBABLY VERY ERROR PRONE; BUG FIXES PROBABLY NECESSARY
+
 	public boolean scoreChange() {
 
 		int previousBags = bags;
