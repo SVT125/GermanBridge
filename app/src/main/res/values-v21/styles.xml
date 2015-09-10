@@ -17,7 +17,7 @@
 
         <item name="android:textAppearanceButton">@color/hearts_red</item>
     </style>
-    <style name="AlertDialogCustom" parent="@android:style/Theme.Dialog">
+    <style name="AlertDialogCustom" parent="@android:style/Theme.Material.Dialog">
         <item name="android:colorPrimary">@color/background</item>
 
         <!-- <item name="android:background">@color/background</item> -->
@@ -43,8 +43,8 @@
 
         <item name="android:textColor">@color/hearts_red</item>
 
-        <item name="android:colorAccent">@color/hearts_red</item>
+        <!-- <item name="android:colorAccent">@color/hearts_red</item>
 
-        <item name="android:textAppearanceButton">@color/hearts_red</item>
+        <item name="android:textAppearanceButton">@color/hearts_red</item> -->
     </style>
 </resources>

@@ -10,6 +10,7 @@ import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
+import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -83,7 +84,7 @@ public abstract class GameActivity extends Activity implements Serializable {
     }
 
     public void menuClick(View v) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.pauseScreen);
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.pauseScreen));
         builder.setTitle("Game Paused");
         LayoutInflater inflater = (LayoutInflater)getApplicationContext().getSystemService
                 (Context.LAYOUT_INFLATER_SERVICE);
@@ -129,7 +130,7 @@ public abstract class GameActivity extends Activity implements Serializable {
     }
 
     public void promptExit(View v) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, android.R.style.Theme_Holo_Dialog_MinWidth);
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.pauseScreen));
         builder.setTitle("Are you sure you want to exit the game?");
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
