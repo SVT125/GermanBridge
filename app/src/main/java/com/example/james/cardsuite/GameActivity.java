@@ -83,7 +83,7 @@ public abstract class GameActivity extends Activity implements Serializable {
     }
 
     public void menuClick(View v) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, android.R.style.Theme_Holo_Dialog_MinWidth);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.pauseScreen);
         builder.setTitle("Game Paused");
         LayoutInflater inflater = (LayoutInflater)getApplicationContext().getSystemService
                 (Context.LAYOUT_INFLATER_SERVICE);

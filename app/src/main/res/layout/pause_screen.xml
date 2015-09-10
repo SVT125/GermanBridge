@@ -5,38 +5,46 @@
 
     <Button
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:text="Return to Game"
+        android:textColor="@color/spades_blue"
         android:id="@+id/return_game"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:background="@color/background"/>
 
     <Button
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:text="Display Scores"
+        android:textColor="@color/spades_blue"
         android:id="@+id/display_scores"
         android:layout_below="@+id/return_game"
         android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:background="@color/background"/>
 
     <Button
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:text="Settings"
+        android:textColor="@color/spades_blue"
         android:id="@+id/in_game_settings"
         android:layout_below="@+id/display_scores"
         android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:background="@color/background"/>
 
     <Button
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:text="Return to Menu"
+        android:textColor="@color/spades_blue"
         android:id="@+id/menu_button"
         android:layout_below="@+id/in_game_settings"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:onClick="promptExit" />
+        android:onClick="promptExit"
+        android:background="@color/background"/>
 </RelativeLayout>

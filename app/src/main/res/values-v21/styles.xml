@@ -30,4 +30,21 @@
 
         <item name="android:textStyle">italic</item>
     </style>
+    <style name="pauseScreen" parent="@android:style/Theme.Material.Dialog.MinWidth">
+        <item name="android:colorPrimary">@color/background</item>
+
+        <item name="android:windowBackground">@color/background</item>
+
+        <item name="android:background">@color/background</item>
+
+        <item name="android:textAlignment">center</item>
+
+        <item name="android:textColorPrimary">@color/hearts_red</item>
+
+        <item name="android:textColor">@color/hearts_red</item>
+
+        <item name="android:colorAccent">@color/hearts_red</item>
+
+        <item name="android:textAppearanceButton">@color/hearts_red</item>
+    </style>
 </resources>
