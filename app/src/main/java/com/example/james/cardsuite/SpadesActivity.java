@@ -8,7 +8,6 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,7 +27,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -46,8 +44,6 @@ public class SpadesActivity extends GameActivity {
         if (loadGame) {
             this.loadGame();
             displayPot();
-            displayEndPiles(scores);
-            displayHands(currentPlayerInteracting, true);
         } else {
             this.isBot = intent.getBooleanArrayExtra("isBot");
 
@@ -67,18 +63,18 @@ public class SpadesActivity extends GameActivity {
 
             manager = new SpadesManager(currentPlayerInteracting);
             manager.totalRoundCount = 12; // Change later for variable number of players
-
-            //Display the image buttons
-            displayEndPiles(scores);
-
-            //Artificial delay added so that this runs after onCreate finishes and the views' coordinates are defined.
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    dealCards();
-                }
-            }, 500);
         }
+
+        //Display the image buttons
+        displayEndPiles(scores);
+
+        //Artificial delay added so that this runs after onCreate finishes and the views' coordinates are defined.
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                dealCards();
+            }
+        }, 500);
     }
 
     @Override
@@ -88,11 +84,9 @@ public class SpadesActivity extends GameActivity {
     }
 
     public void gameClick(View v) {
-        //Prevents spam-clicking before the last button click is done.
-        if (SystemClock.elapsedRealtime() - lastClickTime < 1750) {
+        if (!canClick)
             return;
-        }
-        lastClickTime = SystemClock.elapsedRealtime();
+        canClick = false;
 
         super.gameClick(v);
         //Play sounds only if we're done swapping in hearts or are in any other game mode.
@@ -100,22 +94,36 @@ public class SpadesActivity extends GameActivity {
             int chosenSound = r.nextInt(3);
             soundPools[chosenSound].play(sounds[chosenSound], 1, 1, 0, 0, 1);
         }
-        if (!(manager.isGameOver())) {
-            int chosen = getCardIndex(v);
+        //Get the index of the chosen card in the current player's hand.
+        int chosen = getCardIndex(v);
 
+        if (manager.potsFinished <= 13) {
             manager.potHandle(chosen, currentPlayerInteracting);
-            GameAnimation.placeCard(SpadesActivity.this, v, new Runnable() {
+            GameAnimation.placeCard(this, v, new Runnable() {
                 @Override
                 public void run() {
+                    displayHands(currentPlayerInteracting, false);
                     potClear();
                     displayPot();
 
-                    executeAITurns();
+                    currentPlayerInteracting = (currentPlayerInteracting + 1) % manager.playerCount;
 
                     updateGameState();
+
+                    //If this is the last turn of the entire round, don't execute turns; wait for scoreboard.
+                    final int lastPlayer = manager.startPlayer == 0 ? 3 : manager.startPlayer - 1;
+                    if (manager.players[lastPlayer].hand.size() != 0) {
+                        if (isBot[currentPlayerInteracting])
+                            botHandle(250);
+                        else {
+                            displayHands(currentPlayerInteracting, true);
+                            canClick = true;
+                        }
+                    }
                 }
             }, currentPlayerInteracting);
-        }
+        } else
+            endGame();
     }
 
     // Updates the game state; after the player moves, the code cycles between executing AI turns/updating the game state until done.
@@ -133,41 +141,20 @@ public class SpadesActivity extends GameActivity {
                     potClear();
                     displayPot();
                     displayEndPiles(scores);
-
-                    if (!manager.getPlayers()[lastPlayer].hand.isEmpty())
-                        executeAITurns();
-                    else if (!manager.isGameOver()) {
-                        List<Integer> scores = new ArrayList<Integer>();
-                        for (Player player : manager.getPlayers()) {
-                            player.scoreChange();
-                            scores.add(player.score);
-                        }
-
-                        reset();
-
-                        final List<Integer> finalScores = scores;
-                        displayScoreTable(new Runnable() {
-                            @Override
-                            public void run() {
-                                displayEndPiles(finalScores);
-                                dealCards();
-                            }
-                        });
-                    }
                 }
             }, currentPlayerInteracting);
-        }
 
-        if (manager.isGameOver()) {
-            // The game is done - pass all relevant information for results activity to display.
-            // Passing manager just in case for future statistics if needbe.
-            Intent intent = new Intent(SpadesActivity.this, ResultsActivity.class);
-            intent.putExtra("manager", manager);
-            intent.putExtra("players", manager.getPlayers());
-            intent.putExtra("scores", new int[]{manager.players[0].score, manager.players[1].score,
-                    manager.players[2].score, manager.players[3].score});
-            startActivity(intent);
-            finish();
+            //Finished round, restart it
+            if(manager.getPlayers()[lastPlayer].hand.isEmpty()) {
+                scores.clear();
+                for (Player player : manager.players) {
+                    player.scoreChange();
+                    scores.add(player.score);
+                }
+                manager.potsFinished++;
+                displayEndPiles(scores);
+                displayScoreTable(null);
+            }
         }
     }
 
@@ -177,6 +164,7 @@ public class SpadesActivity extends GameActivity {
         finishedSwapping = false;
         buttonsPresent = false;
         currentPotTurn = 0;
+        guessCount = 0;
         currentPlayerInteracting = 0;
 
         //currentPlayerInteracting default-init'd to 0, we increment until we find a non-bot player.
@@ -185,62 +173,49 @@ public class SpadesActivity extends GameActivity {
         }
     }
 
-    // Executes AI moves for the next player onwards, stopping once we're on a player that isn't a bot or the pot is already full.
+    // Executes AI moves for the next player onwards, stopping once we're on a player that isn't a bot.
     // This mutates currentPlayerInteracting (to the next non-AI player or player whose hand is empty) and the pot as it loops.
-    public void executeAITurns() {
-        long currentTimeDelay = 250;
-        int offset = 0;
-        for (; offset < 4; offset++) {
-            final int currentPlayer = (currentPlayerInteracting + offset) % manager.playerCount;
-            //If the pot is already full, then we break and reset the manager (which will call this again to proceed through the AI).
-            if (manager.pot.size() == 4)
-                break;
+    public void botHandle(final long delay) {
+        if (!manager.isGameOver()) {
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Card bestMove = SpadesAI.chooseMove(currentPlayerInteracting, (SpadesManager) manager, levelsToSearch);
+                    int chosenAI = manager.players[currentPlayerInteracting].hand.indexOf(bestMove);
+                    manager.potHandle(chosenAI, currentPlayerInteracting);
 
-            //If the pot position for this player is empty, then they haven't gone yet.
-            //If the player is a bot, commence AI movement and go to the next player; if they aren't a bot, break and leave at this player.
-            if (manager.pot.get(currentPlayer) == null) {
-                if (isBot[currentPlayer] && manager.players[currentPlayer].hand.size() > 0) {
-                    handler.postDelayed(new Runnable() {
+                    ImageView cardView = (ImageView) findViewByCard(bestMove);
+                    GameAnimation.placeCard(SpadesActivity.this, cardView, new Runnable() {
                         @Override
                         public void run() {
-                            //After the delay, proceed the AI move.
-                            Card bestMove = SpadesAI.chooseMove(currentPlayer, (SpadesManager) manager, levelsToSearch);
+                            potClear();
+                            displayPot();
 
-                            int chosenAI = manager.players[currentPlayer].hand.indexOf(bestMove);
-
-                            manager.potHandle(chosenAI, currentPlayer);
-
-                            ImageView cardView = (ImageView) findViewByCard(bestMove);
-                            GameAnimation.placeCard(SpadesActivity.this, cardView, null, currentPlayer);
-
+                            displayHands(lastNonBot, false);
                             int chosenSound = r.nextInt(3);
                             soundPools[chosenSound].play(sounds[chosenSound], 1, 1, 0, 0, 1);
 
-                            potClear();
-                            displayPot();
-                            if (!manager.players[currentPlayerInteracting].isBot)
-                                displayHands(currentPlayerInteracting, true);
+                            currentPlayerInteracting = (currentPlayerInteracting + 1) % manager.playerCount;
+
+                            if (manager.pot.size() > 0)
+                                updateGameState();
+
+                            //If this is the last turn of the entire round, don't execute turns; wait for scoreboard.
+                            final int lastPlayer = manager.startPlayer == 0 ? 3 : manager.startPlayer - 1;
+                            //TODO THIS IS BEING CALLED DURING END PILE ANIMATIONS, CAUSING POT NULL ERROR THING
+                            if (manager.players[lastPlayer].hand.size() != 0)
+                                if (isBot[currentPlayerInteracting]) {
+                                    botHandle(250);
+                                } else {
+                                    displayHands(currentPlayerInteracting, true);
+                                    canClick = true;
+                                }
                         }
-                    }, currentTimeDelay);
-                } else
-                    break;
-
-                currentTimeDelay += 250;
-            }
-        }
-        currentPlayerInteracting = (currentPlayerInteracting + offset) % manager.playerCount;
-
-        //The last non-bot player to display, since currentPlayerInteracting will be reset to the new start player.
-        //TODO - Handler exists only to update game state after all AI is done - can be eliminated if offset is calculated before.
-        final int playerToDisplay = currentPlayerInteracting;
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                updateGameState();
-                if (!manager.players[currentPlayerInteracting].isBot)
-                    displayHands(playerToDisplay, true);
-            }
-        }, currentTimeDelay + 250);
+                    }, currentPlayerInteracting);
+                }
+            }, delay);
+        } else
+            endGame();
     }
 
     //Call when the end piles and the scores displayed on top of the piles need be redisplayed.
@@ -315,8 +290,12 @@ public class SpadesActivity extends GameActivity {
                         if (guessCount == 4) {
                             currentPlayerInteracting = manager.findStartPlayer();
                             ((SpadesManager) manager).addBids();
-                            executeAITurns();
-                            guessCount = 0;
+                            if (isBot[currentPlayerInteracting])
+                                botHandle(250);
+                            else {
+                                displayHands(currentPlayerInteracting, true);
+                                canClick = true;
+                            }
                             return;
                         }
                         int player = (currentPlayer + 1) % 4;
@@ -326,8 +305,12 @@ public class SpadesActivity extends GameActivity {
                             if (guessCount == 4) {
                                 currentPlayerInteracting = manager.findStartPlayer();
                                 ((SpadesManager) manager).addBids();
-                                executeAITurns();
-                                guessCount = 0;
+                                if (isBot[currentPlayerInteracting])
+                                    botHandle(250);
+                                else {
+                                    displayHands(currentPlayerInteracting, true);
+                                    canClick = true;
+                                }
                                 return;
                             }
                             player = (player + 1) % 4;
@@ -342,6 +325,18 @@ public class SpadesActivity extends GameActivity {
 
         d.getWindow().setLayout(findViewById(R.id.potLayout).getWidth(), findViewById(R.id.potLayout).getHeight());
         d.show();
+    }
+
+    public void endGame() {
+        // The game is done - pass all relevant information for results activity to display.
+        // Passing manager just in case for future statistics if needbe.
+        Intent intent = new Intent(SpadesActivity.this, ResultsActivity.class);
+        intent.putExtra("manager", manager);
+        intent.putExtra("players", manager.players);
+        intent.putExtra("scores", new int[]{manager.players[0].score, manager.players[1].score,
+                manager.players[2].score, manager.players[3].score});
+        startActivity(intent);
+        finish();
     }
 
     //Call when the hands have been updated and need be redisplayed.
@@ -459,9 +454,31 @@ public class SpadesActivity extends GameActivity {
                             if (cardsDisplayed == originalHandSize - 1) {
                                 int player = manager.findStartPlayer();
                                 while (isBot[player]) {
+                                    if (guessCount == 4) {
+                                        currentPlayerInteracting = manager.findStartPlayer();
+                                        ((SpadesManager) manager).addBids();
+                                        if (isBot[currentPlayerInteracting])
+                                            botHandle(250);
+                                        else {
+                                            displayHands(currentPlayerInteracting, true);
+                                            canClick = true;
+                                        }
+                                        return;
+                                    }
                                     ((SpadesPlayer) manager.getPlayers()[player]).bid = SpadesAI.getBid(player, (SpadesManager) manager);
                                     guessCount++;
                                     player = (player + 1) % 4;
+                                }
+                                if (guessCount == 4) {
+                                    currentPlayerInteracting = manager.findStartPlayer();
+                                    ((SpadesManager) manager).addBids();
+                                    if (isBot[currentPlayerInteracting])
+                                        botHandle(250);
+                                    else {
+                                        displayHands(currentPlayerInteracting, true);
+                                        canClick = true;
+                                    }
+                                    return;
                                 }
                                 openGuessDialog(player);
                             }

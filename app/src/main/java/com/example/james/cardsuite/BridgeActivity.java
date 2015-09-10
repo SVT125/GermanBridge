@@ -170,25 +170,6 @@ public class BridgeActivity extends GameActivity implements Serializable {
         }
     }
 
-    // reshuffles deck, increments round count, resets all variables for the next round.
-    public void reset() {
-        guessCount = 0;
-        manager.reset();
-        manager.addedGuesses = 0;
-    }
-
-    public void endGame() {
-        // The game is done - pass all relevant information for results activity to display.
-        // Passing manager just in case for future statistics if needbe.
-        Intent intent = new Intent(BridgeActivity.this, ResultsActivity.class);
-        intent.putExtra("manager", manager);
-        intent.putExtra("players", manager.players);
-        intent.putExtra("scores", new int[]{manager.players[0].score, manager.players[1].score,
-                manager.players[2].score, manager.players[3].score});
-        startActivity(intent);
-        finish();
-    }
-
     // Executes AI moves for the next player onwards, stopping once we're on a player that isn't a bot.
     // This mutates currentPlayerInteracting (to the next non-AI player or player whose hand is empty) and the pot as it loops.
     public void botHandle(final long delay) {
@@ -233,6 +214,27 @@ public class BridgeActivity extends GameActivity implements Serializable {
         } else
             endGame();
     }
+
+    // reshuffles deck, increments round count, resets all variables for the next round.
+    public void reset() {
+        guessCount = 0;
+        manager.reset();
+        manager.addedGuesses = 0;
+    }
+
+    public void endGame() {
+        // The game is done - pass all relevant information for results activity to display.
+        // Passing manager just in case for future statistics if needbe.
+        Intent intent = new Intent(BridgeActivity.this, ResultsActivity.class);
+        intent.putExtra("manager", manager);
+        intent.putExtra("players", manager.players);
+        intent.putExtra("scores", new int[]{manager.players[0].score, manager.players[1].score,
+                manager.players[2].score, manager.players[3].score});
+        startActivity(intent);
+        finish();
+    }
+
+
 
     //Call when the end piles and the scores displayed on top of the piles need be redisplayed.
     public void displayEndPiles(List<Integer> scores) {
