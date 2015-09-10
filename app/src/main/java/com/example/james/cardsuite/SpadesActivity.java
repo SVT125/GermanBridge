@@ -358,7 +358,7 @@ public class SpadesActivity extends GameActivity {
             //The coordinate and angular offsets for every card. Theta is dependent on the number of cards in the hand.
             int deltaX = 0, deltaY;
             if(i % 2 == 0)
-                deltaX = findViewById(R.id.bottomPlayerLayout).getMeasuredWidth()/2 - 55 * manager.players[i].hand.size()/2;
+                deltaX = findViewById(R.id.bottomPlayerLayout).getMeasuredWidth()/2 - 60 * manager.players[i].hand.size()/2;
 
             float initialTheta = (float) -2.25 * manager.getPlayers()[i].hand.size() / 2;
             for (int j = 0; j < manager.getPlayers()[i].hand.size(); j++) {
