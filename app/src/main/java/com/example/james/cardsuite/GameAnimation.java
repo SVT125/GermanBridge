@@ -56,13 +56,17 @@ public class GameAnimation {
 
         View pile = null;
         switch(winningPlayer) {
-            case 0: pile = activity.findViewById(R.id.bottomPile); break;
-            case 1: pile = activity.findViewById(R.id.leftPile); break;
-            case 2: pile = activity.findViewById(R.id.topPile); break;
-            case 3: pile = activity.findViewById(R.id.rightPile); break;
+            case 0: pile = activity.findViewById(R.id.bottomPlayerHandLayout);
+                pile.getLocationOnScreen(pileCoordinates);
+                pileCoordinates[0] += pile.getMeasuredWidth()/2; break;
+            case 1: pile = activity.findViewById(R.id.leftPlayerHandLayout);
+                pile.getLocationOnScreen(pileCoordinates);
+                pileCoordinates[1] += pile.getMeasuredHeight()/2; break;
+            case 2: pile = activity.findViewById(R.id.topPlayerHandLayout);
+                pile.getLocationOnScreen(pileCoordinates); break;
+            case 3: pile = activity.findViewById(R.id.rightPlayerHandLayout);
+                pile.getLocationOnScreen(pileCoordinates); break;
         }
-
-        pile.getLocationOnScreen(pileCoordinates);
 
         for(int i = 0; i < 4; i++) {
             int[] potCoordinates = new int[2];

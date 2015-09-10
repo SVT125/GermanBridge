@@ -240,21 +240,15 @@ public class BridgeActivity extends GameActivity implements Serializable {
     public void displayEndPiles(List<Integer> scores) {
         TextView[] scoreViews = new TextView[]{(TextView) findViewById(R.id.bottomScore), (TextView) findViewById(R.id.leftScore),
                 (TextView) findViewById(R.id.topScore), (TextView) findViewById(R.id.rightScore)};
-        ImageView[] pileViews = new ImageView[]{(ImageView) findViewById(R.id.bottomPile), (ImageView) findViewById(R.id.leftPile),
-                (ImageView) findViewById(R.id.topPile), (ImageView) findViewById(R.id.rightPile)};
 
         for (int i = 0; i < 4; i++) {
-            //Update the score, but remove or update the pile if it exists.
-            pileViews[i].setMaxHeight(150);
-            pileViews[i].setAdjustViewBounds(true);
+            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)scoreViews[i].getLayoutParams();
+            params.setMargins(55 * manager.players[i].hand.size(),0,0,0);
             if (((BridgePlayer) manager.getPlayers()[i]).obtained > 0) {
-                pileViews[i].setImageResource(getResources().getIdentifier("cardback", "drawable", getPackageName()));
                 scoreViews[i].setText(Integer.toString(((BridgePlayer) manager.getPlayers()[i]).obtained));
                 scoreViews[i].setVisibility(View.VISIBLE);
-            } else {
-                pileViews[i].setImageResource(0);
+            } else
                 scoreViews[i].setVisibility(View.INVISIBLE);
-            }
         }
     }
 

@@ -32,16 +32,6 @@
             android:clipChildren="false"
             android:clipToPadding="false"
             android:layout_marginLeft="-55dp">
-        </RelativeLayout>
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight=".8"
-            android:id="@+id/leftPlayerPileLayout"
-            android:gravity="center_vertical|center_horizontal"
-            android:clipChildren="false"
-            android:clipToPadding="false">
 
             <com.example.james.cardsuite.VerticalTextView
                 android:layout_width="wrap_content"
@@ -59,17 +49,7 @@
                 android:background="@drawable/small_button_background"
                 android:textIsSelectable="false"
                 android:layout_marginLeft="-50dp" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/leftPile"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                android:rotation="90"
-                android:layout_gravity="center"
-                android:layout_marginLeft="-50dp" />
-        </FrameLayout>
+        </RelativeLayout>
 
     </LinearLayout>
 
@@ -92,13 +72,15 @@
             android:clipToPadding="false"
             android:baselineAligned="false">
 
-            <FrameLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight=".75"
-                android:id="@+id/topPlayerPileLayout"
+                android:layout_weight=".25"
+                android:id="@+id/topPlayerHandLayout"
+                android:gravity="center_vertical|center_horizontal"
                 android:clipChildren="false"
-                android:clipToPadding="false">
+                android:clipToPadding="false"
+                android:layout_marginTop="-40dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -114,48 +96,9 @@
                     android:background="@drawable/small_button_background"
                     android:visibility="visible"
                     android:layout_marginTop="-35dp" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/topPile"
-                    android:layout_centerInParent="true"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="-35dp" />
-            </FrameLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight=".25"
-                android:id="@+id/topPlayerHandLayout"
-                android:gravity="center_vertical|center_horizontal"
-                android:clipChildren="false"
-                android:clipToPadding="false"
-                android:layout_marginTop="-40dp">
             </RelativeLayout>
 
         </LinearLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal"
-            android:id="@+id/trumpLayout"
-            android:gravity="center_vertical|center_horizontal"
-            android:layout_weight="0.325"
-            android:clipChildren="false"
-            android:clipToPadding="false">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/trumpView"
-                android:layout_alignParentTop="true"
-                android:background="@drawable/trump_border"
-                android:padding="1dp"
-                android:visibility="invisible" />
-        </RelativeLayout>
 
         <RelativeLayout
             android:orientation="horizontal"
@@ -211,6 +154,15 @@
                 android:adjustViewBounds="true"
                 android:layout_centerInParent="true"
                 android:layout_below="@id/anchor"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/trumpView"
+                android:layout_alignParentTop="true"
+                android:background="@drawable/trump_border"
+                android:padding="1dp"
+                android:visibility="invisible" />
         </RelativeLayout>
 
         <LinearLayout
@@ -234,19 +186,6 @@
                 android:clipToPadding="false"
                 android:layout_marginBottom="-55dp">
 
-            </RelativeLayout>
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_centerVertical="true"
-                android:layout_alignParentStart="true"
-                android:layout_weight=".75"
-                android:id="@+id/bottomPlayerPileLayout"
-                android:gravity="center_vertical|center_horizontal"
-                android:clipChildren="false"
-                android:clipToPadding="false">
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -261,16 +200,8 @@
                     android:elevation="1dp"
                     android:background="@drawable/small_button_background"
                     android:layout_marginBottom="-35dp" />
+            </RelativeLayout>
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/bottomPile"
-                    android:layout_centerVertical="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_gravity="center"
-                    android:layout_marginBottom="-35dp" />
-            </FrameLayout>
         </LinearLayout>
     </LinearLayout>
 
@@ -289,7 +220,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/optionsLayout"
-            android:layout_weight="7.5"
+            android:layout_weight=".925"
             android:gravity="center_vertical|right"
             android:clipChildren="false"
             android:clipToPadding="false">
@@ -306,24 +237,15 @@
                 android:onClick="menuClick" />
         </RelativeLayout>
 
-        <FrameLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="7.25"
-            android:id="@+id/rightPlayerPileLayout"
+            android:layout_weight=".075"
+            android:id="@+id/rightPlayerHandLayout"
             android:gravity="center_vertical|center_horizontal"
             android:clipChildren="false"
-            android:clipToPadding="false">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/rightPile"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                android:rotation="270"
-                android:layout_gravity="center"
-                android:layout_marginRight="-45dp" />
+            android:clipToPadding="false"
+            android:layout_marginRight="-60dp">
 
             <com.example.james.cardsuite.VerticalTextView
                 android:layout_width="wrap_content"
@@ -340,18 +262,6 @@
                 android:elevation="1dp"
                 android:background="@drawable/small_button_background"
                 android:layout_marginRight="-45dp" />
-        </FrameLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1.5"
-            android:id="@+id/rightPlayerHandLayout"
-            android:gravity="center_vertical|center_horizontal"
-            android:clipChildren="false"
-            android:clipToPadding="false"
-            android:layout_marginRight="-60dp">
-
         </RelativeLayout>
 
     </LinearLayout>

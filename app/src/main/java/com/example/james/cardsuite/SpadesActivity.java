@@ -222,21 +222,15 @@ public class SpadesActivity extends GameActivity {
     public void displayEndPiles(List<Integer> scores) {
         TextView[] scoreViews = new TextView[]{(TextView) findViewById(R.id.bottomScore), (TextView) findViewById(R.id.leftScore),
                 (TextView) findViewById(R.id.topScore), (TextView) findViewById(R.id.rightScore)};
-        ImageView[] pileViews = new ImageView[]{(ImageView) findViewById(R.id.bottomPile), (ImageView) findViewById(R.id.leftPile),
-                (ImageView) findViewById(R.id.topPile), (ImageView) findViewById(R.id.rightPile)};
 
         for (int i = 0; i < 4; i++) {
-            //Update the score, but remove or update the pile if it exists.
-            pileViews[i].setMaxHeight(150);
-            pileViews[i].setAdjustViewBounds(true);
+            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)scoreViews[i].getLayoutParams();
+            params.setMargins(55 * manager.players[i].hand.size(),0,0,0);
             if ((((SpadesPlayer) manager.getPlayers()[i]).obtained) > 0) {
-                pileViews[i].setImageResource(getResources().getIdentifier("cardback", "drawable", getPackageName()));
                 scoreViews[i].setText(Integer.toString(((SpadesPlayer) manager.getPlayers()[i]).obtained));
                 scoreViews[i].setVisibility(View.VISIBLE);
-            } else {
-                pileViews[i].setImageResource(0);
+            } else
                 scoreViews[i].setVisibility(View.INVISIBLE);
-            }
         }
     }
 
@@ -406,12 +400,12 @@ public class SpadesActivity extends GameActivity {
 
                 switch (i) {
                     case 0:
-                        restParams.setMargins(deltaX, 65 - deltaY, 0, 0);
+                        restParams.setMargins(deltaX,125-deltaY, 0, 0);
                         cardButton.setRotation(theta);
                         bottom.addView(cardButton, restParams);
                         break;
                     case 1:
-                        restParams.setMargins(100 + deltaY, deltaX, 0, 0);
+                        restParams.setMargins(deltaY, deltaX, 0, 0);
                         cardButton.setRotation(90 + theta);
                         left.addView(cardButton, restParams);
                         break;
@@ -420,7 +414,7 @@ public class SpadesActivity extends GameActivity {
                         cardButton.setRotation(180 - theta);
                         top.addView(cardButton, restParams); break;
                     case 3:
-                        restParams.setMargins(110 - deltaY, deltaX, 0, 0);
+                        restParams.setMargins(25-deltaY, deltaX, 0, 0);
                         cardButton.setRotation(270 - theta);
                         right.addView(cardButton, restParams);
                         break;
