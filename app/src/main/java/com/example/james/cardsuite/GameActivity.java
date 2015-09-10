@@ -10,7 +10,6 @@ import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -35,6 +34,7 @@ import java.util.List;
 import java.util.Random;
 
 public abstract class GameActivity extends Activity implements Serializable {
+    public static float sfxVolume = 0.5f, musicVolume = 0.5f;
     public static final int levelsToSearch = 3; //Parameter for AI that indicates how many levels down to search.
     protected Manager manager;
     protected int cardWidthPX, cardHeightPX, currentPlayerInteracting = 0, currentPotTurn = 0, firstNonBot = 0, lastNonBot = 0;

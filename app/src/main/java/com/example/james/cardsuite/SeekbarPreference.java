@@ -162,7 +162,6 @@ public class SeekbarPreference extends Preference
 
 
     private void updatePreference(int newValue){
-
         SharedPreferences.Editor editor =  getEditor();
         editor.putInt(getKey(), newValue);
         editor.commit();

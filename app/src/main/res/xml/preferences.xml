@@ -10,15 +10,15 @@
             <com.example.james.cardsuite.SeekbarPreference
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:title="MASTER"></com.example.james.cardsuite.SeekbarPreference>
+                android:title="MUSIC"
+                android:key="master_music_settings">
+            </com.example.james.cardsuite.SeekbarPreference>
             <com.example.james.cardsuite.SeekbarPreference
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:title="MUSIC"></com.example.james.cardsuite.SeekbarPreference>
-            <com.example.james.cardsuite.SeekbarPreference
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:title="SFX"></com.example.james.cardsuite.SeekbarPreference>
+                android:title="SFX"
+                android:key="master_music_settings">
+            </com.example.james.cardsuite.SeekbarPreference>
             </PreferenceCategory>
         </PreferenceScreen>
         <PreferenceScreen

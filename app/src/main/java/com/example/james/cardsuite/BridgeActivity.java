@@ -103,7 +103,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
         //Play sounds only if we're done swapping in hearts or are in any other game mode.
         if (finishedLoading) {
             int chosenSound = r.nextInt(3);
-            soundPools[chosenSound].play(sounds[chosenSound], 1, 1, 0, 0, 1);
+            soundPools[chosenSound].play(sounds[chosenSound], sfxVolume, sfxVolume, 0, 0, 1);
         }
         //Get the index of the chosen card in the current player's hand.
         int chosen = getCardIndex(v);
@@ -190,7 +190,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
 
                             displayHands(lastNonBot, false);
                             int chosenSound = r.nextInt(3);
-                            soundPools[chosenSound].play(sounds[chosenSound], 1, 1, 0, 0, 1);
+                            soundPools[chosenSound].play(sounds[chosenSound], sfxVolume, sfxVolume, 0, 0, 1);
 
                             currentPlayerInteracting = (currentPlayerInteracting + 1) % manager.playerCount;
 
@@ -528,7 +528,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    soundPools[4].play(sounds[4], 1, 1, 0, 1, 1);
+                    soundPools[4].play(sounds[4], sfxVolume, sfxVolume, 0, 1, 1);
                     GameAnimation.dealSingleCards(BridgeActivity.this, new Runnable() {
                         @Override
                         public void run() {

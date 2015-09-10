@@ -23,7 +23,6 @@ import android.widget.TextView;
 import java.io.File;
 
 public class MainActivity extends Activity {
-
     boolean[] isBot = new boolean[4];
     boolean loadGame = false;
 

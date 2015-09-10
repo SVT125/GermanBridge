@@ -93,7 +93,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
         //Play sounds only if we're done swapping in hearts or are in any other game mode.
         if (finishedLoading && finishedSwapping) {
             int chosenSound = r.nextInt(3);
-            soundPools[chosenSound].play(sounds[chosenSound], 1, 1, 0, 0, 1);
+            soundPools[chosenSound].play(sounds[chosenSound], sfxVolume, sfxVolume, 0, 0, 1);
         }
 
         if (!(manager.isGameOver())) {
@@ -198,7 +198,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
 
                                 displayHands(lastNonBot, false);
                                 int chosenSound = r.nextInt(3);
-                                soundPools[chosenSound].play(sounds[chosenSound], 1, 1, 0, 0, 1);
+                                soundPools[chosenSound].play(sounds[chosenSound], sfxVolume, sfxVolume, 0, 0, 1);
 
                                 if (finishedSwapping && (manager.pot.size() > 0))
                                     restOfRoundHandle();
@@ -315,7 +315,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
 
         if (!finishedSwapping) {
             //Play swapping sound.
-            soundPools[3].play(sounds[3], 1, 1, 0, 0, 1);
+            soundPools[3].play(sounds[3], sfxVolume, sfxVolume, 0, 0, 1);
 
             // Swap the cards between players.
             if (currentPlayerInteracting != 4) {
@@ -349,7 +349,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
             manager.getPlayers()[i].organize();
         }
 
-        soundPools[5].play(sounds[5],1,1,0,-1,1);
+        soundPools[5].play(sounds[5],sfxVolume,sfxVolume,0,-1,1);
         GameAnimation.swapCards(this, swapRound, new Runnable() {
             @Override
             public void run() {
@@ -503,7 +503,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    soundPools[4].play(sounds[4], 1, 1, 0, 0, 1);
+                    soundPools[4].play(sounds[4], sfxVolume, sfxVolume, 0, 0, 1);
                     GameAnimation.dealSingleCards(HeartsActivity.this, new Runnable() {
                         @Override
                         public void run() {
