@@ -274,7 +274,7 @@ public abstract class GameActivity extends Activity implements Serializable {
 
     public void displayIntermediateHands(int numCardsToDisplay) {
         //Remove all old cards first
-        cardViews = new ArrayList<ImageView>();
+        cardViews.clear();
         if (buttonsPresent) {
             for (int i = 0; i < 52; i++) {
                 View view = findViewById(i);

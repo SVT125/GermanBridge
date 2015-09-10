@@ -338,7 +338,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
     //We add the cardsClickable flag for when the player waits for the AI to finish turns.
     public void displayHands(int player, boolean cardsClickable) {
         //Remove all old cards first
-        cardViews = new ArrayList<ImageView>();
+        cardViews.clear();
         if (buttonsPresent) {
             for (int i = 0; i < 52; i++) {
                 View view = findViewById(i);

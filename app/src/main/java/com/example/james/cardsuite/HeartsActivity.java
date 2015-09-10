@@ -409,7 +409,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
     //Call when the hands have been updated and need be redisplayed.
     public void displayHands(int player, boolean cardsClickable) {
         //Remove all old cards first
-        cardViews = new ArrayList<ImageView>();
+        cardViews.clear();
         if (buttonsPresent) {
             for (int i = 0; i < 52; i++) {
                 View view = findViewById(i);
