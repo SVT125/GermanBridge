@@ -218,6 +218,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
 
                             //If this is the last turn of the entire round, don't execute turns; wait for scoreboard.
                             final int lastPlayer = manager.startPlayer == 0 ? 3 : manager.startPlayer - 1;
+                            //TODO THIS IS BEING CALLED DURING END PILE ANIMATIONS, CAUSING POT NULL ERROR THING
                             if (manager.players[lastPlayer].hand.size() != 0)
                                 if (isBot[currentPlayerInteracting]) {
                                     botHandle(250);
