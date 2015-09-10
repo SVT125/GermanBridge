@@ -17,7 +17,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:title="SFX"
-                android:key="master_music_settings">
+                android:key="master_sfx_settings">
             </com.example.james.cardsuite.SeekbarPreference>
             </PreferenceCategory>
         </PreferenceScreen>
