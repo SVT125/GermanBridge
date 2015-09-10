@@ -66,7 +66,7 @@ public class SpadesActivity extends GameActivity {
         }
 
         //Display the image buttons
-        displayEndPiles(scores);
+        // displayEndPiles(scores);
 
         //Artificial delay added so that this runs after onCreate finishes and the views' coordinates are defined.
         handler.postDelayed(new Runnable() {
@@ -140,7 +140,7 @@ public class SpadesActivity extends GameActivity {
                     manager.pot = new HashMap<Integer, Card>();
                     potClear();
                     displayPot();
-                    displayEndPiles(scores);
+                  //  displayEndPiles(scores);
                 }
             }, currentPlayerInteracting);
 
@@ -152,7 +152,7 @@ public class SpadesActivity extends GameActivity {
                     scores.add(player.score);
                 }
                 manager.potsFinished++;
-                displayEndPiles(scores);
+           //     displayEndPiles(scores);
                 displayScoreTable(null);
             }
         }
