@@ -10,9 +10,90 @@ public class BridgeAI {
     // Returns the suggested number of bids for the given player.
     // Calculated by finding the number of cards of the trump suit and subtracting by a random number [0-3].
     public static int getBid(int currentPlayer, BridgeManager manager) {
+        BridgePlayer player = (BridgePlayer)manager.getPlayers()[currentPlayer];
+        if (manager.potsFinished + 1 == 1)
+            return turnOneBid(currentPlayer, player, manager);
+        if (manager.potsFinished + 1 < 5)
+            return turnTwoToFourBid(currentPlayer, player, manager);
+        if (manager.potsFinished + 1 < 9)
+            return turnFiveToEightBid(currentPlayer, player, manager);
+        return turnNineToTwelveBid(player, manager, currentPlayer);
+    }
+
+    public static int turnOneBid(int currentPlayer, BridgePlayer player, BridgeManager manager) {
+        Card c = player.hand.get(0);
+        if (c.getSuit().equals(manager.trumpSuit))
+            return 1;
+        else if (currentPlayer == manager.startPlayer)
+            if (c.getCardNumber() > 10)
+                return 1;
+        else if (currentPlayer == (manager.startPlayer + 3) % 4)
+            if (manager.addedGuesses > 0)
+                return 1;
+        return 0;
+    }
+
+    public static int turnTwoToFourBid(int currentPlayer, BridgePlayer player, BridgeManager manager) {
+        double bid = 0;
+        for (Card c : player.hand) {
+            if (c.getSuit().equals(manager.trumpSuit))
+                bid++;
+            else if (currentPlayer == manager.startPlayer)
+                if (c.getCardNumber() > 10)
+                    bid += 0.75;
+        }
+        int roundedBid = (int)Math.round(bid);
+        if (currentPlayer == (manager.startPlayer + 3) % 4 && (roundedBid + manager.addedGuesses == manager.potsFinished + 1)) {
+            if (roundedBid == 0)
+                roundedBid++;
+            else
+                roundedBid--;
+        }
+        return roundedBid;
+    }
+
+    public static int turnFiveToEightBid(int currentPlayer, BridgePlayer player, BridgeManager manager) {
+        double bid = 0;
+        List<Integer> trumpNums = new ArrayList<>();
+        for (Card card : player.hand)
+            if (card.getSuit().equals(manager.trumpSuit))
+                trumpNums.add(card.getCardNumber());
+        if (trumpNums.contains(14)) {
+            trumpNums.remove(new Integer(14));
+            bid++;
+        }
+        if (trumpNums.contains(13)) {
+            trumpNums.remove(new Integer(13));
+            bid++;
+        }
+        if (trumpNums.contains(12) && trumpNums.size() > 1) {
+            trumpNums.remove(new Integer(12));
+            bid++;
+        }
+        if (trumpNums.size() > 2) {
+            bid += 0.49 * (trumpNums.size() - 2);
+        }
+        for (Card.Suit suit : Card.Suit.values()) {
+            if (!(suit.equals(manager.trumpSuit))) {
+                bid += suitBids(suit, player, bid < trumpNums.size());
+            }
+        }
+        int roundedBid = (int)Math.round(bid);
+        if (currentPlayer == (manager.startPlayer + 3) % 4) {
+            if ((roundedBid + manager.addedGuesses) == manager.potsFinished + 1) {
+                if (roundedBid == 0)
+                    return 1;
+                else
+                    return (int)(roundedBid - 1);
+            }
+        }
+        return roundedBid;
+    }
+
+    public static int turnNineToTwelveBid(BridgePlayer player, BridgeManager manager, int currentPlayer)  {
         //Count the number of applicable cards towards winning the pot - we know the count is less than the potsFinished/total hand size.
         List<Integer> trumpNums = new ArrayList<>();
-        for (Card card : manager.players[currentPlayer].hand)
+        for (Card card : player.hand)
             if (card.getSuit().equals(manager.trumpSuit))
                 trumpNums.add(card.getCardNumber());
 
@@ -34,24 +115,25 @@ public class BridgeAI {
 
         for (Card.Suit suit : Card.Suit.values()) {
             if (!(suit.equals(manager.trumpSuit))) {
-                trumpBid += suitBids(suit, currentPlayer, manager, trumpBid < trumpNums.size());
+                trumpBid += suitBids(suit, player, trumpBid < trumpNums.size());
             }
         }
+        int roundedBid = (int)Math.round(trumpBid);
         if (currentPlayer == (manager.startPlayer + 3) % 4) {
-            if ((trumpBid + manager.addedGuesses) == manager.potsFinished + 1) {
+            if ((roundedBid + manager.addedGuesses) == manager.potsFinished + 1) {
                 if (trumpBid == 0)
                     return 1;
                 else
-                    return (int)(trumpBid - 1);
+                    return (roundedBid - 1);
             }
         }
-        return (int)trumpBid;
+        return roundedBid;
     }
 
-    public static double suitBids(Card.Suit suit, int currentPlayer, BridgeManager manager, boolean extraTrump) {
+    public static double suitBids(Card.Suit suit, BridgePlayer player, boolean extraTrump) {
         double bid = 0;
         List<Integer> suitNums = new ArrayList<>();
-        for (Card card : manager.players[currentPlayer].hand)
+        for (Card card : player.hand)
             if (card.getSuit().equals(suit))
                 suitNums.add(card.getCardNumber());
 
@@ -99,7 +181,7 @@ public class BridgeAI {
             Pair<Card,double[]> result = new Pair<Card,double[]>();
             result.move = card;
             result.values = new double[] {manager.players[0].score, manager.players[1].score, manager.players[2].score,
-                manager.players[3].score};
+                    manager.players[3].score};
             return result;
         }
 
@@ -108,7 +190,7 @@ public class BridgeAI {
             Pair<Card,double[]> result = new Pair<Card,double[]>();
             result.move = card;
             result.values = new double[]{evaluate(0, manager), evaluate(1, manager),
-                        evaluate(2, manager), evaluate(3, manager)};
+                    evaluate(2, manager), evaluate(3, manager)};
             return result;
         }
 
@@ -228,3 +310,4 @@ public class BridgeAI {
         return found;
     }
 }
+
