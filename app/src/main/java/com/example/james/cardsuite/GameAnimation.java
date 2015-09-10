@@ -25,46 +25,30 @@ public class GameAnimation {
     public static void placeCard(GameActivity activity, View v, final Runnable endAction, int player) {
         int[] potCoordinates = new int[2], cardCoordinates = new int[2];
         v.getLocationOnScreen(cardCoordinates);
-        TranslateAnimation ta;
-        RotateAnimation ra = null;
+        float resetRotation = 0;
 
         View potCard = activity.findViewById(R.id.anchor);
-        switch(player) {
-            case 0: ra = new RotateAnimation(0,v.getRotation()); break;
-            case 1: ra = new RotateAnimation(0,90+v.getRotation()); break;
-            case 2: ra = new RotateAnimation(0,180-v.getRotation()); break;
-            case 3: ra = new RotateAnimation(0,270-v.getRotation()); break;
-        }
-
         potCard.getLocationOnScreen(potCoordinates);
 
-        AnimationSet set = new AnimationSet(true);
-
-        ta = new TranslateAnimation(0,potCoordinates[0]-cardCoordinates[0],0,potCoordinates[1]-cardCoordinates[1]);
-        ta.setDuration(150);
-        if(endAction != null) {
-            ta.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
-
-                }
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    handler.post(endAction);
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-
-                }
-            });
+        switch(player) {
+            case 0: potCoordinates[0] -= activity.cardWidthPX/2;
+                    resetRotation = 0; break;
+            case 1: potCoordinates[1] -= activity.cardWidthPX/2;
+                resetRotation = 90; break;
+            case 2: potCoordinates[0] += activity.cardWidthPX/2;
+                resetRotation = 180; break;
+            case 3: potCoordinates[1] += activity.cardWidthPX/2;
+                resetRotation = 270; break;
         }
 
-        set.addAnimation(ra);
-        set.addAnimation(ta);
 
-        v.startAnimation(set);
+        ViewPropertyAnimator animation = v.animate().translationXBy(potCoordinates[0] - cardCoordinates[0]).
+                translationYBy(potCoordinates[1]-cardCoordinates[1]).rotation(resetRotation).setDuration(150);
+
+        if(endAction != null)
+            animation.withEndAction(endAction);
+
+        animation.start();
     }
 
     public static void collectEndPile(GameActivity activity, final Runnable endAction, int winningPlayer) {
