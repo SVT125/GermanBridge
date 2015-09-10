@@ -45,7 +45,8 @@
                 android:elevation="1dp"
                 android:background="@drawable/small_button_background"
                 android:textIsSelectable="false"
-                android:layout_marginLeft="-50dp" />
+                android:layout_marginTop="180dp"
+                android:layout_marginLeft="75dp" />
         </RelativeLayout>
 
     </LinearLayout>
@@ -91,7 +92,8 @@
                     android:autoText="false"
                     android:background="@drawable/small_button_background"
                     android:visibility="visible"
-                    android:layout_marginTop="-35dp" />
+                    android:layout_marginTop="40dp"
+                    android:layout_marginRight="180dp" />
 
             </RelativeLayout>
 
@@ -167,7 +169,6 @@
                 android:layout_height="match_parent"
                 android:layout_weight=".25"
                 android:id="@+id/bottomPlayerHandLayout"
-                android:gravity="center_vertical|center_horizontal"
                 android:clipChildren="false"
                 android:clipToPadding="false"
                 android:layout_marginBottom="-40dp">
@@ -179,14 +180,11 @@
                     android:text="0"
                     android:id="@+id/bottomScore"
                     android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
                     android:textSize="12dp"
                     android:typeface="serif"
                     android:layout_gravity="center"
                     android:elevation="1dp"
-                    android:background="@drawable/small_button_background"
-                    android:layout_marginBottom="75dp"
-                    android:layout_marginLeft="180dp" />
+                    android:background="@drawable/small_button_background" />
             </RelativeLayout>
 
         </LinearLayout>
@@ -245,7 +243,8 @@
                 android:layout_gravity="center"
                 android:elevation="1dp"
                 android:background="@drawable/small_button_background"
-                android:layout_marginRight="-45dp" />
+                android:layout_marginRight="30dp"
+                android:layout_marginBottom="180dp" />
         </RelativeLayout>
 
     </LinearLayout>
