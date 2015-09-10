@@ -9,7 +9,6 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -53,10 +52,6 @@ public class BridgeActivity extends GameActivity implements Serializable {
             displayPot();
         } else {
             this.isBot = intent.getBooleanArrayExtra("isBot");
-            //currentPlayerInteracting default-init'd to 0, we increment until we find a non-bot player.
-            while (isBot[currentPlayerInteracting]) {
-                currentPlayerInteracting++;
-            }
 
             for (int i = 0; i < 4; i++)
                 if (isBot[i])
@@ -100,11 +95,9 @@ public class BridgeActivity extends GameActivity implements Serializable {
     }
 
     public void gameClick(View v) {
-        //Prevents spam-clicking before the last button click is done.
-        if (SystemClock.elapsedRealtime() - lastClickTime < 1750) {
+        if (!canClick)
             return;
-        }
-        lastClickTime = SystemClock.elapsedRealtime();
+        canClick = false;
 
         super.gameClick(v);
         //Play sounds only if we're done swapping in hearts or are in any other game mode.
@@ -118,13 +111,31 @@ public class BridgeActivity extends GameActivity implements Serializable {
         // players start putting cards into the pot and calculate score
         if (manager.potsFinished <= manager.totalRoundCount) {
             manager.potHandle(chosen, currentPlayerInteracting);
-            GameAnimation.placeCard(this, v, null, currentPlayerInteracting);
+            GameAnimation.placeCard(this, v, new Runnable() {
+                @Override
+                public void run() {
+                    displayHands(currentPlayerInteracting, false);
+                    potClear();
+                    displayPot();
 
-            potClear();
-            displayPot();
+                    currentPlayerInteracting = (currentPlayerInteracting + 1) % manager.playerCount;
 
-            executeAITurns();
-        }
+                    updateGameState();
+
+                    //If this is the last turn of the entire round, don't execute turns; wait for scoreboard.
+                    final int lastPlayer = manager.startPlayer == 0 ? 3 : manager.startPlayer - 1;
+                    if (manager.players[lastPlayer].hand.size() != 0) {
+                        if (isBot[currentPlayerInteracting])
+                            botHandle(250);
+                        else {
+                            displayHands(currentPlayerInteracting, true);
+                            canClick = true;
+                        }
+                    }
+                }
+            }, currentPlayerInteracting);
+        } else
+            endGame();
     }
 
     // Updates the game state; after the player moves, the code cycles between executing AI turns/updating the game state until done.
@@ -142,27 +153,31 @@ public class BridgeActivity extends GameActivity implements Serializable {
                     potClear();
                     displayPot();
                     displayEndPiles(scores);
-                    if (!manager.getPlayers()[lastPlayer].hand.isEmpty())
-                        executeAITurns();
-                    else {
-                        scores.clear();
-                        for (Player player : manager.players) {
-                            player.scoreChange();
-                            scores.add(player.score);
-                        }
-                        manager.potsFinished++;
-                        displayEndPiles(scores);
-                        displayScoreTable(null);
-                    }
-
                 }
             }, currentPlayerInteracting);
+
+            //Finished round, restart it
+            if(manager.getPlayers()[lastPlayer].hand.isEmpty()) {
+                scores.clear();
+                for (Player player : manager.players) {
+                    player.scoreChange();
+                    scores.add(player.score);
+                }
+                manager.potsFinished++;
+                displayEndPiles(scores);
+                displayScoreTable(null);
+            }
         }
+    }
 
-        //If this wasn't the last round, return; otherwise, the game is finished.
-        if (manager.potsFinished <= manager.totalRoundCount)
-            return;
+    // reshuffles deck, increments round count, resets all variables for the next round.
+    public void reset() {
+        guessCount = 0;
+        manager.reset();
+        manager.addedGuesses = 0;
+    }
 
+    public void endGame() {
         // The game is done - pass all relevant information for results activity to display.
         // Passing manager just in case for future statistics if needbe.
         Intent intent = new Intent(BridgeActivity.this, ResultsActivity.class);
@@ -174,66 +189,48 @@ public class BridgeActivity extends GameActivity implements Serializable {
         finish();
     }
 
-    // reshuffles deck, increments round count, resets all variables for the next round.
-    public void reset() {
-        guessCount = 0;
-        manager.reset();
-        manager.addedGuesses = 0;
-    }
-
     // Executes AI moves for the next player onwards, stopping once we're on a player that isn't a bot.
     // This mutates currentPlayerInteracting (to the next non-AI player or player whose hand is empty) and the pot as it loops.
-    public void executeAITurns() {
-        long currentTimeDelay = 250;
-        int offset = 0;
+    public void botHandle(final long delay) {
+        if (!manager.isGameOver()) {
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Card bestMove = BridgeAI.chooseMove(currentPlayerInteracting, (BridgeManager) manager, levelsToSearch);
+                    int chosenAI = manager.players[currentPlayerInteracting].hand.indexOf(bestMove);
+                    manager.potHandle(chosenAI, currentPlayerInteracting);
 
-        for (; offset < 4; offset++) {
-            final int currentPlayer = (currentPlayerInteracting + offset) % manager.playerCount;
-            //If the pot is already full, then we break and reset the manager (which will call this again to proceed through the AI).
-            if (manager.pot.size() == 4)
-                break;
-
-            //If the pot position for this player is empty, then they haven't gone yet.
-            //If the player is a bot, commence AI movement and go to the next player; if they aren't a bot, break and leave at this player.
-            if (manager.pot.get(currentPlayer) == null) {
-                if (isBot[currentPlayer] && manager.players[currentPlayer].hand.size() > 0) {
-                    handler.postDelayed(new Runnable() {
+                    ImageView cardView = (ImageView) findViewByCard(bestMove);
+                    GameAnimation.placeCard(BridgeActivity.this, cardView, new Runnable() {
                         @Override
                         public void run() {
-                            //After the delay, proceed the AI move.
-                            Card bestMove = BridgeAI.chooseMove(currentPlayer, (BridgeManager) manager, levelsToSearch);
-                            int chosenAI = manager.players[currentPlayer].hand.indexOf(bestMove);
+                            potClear();
+                            displayPot();
 
-                            ImageView cardView = (ImageView) findViewByCard(bestMove);
-                            GameAnimation.placeCard(BridgeActivity.this, cardView, null, currentPlayer);
-                            manager.potHandle(chosenAI, currentPlayer);
-
+                            displayHands(lastNonBot, false);
                             int chosenSound = r.nextInt(3);
                             soundPools[chosenSound].play(sounds[chosenSound], 1, 1, 0, 0, 1);
 
-                            potClear();
-                            displayPot();
-                            displayHands(currentPlayerInteracting, false);
+                            currentPlayerInteracting = (currentPlayerInteracting + 1) % manager.playerCount;
+
+                            if (manager.pot.size() > 0)
+                                updateGameState();
+
+                            //If this is the last turn of the entire round, don't execute turns; wait for scoreboard.
+                            final int lastPlayer = manager.startPlayer == 0 ? 3 : manager.startPlayer - 1;
+                            if (manager.players[lastPlayer].hand.size() != 0)
+                                if (isBot[currentPlayerInteracting]) {
+                                    botHandle(250);
+                                } else {
+                                    displayHands(currentPlayerInteracting, true);
+                                    canClick = true;
+                                }
                         }
-                    }, currentTimeDelay);
-                } else
-                    break;
-
-                currentTimeDelay += 250;
-            }
-        }
-
-        currentPlayerInteracting = (currentPlayerInteracting + offset) % manager.playerCount;
-
-        //The last non-bot player to display, since currentPlayerInteracting will be reset to the new start player.
-        final int playerToDisplay = currentPlayerInteracting;
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                updateGameState();
-                displayHands(playerToDisplay, true);
-            }
-        }, currentTimeDelay);
+                    }, currentPlayerInteracting);
+                }
+            }, delay);
+        } else
+            endGame();
     }
 
     //Call when the end piles and the scores displayed on top of the piles need be redisplayed.
@@ -308,7 +305,12 @@ public class BridgeActivity extends GameActivity implements Serializable {
                         guessCount++;
                         if (guessCount == 4) {
                             currentPlayerInteracting = manager.findStartPlayer();
-                            executeAITurns();
+                            if (isBot[currentPlayerInteracting])
+                                botHandle(250);
+                            else {
+                                displayHands(currentPlayerInteracting, true);
+                                canClick = true;
+                            }
                             return;
                         }
                         int player = (currentPlayer+1)%4;
@@ -317,7 +319,12 @@ public class BridgeActivity extends GameActivity implements Serializable {
                             guessCount++;
                             if (guessCount == 4) {
                                 currentPlayerInteracting = manager.findStartPlayer();
-                                executeAITurns();
+                                if (isBot[currentPlayerInteracting])
+                                    botHandle(250);
+                                else {
+                                    displayHands(currentPlayerInteracting, true);
+                                    canClick = true;
+                                }
                                 return;
                             }
                             player = (player+1)%4;
@@ -437,6 +444,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
         return true;
     }
 
+    //TODO - Close action as an argument here is useless, never used.
     @Override
     public void displayScoreTable(Runnable closeAction) {
         String[] column = {"Player 1", "Player 2", "Player 3", "Player 4"};

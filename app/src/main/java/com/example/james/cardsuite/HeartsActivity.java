@@ -239,9 +239,8 @@ public class HeartsActivity extends GameActivity implements Serializable {
 
     public void gameClick(View v) {
         //Prevents spam-clicking before the last button click is done.
-        if (!canClick){
+        if (!canClick)
             return;
-        }
         canClick = false;
 
         super.gameClick(v);
@@ -261,9 +260,8 @@ public class HeartsActivity extends GameActivity implements Serializable {
         manager.pot.clear();
 
         roundScores.clear();
-        for (int i = 0; i < manager.getPlayers().length; i++) {
+        for (int i = 0; i < manager.getPlayers().length; i++)
             roundScores.add(((HeartsPlayer) manager.getPlayers()[i]).tallyRoundScore());
-        }
 
         GameAnimation.collectEndPile(HeartsActivity.this, new Runnable() {
             @Override
