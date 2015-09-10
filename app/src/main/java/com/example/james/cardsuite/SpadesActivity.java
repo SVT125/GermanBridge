@@ -357,6 +357,9 @@ public class SpadesActivity extends GameActivity {
             manager.players[i].organize();
             //The coordinate and angular offsets for every card. Theta is dependent on the number of cards in the hand.
             int deltaX = 0, deltaY;
+            if(i % 2 == 0)
+                deltaX = findViewById(R.id.bottomPlayerLayout).getMeasuredWidth()/2 - 55 * manager.players[i].hand.size()/2;
+
             float initialTheta = (float) -2.25 * manager.getPlayers()[i].hand.size() / 2;
             for (int j = 0; j < manager.getPlayers()[i].hand.size(); j++) {
                 float theta = (float) (initialTheta + 2.25 * j);
@@ -423,7 +426,7 @@ public class SpadesActivity extends GameActivity {
                 cardViews.add(cardButton);
                 //Set the deltaX/theta parameters for the next card/loop iteration.
                 //Consequence of more space horizontally than vertically; set smaller distance between cards vertically.
-                deltaX = (i % 2 == 0) ? deltaX + 60 : deltaX + 55;
+                deltaX += 60;
             }
         }
         buttonsPresent = true;

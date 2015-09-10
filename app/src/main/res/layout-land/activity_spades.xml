@@ -171,7 +171,8 @@
                 android:id="@+id/bottomPlayerHandLayout"
                 android:clipChildren="false"
                 android:clipToPadding="false"
-                android:layout_marginBottom="-40dp">
+                android:layout_marginBottom="-40dp"
+                android:gravity="center_horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
