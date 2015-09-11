@@ -38,7 +38,9 @@ public abstract class GameActivity extends Activity implements Serializable {
     public static float sfxVolume = 0.5f, musicVolume = 0.5f;
     public static final int levelsToSearch = 3; //Parameter for AI that indicates how many levels down to search.
     protected Manager manager;
-    protected int cardWidthPX, cardHeightPX, cardDeltaXPX, currentPlayerInteracting = 0, currentPotTurn = 0, firstNonBot = 0, lastNonBot = 0;
+    protected int currentPlayerInteracting = 0, currentPotTurn = 0, firstNonBot = 0, lastNonBot = 0;
+    //DP to pixel values to use...
+    protected int cardWidthPX, cardHeightPX, cardDeltaXPX, bottomTopMarginPX, rightLeftMarginPX;
     private int soundsLoaded = 0;
     protected long lastClickTime = 0;
     protected boolean[] isBot = new boolean[4];
@@ -84,6 +86,8 @@ public abstract class GameActivity extends Activity implements Serializable {
         cardWidthPX = (int)Math.ceil(35 * metrics.density);
         cardHeightPX = (int)Math.ceil(50 * metrics.density);
         cardDeltaXPX = (int)Math.ceil(20 * metrics.density);
+        bottomTopMarginPX = (int)Math.ceil(42 * metrics.density);
+        rightLeftMarginPX = (int)Math.ceil(72 * metrics.density);
     }
 
     public void menuClick(View v) {
@@ -317,7 +321,7 @@ public abstract class GameActivity extends Activity implements Serializable {
 
                 switch (i) {
                     case 0:
-                        restParams.setMargins(deltaX,125-deltaY, 0, 0);
+                        restParams.setMargins(deltaX,bottomTopMarginPX-deltaY, 0, 0);
                         cardButton.setRotation(theta);
                         bottom.addView(cardButton, restParams);
                         break;
@@ -331,7 +335,7 @@ public abstract class GameActivity extends Activity implements Serializable {
                         cardButton.setRotation(180 - theta);
                         top.addView(cardButton, restParams); break;
                     case 3:
-                        restParams.setMargins(25-deltaY, deltaX, 0, 0);
+                        restParams.setMargins(rightLeftMarginPX-deltaY, deltaX, 0, 0);
                         cardButton.setRotation(270 - theta);
                         right.addView(cardButton, restParams);
                         break;

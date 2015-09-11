@@ -413,7 +413,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
 
                 switch (i) {
                     case 0:
-                        restParams.setMargins(deltaX,125-deltaY, 0, 0);
+                        restParams.setMargins(deltaX,bottomTopMarginPX-deltaY, 0, 0);
                         cardButton.setRotation(theta);
                         bottom.addView(cardButton, restParams);
                         break;
@@ -427,7 +427,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
                         cardButton.setRotation(180 - theta);
                         top.addView(cardButton, restParams); break;
                     case 3:
-                        restParams.setMargins(25-deltaY, deltaX, 0, 0);
+                        restParams.setMargins(rightLeftMarginPX-deltaY, deltaX, 0, 0);
                         cardButton.setRotation(270 - theta);
                         right.addView(cardButton, restParams);
                         break;
