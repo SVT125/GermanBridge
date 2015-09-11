@@ -41,7 +41,6 @@
         <ImageButton
             android:layout_width="150dp"
             android:layout_height="75dp"
-            android:text="New Button"
             android:id="@+id/play"
             android:onClick="overlayClick"
             android:background="@drawable/play"
@@ -51,13 +50,20 @@
         <ImageButton
             android:layout_width="225dp"
             android:layout_height="75dp"
-            android:text="New Button"
             android:id="@+id/settings_button"
             android:onClick="settingsClick"
             android:background="@drawable/settings"
-            android:layout_marginBottom="32dp"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true" />
+
+        <ImageButton
+            android:layout_width="300dp"
+            android:layout_height="75dp"
+            android:id="@+id/help_button"
+            android:background="@drawable/help"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:onClick=""/>
     </LinearLayout>
 
     <LinearLayout
