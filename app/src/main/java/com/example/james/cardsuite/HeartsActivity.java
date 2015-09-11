@@ -32,7 +32,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
     private List<List<Card>> chosenLists = new ArrayList<List<Card>>();
     private List<Card> chosenCards = new ArrayList<Card>();
     private boolean canClick = true;
-    Map<Pair<Integer,View>,AnimatorSet> animationsActive = new HashMap<Pair<Integer,View>,AnimatorSet>();
+    private Map<View,Integer> animationsActive = new HashMap<View,Integer>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,10 +158,11 @@ public class HeartsActivity extends GameActivity implements Serializable {
                         public void run() {
                             List<Card> botChosen = ((HeartsAI) manager.getPlayers()[currentPlayerInteracting]).chooseSwap();
 
-                            for(int i = 0; i < botChosen.size(); i++)
-                                animationsActive.put(new Pair<Integer, View>(currentPlayerInteracting,findViewByCard(botChosen.get(i))),
-                                        GameAnimation.selectSwappedCard(HeartsActivity.this,
-                                                findViewByCard(botChosen.get(i)),currentPlayerInteracting));
+                            for(int i = 0; i < botChosen.size(); i++) {
+                                View chosenView = findViewByCard(botChosen.get(i));
+                                GameAnimation.selectSwappedCard(chosenView, currentPlayerInteracting);
+                                animationsActive.put(chosenView,currentPlayerInteracting);
+                            }
 
                             chosenLists.add(botChosen);
                             currentPlayerInteracting++;
@@ -303,15 +304,12 @@ public class HeartsActivity extends GameActivity implements Serializable {
 
     public void chooseCards(Card chosenCard, int swapRound, View v) {
         if (!chosenCard.isClicked) {
+            GameAnimation.selectSwappedCard(v, currentPlayerInteracting);
+            animationsActive.put(v,currentPlayerInteracting);
             chosenCard.isClicked = true;
-            animationsActive.put(new Pair<Integer, View>(currentPlayerInteracting,findViewByCard(chosenCard)), GameAnimation.
-                    selectSwappedCard(this, v, currentPlayerInteracting));
         } else {
-            AnimatorSet set = animationsActive.remove(new Pair<Integer, View>(currentPlayerInteracting, findViewByCard(chosenCard)));
-
-            //TODO - Return the view to its original position.
-
-            set.end();
+            GameAnimation.unselectSwappedCard(v, currentPlayerInteracting);
+            animationsActive.remove(v);
             chosenCard.isClicked = false;
         }
 
@@ -351,7 +349,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
             manager.getPlayers()[i].organize();
         }
 
-        soundPools[5].play(sounds[5],sfxVolume,sfxVolume,0,-1,1);
+        soundPools[5].play(sounds[5],sfxVolume,sfxVolume,0,1,1);
         GameAnimation.swapCards(this, swapRound, new Runnable() {
             @Override
             public void run() {
@@ -371,7 +369,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
     public void reset() {
         manager.reset();
         finishedSwapping = false;
-        animationsActive = new HashMap<Pair<Integer,View>,AnimatorSet>();
+        animationsActive = new HashMap<View,Integer>();
         initialOutputWritten = false;
         buttonsPresent = false;
         foundStartPlayer = false;

@@ -104,27 +104,31 @@ public class GameAnimation {
         }
     }
 
-    public static AnimatorSet selectSwappedCard(HeartsActivity activity, View v, int currentPlayer) {
-        AnimatorSet selectedAnimation = null;
+    public static void selectSwappedCard(View v, int currentPlayer) {
         switch(currentPlayer){
-            case 0: selectedAnimation = (AnimatorSet) AnimatorInflater.loadAnimator(activity, R.anim.selected_bottom); break;
-            case 1: selectedAnimation = (AnimatorSet) AnimatorInflater.loadAnimator(activity, R.anim.selected_left); break;
-            case 2: selectedAnimation = (AnimatorSet) AnimatorInflater.loadAnimator(activity, R.anim.selected_top); break;
-            case 3: selectedAnimation = (AnimatorSet) AnimatorInflater.loadAnimator(activity, R.anim.selected_right); break;
+            case 0: v.animate().yBy(-75).setDuration(100).start(); break;
+            case 1: v.animate().xBy(75).setDuration(100).start(); break;
+            case 2: v.animate().yBy(-75).setDuration(100).start(); break;
+            case 3: v.animate().xBy(-75).setDuration(100).start(); break;
         }
-
-        selectedAnimation.setTarget(v);
-        selectedAnimation.start();
-        return selectedAnimation;
     }
 
-    public static void swapCards(HeartsActivity activity, int swapRound, Runnable endAction, Map<Pair<Integer,View>,AnimatorSet> animations) {
-        Set<Pair<Integer,View>> keySet = animations.keySet();
-        Iterator<Pair<Integer,View>> iter = keySet.iterator();
-        while(iter.hasNext()) {
-            Pair<Integer,View> key = iter.next();
+    public static void unselectSwappedCard(View v, int currentPlayer) {
+        switch(currentPlayer){
+            case 0: v.animate().yBy(75).setDuration(100).start(); break;
+            case 1: v.animate().xBy(-75).setDuration(100).start(); break;
+            case 2: v.animate().yBy(75).setDuration(100).start(); break;
+            case 3: v.animate().xBy(75).setDuration(100).start(); break;
+        }
+    }
 
-            int receivingHand = key.move;
+    public static void swapCards(HeartsActivity activity, int swapRound, Runnable endAction, Map<View, Integer> animations) {
+        Set<View> keySet = animations.keySet();
+        Iterator<View> iter = keySet.iterator();
+        while(iter.hasNext()) {
+            View key = iter.next();
+
+            int receivingHand = animations.get(key);
             switch(swapRound) {
                 case 0: receivingHand = receivingHand == 0 ? 3 : receivingHand - 1; break;
                 case 1: receivingHand = (receivingHand+1)%4; break;
@@ -132,7 +136,7 @@ public class GameAnimation {
             }
 
             int[] initialCoordinates = new int[2], finalCoordinates = new int[2];
-            key.values.getLocationOnScreen(initialCoordinates);
+            key.getLocationOnScreen(initialCoordinates);
 
             switch(receivingHand) {
                 case 0: activity.findViewById(R.id.bottomPlayerHandLayout).getLocationOnScreen(finalCoordinates);
@@ -149,9 +153,8 @@ public class GameAnimation {
                     finalCoordinates[1] += activity.findViewById(R.id.rightPlayerHandLayout).getHeight()/2; break;
             }
 
-            ViewPropertyAnimator animator = key.values.animate().setDuration(400).translationXBy(finalCoordinates[0] - initialCoordinates[0])
+            ViewPropertyAnimator animator = key.animate().setDuration(400).translationXBy(finalCoordinates[0] - initialCoordinates[0])
                     .translationYBy(finalCoordinates[1] - initialCoordinates[1]).alpha(0f);
-            animations.get(key).end();
             if(!iter.hasNext() && endAction != null)
                 animator.withEndAction(endAction);
             animator.start();
