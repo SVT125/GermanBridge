@@ -29,14 +29,14 @@
         <TextView android:text="CARD SUITE" android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/newgreeting"
-            android:textSize="40dp"
+            android:textSize="50dp"
             android:textIsSelectable="false"
-            android:textStyle="bold"
+            android:textStyle="bold|italic"
             android:focusableInTouchMode="false"
             android:textColor="#373d5e"
             android:layout_above="@+id/play"
             android:layout_alignEnd="@+id/settings_button"
-            android:layout_marginBottom="21dp" />
+            android:layout_marginBottom="15dp" />
 
         <ImageButton
             android:layout_width="150dp"
