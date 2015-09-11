@@ -117,6 +117,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
                     displayHands(currentPlayerInteracting, false);
                     potClear();
                     displayPot();
+                    final int currentPotSize = manager.pot.size();
 
                     currentPlayerInteracting = (currentPlayerInteracting + 1) % manager.playerCount;
 
@@ -124,7 +125,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
 
                     //If this is the last turn of the entire round, don't execute turns; wait for scoreboard.
                     final int lastPlayer = manager.startPlayer == 0 ? 3 : manager.startPlayer - 1;
-                    if (manager.players[lastPlayer].hand.size() != 0) {
+                    if (currentPotSize != 4) {
                         if (isBot[currentPlayerInteracting])
                             botHandle(250);
                         else {
@@ -153,20 +154,27 @@ public class BridgeActivity extends GameActivity implements Serializable {
                     potClear();
                     displayPot();
                     displayEndPiles(scores);
+
+                    //Finished round, restart it
+                    if(manager.getPlayers()[lastPlayer].hand.isEmpty()) {
+                        scores.clear();
+                        for (Player player : manager.players) {
+                            player.scoreChange();
+                            scores.add(player.score);
+                        }
+                        manager.potsFinished++;
+                        displayEndPiles(scores);
+                        displayScoreTable(null);
+                    } else {
+                        if (isBot[currentPlayerInteracting])
+                            botHandle(250);
+                        else {
+                            displayHands(currentPlayerInteracting, true);
+                            canClick = true;
+                        }
+                    }
                 }
             }, currentPlayerInteracting);
-
-            //Finished round, restart it
-            if(manager.getPlayers()[lastPlayer].hand.isEmpty()) {
-                scores.clear();
-                for (Player player : manager.players) {
-                    player.scoreChange();
-                    scores.add(player.score);
-                }
-                manager.potsFinished++;
-                displayEndPiles(scores);
-                displayScoreTable(null);
-            }
         }
     }
 
@@ -180,6 +188,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
                     Card bestMove = BridgeAI.chooseMove(currentPlayerInteracting, (BridgeManager) manager, levelsToSearch);
                     int chosenAI = manager.players[currentPlayerInteracting].hand.indexOf(bestMove);
                     manager.potHandle(chosenAI, currentPlayerInteracting);
+                    final int currentPotSize = manager.pot.size();
 
                     ImageView cardView = (ImageView) findViewByCard(bestMove);
                     GameAnimation.placeCard(BridgeActivity.this, cardView, new Runnable() {
@@ -199,14 +208,14 @@ public class BridgeActivity extends GameActivity implements Serializable {
 
                             //If this is the last turn of the entire round, don't execute turns; wait for scoreboard.
                             final int lastPlayer = manager.startPlayer == 0 ? 3 : manager.startPlayer - 1;
-                            //TODO THIS IS BEING CALLED DURING END PILE ANIMATIONS, CAUSING POT NULL ERROR THING
-                            if (manager.players[lastPlayer].hand.size() != 0)
-                                if (isBot[currentPlayerInteracting]) {
+                            if (currentPotSize != 4) {
+                                if (isBot[currentPlayerInteracting])
                                     botHandle(250);
-                                } else {
+                                else {
                                     displayHands(currentPlayerInteracting, true);
                                     canClick = true;
                                 }
+                            }
                         }
                     }, currentPlayerInteracting);
                 }
@@ -233,8 +242,6 @@ public class BridgeActivity extends GameActivity implements Serializable {
         startActivity(intent);
         finish();
     }
-
-
 
     //Call when the end piles and the scores displayed on top of the piles need be redisplayed.
     public void displayEndPiles(List<Integer> scores) {
@@ -306,9 +313,9 @@ public class BridgeActivity extends GameActivity implements Serializable {
                             }
                             return;
                         }
-                        int player = (currentPlayer+1)%4;
-                        while(isBot[player]) {
-                            ((BridgePlayer)manager.getPlayers()[player]).guess = BridgeAI.getBid(player, (BridgeManager)manager);
+                        int player = (currentPlayer + 1) % 4;
+                        while (isBot[player]) {
+                            ((BridgePlayer) manager.getPlayers()[player]).guess = BridgeAI.getBid(player, (BridgeManager) manager);
                             guessCount++;
                             if (guessCount == 4) {
                                 currentPlayerInteracting = manager.findStartPlayer();
@@ -320,7 +327,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
                                 }
                                 return;
                             }
-                            player = (player+1)%4;
+                            player = (player + 1) % 4;
                         }
                         openGuessDialog(player);
                     } else {
