@@ -7,7 +7,8 @@
     android:configChanges="orientation|keyboardHidden"
     android:weightSum="1"
     android:orientation="horizontal"
-    android:background="@drawable/test_background"
+    android:background="#fff2ee"
+    android:baselineAligned="false"
     android:clipChildren="false"
     android:clipToPadding="false"
     android:keepScreenOn="true">
@@ -18,6 +19,7 @@
         android:layout_height="fill_parent"
         android:id="@+id/leftPlayerLayout"
         android:layout_weight="0.41"
+        android:baselineAligned="false"
         android:clipChildren="false"
         android:clipToPadding="false">
 
@@ -26,9 +28,10 @@
             android:layout_height="match_parent"
             android:layout_weight=".175"
             android:id="@+id/leftPlayerHandLayout"
-            android:gravity="center_vertical"
+            android:gravity="center_vertical|center_horizontal"
             android:clipChildren="false"
-            android:clipToPadding="false">
+            android:clipToPadding="false"
+            android:layout_marginLeft="-55dp">
 
         </RelativeLayout>
 

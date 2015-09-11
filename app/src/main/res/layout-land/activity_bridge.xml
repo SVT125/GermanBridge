@@ -7,10 +7,10 @@
     android:configChanges="orientation|keyboardHidden"
     android:weightSum="1"
     android:orientation="horizontal"
-    android:background="@drawable/test_background"
+    android:background="#fff2ee"
     android:baselineAligned="false"
-    android:clipToPadding="false"
     android:clipChildren="false"
+    android:clipToPadding="false"
     android:keepScreenOn="true">
 
     <LinearLayout
@@ -26,7 +26,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight=".2"
+            android:layout_weight=".175"
             android:id="@+id/leftPlayerHandLayout"
             android:gravity="center_vertical|center_horizontal"
             android:clipChildren="false"
@@ -59,6 +59,7 @@
         android:layout_height="fill_parent"
         android:id="@+id/centerLayout"
         android:layout_weight="0.18"
+        android:transitionGroup="false"
         android:clipChildren="false"
         android:clipToPadding="false">
 
@@ -67,10 +68,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/topPlayerLayout"
-            android:layout_weight="0.29"
+            android:layout_weight="0.375"
             android:clipChildren="false"
-            android:clipToPadding="false"
-            android:baselineAligned="false">
+            android:clipToPadding="false">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -105,7 +105,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/potLayout"
-            android:layout_weight="0.26"
+            android:layout_weight="0.25"
             android:clipChildren="false"
             android:clipToPadding="false">
 
@@ -154,7 +154,7 @@
                 android:adjustViewBounds="true"
                 android:layout_centerInParent="true"
                 android:layout_below="@id/anchor"/>
-
+            
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -163,6 +163,121 @@
                 android:background="@drawable/trump_border"
                 android:padding="1dp"
                 android:visibility="invisible" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="Player One"
+                android:letterSpacing="0.07"
+                android:id="@+id/bottomText"
+                android:textAlignment="center"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:typeface="serif"
+                android:textStyle="bold"
+                android:textSize="25dp"
+                android:layout_marginBottom="-23dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="Player Three"
+                android:id="@+id/topText"
+                android:rotation="180"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:typeface="serif"
+                android:textStyle="bold"
+                android:textSize="25dp"
+                android:layout_marginTop="-23dp"
+                android:letterSpacing="0.07" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="Player Two"
+                android:id="@+id/leftText"
+                android:rotation="90"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:typeface="serif"
+                android:textStyle="bold"
+                android:textSize="25dp"
+                android:layout_marginLeft="-108dp"
+                android:letterSpacing="0.07" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="Player Four"
+                android:id="@+id/rightText"
+                android:rotation="270"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:typeface="serif"
+                android:textStyle="bold"
+                android:textSize="25dp"
+                android:layout_marginRight="-108dp"
+                android:letterSpacing="0.07" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="0"
+                android:id="@+id/leftScoreView"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
+                android:rotation="90"
+                android:textStyle="bold"
+                android:textSize="50dp"
+                android:layout_marginLeft="25dp"
+                android:layout_marginBottom="-35dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="0"
+                android:id="@+id/topScoreView"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"
+                android:textStyle="bold"
+                android:textSize="50dp"
+                android:layout_marginLeft="35dp"
+                android:layout_marginTop="-35dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="0"
+                android:id="@+id/rightScoreView"
+                android:rotation="90"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:textStyle="bold"
+                android:textSize="50dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginTop="-35dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="0"
+                android:id="@+id/bottomScoreView"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:textStyle="bold"
+                android:textSize="50dp"
+                android:layout_marginRight="35dp"
+                android:layout_marginBottom="-35dp"/>
+
         </RelativeLayout>
 
         <LinearLayout
@@ -171,10 +286,9 @@
             android:layout_height="match_parent"
             android:id="@+id/bottomPlayerLayout"
             android:layout_gravity="bottom|center_horizontal"
-            android:layout_weight="0.29"
+            android:layout_weight="0.375"
             android:clipChildren="false"
-            android:clipToPadding="false"
-            android:baselineAligned="false">
+            android:clipToPadding="false">
 
             <RelativeLayout
                 android:layout_width="match_parent"
