@@ -1,6 +1,5 @@
 package com.example.james.cardsuite;
 
-import android.animation.AnimatorSet;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -32,7 +31,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
     private List<List<Card>> chosenLists = new ArrayList<List<Card>>();
     private List<Card> chosenCards = new ArrayList<Card>();
     private boolean canClick = true;
-    private Map<View,Integer> animationsActive = new HashMap<View,Integer>();
+    private Map<View, Integer> animationsActive = new HashMap<View, Integer>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,17 +43,16 @@ public class HeartsActivity extends GameActivity implements Serializable {
         if (loadGame) {
             this.loadGame();
             this.displayPot();
-        }
-        else {
+        } else {
             this.isBot = intent.getBooleanArrayExtra("isBot");
             manager = new HeartsManager(isBot);
             currentPlayerInteracting = 0;
             //Find the first and last nonbot players for later ease of use.
-            for(int i = 0; i < 4; i++) {
-                if(!foundFirstNonBot && !isBot[i]) {
+            for (int i = 0; i < 4; i++) {
+                if (!foundFirstNonBot && !isBot[i]) {
                     firstNonBot = i;
                     foundFirstNonBot = true;
-                } else if(!isBot[i]) {
+                } else if (!isBot[i]) {
                     lastNonBot = i;
                 }
             }
@@ -107,8 +105,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
                 int swapRound = manager.getPotsFinished() % 4;
                 if (swapRound != 3) {
                     this.chooseCards(chosenCard, swapRound, v);
-                }
-                else {
+                } else {
                     finishedSwapping = true;
                     canClick = true;
                 }
@@ -123,7 +120,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
                         potClear();
                         displayPot();
 
-                        if(manager.pot.size() > 0)
+                        if (manager.pot.size() > 0)
                             restOfRoundHandle();
 
                         if (manager.getPlayers()[currentPlayerInteracting].isBot) {
@@ -133,18 +130,17 @@ public class HeartsActivity extends GameActivity implements Serializable {
                             canClick = true;
                         }
                     }
-                },currentPlayerInteracting);
+                }, currentPlayerInteracting);
             }
 
             //We copy the code block above because if we're done swapping, we want to continue execution ONLY when the animation is done.
             if (!finishedSwapping && manager.getPlayers()[currentPlayerInteracting].isBot) {
                 botHandle(250);
-            } else if(!finishedSwapping && currentPlayerInteracting == lastNonBot && chosenCards.size() == 0){
+            } else if (!finishedSwapping && chosenCards.size() == 0) {
                 //This is only executed to display the hand of the next player during the swapping phase/end of turn in game phase.
-                displayHands(currentPlayerInteracting,true);
+                displayHands(currentPlayerInteracting, true);
             }
-        }
-        else
+        } else
             endGame();
     }
 
@@ -158,10 +154,10 @@ public class HeartsActivity extends GameActivity implements Serializable {
                         public void run() {
                             List<Card> botChosen = ((HeartsAI) manager.getPlayers()[currentPlayerInteracting]).chooseSwap();
 
-                            for(int i = 0; i < botChosen.size(); i++) {
+                            for (int i = 0; i < botChosen.size(); i++) {
                                 View chosenView = findViewByCard(botChosen.get(i));
                                 GameAnimation.selectSwappedCard(chosenView, currentPlayerInteracting);
-                                animationsActive.put(chosenView,currentPlayerInteracting);
+                                animationsActive.put(chosenView, currentPlayerInteracting);
                             }
 
                             chosenLists.add(botChosen);
@@ -191,7 +187,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
 
                         ((HeartsManager) manager).potHandle(botMove, currentPlayerInteracting);
 
-                        ImageView cardView = (ImageView)findViewByCard(botMove);
+                        ImageView cardView = (ImageView) findViewByCard(botMove);
                         GameAnimation.placeCard(HeartsActivity.this, cardView, new Runnable() {
                             @Override
                             public void run() {
@@ -212,7 +208,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
                                     canClick = true;
                                 }
                             }
-                        },currentPlayerInteracting);
+                        }, currentPlayerInteracting);
 
                     }
                 }, delay);
@@ -305,7 +301,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
     public void chooseCards(Card chosenCard, int swapRound, View v) {
         if (!chosenCard.isClicked) {
             GameAnimation.selectSwappedCard(v, currentPlayerInteracting);
-            animationsActive.put(v,currentPlayerInteracting);
+            animationsActive.put(v, currentPlayerInteracting);
             chosenCard.isClicked = true;
         } else {
             GameAnimation.unselectSwappedCard(v, currentPlayerInteracting);
@@ -349,7 +345,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
             manager.getPlayers()[i].organize();
         }
 
-        soundPools[5].play(sounds[5],sfxVolume,sfxVolume,0,1,1);
+        soundPools[5].play(sounds[5], sfxVolume, sfxVolume, 0, 1, 1);
         GameAnimation.swapCards(this, swapRound, new Runnable() {
             @Override
             public void run() {
@@ -369,7 +365,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
     public void reset() {
         manager.reset();
         finishedSwapping = false;
-        animationsActive = new HashMap<View,Integer>();
+        animationsActive = new HashMap<View, Integer>();
         initialOutputWritten = false;
         buttonsPresent = false;
         foundStartPlayer = false;
@@ -386,9 +382,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
                 (TextView) findViewById(R.id.topScoreView), (TextView) findViewById(R.id.rightScoreView)};
 
         for (int i = 0; i < 4; i++) {
-            if (scores.get(i) != 0) {
-                scoreViews[i].setText(Integer.toString(scores.get(i)));
-            }
+            scoreViews[i].setText(Integer.toString(scores.get(i)));
         }
     }
 
@@ -460,7 +454,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
 
                 switch (i) {
                     case 0:
-                        restParams.setMargins(deltaX,bottomTopMarginPX-deltaY, 0, 0);
+                        restParams.setMargins(deltaX, bottomTopMarginPX - deltaY, 0, 0);
                         cardButton.setRotation(theta);
                         bottom.addView(cardButton, restParams);
                         break;
@@ -472,9 +466,10 @@ public class HeartsActivity extends GameActivity implements Serializable {
                     case 2:
                         restParams.setMargins(deltaX, deltaY, 0, 0);
                         cardButton.setRotation(180 - theta);
-                        top.addView(cardButton, restParams); break;
+                        top.addView(cardButton, restParams);
+                        break;
                     case 3:
-                        restParams.setMargins(rightLeftMarginPX-deltaY, deltaX, 0, 0);
+                        restParams.setMargins(rightLeftMarginPX - deltaY, deltaX, 0, 0);
                         cardButton.setRotation(270 - theta);
                         right.addView(cardButton, restParams);
                         break;
@@ -493,25 +488,25 @@ public class HeartsActivity extends GameActivity implements Serializable {
         long currentTimeDelay = 0;
         final int[] initialCoordinates = new int[2];
         findViewById(R.id.anchor).getLocationOnScreen(initialCoordinates);
-        for(int j = 0; j < manager.players[0].hand.size(); j++) {
+        for (int j = 0; j < manager.players[0].hand.size(); j++) {
             final int cardsDisplayed = j;
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    soundPools[4].play(sounds[4],sfxVolume, sfxVolume, 0, 0, 1);
+                    soundPools[4].play(sounds[4], sfxVolume, sfxVolume, 0, 0, 1);
                     GameAnimation.dealSingleCards(HeartsActivity.this, new Runnable() {
                         @Override
                         public void run() {
                             displayIntermediateHands(cardsDisplayed);
 
-                            if(cardsDisplayed == manager.players[0].hand.size()-1) {
+                            if (cardsDisplayed == manager.players[0].hand.size() - 1) {
                                 if (manager.getPlayers()[currentPlayerInteracting].isBot)
                                     botHandle(250);
                                 else
                                     displayHands(currentPlayerInteracting, true);
                             }
                         }
-                    },initialCoordinates);
+                    }, initialCoordinates);
                 }
             }, currentTimeDelay);
 
@@ -533,8 +528,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
             is.close();
             fis.close();
             deleteFile("save_hearts");
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println(e);
         }
     }
