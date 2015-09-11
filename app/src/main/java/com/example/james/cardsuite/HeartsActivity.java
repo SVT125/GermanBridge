@@ -352,13 +352,24 @@ public class HeartsActivity extends GameActivity implements Serializable {
                 soundPools[5].stop(sounds[5]);
 
                 //This is run under the assumption the start player will be found below as the animation is run.
-                displayHands(firstNonBot, true);
+                findStartPlayer();
+                displayHands(findNextNonBot(manager.startPlayer), true);
                 canClick = true;
             }
         }, animationsActive);
 
         findStartPlayer();
         finishedSwapping = true;
+    }
+
+    public int findNextNonBot(int currentPlayer) {
+        for (int i = 0; i < 4; i++) {
+            if (!(manager.getPlayers()[currentPlayer].isBot))
+                return currentPlayer;
+
+            currentPlayer = (currentPlayer + 1) % 4;
+        }
+        return currentPlayer;
     }
 
     // reshuffles deck, increments round count, resets all variables for the next round.
