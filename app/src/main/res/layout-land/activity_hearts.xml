@@ -31,24 +31,8 @@
             android:gravity="center_vertical|center_horizontal"
             android:clipChildren="false"
             android:clipToPadding="false"
-            android:layout_marginLeft="-55dp">
+            android:layout_marginLeft="-72dp">
 
-            <com.example.james.cardsuite.VerticalTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="0"
-                android:id="@+id/leftScore"
-                android:layout_centerVertical="true"
-                android:layout_alignParentLeft="true"
-                android:textSize="12dp"
-                android:typeface="serif"
-                android:layout_gravity="center"
-                android:elegantTextHeight="false"
-                android:elevation="1dp"
-                android:background="@drawable/small_button_background"
-                android:textIsSelectable="false"
-                android:layout_marginLeft="-50dp" />
         </RelativeLayout>
 
     </LinearLayout>
@@ -80,7 +64,7 @@
                 android:gravity="center_vertical|center_horizontal"
                 android:clipChildren="false"
                 android:clipToPadding="false"
-                android:layout_marginTop="-40dp">
+                android:layout_marginTop="-48dp">
 
             </RelativeLayout>
 
@@ -188,7 +172,7 @@
                 android:textStyle="bold"
                 android:textSize="25dp"
                 android:textColor="@color/tan"
-                android:layout_marginLeft="-108dp"
+                android:layout_marginLeft="-102dp"
                 android:letterSpacing="0.07" />
 
             <TextView
@@ -205,7 +189,7 @@
                 android:textStyle="bold"
                 android:textSize="25dp"
                 android:textColor="@color/tan"
-                android:layout_marginRight="-108dp"
+                android:layout_marginRight="-102dp"
                 android:letterSpacing="0.07" />
 
             <TextView
@@ -293,22 +277,8 @@
                 android:gravity="center_vertical|center_horizontal"
                 android:clipChildren="false"
                 android:clipToPadding="false"
-                android:layout_marginBottom="-55dp">
+                android:layout_marginBottom="-23dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="0"
-                    android:id="@+id/bottomScore"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:textSize="12dp"
-                    android:typeface="sans"
-                    android:layout_gravity="center"
-                    android:elevation="1dp"
-                    android:background="@drawable/small_button_background"
-                    android:layout_marginBottom="-35dp" />
             </RelativeLayout>
 
         </LinearLayout>
@@ -354,7 +324,7 @@
             android:gravity="center_vertical|center_horizontal"
             android:clipChildren="false"
             android:clipToPadding="false"
-            android:layout_marginRight="-55dp">
+            android:layout_marginRight="-22dp">
 
 
         </RelativeLayout>
