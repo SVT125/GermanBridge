@@ -162,6 +162,7 @@
                 android:layout_alignParentTop="true"
                 android:background="@drawable/trump_border"
                 android:padding="1dp"
+                android:layout_marginLeft="40dp"
                 android:visibility="invisible" />
 
             <TextView
