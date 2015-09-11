@@ -66,7 +66,7 @@ public class SpadesActivity extends GameActivity {
         }
 
         //Display the image buttons
-        // displayEndPiles(scores);
+        displayEndPiles(scores);
 
         //Artificial delay added so that this runs after onCreate finishes and the views' coordinates are defined.
         handler.postDelayed(new Runnable() {
@@ -140,7 +140,7 @@ public class SpadesActivity extends GameActivity {
                     manager.pot = new HashMap<Integer, Card>();
                     potClear();
                     displayPot();
-                  //  displayEndPiles(scores);
+                    displayEndPiles(scores);
                 }
             }, currentPlayerInteracting);
 
@@ -152,7 +152,7 @@ public class SpadesActivity extends GameActivity {
                     scores.add(player.score);
                 }
                 manager.potsFinished++;
-           //     displayEndPiles(scores);
+                displayEndPiles(scores);
                 displayScoreTable(null);
             }
         }
@@ -220,17 +220,13 @@ public class SpadesActivity extends GameActivity {
 
     //Call when the end piles and the scores displayed on top of the piles need be redisplayed.
     public void displayEndPiles(List<Integer> scores) {
-        TextView[] scoreViews = new TextView[]{(TextView) findViewById(R.id.bottomScore), (TextView) findViewById(R.id.leftScore),
-                (TextView) findViewById(R.id.topScore), (TextView) findViewById(R.id.rightScore)};
+        TextView[] scoreViews = new TextView[]{(TextView) findViewById(R.id.bottomScoreView), (TextView) findViewById(R.id.leftScoreView),
+                (TextView) findViewById(R.id.topScoreView), (TextView) findViewById(R.id.rightScoreView)};
 
         for (int i = 0; i < 4; i++) {
-            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)scoreViews[i].getLayoutParams();
-            params.setMargins(55 * manager.players[i].hand.size(),0,0,0);
             if ((((SpadesPlayer) manager.getPlayers()[i]).obtained) > 0) {
                 scoreViews[i].setText(Integer.toString(((SpadesPlayer) manager.getPlayers()[i]).obtained));
-                scoreViews[i].setVisibility(View.VISIBLE);
-            } else
-                scoreViews[i].setVisibility(View.INVISIBLE);
+            }
         }
     }
 
