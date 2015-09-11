@@ -38,7 +38,7 @@ public abstract class GameActivity extends Activity implements Serializable {
     public static float sfxVolume = 0.5f, musicVolume = 0.5f;
     public static final int levelsToSearch = 3; //Parameter for AI that indicates how many levels down to search.
     protected Manager manager;
-    protected int cardWidthPX, cardHeightPX, currentPlayerInteracting = 0, currentPotTurn = 0, firstNonBot = 0, lastNonBot = 0;
+    protected int cardWidthPX, cardHeightPX, cardDeltaXPX, currentPlayerInteracting = 0, currentPotTurn = 0, firstNonBot = 0, lastNonBot = 0;
     private int soundsLoaded = 0;
     protected long lastClickTime = 0;
     protected boolean[] isBot = new boolean[4];
@@ -77,10 +77,13 @@ public abstract class GameActivity extends Activity implements Serializable {
         }
 
         //Converting the card dimensions in dp (35x50) into px; change to get dims of cards for entire app.
+        //Also converting the distance between cards (60px) with dp.
+        //These values were obtained using a OnePlus One (xxhdpi).
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         cardWidthPX = (int)Math.ceil(35 * metrics.density);
         cardHeightPX = (int)Math.ceil(50 * metrics.density);
+        cardDeltaXPX = (int)Math.ceil(20 * metrics.density);
     }
 
     public void menuClick(View v) {

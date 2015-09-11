@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -84,9 +85,11 @@ public class SpadesActivity extends GameActivity {
     }
 
     public void gameClick(View v) {
-        if (!canClick)
+        //Prevents spam-clicking before the last button click is done.
+        if (!canClick && SystemClock.elapsedRealtime() - lastClickTime < 200)
             return;
         canClick = false;
+        lastClickTime = SystemClock.elapsedRealtime();
 
         super.gameClick(v);
         //Play sounds only if we're done swapping in hearts or are in any other game mode.
@@ -421,7 +424,7 @@ public class SpadesActivity extends GameActivity {
                 cardViews.add(cardButton);
                 //Set the deltaX/theta parameters for the next card/loop iteration.
                 //Consequence of more space horizontally than vertically; set smaller distance between cards vertically.
-                deltaX += 60;
+                deltaX += cardDeltaXPX;
             }
         }
         buttonsPresent = true;

@@ -7,6 +7,7 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -239,9 +240,10 @@ public class HeartsActivity extends GameActivity implements Serializable {
 
     public void gameClick(View v) {
         //Prevents spam-clicking before the last button click is done.
-        if (!canClick)
+        if (!canClick && SystemClock.elapsedRealtime() - lastClickTime < 200)
             return;
         canClick = false;
+        lastClickTime = SystemClock.elapsedRealtime();
 
         super.gameClick(v);
         this.playerHandle(v);
@@ -483,7 +485,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
                 cardViews.add(cardButton);
                 //Set the deltaX/theta parameters for the next card/loop iteration.
                 //Consequence of more space horizontally than vertically; set smaller distance between cards vertically.
-                deltaX += 60;
+                deltaX += cardDeltaXPX;
             }
         }
         buttonsPresent = true;
