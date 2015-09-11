@@ -105,6 +105,7 @@ public class SpadesActivity extends GameActivity {
                     displayHands(currentPlayerInteracting, false);
                     potClear();
                     displayPot();
+                    final int currentPotSize = manager.pot.size();
 
                     currentPlayerInteracting = (currentPlayerInteracting + 1) % manager.playerCount;
 
@@ -112,7 +113,7 @@ public class SpadesActivity extends GameActivity {
 
                     //If this is the last turn of the entire round, don't execute turns; wait for scoreboard.
                     final int lastPlayer = manager.startPlayer == 0 ? 3 : manager.startPlayer - 1;
-                    if (manager.players[lastPlayer].hand.size() != 0) {
+                    if (currentPotSize != 4) {
                         if (isBot[currentPlayerInteracting])
                             botHandle(250);
                         else {
@@ -183,6 +184,7 @@ public class SpadesActivity extends GameActivity {
                     Card bestMove = SpadesAI.chooseMove(currentPlayerInteracting, (SpadesManager) manager, levelsToSearch);
                     int chosenAI = manager.players[currentPlayerInteracting].hand.indexOf(bestMove);
                     manager.potHandle(chosenAI, currentPlayerInteracting);
+                    final int currentPotSize = manager.pot.size();
 
                     ImageView cardView = (ImageView) findViewByCard(bestMove);
                     GameAnimation.placeCard(SpadesActivity.this, cardView, new Runnable() {
@@ -202,8 +204,7 @@ public class SpadesActivity extends GameActivity {
 
                             //If this is the last turn of the entire round, don't execute turns; wait for scoreboard.
                             final int lastPlayer = manager.startPlayer == 0 ? 3 : manager.startPlayer - 1;
-                            //TODO THIS IS BEING CALLED DURING END PILE ANIMATIONS, CAUSING POT NULL ERROR THING
-                            if (manager.players[lastPlayer].hand.size() != 0)
+                            if (currentPotSize != 4)
                                 if (isBot[currentPlayerInteracting]) {
                                     botHandle(250);
                                 } else {
