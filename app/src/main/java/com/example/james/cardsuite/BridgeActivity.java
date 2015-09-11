@@ -159,7 +159,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
                     displayEndPiles(scores);
 
                     //Finished round, restart it
-                    if(manager.getPlayers()[lastPlayer].hand.isEmpty()) {
+                    if (manager.getPlayers()[lastPlayer].hand.isEmpty()) {
                         scores.clear();
                         for (Player player : manager.players) {
                             player.scoreChange();
@@ -252,9 +252,9 @@ public class BridgeActivity extends GameActivity implements Serializable {
                 (TextView) findViewById(R.id.topScoreView), (TextView) findViewById(R.id.rightScoreView)};
 
         for (int i = 0; i < 4; i++) {
-            if (((BridgePlayer) manager.getPlayers()[i]).obtained > 0) {
-                scoreViews[i].setText(Integer.toString(((BridgePlayer) manager.getPlayers()[i]).obtained));
-            }
+            String obtained = Integer.toString(((BridgePlayer) manager.getPlayers()[i]).obtained);
+            String bidded = Integer.toString(((BridgePlayer) manager.getPlayers()[i]).guess);
+            scoreViews[i].setText(obtained + "/" + bidded);
         }
     }
 
@@ -413,7 +413,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
 
                 switch (i) {
                     case 0:
-                        restParams.setMargins(deltaX,bottomTopMarginPX-deltaY, 0, 0);
+                        restParams.setMargins(deltaX, bottomTopMarginPX - deltaY, 0, 0);
                         cardButton.setRotation(theta);
                         bottom.addView(cardButton, restParams);
                         break;
@@ -425,9 +425,10 @@ public class BridgeActivity extends GameActivity implements Serializable {
                     case 2:
                         restParams.setMargins(deltaX, deltaY, 0, 0);
                         cardButton.setRotation(180 - theta);
-                        top.addView(cardButton, restParams); break;
+                        top.addView(cardButton, restParams);
+                        break;
                     case 3:
-                        restParams.setMargins(rightLeftMarginPX-deltaY, deltaX, 0, 0);
+                        restParams.setMargins(rightLeftMarginPX - deltaY, deltaX, 0, 0);
                         cardButton.setRotation(270 - theta);
                         right.addView(cardButton, restParams);
                         break;

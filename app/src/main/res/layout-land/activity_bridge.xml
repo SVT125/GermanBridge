@@ -31,7 +31,7 @@
             android:gravity="center_vertical|center_horizontal"
             android:clipChildren="false"
             android:clipToPadding="false"
-            android:layout_marginLeft="-72dp">
+            android:layout_marginLeft="-74dp">
 
         </RelativeLayout>
 
@@ -129,10 +129,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/trumpView"
-                android:layout_alignParentTop="true"
+                android:layout_alignParentTop="false"
                 android:background="@drawable/trump_border"
                 android:padding="1dp"
-                android:layout_marginLeft="40dp"
+                android:layout_marginLeft="30dp"
+                android:layout_centerVertical="true"
                 android:visibility="invisible" />
 
             <TextView
@@ -149,8 +150,8 @@
                 android:typeface="sans"
                 android:textStyle="bold"
                 android:textSize="25sp"
-                android:textColor="@color/tan"
-                android:layout_marginBottom="-23dp" />
+                android:textColor="@color/text_green"
+                android:layout_marginBottom="-20dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -165,7 +166,7 @@
                 android:typeface="sans"
                 android:textStyle="bold"
                 android:textSize="25sp"
-                android:textColor="@color/tan"
+                android:textColor="@color/text_green"
                 android:layout_marginTop="-23dp"
                 android:letterSpacing="0.07" />
 
@@ -178,11 +179,11 @@
                 android:id="@+id/leftText"
                 android:rotation="90"
                 android:layout_alignParentStart="true"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="22dp"
                 android:typeface="sans"
                 android:textStyle="bold"
                 android:textSize="25sp"
-                android:textColor="@color/tan"
+                android:textColor="@color/text_green"
                 android:layout_marginLeft="-102dp"
                 android:letterSpacing="0.07" />
 
@@ -195,11 +196,11 @@
                 android:id="@+id/rightText"
                 android:rotation="270"
                 android:layout_alignParentEnd="true"
-                android:layout_marginTop="113dp"
+                android:layout_marginTop="116dp"
                 android:typeface="sans"
                 android:textStyle="bold"
                 android:textSize="25sp"
-                android:textColor="@color/tan"
+                android:textColor="@color/text_green"
                 android:layout_marginRight="-102dp"
                 android:letterSpacing="0.07" />
 
@@ -207,7 +208,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="0"
+                android:text="0/0"
                 android:alpha="0.5"
                 android:id="@+id/leftScoreView"
                 android:layout_alignParentBottom="true"
@@ -216,15 +217,15 @@
                 android:textStyle="bold"
                 android:typeface="sans"
                 android:textSize="30sp"
-                android:textColor="@color/tan"
-                android:layout_marginLeft="-43dp"
-                android:layout_marginBottom="-35dp"/>
+                android:textColor="@color/text_green"
+                android:layout_marginLeft="-59dp"
+                android:layout_marginBottom="-26dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="0"
+                android:text="0/0"
                 android:alpha="0.5"
                 android:rotation="180"
                 android:id="@+id/topScoreView"
@@ -232,32 +233,32 @@
                 android:layout_alignParentStart="true"
                 android:textStyle="bold"
                 android:textSize="30sp"
-                android:textColor="@color/tan"
-                android:layout_marginLeft="85dp"
+                android:textColor="@color/text_green"
+                android:layout_marginLeft="78dp"
                 android:layout_marginTop="-30dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="0"
+                android:text="0/0"
                 android:alpha="0.5"
                 android:id="@+id/rightScoreView"
-                android:rotation="90"
+                android:rotation="270"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
                 android:textStyle="bold"
                 android:typeface="sans"
                 android:textSize="30sp"
-                android:textColor="@color/tan"
-                android:layout_marginRight="-43dp"
-                android:layout_marginTop="-26dp" />
+                android:textColor="@color/text_green"
+                android:layout_marginRight="-56dp"
+                android:layout_marginTop="-24dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="0"
+                android:text="0/0"
                 android:alpha="0.5"
                 android:id="@+id/bottomScoreView"
                 android:layout_alignParentBottom="true"
@@ -265,7 +266,7 @@
                 android:textStyle="bold"
                 android:typeface="sans"
                 android:textSize="30sp"
-                android:textColor="@color/tan"
+                android:textColor="@color/text_green"
                 android:layout_marginRight="92dp"
                 android:layout_marginBottom="-28dp"/>
 
