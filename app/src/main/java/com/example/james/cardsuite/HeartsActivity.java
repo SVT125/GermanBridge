@@ -382,18 +382,13 @@ public class HeartsActivity extends GameActivity implements Serializable {
 
     //Call when the end piles and the scores displayed on top of the piles need be redisplayed.
     public void displayEndPiles(List<Integer> scores) {
-        TextView[] scoreViews = new TextView[]{(TextView) findViewById(R.id.bottomScore), (TextView) findViewById(R.id.leftScore),
-                (TextView) findViewById(R.id.topScore), (TextView) findViewById(R.id.rightScore)};
+        TextView[] scoreViews = new TextView[]{(TextView) findViewById(R.id.bottomScoreView), (TextView) findViewById(R.id.leftScoreView),
+                (TextView) findViewById(R.id.topScoreView), (TextView) findViewById(R.id.rightScoreView)};
 
         for (int i = 0; i < 4; i++) {
-            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)scoreViews[i].getLayoutParams();
-            params.setMargins(55 * manager.players[i].hand.size(),0,0,0);
             if (scores.get(i) != 0) {
-                scoreViews[i].setVisibility(View.VISIBLE);
                 scoreViews[i].setText(Integer.toString(scores.get(i)));
             }
-            else
-                scoreViews[i].setVisibility(View.INVISIBLE);
         }
     }
 
@@ -421,12 +416,13 @@ public class HeartsActivity extends GameActivity implements Serializable {
             manager.players[i].organize();
             //The coordinate and angular offsets for every card. Theta is dependent on the number of cards in the hand.
             int deltaX = 0, deltaY;
+
             float initialTheta = (float) -2.25 * manager.getPlayers()[i].hand.size() / 2;
             for (int j = 0; j < manager.getPlayers()[i].hand.size(); j++) {
                 float theta = (float) (initialTheta + 2.25 * j);
                 deltaY = (int) (1.2 * (17.5 - Math.pow(j - manager.getPlayers()[i].hand.size() / 2, 2))); //Truncate the result of the offset
 
-                if(manager.getPlayers()[i].hand.size() % 2 != 0 && j == (manager.getPlayers()[i].hand.size()-1)/2)
+                if (manager.getPlayers()[i].hand.size() % 2 != 0 && j == (manager.getPlayers()[i].hand.size() - 1) / 2)
                     theta = 0;
 
                 RelativeLayout.LayoutParams restParams = new RelativeLayout.LayoutParams(cardWidthPX, cardHeightPX);
@@ -457,31 +453,37 @@ public class HeartsActivity extends GameActivity implements Serializable {
 
                 cardButton.setTag(manager.getPlayers()[i].hand.get(j));
                 cardButton.setPadding(1, 1, 1, 1);
-                if(!cardsClickable)
+                if (!cardsClickable)
                     cardButton.setClickable(false);
                 cardButton.setMaxHeight(150);
                 cardButton.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
-                switch(i) {
-                    case 0: restParams.setMargins(deltaX,-deltaY,0,0);
+                switch (i) {
+                    case 0:
+                        restParams.setMargins(deltaX,125-deltaY, 0, 0);
                         cardButton.setRotation(theta);
-                        bottom.addView(cardButton, restParams); break;
-                    case 1: restParams.setMargins(deltaY,deltaX,0,0);
+                        bottom.addView(cardButton, restParams);
+                        break;
+                    case 1:
+                        restParams.setMargins(deltaY, deltaX, 0, 0);
                         cardButton.setRotation(90 + theta);
-                        left.addView(cardButton, restParams); break;
-                    case 2: restParams.setMargins(deltaX,deltaY,0,0);
+                        left.addView(cardButton, restParams);
+                        break;
+                    case 2:
+                        restParams.setMargins(deltaX, deltaY, 0, 0);
                         cardButton.setRotation(180 - theta);
                         top.addView(cardButton, restParams); break;
-                    case 3: restParams.setMargins(-deltaY,deltaX,0,0);
+                    case 3:
+                        restParams.setMargins(25-deltaY, deltaX, 0, 0);
                         cardButton.setRotation(270 - theta);
-                        right.addView(cardButton, restParams); break;
+                        right.addView(cardButton, restParams);
+                        break;
                 }
                 cardButton.setId(temporaryID++);
                 cardViews.add(cardButton);
-
                 //Set the deltaX/theta parameters for the next card/loop iteration.
                 //Consequence of more space horizontally than vertically; set smaller distance between cards vertically.
-                deltaX = (i % 2 == 0) ? deltaX + 60 : deltaX + 55;
+                deltaX += 60;
             }
         }
         buttonsPresent = true;
