@@ -145,20 +145,27 @@ public class SpadesActivity extends GameActivity {
                     potClear();
                     displayPot();
                     displayEndPiles(scores);
+
+                    //Finished round, restart it
+                    if(manager.getPlayers()[lastPlayer].hand.isEmpty()) {
+                        scores.clear();
+                        for (Player player : manager.players) {
+                            player.scoreChange();
+                            scores.add(player.score);
+                        }
+                        manager.potsFinished++;
+                        displayEndPiles(scores);
+                        displayScoreTable(null);
+                    } else {
+                        if (isBot[currentPlayerInteracting])
+                            botHandle(250);
+                        else {
+                            displayHands(currentPlayerInteracting, true);
+                            canClick = true;
+                        }
+                    }
                 }
             }, currentPlayerInteracting);
-
-            //Finished round, restart it
-            if(manager.getPlayers()[lastPlayer].hand.isEmpty()) {
-                scores.clear();
-                for (Player player : manager.players) {
-                    player.scoreChange();
-                    scores.add(player.score);
-                }
-                manager.potsFinished++;
-                displayEndPiles(scores);
-                displayScoreTable(null);
-            }
         }
     }
 
