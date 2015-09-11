@@ -82,7 +82,7 @@ public class HeartsManager extends Manager implements Serializable {
 			if ((players[startPlayer].hand.size() == 13) && (card.compareTo(new Card(2, Card.Suit.CLUBS)) != 0)) {
 				return false;
 			}
-			if (currentPlayer == startPlayer && players[currentPlayer].hand.size() == 4)
+			if (currentPlayer == startPlayer && !heartsBroken && players[currentPlayer].onlyHasSuit(Card.Suit.HEARTS))
 				return true;
 			if (currentPlayer == startPlayer && (!heartsBroken && ((card.getSuit().equals(Card.Suit.HEARTS)) || card.compareTo(new Card(12, Card.Suit.SPADES)) == 0))) {
 				return false;

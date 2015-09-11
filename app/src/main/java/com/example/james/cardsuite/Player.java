@@ -28,6 +28,13 @@ public abstract class Player implements Serializable {
 		
 	}
 
+	public boolean onlyHasSuit(Card.Suit suit) {
+		for (Card c : hand)
+			if (!(c.getSuit().equals(suit)))
+				return false;
+		return true;
+	}
+
 	// Fills player hands with cards
 	public ArrayList<Card> fillHand(ArrayList<Card> deck, Random random, int size) {
 		for (int i = 0; i < size; i++) {

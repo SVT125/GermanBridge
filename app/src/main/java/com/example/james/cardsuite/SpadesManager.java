@@ -94,7 +94,7 @@ public class SpadesManager extends Manager implements Serializable {
 	}
 
 	public boolean cardSelectable(Card card, boolean finishedSwapping, int currentPlayer) {
-		if (currentPlayer == startPlayer && players[currentPlayer].hand.size() == 5)
+		if (currentPlayer == startPlayer && !spadesBroken && players[currentPlayer].onlyHasSuit(Card.Suit.SPADES))
 			return true;
 		if (currentPlayer == startPlayer && !spadesBroken && card.getSuit().equals(Card.Suit.SPADES))
 			return false;
