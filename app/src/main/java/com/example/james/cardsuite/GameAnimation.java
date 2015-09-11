@@ -136,19 +136,21 @@ public class GameAnimation {
 
             switch(receivingHand) {
                 case 0: activity.findViewById(R.id.bottomPlayerHandLayout).getLocationOnScreen(finalCoordinates);
-                    finalCoordinates[0] += activity.findViewById(R.id.bottomPlayerHandLayout).getWidth()/2; break;
+                    finalCoordinates[0] += activity.findViewById(R.id.bottomPlayerHandLayout).getWidth()/2;
+                    finalCoordinates[1] += activity.findViewById(R.id.bottomPlayerHandLayout).getHeight()/2; break;
                 case 1: activity.findViewById(R.id.leftPlayerHandLayout).getLocationOnScreen(finalCoordinates);
-                    finalCoordinates[0] += activity.findViewById(R.id.leftPlayerHandLayout).getWidth();
+                    finalCoordinates[0] += activity.findViewById(R.id.leftPlayerHandLayout).getWidth()/2;
                     finalCoordinates[1] += activity.findViewById(R.id.leftPlayerHandLayout).getHeight()/2; break;
                 case 2: activity.findViewById(R.id.topPlayerHandLayout).getLocationOnScreen(finalCoordinates);
                     finalCoordinates[0] += activity.findViewById(R.id.topPlayerHandLayout).getWidth()/2;
-                    finalCoordinates[1] += activity.findViewById(R.id.topPlayerHandLayout).getHeight(); break;
+                    finalCoordinates[1] += activity.findViewById(R.id.topPlayerHandLayout).getHeight()/2; break;
                 case 3: activity.findViewById(R.id.rightPlayerHandLayout).getLocationOnScreen(finalCoordinates);
+                    finalCoordinates[0] += activity.findViewById(R.id.rightPlayerHandLayout).getWidth()/2;
                     finalCoordinates[1] += activity.findViewById(R.id.rightPlayerHandLayout).getHeight()/2; break;
             }
 
-            ViewPropertyAnimator animator = key.values.animate().setDuration(500).translationXBy(finalCoordinates[0] - initialCoordinates[0])
-                    .translationYBy(finalCoordinates[1] - initialCoordinates[1]);
+            ViewPropertyAnimator animator = key.values.animate().setDuration(400).translationXBy(finalCoordinates[0] - initialCoordinates[0])
+                    .translationYBy(finalCoordinates[1] - initialCoordinates[1]).alpha(0f);
             animations.get(key).end();
             if(!iter.hasNext() && endAction != null)
                 animator.withEndAction(endAction);
