@@ -82,20 +82,6 @@
                 android:clipToPadding="false"
                 android:layout_marginTop="-40dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="0"
-                    android:id="@+id/topScore"
-                    android:textSize="12dp"
-                    android:typeface="serif"
-                    android:elevation="1dp"
-                    android:layout_gravity="center"
-                    android:autoText="false"
-                    android:background="@drawable/small_button_background"
-                    android:visibility="visible"
-                    android:layout_marginTop="-35dp" />
             </RelativeLayout>
 
         </LinearLayout>
@@ -370,21 +356,7 @@
             android:clipToPadding="false"
             android:layout_marginRight="-55dp">
 
-            <com.example.james.cardsuite.VerticalTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="0"
-                android:id="@+id/rightScore"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:textSize="12dp"
-                android:gravity="bottom"
-                android:typeface="serif"
-                android:layout_gravity="center"
-                android:elevation="1dp"
-                android:background="@drawable/small_button_background"
-                android:layout_marginRight="-45dp" />
+
         </RelativeLayout>
 
     </LinearLayout>
