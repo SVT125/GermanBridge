@@ -147,7 +147,7 @@ public class GameAnimation {
                     finalCoordinates[1] += activity.findViewById(R.id.rightPlayerHandLayout).getHeight()/2; break;
             }
 
-            ViewPropertyAnimator animator = key.values.animate().setDuration(150).translationXBy(finalCoordinates[0] - initialCoordinates[0])
+            ViewPropertyAnimator animator = key.values.animate().setDuration(500).translationXBy(finalCoordinates[0] - initialCoordinates[0])
                     .translationYBy(finalCoordinates[1] - initialCoordinates[1]);
             animations.get(key).end();
             if(!iter.hasNext() && endAction != null)

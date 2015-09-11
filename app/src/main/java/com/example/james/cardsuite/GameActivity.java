@@ -312,7 +312,7 @@ public abstract class GameActivity extends Activity implements Serializable {
 
                 cardButton.setTag(manager.getPlayers()[i].hand.get(j));
                 cardButton.setPadding(3, 3, 3, 3);
-                cardButton.setMaxHeight(150);
+                cardButton.setMaxHeight(cardHeightPX);
                 cardButton.setAdjustViewBounds(true);
 
                 switch (i) {
