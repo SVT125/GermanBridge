@@ -55,7 +55,7 @@
             android:name=".SettingsActivity"
             android:screenOrientation="sensorLandscape"
             android:configChanges="mcc|mnc|locale|touchscreen|navigation|fontScale|orientation|keyboard|keyboardHidden|screenLayout|uiMode|smallestScreenSize|screenSize|layoutDirection"
-            android:theme="@android:style/Theme.Holo.Light.NoActionBar"
+            android:theme="@style/settings"
             android:label="title_activity_settings">
 
         </activity>

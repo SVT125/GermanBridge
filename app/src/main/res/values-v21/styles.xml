@@ -47,4 +47,19 @@
 
         <item name="android:textAppearanceButton">@color/hearts_red</item> -->
     </style>
+    <style name="settings" parent="@android:style/Theme.Holo.Light.NoActionBar">
+        <item name="android:colorPrimary">@color/background</item>
+
+        <item name="android:windowBackground">@color/background</item>
+
+        <item name="android:background">@color/background</item>
+
+        <item name="android:titleTextAppearance">@color/spades_blue</item>
+
+        <item name="android:textAlignment">center</item>
+
+        <item name="android:textColorPrimary">@color/hearts_red</item>
+
+        <item name="android:textColor">@color/hearts_red</item>
+    </style>
 </resources>

@@ -18,10 +18,12 @@ public class SettingsActivity extends Activity {
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
+
             super.onCreate(savedInstanceState);
 
             // Load the preferences from an XML resource
             addPreferencesFromResource(R.xml.preferences);
+
 
             SeekbarPreference musicPreference = (SeekbarPreference)findPreference("master_music_settings");
             musicPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {

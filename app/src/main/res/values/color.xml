@@ -3,4 +3,9 @@
     <color name="background">#fff2ee</color>
     <color name="spades_blue">#373d5e</color>
     <color name="hearts_red">#ed6565</color>
+    <color name="tan">#e4c283</color>
+    <color name="background_bridge">#be85d08d</color>
+    <color name="text_green">#f174c07c</color>
+    <color name="background_spades">#bea5aed0</color>
+    <color name="text_blue">#ce737998</color>
 </resources>
