@@ -258,7 +258,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
 
     public void gameClick(View v) {
         //Prevents spam-clicking before the last button click is done.
-        if (!canClick && SystemClock.elapsedRealtime() - lastClickTime < 200)
+        if (!canClick || SystemClock.elapsedRealtime() - lastClickTime < 200)
             return;
         canClick = false;
         lastClickTime = SystemClock.elapsedRealtime();
