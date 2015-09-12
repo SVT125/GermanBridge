@@ -186,6 +186,7 @@ public class SpadesActivity extends GameActivity {
         manager.reset();
         finishedSwapping = false;
         buttonsPresent = false;
+        displayedSpadesBroken = false;
         currentPotTurn = 0;
         guessCount = 0;
         currentPlayerInteracting = 0;

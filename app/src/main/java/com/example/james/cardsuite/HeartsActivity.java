@@ -122,6 +122,8 @@ public class HeartsActivity extends GameActivity implements Serializable {
                     displayedHeartsBroken = true;
                 }
 
+                final int lastPlayer = manager.startPlayer == 0 ? 3 : manager.startPlayer-1;
+                final boolean isRoundOver = manager.players[lastPlayer].hand.size() == 0;
                 GameAnimation.placeCard(HeartsActivity.this, v, new Runnable() {
                     @Override
                     public void run() {
@@ -136,7 +138,8 @@ public class HeartsActivity extends GameActivity implements Serializable {
                         if (manager.getPlayers()[currentPlayerInteracting].isBot) {
                             botHandle(250);
                         } else {
-                            displayHands(currentPlayerInteracting, true);
+                            if(!isRoundOver)
+                                displayHands(currentPlayerInteracting, true);
                             canClick = true;
                         }
                     }
@@ -201,6 +204,9 @@ public class HeartsActivity extends GameActivity implements Serializable {
                             displayedHeartsBroken = true;
                         }
 
+                        final int lastPlayer = manager.startPlayer == 0 ? 3 : manager.startPlayer-1;
+                        final boolean isRoundOver = manager.players[lastPlayer].hand.size() == 0;
+
                         ImageView cardView = (ImageView) findViewByCard(botMove);
                         GameAnimation.placeCard(HeartsActivity.this, cardView, new Runnable() {
                             @Override
@@ -218,7 +224,8 @@ public class HeartsActivity extends GameActivity implements Serializable {
                                 if (manager.getPlayers()[currentPlayerInteracting].isBot)
                                     botHandle(250);
                                 else {
-                                    displayHands(currentPlayerInteracting, true);
+                                    if(!isRoundOver)
+                                        displayHands(currentPlayerInteracting, true);
                                     canClick = true;
                                 }
                             }
@@ -309,7 +316,12 @@ public class HeartsActivity extends GameActivity implements Serializable {
             roundScores.add(((HeartsPlayer) manager.getPlayers()[i]).tallyRoundScore());
         displayEndPiles(roundScores);
         reset();
-        displayScoreTable(null);
+        displayScoreTable(new Runnable() {
+            @Override
+            public void run() {
+                dealCards();
+            }
+        });
     }
 
     public void chooseCards(Card chosenCard, int swapRound, View v) {
@@ -390,6 +402,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
     public void reset() {
         manager.reset();
         finishedSwapping = false;
+        displayedHeartsBroken = false;
         animationsActive = new HashMap<View, Integer>();
         initialOutputWritten = false;
         buttonsPresent = false;
@@ -398,7 +411,6 @@ public class HeartsActivity extends GameActivity implements Serializable {
         currentPlayerInteracting = 0;
         chosenLists.clear();
         chosenCards.clear();
-        dealCards();
     }
 
     //Call when the end piles and the scores displayed on top of the piles need be redisplayed.
