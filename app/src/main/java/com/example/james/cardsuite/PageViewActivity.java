@@ -8,6 +8,8 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 
 public class PageViewActivity extends FragmentActivity {
 
@@ -36,21 +38,41 @@ public class PageViewActivity extends FragmentActivity {
     }
 
     public void bridgeHelp(View v) {
-        gameMode = 0;
-        mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
-        mPager.setAdapter(mPagerAdapter);
+        if (gameMode != 0) {
+            gameMode = 0;
+            resetBorders(v);
+            mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
+            mPager.setAdapter(mPagerAdapter);
+        }
     }
 
     public void heartsHelp(View v) {
-        gameMode = 1;
-        mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
-        mPager.setAdapter(mPagerAdapter);
+        if (gameMode != 1) {
+            gameMode = 1;
+            resetBorders(v);
+            mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
+            mPager.setAdapter(mPagerAdapter);
+        }
     }
 
     public void spadesHelp(View v) {
-        gameMode = 2;
-        mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
-        mPager.setAdapter(mPagerAdapter);
+        if (gameMode != 2) {
+            gameMode = 2;
+            resetBorders(v);
+            mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
+            mPager.setAdapter(mPagerAdapter);
+        }
+    }
+
+    public void resetBorders(View v) {
+        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.help_layout);
+        for(int i = 1; i < 4; i++) {
+            if (i - 1 != gameMode) {
+                ImageButton button = (ImageButton) relativeLayout.getChildAt(i);
+                button.setBackgroundResource(R.drawable.help_border_unselected);
+            }
+        }
+        v.setBackgroundResource(R.drawable.help_border);
     }
 
 
