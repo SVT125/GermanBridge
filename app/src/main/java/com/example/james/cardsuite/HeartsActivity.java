@@ -559,6 +559,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
             super.loadGame(is);
             this.manager = (HeartsManager) is.readObject();
             this.finishedSwapping = is.readBoolean();
+            this.displayedHeartsBroken = is.readBoolean();
             int size = is.readInt();
             for (int i = 0; i < size; i++)
                 this.chosenLists.add((List<Card>) is.readObject());
@@ -580,6 +581,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
             super.saveGame(objectStream);
             objectStream.writeObject(this.manager);
             objectStream.writeBoolean(finishedSwapping);
+            objectStream.writeBoolean(displayedHeartsBroken);
             objectStream.writeInt(chosenLists.size());
             for (int i = 0; i < chosenLists.size(); i++)
                 objectStream.writeObject(chosenLists.get(i));

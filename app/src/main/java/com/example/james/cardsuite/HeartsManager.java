@@ -113,7 +113,7 @@ public class HeartsManager extends Manager implements Serializable {
 
 		if(currentPlayer == startPlayer)
 			startSuit = chosen.getSuit();
-		else if (!heartsBroken && (chosen.getSuit().equals(Card.Suit.HEARTS) || chosen.compareTo(new Card(12, Card.Suit.SPADES)) == 0))
+		else if (!heartsBroken && (chosen.getSuit().equals(Card.Suit.HEARTS)))
 			heartsBroken = true;
 
 		pot.put(currentPlayer, chosen);
