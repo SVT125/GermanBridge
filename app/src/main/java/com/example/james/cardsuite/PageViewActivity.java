@@ -1,5 +1,6 @@
 package com.example.james.cardsuite;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -62,6 +63,10 @@ public class PageViewActivity extends FragmentActivity {
             mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
             mPager.setAdapter(mPagerAdapter);
         }
+    }
+
+    public void helpToMenu(View v) {
+        startActivity(new Intent(this, MainActivity.class));
     }
 
     public void resetBorders(View v) {
