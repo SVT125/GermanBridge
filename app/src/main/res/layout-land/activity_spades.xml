@@ -318,21 +318,6 @@
             android:clipToPadding="false"
             android:layout_marginRight="-55dp">
 
-            <com.example.james.cardsuite.VerticalTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="0"
-                android:id="@+id/rightScore"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:textSize="12dp"
-                android:gravity="bottom"
-                android:typeface="serif"
-                android:layout_gravity="center"
-                android:elevation="1dp"
-                android:background="@drawable/small_button_background"
-                android:layout_marginRight="-45dp" />
         </RelativeLayout>
 
     </LinearLayout>
