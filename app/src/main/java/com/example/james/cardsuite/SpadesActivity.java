@@ -120,14 +120,15 @@ public class SpadesActivity extends GameActivity {
                     potClear();
                     displayPot();
                     final int currentPotSize = manager.pot.size();
+                    final int lastPlayer = manager.startPlayer == 0 ? 3 : manager.startPlayer - 1;
+                    final int lastPlayerHandSize = manager.players[lastPlayer].hand.size();
 
                     currentPlayerInteracting = (currentPlayerInteracting + 1) % manager.playerCount;
 
                     updateGameState();
 
                     //If this is the last turn of the entire round, don't execute turns; wait for scoreboard.
-                    final int lastPlayer = manager.startPlayer == 0 ? 3 : manager.startPlayer - 1;
-                    if (currentPotSize != 4) {
+                    if (currentPotSize != 4 && lastPlayerHandSize != 0) {
                         if (isBot[currentPlayerInteracting])
                             botHandle(250);
                         else {
@@ -137,6 +138,57 @@ public class SpadesActivity extends GameActivity {
                     }
                 }
             }, currentPlayerInteracting);
+        } else
+            endGame();
+    }
+
+
+    // Executes AI moves for the next player onwards, stopping once we're on a player that isn't a bot.
+    // This mutates currentPlayerInteracting (to the next non-AI player or player whose hand is empty) and the pot as it loops.
+    public void botHandle(final long delay) {
+        if (!manager.isGameOver()) {
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Card bestMove = SpadesAI.chooseMove(currentPlayerInteracting, (SpadesManager) manager, levelsToSearch);
+                    int chosenAI = manager.players[currentPlayerInteracting].hand.indexOf(bestMove);
+                    manager.potHandle(chosenAI, currentPlayerInteracting);
+                    if (!displayedSpadesBroken && ((SpadesManager) manager).spadesBroken) {
+                        GameAnimation.showSpadesBroken(SpadesActivity.this);
+                        displayedSpadesBroken = true;
+                    }
+                    final int currentPotSize = manager.pot.size();
+                    final int lastPlayer = manager.startPlayer == 0 ? 3 : manager.startPlayer - 1;
+                    final int lastPlayerHandSize = manager.players[lastPlayer].hand.size();
+
+                    ImageView cardView = (ImageView) findViewByCard(bestMove);
+                    GameAnimation.placeCard(SpadesActivity.this, cardView, new Runnable() {
+                        @Override
+                        public void run() {
+                            potClear();
+                            displayPot();
+
+                            displayHands(lastNonBot, false);
+                            int chosenSound = r.nextInt(3);
+                            soundPools[chosenSound].play(sounds[chosenSound], sfxVolume, sfxVolume, 0, 0, 1);
+
+                            currentPlayerInteracting = (currentPlayerInteracting + 1) % manager.playerCount;
+
+                            if (manager.pot.size() > 0)
+                                updateGameState();
+
+                            //If this is the last turn of the entire round, don't execute turns; wait for scoreboard.
+                            if (currentPotSize != 4 && lastPlayerHandSize != 0)
+                                if (isBot[currentPlayerInteracting]) {
+                                    botHandle(250);
+                                } else {
+                                    displayHands(currentPlayerInteracting, true);
+                                    canClick = true;
+                                }
+                        }
+                    }, currentPlayerInteracting);
+                }
+            }, delay);
         } else
             endGame();
     }
@@ -166,7 +218,15 @@ public class SpadesActivity extends GameActivity {
                         }
                         manager.potsFinished++;
                         displayEndPiles(scores);
-                        displayScoreTable(null);
+                        displayScoreTable(new Runnable() {
+                            @Override
+                            public void run() {
+                                // resets deck, hands, etc. and increments round
+                                reset();
+
+                                dealCards();
+                            }
+                        });
                     } else {
                         if (isBot[currentPlayerInteracting])
                             botHandle(250);
@@ -194,55 +254,6 @@ public class SpadesActivity extends GameActivity {
         while (isBot[currentPlayerInteracting]) {
             currentPlayerInteracting++;
         }
-    }
-
-    // Executes AI moves for the next player onwards, stopping once we're on a player that isn't a bot.
-    // This mutates currentPlayerInteracting (to the next non-AI player or player whose hand is empty) and the pot as it loops.
-    public void botHandle(final long delay) {
-        if (!manager.isGameOver()) {
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    Card bestMove = SpadesAI.chooseMove(currentPlayerInteracting, (SpadesManager) manager, levelsToSearch);
-                    int chosenAI = manager.players[currentPlayerInteracting].hand.indexOf(bestMove);
-                    manager.potHandle(chosenAI, currentPlayerInteracting);
-                    if(!displayedSpadesBroken && ((SpadesManager)manager).spadesBroken) {
-                        GameAnimation.showSpadesBroken(SpadesActivity.this);
-                        displayedSpadesBroken = true;
-                    }
-                    final int currentPotSize = manager.pot.size();
-
-                    ImageView cardView = (ImageView) findViewByCard(bestMove);
-                    GameAnimation.placeCard(SpadesActivity.this, cardView, new Runnable() {
-                        @Override
-                        public void run() {
-                            potClear();
-                            displayPot();
-
-                            displayHands(lastNonBot, false);
-                            int chosenSound = r.nextInt(3);
-                            soundPools[chosenSound].play(sounds[chosenSound], sfxVolume, sfxVolume, 0, 0, 1);
-
-                            currentPlayerInteracting = (currentPlayerInteracting + 1) % manager.playerCount;
-
-                            if (manager.pot.size() > 0)
-                                updateGameState();
-
-                            //If this is the last turn of the entire round, don't execute turns; wait for scoreboard.
-                            final int lastPlayer = manager.startPlayer == 0 ? 3 : manager.startPlayer - 1;
-                            if (currentPotSize != 4)
-                                if (isBot[currentPlayerInteracting]) {
-                                    botHandle(250);
-                                } else {
-                                    displayHands(currentPlayerInteracting, true);
-                                    canClick = true;
-                                }
-                        }
-                    }, currentPlayerInteracting);
-                }
-            }, delay);
-        } else
-            endGame();
     }
 
     //Call when the end piles and the scores displayed on top of the piles need be redisplayed.

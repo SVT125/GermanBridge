@@ -121,14 +121,15 @@ public class BridgeActivity extends GameActivity implements Serializable {
                     potClear();
                     displayPot();
                     final int currentPotSize = manager.pot.size();
+                    final int lastPlayer = manager.startPlayer == 0 ? 3 : manager.startPlayer - 1;
+                    final int lastPlayerHandSize = manager.players[lastPlayer].hand.size();
 
                     currentPlayerInteracting = (currentPlayerInteracting + 1) % manager.playerCount;
 
                     updateGameState();
 
                     //If this is the last turn of the entire round, don't execute turns; wait for scoreboard.
-                    final int lastPlayer = manager.startPlayer == 0 ? 3 : manager.startPlayer - 1;
-                    if (currentPotSize != 4) {
+                    if (currentPotSize != 4 && lastPlayerHandSize != 0) {
                         if (isBot[currentPlayerInteracting])
                             botHandle(250);
                         else {
@@ -138,6 +139,55 @@ public class BridgeActivity extends GameActivity implements Serializable {
                     }
                 }
             }, currentPlayerInteracting);
+        } else
+            endGame();
+    }
+
+
+    // Executes AI moves for the next player onwards, stopping once we're on a player that isn't a bot.
+    // This mutates currentPlayerInteracting (to the next non-AI player or player whose hand is empty) and the pot as it loops.
+    public void botHandle(final long delay) {
+        if (!manager.isGameOver()) {
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Card bestMove = BridgeAI.chooseMove(currentPlayerInteracting, (BridgeManager) manager, levelsToSearch);
+                    int chosenAI = manager.players[currentPlayerInteracting].hand.indexOf(bestMove);
+                    manager.potHandle(chosenAI, currentPlayerInteracting);
+
+                    ImageView cardView = (ImageView) findViewByCard(bestMove);
+                    GameAnimation.placeCard(BridgeActivity.this, cardView, new Runnable() {
+                        @Override
+                        public void run() {
+                            potClear();
+                            displayPot();
+
+                            final int currentPotSize = manager.pot.size();
+                            final int lastPlayer = manager.startPlayer == 0 ? 3 : manager.startPlayer - 1;
+                            final int lastPlayerHandSize = manager.players[lastPlayer].hand.size();
+
+                            displayHands(lastNonBot, false);
+                            int chosenSound = r.nextInt(3);
+                            soundPools[chosenSound].play(sounds[chosenSound], sfxVolume, sfxVolume, 0, 0, 1);
+
+                            currentPlayerInteracting = (currentPlayerInteracting + 1) % manager.playerCount;
+
+                            if (manager.pot.size() > 0)
+                                updateGameState();
+
+                            //If this is the last turn of the entire round, don't execute turns; wait for scoreboard.
+                            if (currentPotSize != 4 && lastPlayerHandSize != 0) {
+                                if (isBot[currentPlayerInteracting])
+                                    botHandle(250);
+                                else {
+                                    displayHands(currentPlayerInteracting, true);
+                                    canClick = true;
+                                }
+                            }
+                        }
+                    }, currentPlayerInteracting);
+                }
+            }, delay);
         } else
             endGame();
     }
@@ -179,52 +229,6 @@ public class BridgeActivity extends GameActivity implements Serializable {
                 }
             }, currentPlayerInteracting);
         }
-    }
-
-    // Executes AI moves for the next player onwards, stopping once we're on a player that isn't a bot.
-    // This mutates currentPlayerInteracting (to the next non-AI player or player whose hand is empty) and the pot as it loops.
-    public void botHandle(final long delay) {
-        if (!manager.isGameOver()) {
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    Card bestMove = BridgeAI.chooseMove(currentPlayerInteracting, (BridgeManager) manager, levelsToSearch);
-                    int chosenAI = manager.players[currentPlayerInteracting].hand.indexOf(bestMove);
-                    manager.potHandle(chosenAI, currentPlayerInteracting);
-                    final int currentPotSize = manager.pot.size();
-
-                    ImageView cardView = (ImageView) findViewByCard(bestMove);
-                    GameAnimation.placeCard(BridgeActivity.this, cardView, new Runnable() {
-                        @Override
-                        public void run() {
-                            potClear();
-                            displayPot();
-
-                            displayHands(lastNonBot, false);
-                            int chosenSound = r.nextInt(3);
-                            soundPools[chosenSound].play(sounds[chosenSound], sfxVolume, sfxVolume, 0, 0, 1);
-
-                            currentPlayerInteracting = (currentPlayerInteracting + 1) % manager.playerCount;
-
-                            if (manager.pot.size() > 0)
-                                updateGameState();
-
-                            //If this is the last turn of the entire round, don't execute turns; wait for scoreboard.
-                            final int lastPlayer = manager.startPlayer == 0 ? 3 : manager.startPlayer - 1;
-                            if (currentPotSize != 4) {
-                                if (isBot[currentPlayerInteracting])
-                                    botHandle(250);
-                                else {
-                                    displayHands(currentPlayerInteracting, true);
-                                    canClick = true;
-                                }
-                            }
-                        }
-                    }, currentPlayerInteracting);
-                }
-            }, delay);
-        } else
-            endGame();
     }
 
     // reshuffles deck, increments round count, resets all variables for the next round.
