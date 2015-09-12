@@ -10,7 +10,6 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -252,9 +251,9 @@ public class SpadesActivity extends GameActivity {
                 (TextView) findViewById(R.id.topScoreView), (TextView) findViewById(R.id.rightScoreView)};
 
         for (int i = 0; i < 4; i++) {
-            if ((((SpadesPlayer) manager.getPlayers()[i]).obtained) > 0) {
-                scoreViews[i].setText(Integer.toString(((SpadesPlayer) manager.getPlayers()[i]).obtained));
-            }
+            String obtained = Integer.toString(((SpadesPlayer) manager.getPlayers()[i]).totalObtained);
+            String bidded = Integer.toString(((SpadesPlayer) manager.getPlayers()[i]).totalBid);
+            scoreViews[i].setText(obtained + "/" + bidded);
         }
     }
 
