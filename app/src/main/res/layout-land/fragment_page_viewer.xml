@@ -8,7 +8,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="When you lolalo"
-        android:id="@+id/textView"
-        android:layout_gravity="left|top" />
+        android:text=""
+        android:id="@+id/help_text"
+        android:layout_gravity="left|top"
+        android:padding="15dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/help_title" />
 </FrameLayout>

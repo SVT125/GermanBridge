@@ -18,4 +18,38 @@
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="bridge1">GBridge (German Bridge) is a variant of the bridge games (card game). The rule of the game is quite simple, yet it is hard for one to master. Materials of this game are not easily found and thus players need to develop by themselves. </string>
+    <string name="bridge2">The game is for 2+ players and progresses in round. For each round, each player is distributed a fixed number of cards. For the first round, only one card is distributed to each player for playing. One additional card will be distributed to each player for playing in each subsequent round. The number of cards  will distributed evenly to each player in each round until no more card can be evenly distributed, then the number of cards distributed will be reset to one and so forth.</string>
+    <string name="bridge3">In the beginning of a round, a suit (spade, heart, diamond or club) is randomly chosen as the trump suit. Then each player bid by turn to state how many tricks will be won by that player during the round. The player has the option to bid from zero tricks to the total number of card distributed. There is one limitation on bidding, for the last player to bid, it does not allow to bid the number of expected win tricks so the sum of all the player bid tricks is not equal to the total number of card distributed (that meant at least one player must lost).</string>
+    <string name="bridge4">After the bidding, it is the time to play the card. The aim of the play to win exactly the number of tricks. The player who bids first will lead a card from hand (there is not limit for a player to lead a card). The play is then continuing in clockwise. The next player needs to play a card, however, it is required to follow the leading suit. If there is not suit to follow, one can play either a discard or a trump (if the leading suit is not a trump suit). After the each player played a card, their cards will compare to see who wins the trick. The comparison rules are simple:- discard will always loss; trump suit will always win; if on the same suit, compare card strength (A, K, Q, J, 10, 9, 8, 7, 6, 5, 4, 3, 2 from biggest to smallest). The winner of the trick will lead a card for the next trick. After all tricks have been played, a new round will start. </string>
+    <string name="bridge5">The turn score is very simple according to the following two equations:-
+1) For winners in a round, winning tricks is equal to bidding tricks (just make):-
+
+score = 10 + win-trick * win-trick
+2) For losers in a round, winning tricks is not equal to bidding tricks (up or down):-
+score = - (win-trick - bid-trick) * (win-trick - bid-trick)
+The turn score will be accumulated to the total score. </string>
+
+    <string name="hearts1">Many trick-taking games are not directly related to Bridge or Whist. Perhaps the foremost one is Hearts, which is truly one of the greatest card games ever devised for four players, each playing individually.</string>
+    <string name="hearts2">Deal the cards one at a time, face down, clockwise. In a four-player game, each is dealt 13 cards; in a three-player game, the 2 of diamonds should be removed, and each player gets 17 cards; in a five-player game, the 2 of diamonds and 2 of clubs should be removed so that each player will get 10 cards.</string>
+    <string name="hearts3">The player holding the 2 of clubs after the pass makes the opening lead. If the 2 has been removed for the three handed game, then the 3 of clubs is led.
+
+Each player must follow suit if possible. If a player is void of the suit led, a card of any other suit may be discarded. However, if a player has no clubs when the first trick is led, a heart or the queen of spades cannot be discarded.</string>
+    <string name="hearts4">The highest card of the suit led wins a trick and the winner of that trick leads next. There is no trump suit.
+
+The winner of the trick collects it and places it face down. Hearts may not be led until a heart or the queen of spades has been discarded. The queen does not have to be discarded at the first opportunity.</string>
+    <string name="hearts5">At the end of each hand, players count the number of hearts they have taken as well as the queen of spades, if applicable. Hearts count as one point each and the queen counts 13 points. Each heart - 1 point The Q - 13 points The aggregate total of all scores for each hand must be a multiple of 26. The game is usually played to 100 points (some play to 50). When a player takes all 13 hearts and the queen of spades in one hand, instead of losing 26 points, that player scores zero and each of his opponents score an additional 26 points.</string>
+
+    <string name="spades1"></string>
+    <string name="spades2"></string>
+    <string name="spades3"></string>
+    <string name="spades4"></string>
+    <string name="spades5"></string>
+
+    <string name="help_title1">Introduction</string>
+    <string name="help_title2">Rules</string>
+    <string name="help_title3">Rules</string>
+    <string name="help_title4">Rules</string>
+    <string name="help_title5">Scoring</string>
 </resources>
