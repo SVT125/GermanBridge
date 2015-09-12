@@ -128,6 +128,40 @@ public class GameAnimation {
         }
     }
 
+    public static void showHeartsBroken(final HeartsActivity activity) {
+        final ImageView heartsBrokenView = (ImageView)activity.findViewById(R.id.heartsBrokenView);
+        heartsBrokenView.setMaxWidth(activity.heartsBrokenPX);
+        heartsBrokenView.setMaxHeight(activity.heartsBrokenPX);
+
+        heartsBrokenView.animate().yBy(-200).setDuration(1500).alpha(1f).withEndAction(new Runnable() {
+            @Override
+            public void run() {
+                //Hide the view once animation is done
+                heartsBrokenView.setMaxWidth(0);
+                heartsBrokenView.setMaxHeight(0);
+                heartsBrokenView.setImageResource(0);
+            }
+        }).start();
+    }
+
+    public static void showSpadesBroken(final SpadesActivity activity) {
+        /*
+        final ImageView spadesBrokenView = (ImageView)activity.findViewById(R.id.spadesBrokenView);
+        spadesBrokenView.setMaxWidth(activity.heartsBrokenPX);
+        spadesBrokenView.setMaxHeight(activity.heartsBrokenPX);
+
+        spadesBrokenView.animate().yBy(-200).setDuration(1500).alpha(1f).withEndAction(new Runnable() {
+            @Override
+            public void run() {
+                //Hide the view once animation is done
+                spadesBrokenView.setMaxWidth(0);
+                spadesBrokenView.setMaxHeight(0);
+                spadesBrokenView.setImageResource(0);
+            }
+        }).start();
+        */
+    }
+
     public static void swapCards(HeartsActivity activity, int swapRound, Runnable endAction, Map<View, Integer> animations) {
         Set<View> keySet = animations.keySet();
         Iterator<View> iter = keySet.iterator();

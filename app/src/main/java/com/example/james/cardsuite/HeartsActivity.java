@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,11 +28,11 @@ import java.util.List;
 import java.util.Map;
 
 public class HeartsActivity extends GameActivity implements Serializable {
-    private boolean finishedSwapping = false;
+    private boolean finishedSwapping = false, canClick = true, displayedHeartsBroken = false;
     private List<List<Card>> chosenLists = new ArrayList<List<Card>>();
     private List<Card> chosenCards = new ArrayList<Card>();
-    private boolean canClick = true;
     private Map<View, Integer> animationsActive = new HashMap<View, Integer>();
+    public int heartsBrokenPX;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +60,10 @@ public class HeartsActivity extends GameActivity implements Serializable {
         }
 
         displayEndPiles(scores);
+
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        heartsBrokenPX = (int)Math.ceil(75 * metrics.density);
 
         //Artificial delay added so that this runs after onCreate finishes and the views' coordinates are defined.
         handler.postDelayed(new Runnable() {
@@ -112,6 +117,11 @@ public class HeartsActivity extends GameActivity implements Serializable {
             } else {
                 // handle cards being tossed in the pot until all cards are gone (13 turns).
                 manager.potHandle(chosen, currentPlayerInteracting);
+                if(!displayedHeartsBroken && ((HeartsManager)manager).heartsBroken) {
+                    GameAnimation.showHeartsBroken(this);
+                    displayedHeartsBroken = true;
+                }
+
                 GameAnimation.placeCard(HeartsActivity.this, v, new Runnable() {
                     @Override
                     public void run() {
@@ -186,6 +196,10 @@ public class HeartsActivity extends GameActivity implements Serializable {
                         Card botMove = ((HeartsAI) manager.getPlayers()[currentPlayerInteracting]).makeMove(currentPlayerInteracting, manager.startPlayer, (HeartsManager) manager);
 
                         ((HeartsManager) manager).potHandle(botMove, currentPlayerInteracting);
+                        if(!displayedHeartsBroken && ((HeartsManager)manager).heartsBroken) {
+                            GameAnimation.showHeartsBroken(HeartsActivity.this);
+                            displayedHeartsBroken = true;
+                        }
 
                         ImageView cardView = (ImageView) findViewByCard(botMove);
                         GameAnimation.placeCard(HeartsActivity.this, cardView, new Runnable() {

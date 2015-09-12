@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 public class HeartsManager extends Manager implements Serializable {
-
 	public boolean heartsBroken = false;
 
 	public HeartsManager(boolean[] isBot) {

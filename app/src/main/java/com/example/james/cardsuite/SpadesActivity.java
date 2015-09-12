@@ -9,6 +9,7 @@ import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,6 +35,8 @@ import java.util.List;
 
 public class SpadesActivity extends GameActivity {
     private int guess = -1, guessCount = 0, botCount = 0;
+    public int spadesBrokenPX;
+    public boolean displayedSpadesBroken = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +73,10 @@ public class SpadesActivity extends GameActivity {
         //Display the image buttons
         displayEndPiles(scores);
 
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        spadesBrokenPX = (int)Math.ceil(75 * metrics.density);
+
         //Artificial delay added so that this runs after onCreate finishes and the views' coordinates are defined.
         handler.postDelayed(new Runnable() {
             @Override
@@ -103,6 +110,10 @@ public class SpadesActivity extends GameActivity {
 
         if (manager.potsFinished <= 13) {
             manager.potHandle(chosen, currentPlayerInteracting);
+            if(!displayedSpadesBroken && ((SpadesManager)manager).spadesBroken) {
+                GameAnimation.showSpadesBroken(this);
+                displayedSpadesBroken = true;
+            }
             GameAnimation.placeCard(this, v, new Runnable() {
                 @Override
                 public void run() {
@@ -195,6 +206,10 @@ public class SpadesActivity extends GameActivity {
                     Card bestMove = SpadesAI.chooseMove(currentPlayerInteracting, (SpadesManager) manager, levelsToSearch);
                     int chosenAI = manager.players[currentPlayerInteracting].hand.indexOf(bestMove);
                     manager.potHandle(chosenAI, currentPlayerInteracting);
+                    if(!displayedSpadesBroken && ((SpadesManager)manager).spadesBroken) {
+                        GameAnimation.showSpadesBroken(SpadesActivity.this);
+                        displayedSpadesBroken = true;
+                    }
                     final int currentPotSize = manager.pot.size();
 
                     ImageView cardView = (ImageView) findViewByCard(bestMove);

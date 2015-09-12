@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 public class SpadesManager extends Manager implements Serializable {
-	private boolean spadesBroken = false;
+	public boolean spadesBroken = false;
 	
 	public SpadesManager(int player) {
 		
