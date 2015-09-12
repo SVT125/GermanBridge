@@ -151,7 +151,7 @@
                 android:textStyle="bold"
                 android:textSize="25sp"
                 android:textColor="@color/text_green"
-                android:layout_marginBottom="-20dp" />
+                android:layout_marginBottom="-21dp" />
 
             <TextView
                 android:layout_width="wrap_content"
