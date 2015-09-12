@@ -57,9 +57,13 @@ public class MainActivity extends Activity {
         startActivity(intent);
     }
 
+    public void helpClick(View v) {
+        startActivity(new Intent(this, PageViewActivity.class));
+    }
+
     public void overlayClick(View v) {
         View view = findViewById(R.id.overlay);
-        view.setVisibility(0);
+        view.setVisibility(View.VISIBLE);
     }
 
     public void savedGamePrompt(final View v) {
