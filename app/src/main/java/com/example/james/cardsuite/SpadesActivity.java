@@ -9,6 +9,7 @@ import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -288,6 +289,7 @@ public class SpadesActivity extends GameActivity {
 
                         d.dismiss();
                         guessCount++;
+                        //Finished guessing, now move to actual gameplay.
                         if (guessCount == 4) {
                             currentPlayerInteracting = manager.findStartPlayer();
                             ((SpadesManager) manager).addBids();
@@ -299,24 +301,42 @@ public class SpadesActivity extends GameActivity {
                             }
                             return;
                         }
+
+                        //Otherwise, we prompt the guess dialog for the next player.
                         int player = (currentPlayer + 1) % 4;
+                        long currentTimeDelay = 0;
                         while (isBot[player]) {
-                            ((SpadesPlayer) manager.getPlayers()[player]).bid = SpadesAI.getBid(player, (SpadesManager) manager);
-                            guessCount++;
-                            if (guessCount == 4) {
-                                currentPlayerInteracting = manager.findStartPlayer();
-                                ((SpadesManager) manager).addBids();
-                                if (isBot[currentPlayerInteracting])
-                                    botHandle(250);
-                                else {
-                                    displayHands(currentPlayerInteracting, true);
-                                    canClick = true;
+                            final int currentFinalPlayer = player;
+                            final int currentGuessCount = ++guessCount;
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    ((SpadesPlayer) manager.getPlayers()[currentFinalPlayer]).bid = SpadesAI.getBid(currentFinalPlayer, (SpadesManager) manager);
+                                    if (currentGuessCount == 4) {
+                                        currentPlayerInteracting = manager.findStartPlayer();
+                                        ((SpadesManager) manager).addBids();
+                                        if (isBot[currentPlayerInteracting])
+                                            botHandle(250);
+                                        else {
+                                            displayHands(currentPlayerInteracting, true);
+                                            canClick = true;
+                                        }
+                                    }
                                 }
-                                return;
-                            }
+                            }, currentTimeDelay);
+                            currentTimeDelay += 250;
                             player = (player + 1) % 4;
                         }
-                        openGuessDialog(player);
+
+                        if (guessCount != 4) {
+                            final int finalPlayer = player;
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    openGuessDialog(finalPlayer);
+                                }
+                            }, currentTimeDelay);
+                        }
                     } else {
                         guess = (Integer) button.getTag();
                     }
