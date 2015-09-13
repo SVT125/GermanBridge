@@ -13,7 +13,7 @@
     android:id="@+id/mainLayout"
     android:screenOrientation="landscape"
     android:configChanges="orientation|keyboardHidden"
-    android:background="#fff2ee"
+    android:background="@drawable/background_tint_tan"
     android:keepScreenOn="true"
     android:transitionGroup="false">
 
