@@ -86,6 +86,14 @@ public class BridgeActivity extends GameActivity implements Serializable {
         //Display the image buttons
         displayEndPiles(scores);
 
+        View[] potViews = new View[] {findViewById(R.id.leftPotCard),findViewById(R.id.topPotCard),
+                findViewById(R.id.rightPotCard),findViewById(R.id.bottomPotCard)};
+        for(View card : potViews) {
+            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)card.getLayoutParams();
+            params.width = cardWidthPX;
+            params.height = cardHeightPX;
+        }
+
         //Artificial delay added so that this runs after onCreate finishes and the views' coordinates are defined.
         handler.postDelayed(new Runnable() {
             @Override
