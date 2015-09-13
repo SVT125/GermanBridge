@@ -1,12 +1,15 @@
 package com.example.james.cardsuite;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.DisplayMetrics;
@@ -14,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
@@ -132,7 +136,12 @@ public class SpadesActivity extends GameActivity {
                         if (isBot[currentPlayerInteracting])
                             botHandle(250);
                         else {
-                            displayHands(currentPlayerInteracting, true);
+                            if (botCount != 3) {
+                                displayHands(-1, false);
+                                displayWaitScreen(currentPlayerInteracting);
+                            }
+                            else
+                                displayHands(currentPlayerInteracting, true);
                             canClick = true;
                         }
                     }
@@ -182,7 +191,12 @@ public class SpadesActivity extends GameActivity {
                                 if (isBot[currentPlayerInteracting]) {
                                     botHandle(250);
                                 } else {
-                                    displayHands(currentPlayerInteracting, true);
+                                    if (botCount != 3) {
+                                        displayHands(-1, false);
+                                        displayWaitScreen(currentPlayerInteracting);
+                                    }
+                                    else
+                                        displayHands(currentPlayerInteracting, true);
                                     canClick = true;
                                 }
                         }
@@ -231,7 +245,12 @@ public class SpadesActivity extends GameActivity {
                         if (isBot[currentPlayerInteracting])
                             botHandle(250);
                         else {
-                            displayHands(currentPlayerInteracting, true);
+                            if (botCount != 3) {
+                                displayHands(-1, false);
+                                displayWaitScreen(currentPlayerInteracting);
+                            }
+                            else
+                                displayHands(currentPlayerInteracting, true);
                             canClick = true;
                         }
                     }
@@ -268,8 +287,30 @@ public class SpadesActivity extends GameActivity {
         }
     }
 
+    public void displayWaitScreenBid(final int currentPlayer) {
+        final Dialog alertDialog = new Dialog(this);
+        alertDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        alertDialog.setContentView(R.layout.wait_screen);
+        alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        TextView text = (TextView) alertDialog.findViewById(R.id.wait_text);
+        text.setText("Player " + (currentPlayer + 1) + ": Click anywhere to continue.");
+        text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
+        alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                displayHands(currentPlayer, true);
+                openGuessDialog(currentPlayer);
+            }
+        });
+        alertDialog.show();
+    }
+
     public void openGuessDialog(final int currentPlayer) {
-        displayHands(currentPlayer, false);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false);
@@ -322,7 +363,11 @@ public class SpadesActivity extends GameActivity {
                             if (isBot[currentPlayerInteracting])
                                 botHandle(250);
                             else {
-                                displayHands(currentPlayerInteracting, true);
+                                if (botCount != 3) {
+                                    displayHands(-1, false);
+                                    displayWaitScreen(currentPlayerInteracting);
+                                } else
+                                    displayHands(currentPlayerInteracting, true);
                                 canClick = true;
                             }
                             return;
@@ -344,7 +389,11 @@ public class SpadesActivity extends GameActivity {
                                         if (isBot[currentPlayerInteracting])
                                             botHandle(250);
                                         else {
-                                            displayHands(currentPlayerInteracting, true);
+                                            if (botCount != 3) {
+                                                displayHands(-1, false);
+                                                displayWaitScreen(currentPlayerInteracting);
+                                            } else
+                                                displayHands(currentPlayerInteracting, true);
                                             canClick = true;
                                         }
                                     }
@@ -359,7 +408,12 @@ public class SpadesActivity extends GameActivity {
                             handler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    openGuessDialog(finalPlayer);
+                                    if (botCount != 3) {
+                                        displayHands(-1, false);
+                                        displayWaitScreenBid(finalPlayer);
+                                    }
+                                    else
+                                        openGuessDialog(finalPlayer);
                                 }
                             }, currentTimeDelay);
                         }
@@ -507,6 +561,10 @@ public class SpadesActivity extends GameActivity {
                                         if (isBot[currentPlayerInteracting])
                                             botHandle(250);
                                         else {
+                                            if (botCount != 3) {
+                                                displayHands(-1, false);
+                                                displayWaitScreen(currentPlayerInteracting);
+                                            } else
                                             displayHands(currentPlayerInteracting, true);
                                             canClick = true;
                                         }
@@ -522,12 +580,21 @@ public class SpadesActivity extends GameActivity {
                                     if (isBot[currentPlayerInteracting])
                                         botHandle(250);
                                     else {
+                                        if (botCount != 3) {
+                                            displayHands(-1, false);
+                                            displayWaitScreen(currentPlayerInteracting);
+                                        } else
                                         displayHands(currentPlayerInteracting, true);
                                         canClick = true;
                                     }
                                     return;
                                 }
-                                openGuessDialog(player);
+                                if (botCount != 3) {
+                                    displayHands(-1, false);
+                                    displayWaitScreenBid(currentPlayerInteracting);
+                                }
+                                else
+                                    openGuessDialog(currentPlayerInteracting);
                             }
                         }
                     }, initialCoordinates);

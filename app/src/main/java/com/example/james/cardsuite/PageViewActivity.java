@@ -86,6 +86,13 @@ public class PageViewActivity extends FragmentActivity {
         }
 
         @Override
+        public void destroyItem(View collection, int position, Object o) {
+            View view = (View)o;
+            ((ViewPager) collection).removeView(view);
+            view = null;
+        }
+
+        @Override
         public Fragment getItem(int position) {
             switch (position) {
                 case 0: // Fragment # 0 - This will show FirstFragment
