@@ -32,7 +32,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
     private List<List<Card>> chosenLists = new ArrayList<List<Card>>();
     private List<Card> chosenCards = new ArrayList<Card>();
     private Map<View, Integer> animationsActive = new HashMap<View, Integer>();
-    public int heartsBrokenPX;
+    public int heartsBrokenPX, botCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +48,9 @@ public class HeartsActivity extends GameActivity implements Serializable {
             this.isBot = intent.getBooleanArrayExtra("isBot");
             manager = new HeartsManager(isBot);
             currentPlayerInteracting = 0;
+            for (int i = 0; i < 4; i++)
+                if (isBot[i])
+                    botCount++;
             //Find the first and last nonbot players for later ease of use.
             for (int i = 0; i < 4; i++) {
                 if (!foundFirstNonBot && !isBot[i]) {
@@ -138,8 +141,14 @@ public class HeartsActivity extends GameActivity implements Serializable {
                         if (manager.getPlayers()[currentPlayerInteracting].isBot) {
                             botHandle(250);
                         } else {
-                            if(!isRoundOver)
-                                displayHands(currentPlayerInteracting, true);
+                            if(!isRoundOver) {
+                                if (botCount != 3) {
+                                    displayHands(-1, false);
+                                    displayWaitScreen();
+                                }
+                                else
+                                    displayHands(currentPlayerInteracting, true);
+                            }
                             canClick = true;
                         }
                     }
@@ -151,7 +160,14 @@ public class HeartsActivity extends GameActivity implements Serializable {
                 botHandle(250);
             } else if (!finishedSwapping && chosenCards.size() == 0) {
                 //This is only executed to display the hand of the next player during the swapping phase/end of turn in game phase.
-                displayHands(currentPlayerInteracting, true);
+                if (botCount != 3) {
+                    displayHands(-1, false);
+                    displayWaitScreen();
+                }
+                else
+                    displayHands(currentPlayerInteracting, true);
+
+                canClick = true;
             }
         } else
             endGame();
@@ -185,7 +201,13 @@ public class HeartsActivity extends GameActivity implements Serializable {
                             if (manager.getPlayers()[currentPlayerInteracting].isBot)
                                 botHandle(250);
                             else {
-                                displayHands(currentPlayerInteracting, true);
+                                displayHands(-1, false);
+                                if (botCount != 3) {
+                                    displayHands(-1, false);
+                                    displayWaitScreen();
+                                }
+                                else
+                                    displayHands(currentPlayerInteracting, true);
                                 canClick = true;
                             }
                         }
@@ -224,8 +246,14 @@ public class HeartsActivity extends GameActivity implements Serializable {
                                 if (manager.getPlayers()[currentPlayerInteracting].isBot)
                                     botHandle(250);
                                 else {
-                                    if(!isRoundOver)
-                                        displayHands(currentPlayerInteracting, true);
+                                    if(!isRoundOver) {
+                                        if (botCount != 3) {
+                                            displayHands(-1, false);
+                                            displayWaitScreen();
+                                        }
+                                        else
+                                            displayHands(currentPlayerInteracting, true);
+                                    }
                                     canClick = true;
                                 }
                             }
@@ -379,7 +407,13 @@ public class HeartsActivity extends GameActivity implements Serializable {
 
                 //This is run under the assumption the start player will be found below as the animation is run.
                 findStartPlayer();
-                displayHands(findNextNonBot(manager.startPlayer), true);
+                currentPlayerInteracting = findNextNonBot(manager.startPlayer);
+                if (botCount != 3) {
+                    displayHands(-1, false);
+                    displayWaitScreen();
+                }
+                else
+                    displayHands(currentPlayerInteracting, true);
                 canClick = true;
             }
         }, animationsActive);
@@ -539,8 +573,11 @@ public class HeartsActivity extends GameActivity implements Serializable {
                             if (cardsDisplayed == manager.players[0].hand.size() - 1) {
                                 if (manager.getPlayers()[currentPlayerInteracting].isBot)
                                     botHandle(250);
-                                else
-                                    displayHands(currentPlayerInteracting, true);
+                                else {
+                                    displayHands(-1, false);
+                                    if (botCount != 3)
+                                        displayWaitScreen();
+                                }
                             }
                         }
                     }, initialCoordinates);
@@ -561,6 +598,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
             this.finishedSwapping = is.readBoolean();
             this.displayedHeartsBroken = is.readBoolean();
             int size = is.readInt();
+            botCount = is.readInt();
             for (int i = 0; i < size; i++)
                 this.chosenLists.add((List<Card>) is.readObject());
             is.close();
@@ -583,6 +621,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
             objectStream.writeBoolean(finishedSwapping);
             objectStream.writeBoolean(displayedHeartsBroken);
             objectStream.writeInt(chosenLists.size());
+            objectStream.writeInt(botCount);
             for (int i = 0; i < chosenLists.size(); i++)
                 objectStream.writeObject(chosenLists.get(i));
             for (Card c : manager.getPlayers()[currentPlayerInteracting].hand)

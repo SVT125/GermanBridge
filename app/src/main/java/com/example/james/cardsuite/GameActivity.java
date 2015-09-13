@@ -2,10 +2,13 @@ package com.example.james.cardsuite;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -197,6 +201,22 @@ public abstract class GameActivity extends Activity implements Serializable {
             potView.setImageResource(0);
             potView.setTag(0);
         }
+    }
+
+    public void displayWaitScreen() {
+        Dialog alertDialog = new Dialog(this);
+        alertDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        alertDialog.setContentView(R.layout.wait_screen);
+        alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        TextView text = (TextView) alertDialog.findViewById(R.id.wait_text);
+        text.setText("Player " + (currentPlayerInteracting + 1) + ": Click anywhere to show current hand and continue the game.");
+        alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                displayHands(currentPlayerInteracting, true);
+            }
+        });
+        alertDialog.show();
     }
 
     public void displayScoreTable(final Runnable closeAction) {
