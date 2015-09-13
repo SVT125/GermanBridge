@@ -67,7 +67,7 @@
 
         <item name="android:background">@color/background</item>
 
-        <item name="android:windowBackground">@color/background</item>
+        <item name="android:windowBackground">@drawable/bid_background</item>
 
         <item name="android:textColor">@color/spades_blue</item>
 
