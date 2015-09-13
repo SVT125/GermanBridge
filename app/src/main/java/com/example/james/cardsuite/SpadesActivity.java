@@ -10,6 +10,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -354,7 +355,7 @@ public class SpadesActivity extends GameActivity {
                             player = (player + 1) % 4;
                         }
 
-                        if (guessCount != 4) {
+                        if (guessCount < 4) {
                             final int finalPlayer = player;
                             handler.postDelayed(new Runnable() {
                                 @Override
