@@ -8,9 +8,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 public class PageViewActivity extends FragmentActivity {
 
@@ -27,6 +29,24 @@ public class PageViewActivity extends FragmentActivity {
         mPager = (ViewPager) findViewById(R.id.pager);
         mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
         mPager.setAdapter(mPagerAdapter);
+
+        TextView text = (TextView) findViewById(R.id.menu_from_help);
+        text.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    v.setAlpha(0.5f);
+                    helpToMenu(v);
+                    return true;
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    v.setAlpha(1f);
+                    return true;
+                }
+
+                return false;
+            }
+        });
     }
 
     @Override

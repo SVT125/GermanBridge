@@ -15,11 +15,13 @@ import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -38,6 +40,61 @@ public class MainActivity extends Activity {
         Typeface font = Typeface.createFromAsset(getAssets(), "SigniaPro-Regular.ttf");
         TextView greetingView = (TextView)findViewById(R.id.newgreeting);
         greetingView.setTypeface(font);
+
+        final ImageButton playButton = (ImageButton) findViewById(R.id.play);
+        playButton.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                ImageView iv = (ImageView) v;
+
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    iv.setAlpha(0.5f);
+                    overlayClick(v);
+                    return true;
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    iv.setAlpha(1f);
+                    return true;
+                }
+
+                return false;
+            }
+        });
+        final ImageButton settingsButton = (ImageButton) findViewById(R.id.settings_button);
+        settingsButton.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                ImageView iv = (ImageView) v;
+
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    settingsClick(v);
+                    iv.setAlpha(0.5f);
+                    return true;
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    iv.setAlpha(1f);
+                    return true;
+                }
+
+                return false;
+            }
+        });
+        final ImageButton helpButton = (ImageButton) findViewById(R.id.help_button);
+        helpButton.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                ImageView iv = (ImageView) v;
+
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    helpClick(v);
+                    iv.setAlpha(0.5f);
+                    return true;
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    iv.setAlpha(1f);
+                    return true;
+                }
+
+                return false;
+            }
+        });
     }
 
     @Override
