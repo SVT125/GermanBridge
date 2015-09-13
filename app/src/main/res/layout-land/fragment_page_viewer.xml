@@ -9,6 +9,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:id="@+id/help_title"
+        android:textColor="@color/spades_blue"
         android:textAlignment="center"
         android:layout_gravity="center_horizontal"
         android:textStyle="bold|italic"

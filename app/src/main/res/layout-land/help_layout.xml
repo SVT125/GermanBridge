@@ -52,6 +52,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Return to Main Menu"
+        android:textColor="@color/text_green"
         android:id="@+id/textView2"
         android:layout_alignParentBottom="true"
         android:layout_alignEnd="@+id/pager"
