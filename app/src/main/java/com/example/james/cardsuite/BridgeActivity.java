@@ -410,7 +410,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
                             player = (player + 1) % 4;
                         }
 
-                        if (guessCount != 4) {
+                        if (guessCount < 4) {
                             final int finalPlayer = player;
                             handler.postDelayed(new Runnable() {
                                 @Override
