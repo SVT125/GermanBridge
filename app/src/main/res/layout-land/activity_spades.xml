@@ -7,7 +7,7 @@
     android:configChanges="orientation|keyboardHidden"
     android:weightSum="1"
     android:orientation="horizontal"
-    android:background="@color/background_spades"
+    android:background="@drawable/background_tint_blue"
     android:baselineAligned="false"
     android:clipChildren="false"
     android:clipToPadding="false"

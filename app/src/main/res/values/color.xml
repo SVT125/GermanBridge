@@ -5,9 +5,9 @@
     <color name="hearts_red">#ed6565</color>
     <color name="tan">#e4c283</color>
     <color name="background_bridge">#be85d08d</color>
-    <color name="text_green">#f174c07c</color>
+    <color name="text_green">#f1447b4a</color>
     <color name="background_spades">#bea5aed0</color>
-    <color name="text_blue">#ce737998</color>
+    <color name="text_blue">#ce555974</color>
     <color name="transparent">#00737998</color>
     <color name="hearts_transparent">#54ed6565</color>
 </resources>
