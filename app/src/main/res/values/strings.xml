@@ -54,6 +54,6 @@ The winner of the trick collects it and places it face down. Hearts may not be l
     <string name="help_title5">Scoring</string>
 
     <!-- TODO: Fill in the Ad Unit ID for main activity, etc. -->
-    <string name="main_banner_ad_unit_id"></string>
-    <string name="results_banner_ad_unit_id"></string>
+    <string name="main_banner_ad_unit_id">ca-app-pub-6563321210012380/5058162757</string>
+    <string name="results_banner_ad_unit_id">ca-app-pub-6563321210012380/8011629150</string>
 </resources>
