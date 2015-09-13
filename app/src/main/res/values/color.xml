@@ -9,4 +9,5 @@
     <color name="background_spades">#bea5aed0</color>
     <color name="text_blue">#ce737998</color>
     <color name="transparent">#00737998</color>
+    <color name="hearts_transparent">#54ed6565</color>
 </resources>

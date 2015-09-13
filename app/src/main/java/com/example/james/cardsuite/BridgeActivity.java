@@ -314,8 +314,6 @@ public class BridgeActivity extends GameActivity implements Serializable {
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.HORIZONTAL);
 
-
-
         guess = -1;
 
         RadioGroup group = new RadioGroup(this);
@@ -342,9 +340,9 @@ public class BridgeActivity extends GameActivity implements Serializable {
             buttons[i] = button;
             group.addView(button);
         }
-
-        layout.addView(group);
-        layout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        llp.setMargins(50,0,0,0);
+        layout.addView(group, llp);
         horizontalScrollView.addView(layout);
         horizontalScrollView.setLayoutParams(new AbsListView.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         builder.setView(horizontalScrollView);
@@ -352,6 +350,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
         WindowManager.LayoutParams wmlp = d.getWindow().getAttributes();
 
         //wmlp.gravity = Gravity.TOP | Gravity.RIGHT;
+
         wmlp.x = 150;   //x position
         wmlp.y = 0;   //y position
 
