@@ -77,7 +77,7 @@ public class PageViewActivity extends FragmentActivity {
                 button.setBackgroundResource(R.drawable.help_border_unselected);
             }
         }
-        v.setBackgroundResource(R.drawable.help_border);
+        v.setBackgroundResource(R.color.background);
     }
 
     private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
