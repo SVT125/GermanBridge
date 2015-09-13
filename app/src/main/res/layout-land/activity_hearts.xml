@@ -233,7 +233,7 @@
                 android:text="0"
                 android:alpha="0.5"
                 android:id="@+id/rightScoreView"
-                android:rotation="90"
+                android:rotation="270"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
                 android:textStyle="bold"

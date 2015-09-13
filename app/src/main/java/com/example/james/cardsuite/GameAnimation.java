@@ -4,7 +4,6 @@ import android.os.Handler;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
-import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
@@ -169,8 +168,8 @@ public class GameAnimation {
 
             int receivingHand = animations.get(key);
             switch(swapRound) {
-                case 0: receivingHand = receivingHand == 0 ? 3 : receivingHand - 1; break;
-                case 1: receivingHand = (receivingHand+1)%4; break;
+                case 0: receivingHand = (receivingHand+1)%4; break;
+                case 1: receivingHand = receivingHand == 0 ? 3 : receivingHand - 1; break;
                 case 2: receivingHand = (receivingHand+2)%4; break;
             }
 
