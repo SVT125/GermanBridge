@@ -45,15 +45,15 @@ public class MainActivity extends Activity {
         super.onConfigurationChanged(config);
     }
 
-    public void gameClick(final View v) {
-        if (v == findViewById(R.id.hearts_button) && (fileExists(this, "save_hearts")))
-            savedGamePrompt(v);
-        else if (v == findViewById(R.id.german_button) && (fileExists(this, "save_bridge")))
-            savedGamePrompt(v);
-        else if (v == findViewById(R.id.spades_button) && (fileExists(this, "save_spades")))
-            savedGamePrompt(v);
+    public void gameClick(int gameMode) {
+        if (gameMode == 0 && (fileExists(this, "save_hearts")))
+            savedGamePrompt(0);
+        else if (gameMode == 1 && (fileExists(this, "save_bridge")))
+            savedGamePrompt(1);
+        else if (gameMode == 2 && (fileExists(this, "save_spades")))
+            savedGamePrompt(2);
         else
-            playerSelection(v);
+            playerSelection(gameMode);
     }
 
     public void settingsClick(View v) {
@@ -75,45 +75,45 @@ public class MainActivity extends Activity {
         ImageButton heartsButton = (ImageButton) alertDialog.findViewById(R.id.hearts_button);
         heartsButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                gameClick(v);
+                gameClick(0);
             }
         });
         ImageButton bridgeButton = (ImageButton) alertDialog.findViewById(R.id.german_button);
         bridgeButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
-                gameClick(v);
+                gameClick(1);
             }
         });
         ImageButton spadesButton = (ImageButton) alertDialog.findViewById(R.id.spades_button);
         spadesButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
-                gameClick(v);
+                gameClick(2);
             }
         });
     }
 
-    public void savedGamePrompt(final View v) {
+    public void savedGamePrompt(final int gameMode) {
         AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this,R.style.MyAppTheme));
         builder.setTitle("Do you want to continue from a previous game?");
         builder.setNegativeButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 loadGame = true;
-                runGameActivity(v);
+                runGameActivity(gameMode);
             }
         });
         builder.setPositiveButton("No", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 loadGame = false;
-                playerSelection(v);
+                playerSelection(gameMode);
             }
         });
         builder.show();
         onPause();
     }
 
-    public void playerSelection(final View v) {
+    public void playerSelection(final int gameMode) {
         final String[] choices = new String[3];
 
         choices[0] = "PLAYER 2";
@@ -173,7 +173,7 @@ public class MainActivity extends Activity {
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                runGameActivity(v);
+                runGameActivity(gameMode);
             }
         });
         builder.setNeutralButton("Back", new DialogInterface.OnClickListener() {
@@ -186,13 +186,13 @@ public class MainActivity extends Activity {
         builder.show();
     }
 
-    public void runGameActivity(View v) {
+    public void runGameActivity(int gameMode) {
         Class<? extends GameActivity> executingActivity = null;
-        if(v == findViewById(R.id.hearts_button))
+        if(gameMode == 0)
             executingActivity = HeartsActivity.class;
-        else if(v == findViewById(R.id.german_button))
+        else if(gameMode == 1)
             executingActivity = BridgeActivity.class;
-        else if(v == findViewById(R.id.spades_button))
+        else if(gameMode == 2)
             executingActivity = SpadesActivity.class;
 
         Intent intent = new Intent(MainActivity.this,executingActivity);
