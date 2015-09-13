@@ -27,6 +27,14 @@
         android:orientation="vertical"
         android:gravity="center">
 
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/adView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            ads:adSize="BANNER"
+            ads:adUnitId="@string/main_banner_ad_unit_id">
+        </com.google.android.gms.ads.AdView>
+
         <TextView
             android:text="CARD SUITE"
             android:layout_width="wrap_content"
@@ -70,13 +78,6 @@
             android:layout_centerHorizontal="true"
             android:onClick="helpClick"/>
 
-        <com.google.android.gms.ads.AdView
-            android:id="@+id/adView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            ads:adSize="BANNER"
-            ads:adUnitId="@string/main_banner_ad_unit_id">
-        </com.google.android.gms.ads.AdView>
     </LinearLayout>
 
 </RelativeLayout>
