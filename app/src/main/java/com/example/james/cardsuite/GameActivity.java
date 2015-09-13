@@ -203,13 +203,13 @@ public abstract class GameActivity extends Activity implements Serializable {
         }
     }
 
-    public void displayWaitScreen() {
+    public void displayWaitScreen(final int currentPlayer) {
         final Dialog alertDialog = new Dialog(this);
         alertDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         alertDialog.setContentView(R.layout.wait_screen);
         alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         TextView text = (TextView) alertDialog.findViewById(R.id.wait_text);
-        text.setText("Player " + (currentPlayerInteracting + 1) + ": Click anywhere to show current hand and continue the game.");
+        text.setText("Player " + (currentPlayer + 1) + ": Click anywhere to show current hand and continue the game.");
         text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -219,7 +219,7 @@ public abstract class GameActivity extends Activity implements Serializable {
         alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                displayHands(currentPlayerInteracting, true);
+                displayHands(currentPlayer, true);
             }
         });
         alertDialog.show();

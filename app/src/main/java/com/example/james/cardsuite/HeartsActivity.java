@@ -144,7 +144,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
                             if(!isRoundOver) {
                                 if (botCount != 3) {
                                     displayHands(-1, false);
-                                    displayWaitScreen();
+                                    displayWaitScreen(currentPlayerInteracting);
                                 }
                                 else
                                     displayHands(currentPlayerInteracting, true);
@@ -162,7 +162,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
                 //This is only executed to display the hand of the next player during the swapping phase/end of turn in game phase.
                 if (botCount != 3) {
                     displayHands(-1, false);
-                    displayWaitScreen();
+                    displayWaitScreen(currentPlayerInteracting);
                 }
                 else
                     displayHands(currentPlayerInteracting, true);
@@ -204,7 +204,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
                                 displayHands(-1, false);
                                 if (botCount != 3) {
                                     displayHands(-1, false);
-                                    displayWaitScreen();
+                                    displayWaitScreen(currentPlayerInteracting);
                                 }
                                 else
                                     displayHands(currentPlayerInteracting, true);
@@ -249,7 +249,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
                                     if(!isRoundOver) {
                                         if (botCount != 3) {
                                             displayHands(-1, false);
-                                            displayWaitScreen();
+                                            displayWaitScreen(currentPlayerInteracting);
                                         }
                                         else
                                             displayHands(currentPlayerInteracting, true);
@@ -407,13 +407,12 @@ public class HeartsActivity extends GameActivity implements Serializable {
 
                 //This is run under the assumption the start player will be found below as the animation is run.
                 findStartPlayer();
-                currentPlayerInteracting = findNextNonBot(manager.startPlayer);
                 if (botCount != 3) {
                     displayHands(-1, false);
-                    displayWaitScreen();
+                    displayWaitScreen(findNextNonBot(manager.startPlayer));
                 }
                 else
-                    displayHands(currentPlayerInteracting, true);
+                    displayHands(findNextNonBot(manager.startPlayer), true);
                 canClick = true;
             }
         }, animationsActive);
@@ -576,7 +575,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
                                 else {
                                     if (botCount != 3) {
                                         displayHands(-1, false);
-                                        displayWaitScreen();
+                                        displayWaitScreen(currentPlayerInteracting);
                                     }
                                     else
                                         displayHands(currentPlayerInteracting, true);
