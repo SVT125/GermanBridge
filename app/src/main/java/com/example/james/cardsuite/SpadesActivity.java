@@ -450,7 +450,6 @@ public class SpadesActivity extends GameActivity {
                 cardButton.setPadding(1, 1, 1, 1);
                 if (!cardsClickable)
                     cardButton.setClickable(false);
-                cardButton.setMaxHeight(cardHeightPX);
                 cardButton.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
                 switch (i) {

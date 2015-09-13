@@ -308,16 +308,15 @@ public abstract class GameActivity extends Activity implements Serializable {
                 if(numCardsToDisplay % 2 != 0 && j == (numCardsToDisplay-1)/2)
                     theta = 0;
 
-                RelativeLayout.LayoutParams restParams = new RelativeLayout.LayoutParams(103, 149);
+                RelativeLayout.LayoutParams restParams = new RelativeLayout.LayoutParams(cardWidthPX, cardHeightPX);
 
                 //How to treat and initialize the other cards depending on whether the current player or any other.
                 ImageView cardButton = new ImageView(this);
                 cardButton.setImageResource(getResources().getIdentifier("cardback", "drawable", getPackageName()));
 
                 cardButton.setTag(manager.getPlayers()[i].hand.get(j));
-                cardButton.setPadding(3, 3, 3, 3);
-                cardButton.setMaxHeight(cardHeightPX);
-                cardButton.setAdjustViewBounds(true);
+                cardButton.setPadding(1, 1, 1, 1);
+                cardButton.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
                 switch (i) {
                     case 0:

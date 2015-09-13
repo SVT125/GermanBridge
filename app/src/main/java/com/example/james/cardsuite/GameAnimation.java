@@ -224,12 +224,11 @@ public class GameAnimation {
         for(int i = 0; i < 4; i++) {
             final int currentIndex = i;
             final ImageView imageView = new ImageView(activity.getApplicationContext());
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(activity.cardWidthPX, activity.cardHeightPX);
             params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
 
             imageView.setLayoutParams(params);
             imageView.setImageResource(activity.getResources().getIdentifier("cardback", "drawable", activity.getPackageName()));
-            imageView.setMaxHeight(150);
             imageView.setAdjustViewBounds(true);
             ((RelativeLayout) activity.findViewById(R.id.potLayout)).addView(imageView);
 
