@@ -209,7 +209,7 @@ public abstract class GameActivity extends Activity implements Serializable {
         alertDialog.setContentView(R.layout.wait_screen);
         alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         TextView text = (TextView) alertDialog.findViewById(R.id.wait_text);
-        text.setText("Player " + (currentPlayer + 1) + ": Click anywhere to show current hand and continue the game.");
+        text.setText("Player " + (currentPlayer + 1) + ": Click anywhere to continue.");
         text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
