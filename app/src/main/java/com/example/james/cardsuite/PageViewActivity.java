@@ -80,7 +80,6 @@ public class PageViewActivity extends FragmentActivity {
         v.setBackgroundResource(R.drawable.help_border);
     }
 
-
     private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
         public ScreenSlidePagerAdapter(FragmentManager fm) {
             super(fm);
@@ -88,7 +87,6 @@ public class PageViewActivity extends FragmentActivity {
 
         @Override
         public Fragment getItem(int position) {
-            System.out.println(gameMode);
             switch (position) {
                 case 0: // Fragment # 0 - This will show FirstFragment
                     return PageViewerFragment.newInstance(1, "Page # 1", gameMode);
