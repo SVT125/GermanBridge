@@ -333,6 +333,12 @@ public class BridgeActivity extends GameActivity implements Serializable {
             final RadioButton button = new RadioButton(this);
             button.setText(Integer.toString(i));
             button.setTextSize(20);
+            if (i == manager.getPlayers()[currentPlayer].hand.size() - manager.addedGuesses)
+                button.setTextColor(getResources().getColor(R.color.spades_blue));
+            else {
+                button.setTextColor(Color.RED);
+                button.setClickable(false);
+            }
             button.setTextColor(getResources().getColor(R.color.spades_blue));
             button.setBackgroundResource(R.drawable.bid_selected);
             button.setButtonDrawable(R.color.transparent);
@@ -351,7 +357,6 @@ public class BridgeActivity extends GameActivity implements Serializable {
         WindowManager.LayoutParams wmlp = d.getWindow().getAttributes();
 
         //wmlp.gravity = Gravity.TOP | Gravity.RIGHT;
-
         wmlp.x = 150;   //x position
         wmlp.y = 0;   //y position
 
