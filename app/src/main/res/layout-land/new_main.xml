@@ -7,8 +7,8 @@
     android:layout_height="match_parent"
     android:paddingLeft="14dp"
     android:paddingRight="14dp"
-    android:paddingTop="14dp"
-    android:paddingBottom="14dp" tools:context=".MainActivity"
+    android:paddingTop="0dp"
+    android:paddingBottom="0dp" tools:context=".MainActivity"
     android:gravity="center"
     android:id="@+id/mainLayout"
     android:screenOrientation="landscape"
@@ -37,9 +37,10 @@
         android:textColor="#373d5e"
         android:layout_above="@+id/play"
         android:layout_alignEnd="@+id/settings_button"
-        android:layout_marginBottom="14dp"
+        android:layout_marginBottom="5dp"
         android:typeface="normal"
-        android:visibility="visible" />
+        android:visibility="visible"
+        android:layout_marginTop="5dp" />
 
     <ImageButton
         android:layout_width="150dp"
