@@ -66,7 +66,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
 
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        heartsBrokenPX = (int)Math.ceil(75 * metrics.density);
+        heartsBrokenPX = (int)Math.ceil(150 * metrics.density);
 
         //Artificial delay added so that this runs after onCreate finishes and the views' coordinates are defined.
         handler.postDelayed(new Runnable() {

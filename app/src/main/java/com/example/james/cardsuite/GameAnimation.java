@@ -145,11 +145,10 @@ public class GameAnimation {
     }
 
     public static void showSpadesBroken(final SpadesActivity activity) {
-        /*
-        final ImageView heartsBrokenView = (ImageView)activity.findViewById(R.id.heartsBrokenView);
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(activity.heartsBrokenPX,activity.heartsBrokenPX);
-        params.addRule(RelativeLayout.CENTER_IN_PARENT,RelativeLayout.TRUE);
-        heartsBrokenView.setLayoutParams(params);
+        final ImageView spadesBrokenView = (ImageView)activity.findViewById(R.id.spadesBrokenView);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(activity.spadesBrokenPX,activity.spadesBrokenPX);
+        params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+        spadesBrokenView.setLayoutParams(params);
 
         spadesBrokenView.animate().yBy(-350).setDuration(1500).alpha(0f).withEndAction(new Runnable() {
             @Override
@@ -160,7 +159,6 @@ public class GameAnimation {
                 spadesBrokenView.setAlpha(0f);
             }
         }).start();
-        */
     }
 
     public static void swapCards(HeartsActivity activity, int swapRound, Runnable endAction, Map<View, Integer> animations) {

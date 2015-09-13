@@ -78,7 +78,7 @@ public class SpadesActivity extends GameActivity {
 
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        spadesBrokenPX = (int)Math.ceil(75 * metrics.density);
+        spadesBrokenPX = (int)Math.ceil(150 * metrics.density);
 
         //Artificial delay added so that this runs after onCreate finishes and the views' coordinates are defined.
         handler.postDelayed(new Runnable() {

@@ -258,6 +258,13 @@
                 android:layout_marginRight="92dp"
                 android:layout_marginBottom="-28dp"/>
 
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:id="@+id/spadesBrokenView"
+                android:layout_centerInParent="true"
+                android:src="@drawable/spades_broken"
+                android:elevation="100dp" />
         </RelativeLayout>
 
         <LinearLayout
