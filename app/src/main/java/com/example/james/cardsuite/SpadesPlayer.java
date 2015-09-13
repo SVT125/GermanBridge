@@ -15,10 +15,7 @@ public class SpadesPlayer extends Player implements Serializable {
 	}
 
 	public boolean scoreChange() {
-
 		int previousBags = bags;
-		System.out.println(bid);
-		System.out.println(totalBid);
 
 		// if person gets 0 hands
 		if (obtained == 0) {
