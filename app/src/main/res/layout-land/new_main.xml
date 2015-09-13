@@ -5,10 +5,10 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:paddingTop="16dp"
-    android:paddingBottom="16dp" tools:context=".MainActivity"
+    android:paddingLeft="14dp"
+    android:paddingRight="14dp"
+    android:paddingTop="14dp"
+    android:paddingBottom="14dp" tools:context=".MainActivity"
     android:gravity="center"
     android:id="@+id/mainLayout"
     android:screenOrientation="landscape"
@@ -41,6 +41,7 @@
         android:typeface="normal"
         android:visibility="visible" />
 
+<<<<<<< Updated upstream
     <ImageButton
         android:layout_width="150dp"
         android:layout_height="75dp"
@@ -49,6 +50,23 @@
         android:background="@drawable/play"
         android:layout_above="@+id/settings_button"
         android:layout_centerHorizontal="true" />
+=======
+        <TextView
+            android:text="CARD SUITE"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/newgreeting"
+            android:textSize="50dp"
+            android:textIsSelectable="false"
+            android:textStyle="bold|italic"
+            android:focusableInTouchMode="false"
+            android:textColor="#373d5e"
+            android:layout_above="@+id/play"
+            android:layout_alignEnd="@+id/settings_button"
+            android:layout_marginBottom="14dp"
+            android:typeface="normal"
+            android:visibility="visible" />
+>>>>>>> Stashed changes
 
     <ImageButton
         android:layout_width="225dp"

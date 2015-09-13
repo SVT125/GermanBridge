@@ -324,8 +324,8 @@ public class BridgeActivity extends GameActivity implements Serializable {
         TextView text = new TextView(this);
         text.setText("Player " + (currentPlayer + 1) + " bid");
         text.setTextColor(getResources().getColor(R.color.spades_blue));
-        text.setTextSize(20);
-        text.setPadding(30, 30, 30, 30);
+        text.setTextSize(22);
+        text.setPadding(30, 50, 30, 30);
         text.setTypeface(null, Typeface.BOLD);
         builder.setCustomTitle(text);
         Button[] buttons = new Button[manager.potsFinished + 1];
@@ -333,8 +333,10 @@ public class BridgeActivity extends GameActivity implements Serializable {
         for (int i = 0; i <= manager.potsFinished; i++) {
             final RadioButton button = new RadioButton(this);
             button.setText(Integer.toString(i));
+            button.setTextSize(20);
             button.setTextColor(getResources().getColor(R.color.spades_blue));
-            button.setButtonDrawable(R.drawable.bid_selected);
+            button.setBackgroundResource(R.drawable.bid_selected);
+            button.setButtonDrawable(R.color.transparent);
             button.setPadding(50, 0, 50, 0);
             button.setTag(i);
             buttons[i] = button;
