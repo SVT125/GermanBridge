@@ -5,8 +5,8 @@
     android:gravity="center_vertical|center_horizontal">
 
     <ImageButton
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:id="@+id/german_button"
         android:layout_alignParentStart="true"
         android:src="@drawable/bridge"
@@ -16,8 +16,8 @@
         android:layout_marginRight="50dp" />
 
     <ImageButton
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:id="@+id/hearts_button"
         android:layout_below="@+id/german_button"
         android:layout_toEndOf="@+id/german_button"
@@ -28,8 +28,8 @@
         android:layout_marginRight="50dp" />
 
     <ImageButton
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:id="@+id/spades_button"
         android:layout_below="@+id/hearts_button"
         android:layout_toEndOf="@+id/hearts_button"
