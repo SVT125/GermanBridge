@@ -8,4 +8,5 @@
     <color name="text_green">#f174c07c</color>
     <color name="background_spades">#bea5aed0</color>
     <color name="text_blue">#ce737998</color>
+    <color name="transparent">#00737998</color>
 </resources>

@@ -12,12 +12,14 @@ import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
@@ -284,6 +286,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
         alertDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         alertDialog.setContentView(R.layout.wait_screen);
         alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
         TextView text = (TextView) alertDialog.findViewById(R.id.wait_text);
         text.setText("Player " + (currentPlayer + 1) + ": Click anywhere to continue.");
         text.setOnClickListener(new View.OnClickListener() {
@@ -305,11 +308,13 @@ public class BridgeActivity extends GameActivity implements Serializable {
     //Opens the guess dialog - fit for German Bridge for now.
     public void openGuessDialog(final int currentPlayer) {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.BidCustom));
         builder.setCancelable(false);
         HorizontalScrollView horizontalScrollView = new HorizontalScrollView(this);
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.HORIZONTAL);
+
+
 
         guess = -1;
 
@@ -318,8 +323,9 @@ public class BridgeActivity extends GameActivity implements Serializable {
 
         TextView text = new TextView(this);
         text.setText("Player " + (currentPlayer + 1) + " bid");
-        text.setTextSize(16);
-        text.setPadding(5, 5, 5, 5);
+        text.setTextColor(getResources().getColor(R.color.spades_blue));
+        text.setTextSize(20);
+        text.setPadding(30, 30, 30, 30);
         text.setTypeface(null, Typeface.BOLD);
         builder.setCustomTitle(text);
         Button[] buttons = new Button[manager.potsFinished + 1];
@@ -327,6 +333,9 @@ public class BridgeActivity extends GameActivity implements Serializable {
         for (int i = 0; i <= manager.potsFinished; i++) {
             final RadioButton button = new RadioButton(this);
             button.setText(Integer.toString(i));
+            button.setTextColor(getResources().getColor(R.color.spades_blue));
+            button.setButtonDrawable(R.drawable.bid_selected);
+            button.setPadding(50, 0, 50, 0);
             button.setTag(i);
             buttons[i] = button;
             group.addView(button);
@@ -338,6 +347,11 @@ public class BridgeActivity extends GameActivity implements Serializable {
         horizontalScrollView.setLayoutParams(new AbsListView.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         builder.setView(horizontalScrollView);
         final AlertDialog d = builder.create();
+        WindowManager.LayoutParams wmlp = d.getWindow().getAttributes();
+
+        //wmlp.gravity = Gravity.TOP | Gravity.RIGHT;
+        wmlp.x = 150;   //x position
+        wmlp.y = 0;   //y position
 
         for (final Button button : buttons) {
             button.setOnClickListener(new View.OnClickListener() {
@@ -417,8 +431,14 @@ public class BridgeActivity extends GameActivity implements Serializable {
             });
         }
 
-        d.getWindow().setLayout(findViewById(R.id.potLayout).getWidth(), findViewById(R.id.potLayout).getHeight());
+        //d.getWindow().setLayout(findViewById(R.id.bid).getWidth(), findViewById(R.id.bid).getHeight());
         d.show();
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+
+        lp.copyFrom(d.getWindow().getAttributes());
+        lp.width = 1000;
+        lp.height = 400;
+        d.getWindow().setAttributes(lp);
     }
 
     //Call when the hands have been updated and need be redisplayed.
