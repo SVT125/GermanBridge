@@ -139,8 +139,7 @@ public class SpadesActivity extends GameActivity {
                             if (botCount != 3) {
                                 displayHands(-1, false);
                                 displayWaitScreen(currentPlayerInteracting);
-                            }
-                            else
+                            } else
                                 displayHands(currentPlayerInteracting, true);
                             canClick = true;
                         }
@@ -593,8 +592,10 @@ public class SpadesActivity extends GameActivity {
                                     displayHands(-1, false);
                                     displayWaitScreenBid(currentPlayerInteracting);
                                 }
-                                else
+                                else {
+                                    displayHands(currentPlayerInteracting, false);
                                     openGuessDialog(currentPlayerInteracting);
+                                }
                             }
                         }
                     }, initialCoordinates);
