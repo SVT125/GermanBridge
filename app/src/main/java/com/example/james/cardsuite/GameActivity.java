@@ -344,7 +344,7 @@ public abstract class GameActivity extends Activity implements Serializable {
 
                 //Set the deltaX/theta parameters for the next card/loop iteration.
                 //Consequence of more space horizontally than vertically; set smaller distance between cards vertically.
-                deltaX = (i % 2 == 0) ? deltaX + 60 : deltaX + 55;
+                deltaX += cardDeltaXPX;
             }
         }
         buttonsPresent = true;
