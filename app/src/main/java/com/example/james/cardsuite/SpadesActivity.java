@@ -150,7 +150,6 @@ public class SpadesActivity extends GameActivity {
             endGame();
     }
 
-
     // Executes AI moves for the next player onwards, stopping once we're on a player that isn't a bot.
     // This mutates currentPlayerInteracting (to the next non-AI player or player whose hand is empty) and the pot as it loops.
     public void botHandle(final long delay) {

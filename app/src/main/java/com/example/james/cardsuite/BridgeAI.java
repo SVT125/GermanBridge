@@ -154,8 +154,7 @@ public class BridgeAI {
     // Returns the best possible move for the given player and state of game using the recursive maxN algorithm.
     public static Card chooseMove(int currentPlayer, BridgeManager manager, int level) {
         double[] maxVector = new double[] {Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY};
-        //TODO - bestCard should be null. This temp fix simply negates any problem with cardSelectable/AI for the time being so nothing crashes!
-        Card bestCard = manager.players[currentPlayer].hand.get(new Random().nextInt(manager.players[currentPlayer].hand.size()));
+        Card bestCard = null;
         for(int i = 0; i < manager.players[currentPlayer].hand.size(); i++) {
             if(manager.cardSelectable(manager.players[currentPlayer].hand.get(i),true,currentPlayer)) {
                 Card chosenCard = manager.players[currentPlayer].hand.remove(i);
@@ -168,6 +167,14 @@ public class BridgeAI {
 
                 //Put the card back for next iterations
                 manager.players[currentPlayer].hand.add(i, chosenCard);
+            }
+        }
+
+        //TODO - bestCard should be null. This temp fix simply negates any problem with cardSelectable/AI for the time being so nothing crashes!
+        if(bestCard == null) {
+            bestCard = manager.players[currentPlayer].hand.get(new Random().nextInt(manager.players[currentPlayer].hand.size()));
+            while(!manager.cardSelectable(bestCard,false,currentPlayer)) {
+                bestCard = manager.players[currentPlayer].hand.get(new Random().nextInt(manager.players[currentPlayer].hand.size()));
             }
         }
         return bestCard;
