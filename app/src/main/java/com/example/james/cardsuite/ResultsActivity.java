@@ -8,6 +8,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 public class ResultsActivity extends Activity {
 
@@ -26,6 +28,10 @@ public class ResultsActivity extends Activity {
 
         TextView resultsView = (TextView)findViewById(R.id.resultsView);
         resultsView.setText("Player " + (manager.findWinner()+1) + " won the game!");
+
+        AdView mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
     }
 
     @Override
