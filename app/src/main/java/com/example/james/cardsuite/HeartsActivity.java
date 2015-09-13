@@ -574,9 +574,12 @@ public class HeartsActivity extends GameActivity implements Serializable {
                                 if (manager.getPlayers()[currentPlayerInteracting].isBot)
                                     botHandle(250);
                                 else {
-                                    displayHands(-1, false);
-                                    if (botCount != 3)
+                                    if (botCount != 3) {
+                                        displayHands(-1, false);
                                         displayWaitScreen();
+                                    }
+                                    else
+                                        displayHands(currentPlayerInteracting, true);
                                 }
                             }
                         }

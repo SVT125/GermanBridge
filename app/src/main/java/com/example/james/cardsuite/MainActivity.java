@@ -66,7 +66,7 @@ public class MainActivity extends Activity {
     }
 
     public void overlayClick(View v) {
-        Dialog alertDialog = new Dialog(this);
+        final Dialog alertDialog = new Dialog(this);
         alertDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         alertDialog.setContentView(R.layout.menu_overlay);
         alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -75,18 +75,21 @@ public class MainActivity extends Activity {
         ImageButton heartsButton = (ImageButton) alertDialog.findViewById(R.id.hearts_button);
         heartsButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                alertDialog.dismiss();
                 gameClick(0);
             }
         });
         ImageButton bridgeButton = (ImageButton) alertDialog.findViewById(R.id.german_button);
         bridgeButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
+                alertDialog.dismiss();
                 gameClick(1);
             }
         });
         ImageButton spadesButton = (ImageButton) alertDialog.findViewById(R.id.spades_button);
         spadesButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
+                alertDialog.dismiss();
                 gameClick(2);
             }
         });
