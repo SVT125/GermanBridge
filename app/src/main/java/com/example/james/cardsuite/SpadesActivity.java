@@ -13,6 +13,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.DisplayMetrics;
+import android.view.ContextThemeWrapper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -318,7 +319,7 @@ public class SpadesActivity extends GameActivity {
 
     public void openGuessDialog(final int currentPlayer) {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.BidCustom));
         builder.setCancelable(false);
         HorizontalScrollView horizontalScrollView = new HorizontalScrollView(this);
         LinearLayout layout = new LinearLayout(this);
@@ -331,8 +332,9 @@ public class SpadesActivity extends GameActivity {
 
         TextView text = new TextView(this);
         text.setText("Player " + (currentPlayer + 1) + " bid");
-        text.setTextSize(16);
-        text.setPadding(5, 5, 5, 5);
+        text.setTextColor(getResources().getColor(R.color.spades_blue));
+        text.setTextSize(22);
+        text.setPadding(30, 50, 30, 30);
         text.setTypeface(null, Typeface.BOLD);
         builder.setCustomTitle(text);
         Button[] buttons = new Button[14];
@@ -340,13 +342,18 @@ public class SpadesActivity extends GameActivity {
         for (int i = 0; i <= 13; i++) {
             final RadioButton button = new RadioButton(this);
             button.setText(Integer.toString(i));
+            button.setTextSize(20);
+            button.setTextColor(getResources().getColor(R.color.spades_blue));
+            button.setBackgroundResource(R.drawable.bid_selected);
+            button.setButtonDrawable(R.color.transparent);
+            button.setPadding(50, 0, 50, 0);
             button.setTag(i);
             buttons[i] = button;
             group.addView(button);
         }
-
-        layout.addView(group);
-        layout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        llp.setMargins(50, 0, 0, 0);
+        layout.addView(group, llp);
         horizontalScrollView.addView(layout);
         horizontalScrollView.setLayoutParams(new AbsListView.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         builder.setView(horizontalScrollView);

@@ -275,7 +275,7 @@ public abstract class GameActivity extends Activity implements Serializable {
         sv.setSmoothScrollingEnabled(true);
         sv.addView(tableLayout);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.BidCustom));
         builder.setCancelable(false);
         builder.setView(sv);
         builder.setTitle("Scoreboard");

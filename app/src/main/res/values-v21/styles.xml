@@ -75,4 +75,8 @@
 
         <item name="android:textAlignment">center</item>
     </style>
+    <style name="TitleStyle">
+        <item name="android:textColor">@color/spades_blue</item>
+        <item name="android:textAlignment">center</item>
+    </style>
 </resources>
