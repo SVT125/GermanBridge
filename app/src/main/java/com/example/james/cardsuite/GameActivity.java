@@ -263,7 +263,7 @@ public abstract class GameActivity extends Activity implements Serializable {
 
                 textView.setGravity(Gravity.CENTER);
                 textView.setPadding(30, 5, 5, 5);
-                textView.setTextSize(15);
+                textView.setTextSize(20);
                 tableRow.addView(textView);
             }
             tableLayout.addView(tableRow);
