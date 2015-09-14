@@ -322,7 +322,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
         sv.setLayoutParams(scrollParams);
         sv.setSmoothScrollingEnabled(true);
         sv.addView(tableLayout);
-        
+
         AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.BidCustom));
         builder.setView(sv);
         builder.setCancelable(false);
