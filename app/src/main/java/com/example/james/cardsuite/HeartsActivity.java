@@ -8,6 +8,7 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -147,6 +148,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
                         if (manager.pot.size() > 0)
                             restOfRoundHandle();
 
+                        Log.i("Continue?", Boolean.toString((currentPotSize != 4 && !isRoundOver)));
                         if(currentPotSize != 4 && !isRoundOver) {
                             if (manager.getPlayers()[currentPlayerInteracting].isBot)
                                 botHandle(250);
@@ -328,23 +330,22 @@ public class HeartsActivity extends GameActivity implements Serializable {
                 potClear();
                 displayPot();
 
+                if (currentPotTurn == 13)
+                    finishedRound();
+                else {
+                    if (manager.getPlayers()[currentPlayerInteracting].isBot)
+                        botHandle(250);
+                    else {
+                        if (botCount != 3) {
+                            displayHands(-1, false);
+                            displayWaitScreen(currentPlayerInteracting);
+                        } else
+                            displayHands(currentPlayerInteracting, true);
+                        canClick = true;
+                    }
+                }
             }
         }, currentPlayerInteracting);
-
-        if (currentPotTurn == 13)
-            finishedRound();
-        else {
-            if (manager.getPlayers()[currentPlayerInteracting].isBot)
-                botHandle(250);
-            else {
-                if (botCount != 3) {
-                    displayHands(-1, false);
-                    displayWaitScreen(currentPlayerInteracting);
-                } else
-                    displayHands(currentPlayerInteracting, true);
-                canClick = true;
-            }
-        }
     }
 
     public void finishedRound() {
