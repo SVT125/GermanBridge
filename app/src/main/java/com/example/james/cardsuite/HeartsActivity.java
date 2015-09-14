@@ -118,7 +118,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
 
             if (!finishedSwapping) {
                 // Handle the player swapping cards
-                int swapRound = (manager.getPotsFinished() % 4) - 1;
+                int swapRound = (manager.getPotsFinished() - 1) % 4;
                 if (swapRound != 3) {
                     this.chooseCards(chosenCard, swapRound, v);
                 } else {
@@ -184,7 +184,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
     public void botHandle(final long delay) {
         if (!manager.isGameOver()) {
             if (!finishedSwapping) {
-                final int swapRound = (manager.getPotsFinished() % 4) - 1;
+                final int swapRound = (manager.getPotsFinished() - 1) % 4;
                 System.out.println(swapRound);
                 if (swapRound != 3) {
                     handler.postDelayed(new Runnable() {
@@ -456,7 +456,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
     // reshuffles deck, increments round count, resets all variables for the next round.
     public void reset() {
         manager.reset();
-        int swapRound = (manager.getPotsFinished() % 4) - 1;
+        int swapRound = (manager.getPotsFinished() - 1) % 4;
         if (swapRound != 4)
             finishedSwapping = false;
         displayedHeartsBroken = false;

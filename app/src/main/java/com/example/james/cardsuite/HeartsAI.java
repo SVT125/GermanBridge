@@ -155,7 +155,7 @@ public class HeartsAI extends HeartsPlayer implements Serializable {
         List<Card> placeable = findPlaceable(manager, manager.startPlayer);
 
         if (this.hand.size() == 13)
-            return placeable.get(0);
+            return (new Card(2, Card.Suit.CLUBS));
 
         // if person does not have queen of spades and has a safe hand for spades, place low spades
         if (!(this.hasCard(12, Card.Suit.SPADES)) && (suitWeights(Card.Suit.SPADES) < 3) && this.hasSuit(placeable, Card.Suit.SPADES))
