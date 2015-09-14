@@ -135,6 +135,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
 
                 final int lastPlayer = manager.startPlayer == 0 ? 3 : manager.startPlayer-1;
                 final boolean isRoundOver = manager.players[lastPlayer].hand.size() == 0;
+                final int currentPotSize = manager.pot.size();
                 GameAnimation.placeCard(HeartsActivity.this, v, new Runnable() {
                     @Override
                     public void run() {
@@ -146,18 +147,17 @@ public class HeartsActivity extends GameActivity implements Serializable {
                         if (manager.pot.size() > 0)
                             restOfRoundHandle();
 
-                        if (manager.getPlayers()[currentPlayerInteracting].isBot) {
-                            botHandle(250);
-                        } else {
-                            if(!isRoundOver) {
+                        if(currentPotSize != 4 && !isRoundOver) {
+                            if (manager.getPlayers()[currentPlayerInteracting].isBot)
+                                botHandle(250);
+                            else {
                                 if (botCount != 3) {
                                     displayHands(-1, false);
                                     displayWaitScreen(currentPlayerInteracting);
-                                }
-                                else
+                                } else
                                     displayHands(currentPlayerInteracting, true);
+                                canClick = true;
                             }
-                            canClick = true;
                         }
                     }
                 }, currentPlayerInteracting);
@@ -237,6 +237,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
 
                         final int lastPlayer = manager.startPlayer == 0 ? 3 : manager.startPlayer-1;
                         final boolean isRoundOver = manager.players[lastPlayer].hand.size() == 0;
+                        final int currentPotSize = manager.pot.size();
 
                         ImageView cardView = (ImageView) findViewByCard(botMove);
                         GameAnimation.placeCard(HeartsActivity.this, cardView, new Runnable() {
@@ -252,18 +253,17 @@ public class HeartsActivity extends GameActivity implements Serializable {
                                 if (finishedSwapping && (manager.pot.size() > 0))
                                     restOfRoundHandle();
 
-                                if (manager.getPlayers()[currentPlayerInteracting].isBot)
-                                    botHandle(250);
-                                else {
-                                    if(!isRoundOver) {
+                                if(currentPotSize != 4 && !isRoundOver) {
+                                    if (manager.getPlayers()[currentPlayerInteracting].isBot)
+                                        botHandle(250);
+                                    else {
                                         if (botCount != 3) {
                                             displayHands(-1, false);
                                             displayWaitScreen(currentPlayerInteracting);
-                                        }
-                                        else
+                                        } else
                                             displayHands(currentPlayerInteracting, true);
+                                        canClick = true;
                                     }
-                                    canClick = true;
                                 }
                             }
                         }, currentPlayerInteracting);
@@ -330,8 +330,21 @@ public class HeartsActivity extends GameActivity implements Serializable {
 
             }
         }, currentPlayerInteracting);
+
         if (currentPotTurn == 13)
             finishedRound();
+        else {
+            if (manager.getPlayers()[currentPlayerInteracting].isBot)
+                botHandle(250);
+            else {
+                if (botCount != 3) {
+                    displayHands(-1, false);
+                    displayWaitScreen(currentPlayerInteracting);
+                } else
+                    displayHands(currentPlayerInteracting, true);
+                canClick = true;
+            }
+        }
     }
 
     public void finishedRound() {
@@ -588,8 +601,10 @@ public class HeartsActivity extends GameActivity implements Serializable {
                                         displayHands(-1, false);
                                         displayWaitScreen(currentPlayerInteracting);
                                     }
-                                    else
+                                    else {
                                         displayHands(currentPlayerInteracting, true);
+                                        canClick = true;
+                                    }
                                 }
                             }
                         }
