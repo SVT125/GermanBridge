@@ -54,13 +54,15 @@
 
         <item name="android:background">@color/background</item>
 
-        <item name="android:titleTextAppearance">@color/spades_blue</item>
+        <item name="android:titleTextAppearance">@color/hearts_red</item>
 
         <item name="android:textAlignment">center</item>
 
         <item name="android:textColorPrimary">@color/hearts_red</item>
 
         <item name="android:textColor">@color/hearts_red</item>
+
+        <item name="android:colorAccent">@color/hearts_red</item>
     </style>
     <style name="BidCustom" parent="@android:style/Theme.Material.Dialog">
         <item name="android:colorPrimary">@color/background</item>
