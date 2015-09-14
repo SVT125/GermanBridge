@@ -144,7 +144,6 @@ public class GameAnimation {
                 //Hide the view once animation is done
                 heartsBrokenView.setMaxWidth(0);
                 heartsBrokenView.setMaxHeight(0);
-                heartsBrokenView.setAlpha(0f);
             }
         }).start();
     }
@@ -161,7 +160,6 @@ public class GameAnimation {
                 //Hide the view once animation is done
                 spadesBrokenView.setMaxWidth(0);
                 spadesBrokenView.setMaxHeight(0);
-                spadesBrokenView.setAlpha(0f);
             }
         }).start();
     }
