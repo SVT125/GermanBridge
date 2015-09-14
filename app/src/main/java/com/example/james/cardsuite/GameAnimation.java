@@ -46,8 +46,8 @@ public class GameAnimation {
     }
 
     //TODO - Replace manually setting alpha with actual ViewPropertyAnimator usage, noting that VPA moves the actual view's location.
-    public static void collectEndPile(GameActivity activity, final Runnable endAction, int winningPlayer) {
-        int[] pileCoordinates = new int[2];
+    public static void collectEndPile(final GameActivity activity, final Runnable endAction, int winningPlayer) {
+        final int[] pileCoordinates = new int[2];
 
         View pile = null;
         switch(winningPlayer) {
@@ -69,43 +69,49 @@ public class GameAnimation {
                 pileCoordinates[1] += pile.getHeight()/2; break;
         }
 
-        for(int i = 0; i < 4; i++) {
-            int[] potCoordinates = new int[2];
-            View v = null;
-            switch(i) {
-                case 0: v = activity.findViewById(R.id.bottomPotCard); break;
-                case 1: v = activity.findViewById(R.id.leftPotCard); break;
-                case 2: v = activity.findViewById(R.id.topPotCard); break;
-                case 3: v = activity.findViewById(R.id.rightPotCard); break;
-            }
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                for(int i = 0; i < 4; i++) {
+                    int[] potCoordinates = new int[2];
+                    View v = null;
+                    switch(i) {
+                        case 0: v = activity.findViewById(R.id.bottomPotCard); break;
+                        case 1: v = activity.findViewById(R.id.leftPotCard); break;
+                        case 2: v = activity.findViewById(R.id.topPotCard); break;
+                        case 3: v = activity.findViewById(R.id.rightPotCard); break;
+                    }
 
-            if(v.getTag() == (Integer)0)
-                continue;
-            v.getLocationOnScreen(potCoordinates);
+                    if(v.getTag() == (Integer)0)
+                        continue;
+                    v.getLocationOnScreen(potCoordinates);
 
-            v.setAlpha(0.25f);
-            TranslateAnimation ta = new TranslateAnimation(0,pileCoordinates[0]-potCoordinates[0],0,pileCoordinates[1]-potCoordinates[1]);
-            ta.setDuration(250);
+                    v.setAlpha(0.25f);
+                    TranslateAnimation ta = new TranslateAnimation(0,pileCoordinates[0]-potCoordinates[0],0,pileCoordinates[1]-potCoordinates[1]);
+                    ta.setDuration(250);
 
-            //Condition (i == 3) is arbitrary; enforce that the Runnable is only run once of the 4 animations.
-            final int index = i;
-            final View view = v;
-            ta.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {}
+                    //Condition (i == 3) is arbitrary; enforce that the Runnable is only run once of the 4 animations.
+                    final int index = i;
+                    final View view = v;
+                    ta.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {}
 
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    view.setAlpha(1f);
-                    if(endAction != null && index == 3)
-                        handler.post(endAction);
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            view.setAlpha(1f);
+                            if(endAction != null && index == 3)
+                                handler.post(endAction);
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {}
+                    });
+                    v.startAnimation(ta);
                 }
+            }
+        },500);
 
-                @Override
-                public void onAnimationRepeat(Animation animation) {}
-            });
-            v.startAnimation(ta);
-        }
     }
 
     public static void selectSwappedCard(View v, int currentPlayer) {
