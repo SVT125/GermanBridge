@@ -289,6 +289,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
         Intent intent = new Intent(HeartsActivity.this, ResultsActivity.class);
         intent.putExtra("manager", manager);
         intent.putExtra("players", manager.getPlayers());
+        intent.putExtra("game_mode",0);
         startActivity(intent);
         finish();
     }

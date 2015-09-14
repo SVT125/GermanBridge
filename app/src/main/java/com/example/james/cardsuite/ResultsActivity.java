@@ -22,12 +22,16 @@ public class ResultsActivity extends Activity {
         Manager manager = (Manager)intent.getSerializableExtra("manager");
         Player[] players = (Player[])intent.getSerializableExtra("players");
         int[] scores = (int[])intent.getSerializableExtra("scores");
+        int gameMode = (Integer)intent.getSerializableExtra("game_mode");
         manager.players = players;
         for(int i = 0; i < 4; i++)
             manager.players[i].score = scores[i];
 
         TextView resultsView = (TextView)findViewById(R.id.resultsView);
-        resultsView.setText("Player " + (manager.findWinner()+1) + " won the game!");
+        if(gameMode == 2)
+            resultsView.setText("Players " +(manager.findWinner()+1) + " and " + ((manager.findWinner()+2)%4+1) + " won the game!");
+        else
+            resultsView.setText("Player " + (manager.findWinner()+1) + " won the game!");
 
         AdView mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();

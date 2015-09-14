@@ -271,6 +271,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
         intent.putExtra("players", manager.players);
         intent.putExtra("scores", new int[]{manager.players[0].score, manager.players[1].score,
                 manager.players[2].score, manager.players[3].score});
+        intent.putExtra("game_mode",1);
         startActivity(intent);
         finish();
     }
@@ -384,7 +385,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
 
     //Opens the guess dialog - fit for German Bridge for now.
     public void openGuessDialog(final int currentPlayer) {
-        Log.i("current P", "" + currentPlayer);
+        //displayHands(currentPlayer,false);
         AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.BidCustom));
         builder.setCancelable(false);
         HorizontalScrollView horizontalScrollView = new HorizontalScrollView(this);

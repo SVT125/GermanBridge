@@ -319,7 +319,6 @@ public class SpadesActivity extends GameActivity {
     }
 
     public void openGuessDialog(final int currentPlayer) {
-
         AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.BidCustom));
         builder.setCancelable(false);
         HorizontalScrollView horizontalScrollView = new HorizontalScrollView(this);
@@ -454,6 +453,7 @@ public class SpadesActivity extends GameActivity {
         intent.putExtra("players", manager.players);
         intent.putExtra("scores", new int[]{manager.players[0].score, manager.players[1].score,
                 manager.players[2].score, manager.players[3].score});
+        intent.putExtra("game_mode",2);
         startActivity(intent);
         finish();
     }
