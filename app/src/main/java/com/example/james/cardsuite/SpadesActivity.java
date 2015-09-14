@@ -365,15 +365,16 @@ public class SpadesActivity extends GameActivity {
                 @Override
                 public void onClick(View v) {
                     if (guess == (Integer) button.getTag()) {
-                        manager.addedGuesses += guess;
                         ((SpadesPlayer) manager.players[currentPlayer]).bid = guess;
+                        ((SpadesPlayer) manager.players[currentPlayer]).totalBid += guess;
+                        ((SpadesPlayer) manager.players[currentPlayer]).partner.totalBid += guess;
+                        displayEndPiles(scores);
 
                         d.dismiss();
                         guessCount++;
                         //Finished guessing, now move to actual gameplay.
                         if (guessCount == 4) {
                             currentPlayerInteracting = manager.findStartPlayer();
-                            ((SpadesManager) manager).addBids();
                             if (isBot[currentPlayerInteracting])
                                 botHandle(250);
                             else {
@@ -396,7 +397,11 @@ public class SpadesActivity extends GameActivity {
                             handler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    ((SpadesPlayer) manager.getPlayers()[currentFinalPlayer]).bid = SpadesAI.getBid(currentFinalPlayer, (SpadesManager) manager);
+                                    int tempBid = SpadesAI.getBid(currentFinalPlayer, (SpadesManager) manager);
+                                    ((SpadesPlayer) manager.getPlayers()[currentFinalPlayer]).bid = tempBid;
+                                    ((SpadesPlayer) manager.players[currentFinalPlayer]).totalBid += tempBid;
+                                    ((SpadesPlayer) manager.players[currentFinalPlayer]).partner.totalBid += tempBid;
+                                    displayEndPiles(scores);
                                     if (currentGuessCount == 4) {
                                         currentPlayerInteracting = manager.findStartPlayer();
                                         ((SpadesManager) manager).addBids();

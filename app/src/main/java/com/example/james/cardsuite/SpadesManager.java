@@ -48,7 +48,6 @@ public class SpadesManager extends Manager implements Serializable {
 	}
 	
 	public void reset() {
-		potsFinished++;
 		pot = new HashMap<Integer,Card>();
 		spadesBroken = false;
 		// make deck
