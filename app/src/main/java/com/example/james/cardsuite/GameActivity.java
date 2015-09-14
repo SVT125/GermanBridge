@@ -277,13 +277,13 @@ public abstract class GameActivity extends Activity implements Serializable {
         sv.setSmoothScrollingEnabled(true);
         sv.addView(tableLayout);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.BidCustom));
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false);
         builder.setView(sv);
         builder.setTitle("Scoreboard");
-        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+        builder.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
             @Override
-            public void onDismiss(DialogInterface dialog) {
+            public void onClick(DialogInterface dialog, int which) {
                 if(closeAction != null)
                     handler.post(closeAction);
             }
