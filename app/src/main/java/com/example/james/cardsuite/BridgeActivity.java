@@ -12,9 +12,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.util.DisplayMetrics;
 import android.view.ContextThemeWrapper;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,9 +28,6 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
-import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 
 import java.io.FileInputStream;
@@ -40,7 +35,6 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -565,78 +559,6 @@ public class BridgeActivity extends GameActivity implements Serializable {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_bridge, menu);
         return true;
-    }
-
-    //TODO - Close action as an argument here is useless, never used.
-    @Override
-    public void displayScoreTable(Runnable closeAction) {
-        String[] column = {"Player 1", "Player 2", "Player 3", "Player 4"};
-        List<String> row = new ArrayList<>();
-        for (int i = 1; i <= manager.getPotsFinished() - 1; i++)
-            row.add("Round " + (i));
-
-        TableLayout tableLayout = new TableLayout(this);
-        tableLayout.setLayoutParams(new LinearLayout.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.MATCH_PARENT));
-        LinearLayout.LayoutParams rowParams = new LinearLayout.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT,
-                AbsListView.LayoutParams.MATCH_PARENT);
-        rowParams.gravity = Gravity.CENTER_VERTICAL;
-        rowParams.setMargins(10, 5, 10, 5);
-
-
-        for (int i = 0; i <= row.size(); i++) {
-            TableRow tableRow = new TableRow(this);
-            tableRow.setLayoutParams(rowParams);
-
-            for (int j = 0; j <= column.length; j++) {
-
-                TextView textView = new TextView(this);
-                if (i == 0 && j == 0)
-                    textView.setText("");
-                else if (i == 0) {
-                    textView.setText(column[j - 1]);
-                    textView.setTypeface(null, Typeface.BOLD);
-                } else if (j == 0) {
-                    textView.setText(row.get(i - 1));
-                    textView.setTypeface(null, Typeface.BOLD);
-                } else if (i != 0 && j != 0)
-                    textView.setText(Integer.toString(manager.getPlayers()[j - 1].scoreHistory.get(i - 1)));
-
-                textView.setGravity(Gravity.CENTER);
-                textView.setPadding(30, 5, 5, 5);
-                textView.setTextSize(15);
-                tableRow.addView(textView);
-            }
-            tableLayout.addView(tableRow);
-        }
-
-        ScrollView sv = new ScrollView(this);
-        LinearLayout.LayoutParams scrollParams = new LinearLayout.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT,
-                AbsListView.LayoutParams.MATCH_PARENT);
-        sv.setPadding(10, 20, 10, 20);
-        sv.setLayoutParams(scrollParams);
-        sv.setSmoothScrollingEnabled(true);
-        sv.addView(tableLayout);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setView(sv);
-        builder.setTitle("Scoreboard");
-        builder.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // resets deck, hands, etc. and increments round
-                reset();
-
-                //Redisplay the trump
-                ImageView trumpView = (ImageView) findViewById(R.id.trumpView);
-                Card trumpCard = ((BridgeManager) manager).trumpCard;
-                trumpView.setImageResource(getResources().getIdentifier(trumpCard.getAddress(), "drawable", getPackageName()));
-                trumpView.setMaxHeight(150);
-                trumpView.setAdjustViewBounds(true);
-
-                dealCards();
-            }
-        });
-        builder.show();
     }
 
     public void dealCards() {

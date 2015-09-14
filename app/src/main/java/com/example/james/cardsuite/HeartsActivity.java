@@ -458,8 +458,9 @@ public class HeartsActivity extends GameActivity implements Serializable {
     public void reset() {
         manager.reset();
         int swapRound = (manager.getPotsFinished() - 1) % 4;
-        if (swapRound != 4)
+        if (swapRound != 3) {
             finishedSwapping = false;
+        }
         displayedHeartsBroken = false;
         animationsActive = new HashMap<View, Integer>();
         initialOutputWritten = false;
@@ -602,10 +603,9 @@ public class HeartsActivity extends GameActivity implements Serializable {
                                         displayHands(-1, false);
                                         displayWaitScreen(currentPlayerInteracting);
                                     }
-                                    else {
+                                    else
                                         displayHands(currentPlayerInteracting, true);
-                                        canClick = true;
-                                    }
+                                    canClick = true;
                                 }
                             }
                         }
