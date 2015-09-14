@@ -468,6 +468,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
         currentPlayerInteracting = 0;
         chosenLists.clear();
         chosenCards.clear();
+        findViewById(R.id.heartsBrokenView).setAlpha(1f);
     }
 
     //Call when the end piles and the scores displayed on top of the piles need be redisplayed.

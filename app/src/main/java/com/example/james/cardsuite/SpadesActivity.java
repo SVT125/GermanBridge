@@ -280,6 +280,7 @@ public class SpadesActivity extends GameActivity {
         while (isBot[currentPlayerInteracting]) {
             currentPlayerInteracting++;
         }
+        findViewById(R.id.spadesBrokenView).setAlpha(1f);
     }
 
     //Call when the end piles and the scores displayed on top of the piles need be redisplayed.

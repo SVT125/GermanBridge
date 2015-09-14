@@ -142,9 +142,9 @@ public class GameAnimation {
             @Override
             public void run() {
                 //Hide the view once animation is done
-                heartsBrokenView.setMaxWidth(0);
-                heartsBrokenView.setMaxHeight(0);
-                heartsBrokenView.setAlpha(1f);
+                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)heartsBrokenView.getLayoutParams();
+                params.width = 0;
+                params.height = 0;
             }
         }).start();
     }
@@ -159,9 +159,9 @@ public class GameAnimation {
             @Override
             public void run() {
                 //Hide the view once animation is done
-                spadesBrokenView.setMaxWidth(0);
-                spadesBrokenView.setMaxHeight(0);
-                spadesBrokenView.setAlpha(1f);
+                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)spadesBrokenView.getLayoutParams();
+                params.width = 0;
+                params.height = 0;
             }
         }).start();
     }
