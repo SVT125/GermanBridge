@@ -187,7 +187,6 @@ public class HeartsActivity extends GameActivity implements Serializable {
         if (!manager.isGameOver()) {
             if (!finishedSwapping) {
                 final int swapRound = (manager.getPotsFinished() - 1) % 4;
-                System.out.println(swapRound);
                 if (swapRound != 3) {
                     handler.postDelayed(new Runnable() {
                         @Override
@@ -649,7 +648,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
             fis.close();
             deleteFile("save_hearts");
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
     }
 
