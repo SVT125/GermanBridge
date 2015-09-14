@@ -201,11 +201,11 @@ public abstract class GameActivity extends Activity implements Serializable {
 
     // Called at the end of a round when all four players have added their cards; clears the pot using given IDs 100-103.
     public void potClear() {
-        RelativeLayout potLayout = (RelativeLayout)findViewById(R.id.potLayout);
-        for(int i = 0; i < 5; i++) {
-            ImageView potView = (ImageView)potLayout.getChildAt(i);
-            potView.setImageResource(0);
-            potView.setTag(0);
+        View[] potViews = new View[] {findViewById(R.id.leftPotCard),findViewById(R.id.topPotCard),
+            findViewById(R.id.rightPotCard),findViewById(R.id.bottomPotCard)};
+        for(View v : potViews) {
+            ((ImageView)v).setImageResource(0);
+            v.setTag(0);
         }
     }
 
