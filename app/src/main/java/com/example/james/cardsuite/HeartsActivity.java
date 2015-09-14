@@ -594,17 +594,32 @@ public class HeartsActivity extends GameActivity implements Serializable {
                         @Override
                         public void run() {
                             displayIntermediateHands(cardsDisplayed);
+                            int swapRound = (manager.getPotsFinished() - 1) % 4;
 
                             if (cardsDisplayed == manager.players[0].hand.size() - 1) {
-                                if (manager.getPlayers()[currentPlayerInteracting].isBot)
-                                    botHandle(250);
-                                else {
-                                    if (botCount != 3) {
-                                        displayHands(-1, false);
-                                        displayWaitScreen(currentPlayerInteracting);
+                                if (swapRound == 3) {
+                                    findStartPlayer();
+                                    if (manager.getPlayers()[currentPlayerInteracting].isBot)
+                                        botHandle(250);
+                                    else {
+                                        if (botCount != 3) {
+                                            displayHands(-1, false);
+                                            displayWaitScreen(currentPlayerInteracting);
+                                        } else
+                                            displayHands(currentPlayerInteracting, true);
+                                        canClick = true;
                                     }
-                                    else
-                                        displayHands(currentPlayerInteracting, true);
+                                }
+                                else {
+                                    if (manager.getPlayers()[currentPlayerInteracting].isBot)
+                                        botHandle(250);
+                                    else {
+                                        if (botCount != 3) {
+                                            displayHands(-1, false);
+                                            displayWaitScreen(currentPlayerInteracting);
+                                        } else
+                                            displayHands(currentPlayerInteracting, true);
+                                    }
                                     canClick = true;
                                 }
                             }
