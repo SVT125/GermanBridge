@@ -104,30 +104,23 @@ public class SpadesManager extends Manager implements Serializable {
 		}
 		return true;
 	}
-
-	public void addBids() {
-		((SpadesPlayer)(getPlayers()[0])).totalBid = ((SpadesPlayer)(getPlayers()[0])).bid + ((SpadesPlayer)(getPlayers()[2])).bid;
-		((SpadesPlayer)(getPlayers()[2])).totalBid = ((SpadesPlayer)(getPlayers()[0])).bid + ((SpadesPlayer)(getPlayers()[2])).bid;
-		((SpadesPlayer)(getPlayers()[1])).totalBid = ((SpadesPlayer)(getPlayers()[1])).bid + ((SpadesPlayer)(getPlayers()[3])).bid;
-		((SpadesPlayer)(getPlayers()[3])).totalBid = ((SpadesPlayer)(getPlayers()[1])).bid + ((SpadesPlayer)(getPlayers()[3])).bid;
-	}
 	
 	public void potAnalyze() {
 		Card winCard = null;
 		for (Entry<Integer, Card> entry : pot.entrySet()) {
-			if (entry.getValue().getSuit() == startSuit) {
+			if (entry.getValue().getSuit().equals(startSuit) && !startSuit.equals(Card.Suit.SPADES)) {
 				if (winCard == null) {
 					winCard = entry.getValue();
 					startPlayer = entry.getKey();
 				}
-				else if (entry.getValue().getCardNumber() > winCard.getCardNumber()){
+				else if (entry.getValue().getCardNumber() > winCard.getCardNumber() && !(winCard.getSuit().equals(Card.Suit.SPADES))){
 					winCard = entry.getValue();
 					startPlayer = entry.getKey();
 				}
 			}
 			// if spades exists, it tops normal cards
-			else if (entry.getValue().getSuit() == Card.Suit.SPADES) {
-				if (winCard == null || winCard.getSuit() != Card.Suit.SPADES) {
+			else if (entry.getValue().getSuit().equals(Card.Suit.SPADES)) {
+				if (winCard == null || !(winCard.getSuit().equals(Card.Suit.SPADES))) {
 					winCard = entry.getValue();
 					startPlayer = entry.getKey();
 				}

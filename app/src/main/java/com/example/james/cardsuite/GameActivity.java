@@ -95,6 +95,8 @@ public abstract class GameActivity extends Activity implements Serializable {
     }
 
     public void menuClick(View v) {
+        if (!canClick)
+            return;
         AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.pauseScreen));
         builder.setTitle("Game Paused");
         LayoutInflater inflater = (LayoutInflater)getApplicationContext().getSystemService

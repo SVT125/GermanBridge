@@ -36,7 +36,7 @@ public class SpadesAI implements Serializable {
         spadesBid += suitBids(Card.Suit.CLUBS, currentPlayer, manager, spadesBid < trumpNums.size());
         spadesBid += suitBids(Card.Suit.HEARTS, currentPlayer, manager, spadesBid < trumpNums.size());
         spadesBid += suitBids(Card.Suit.DIAMONDS, currentPlayer, manager, spadesBid < trumpNums.size());
-
+        
         return (int)Math.round(spadesBid);
     }
 

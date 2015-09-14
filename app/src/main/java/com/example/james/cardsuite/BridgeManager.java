@@ -81,7 +81,7 @@ public class BridgeManager extends Manager implements Serializable {
 		Card winCard = null;
 		for (Entry<Integer, Card> entry : pot.entrySet()) {
 			if (entry.getValue().getSuit() == startSuit) {
-				if (winCard == null || entry.getValue().getCardNumber() > winCard.getCardNumber()) {
+				if (winCard == null || entry.getValue().getCardNumber() > winCard.getCardNumber() && !(winCard.getSuit().equals(trumpSuit))) {
 					winCard = entry.getValue();
 					startPlayer = entry.getKey();
 				}

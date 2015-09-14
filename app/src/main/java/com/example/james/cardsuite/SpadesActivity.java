@@ -404,7 +404,6 @@ public class SpadesActivity extends GameActivity {
                                     displayEndPiles(scores);
                                     if (currentGuessCount == 4) {
                                         currentPlayerInteracting = manager.findStartPlayer();
-                                        ((SpadesManager) manager).addBids();
                                         if (isBot[currentPlayerInteracting])
                                             botHandle(250);
                                         else {
@@ -576,7 +575,6 @@ public class SpadesActivity extends GameActivity {
                                 while (isBot[player]) {
                                     if (guessCount == 4) {
                                         currentPlayerInteracting = manager.findStartPlayer();
-                                        ((SpadesManager) manager).addBids();
                                         if (isBot[currentPlayerInteracting])
                                             botHandle(250);
                                         else {
@@ -589,13 +587,16 @@ public class SpadesActivity extends GameActivity {
                                         }
                                         return;
                                     }
-                                    ((SpadesPlayer) manager.getPlayers()[player]).bid = SpadesAI.getBid(player, (SpadesManager) manager);
+                                    int tempBid = SpadesAI.getBid(player, (SpadesManager) manager);
+                                    ((SpadesPlayer) manager.getPlayers()[player]).bid = tempBid;
+                                    ((SpadesPlayer) manager.players[player]).totalBid += tempBid;
+                                    ((SpadesPlayer) manager.players[player]).partner.totalBid += tempBid;
+                                    displayEndPiles(scores);
                                     guessCount++;
                                     player = (player + 1) % 4;
                                 }
                                 if (guessCount == 4) {
                                     currentPlayerInteracting = manager.findStartPlayer();
-                                    ((SpadesManager) manager).addBids();
                                     if (isBot[currentPlayerInteracting])
                                         botHandle(250);
                                     else {
