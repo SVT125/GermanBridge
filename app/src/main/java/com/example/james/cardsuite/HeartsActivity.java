@@ -45,6 +45,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
         if (loadGame) {
             this.loadGame();
             this.displayPot();
+            displayEndPiles(roundScores);
         } else {
             this.isBot = intent.getBooleanArrayExtra("isBot");
             manager = new HeartsManager(isBot);
@@ -62,8 +63,6 @@ public class HeartsActivity extends GameActivity implements Serializable {
                 }
             }
         }
-
-        displayEndPiles(scores);
 
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);

@@ -127,8 +127,10 @@ public abstract class GameActivity extends Activity implements Serializable {
         });
         exitMenu.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                dlg.dismiss();
-                promptExit(v);
+                if (canClick) {
+                    dlg.dismiss();
+                    promptExit(v);
+                }
             }
         });
         dlg.show();
@@ -279,9 +281,9 @@ public abstract class GameActivity extends Activity implements Serializable {
         builder.setCancelable(false);
         builder.setView(sv);
         builder.setTitle("Scoreboard");
-        builder.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onDismiss(DialogInterface dialog) {
                 if(closeAction != null)
                     handler.post(closeAction);
             }

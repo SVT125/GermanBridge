@@ -324,12 +324,12 @@ public class BridgeActivity extends GameActivity implements Serializable {
         sv.setSmoothScrollingEnabled(true);
         sv.addView(tableLayout);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final AlertDialog builder = new AlertDialog.Builder(this).create();
         builder.setView(sv);
         builder.setTitle("Scoreboard");
-        builder.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onDismiss(DialogInterface dialog) {
                 // resets deck, hands, etc. and increments round
                 reset();
 
@@ -342,6 +342,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
 
                 dealCards();
             }
+
         });
         builder.show();
     }
