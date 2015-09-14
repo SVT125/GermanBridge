@@ -12,6 +12,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.Menu;
@@ -159,7 +160,6 @@ public class BridgeActivity extends GameActivity implements Serializable {
         } else
             endGame();
     }
-
 
     // Executes AI moves for the next player onwards, stopping once we're on a player that isn't a bot.
     // This mutates currentPlayerInteracting (to the next non-AI player or player whose hand is empty) and the pot as it loops.
@@ -384,7 +384,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
 
     //Opens the guess dialog - fit for German Bridge for now.
     public void openGuessDialog(final int currentPlayer) {
-
+        Log.i("current P", "" + currentPlayer);
         AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.BidCustom));
         builder.setCancelable(false);
         HorizontalScrollView horizontalScrollView = new HorizontalScrollView(this);
@@ -423,18 +423,16 @@ public class BridgeActivity extends GameActivity implements Serializable {
             buttons[i] = button;
             group.addView(button);
         }
-        LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         llp.setMargins(50,0,0,0);
         layout.addView(group, llp);
         horizontalScrollView.addView(layout);
         horizontalScrollView.setLayoutParams(new AbsListView.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         builder.setView(horizontalScrollView);
         final AlertDialog d = builder.create();
-        WindowManager.LayoutParams wmlp = d.getWindow().getAttributes();
 
+        WindowManager.LayoutParams wmlp = d.getWindow().getAttributes();
         //wmlp.gravity = Gravity.TOP | Gravity.RIGHT;
-        wmlp.x = 150;   //x position
-        wmlp.y = 0;   //y position
 
         for (final Button button : buttons) {
             button.setOnClickListener(new View.OnClickListener() {
@@ -519,8 +517,8 @@ public class BridgeActivity extends GameActivity implements Serializable {
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
 
         lp.copyFrom(d.getWindow().getAttributes());
-        lp.width = 1000;
-        lp.height = 400;
+        lp.width = biddingWidthPX;
+        lp.height = biddingHeightPX;
         d.getWindow().setAttributes(lp);
     }
 

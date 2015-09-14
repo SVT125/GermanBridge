@@ -44,7 +44,7 @@ public abstract class GameActivity extends Activity implements Serializable {
     protected Manager manager;
     protected int currentPlayerInteracting = 0, currentPotTurn = 0, firstNonBot = 0, lastNonBot = 0;
     //DP to pixel values to use...
-    protected int cardWidthPX, cardHeightPX, cardDeltaXPX, bottomTopMarginPX, rightLeftMarginPX;
+    protected int cardWidthPX, cardHeightPX, cardDeltaXPX, bottomTopMarginPX, rightLeftMarginPX, biddingWidthPX, biddingHeightPX;
     private int soundsLoaded = 0;
     protected long lastClickTime = 0;
     protected boolean[] isBot = new boolean[4];
@@ -92,6 +92,8 @@ public abstract class GameActivity extends Activity implements Serializable {
         cardDeltaXPX = (int)Math.ceil(20 * metrics.density);
         bottomTopMarginPX = (int)Math.ceil(42 * metrics.density);
         rightLeftMarginPX = (int)Math.ceil(72 * metrics.density);
+        biddingWidthPX = (int)Math.ceil(300 * metrics.density);
+        biddingHeightPX = (int)Math.ceil(125 * metrics.density);
     }
 
     public void menuClick(View v) {
