@@ -171,6 +171,9 @@ public class BridgeActivity extends GameActivity implements Serializable {
                     Card bestMove = BridgeAI.chooseMove(currentPlayerInteracting, (BridgeManager) manager, levelsToSearch);
                     int chosenAI = manager.players[currentPlayerInteracting].hand.indexOf(bestMove);
                     manager.potHandle(chosenAI, currentPlayerInteracting);
+                    final int currentPotSize = manager.pot.size();
+                    final int lastPlayer = manager.startPlayer == 0 ? 3 : manager.startPlayer - 1;
+                    final int lastPlayerHandSize = manager.players[lastPlayer].hand.size();
 
                     ImageView cardView = (ImageView) findViewByCard(bestMove);
                     GameAnimation.placeCard(BridgeActivity.this, cardView, new Runnable() {
@@ -178,10 +181,6 @@ public class BridgeActivity extends GameActivity implements Serializable {
                         public void run() {
                             potClear();
                             displayPot();
-
-                            final int currentPotSize = manager.pot.size();
-                            final int lastPlayer = manager.startPlayer == 0 ? 3 : manager.startPlayer - 1;
-                            final int lastPlayerHandSize = manager.players[lastPlayer].hand.size();
 
                             displayHands(lastNonBot, false);
                             int chosenSound = r.nextInt(3);
