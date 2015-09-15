@@ -139,7 +139,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
                 GameAnimation.placeCard(HeartsActivity.this, v, new Runnable() {
                     @Override
                     public void run() {
-                        displayHands(currentPlayerInteracting, false);
+                        displayHands(currentPlayerInteracting, false, true);
 
                         potClear();
                         displayPot();
@@ -153,10 +153,10 @@ public class HeartsActivity extends GameActivity implements Serializable {
                                 botHandle(250);
                             else {
                                 if (botCount != 3) {
-                                    displayHands(-1, false);
+                                    displayHands(-1, false, true);
                                     displayWaitScreen(currentPlayerInteracting);
                                 } else
-                                    displayHands(currentPlayerInteracting, true);
+                                    displayHands(currentPlayerInteracting, true, true);
                                 canClick = true;
                             }
                         }
@@ -170,11 +170,11 @@ public class HeartsActivity extends GameActivity implements Serializable {
             } else if (!finishedSwapping && chosenCards.size() == 0) {
                 //This is only executed to display the hand of the next player during the swapping phase/end of turn in game phase.
                 if (botCount != 3) {
-                    displayHands(-1, false);
+                    displayHands(-1, false, true);
                     displayWaitScreen(currentPlayerInteracting);
                 }
                 else
-                    displayHands(currentPlayerInteracting, true);
+                    displayHands(currentPlayerInteracting, true, true);
 
                 canClick = true;
             }
@@ -210,13 +210,13 @@ public class HeartsActivity extends GameActivity implements Serializable {
                             if (manager.getPlayers()[currentPlayerInteracting].isBot)
                                 botHandle(250);
                             else {
-                                displayHands(-1, false);
+                                displayHands(-1, false, true);
                                 if (botCount != 3) {
-                                    displayHands(-1, false);
+                                    displayHands(-1, false, true);
                                     displayWaitScreen(currentPlayerInteracting);
                                 }
                                 else
-                                    displayHands(currentPlayerInteracting, true);
+                                    displayHands(currentPlayerInteracting, true, true);
                                 canClick = true;
                             }
                         }
@@ -246,7 +246,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
                                 potClear();
                                 displayPot();
 
-                                displayHands(lastNonBot, false);
+                                displayHands(lastNonBot, false, true);
                                 int chosenSound = r.nextInt(3);
                                 soundPools[chosenSound].play(sounds[chosenSound], sfxVolume, sfxVolume, 0, 0, 1);
 
@@ -258,10 +258,10 @@ public class HeartsActivity extends GameActivity implements Serializable {
                                         botHandle(250);
                                     else {
                                         if (botCount != 3) {
-                                            displayHands(-1, false);
+                                            displayHands(-1, false, true);
                                             displayWaitScreen(currentPlayerInteracting);
                                         } else
-                                            displayHands(currentPlayerInteracting, true);
+                                            displayHands(currentPlayerInteracting, true, true);
                                         canClick = true;
                                     }
                                 }
@@ -336,10 +336,10 @@ public class HeartsActivity extends GameActivity implements Serializable {
                         botHandle(250);
                     else {
                         if (botCount != 3) {
-                            displayHands(-1, false);
+                            displayHands(-1, false, true);
                             displayWaitScreen(currentPlayerInteracting);
                         } else
-                            displayHands(currentPlayerInteracting, true);
+                            displayHands(currentPlayerInteracting, true, true);
                         canClick = true;
                     }
                 }
@@ -430,11 +430,11 @@ public class HeartsActivity extends GameActivity implements Serializable {
                 //This is run under the assumption the start player will be found below as the animation is run.
                 findStartPlayer();
                 if (botCount != 3) {
-                    displayHands(-1, false);
+                    displayHands(-1, false, true);
                     displayWaitScreen(findNextNonBot(manager.startPlayer));
                 }
                 else
-                    displayHands(findNextNonBot(manager.startPlayer), true);
+                    displayHands(findNextNonBot(manager.startPlayer), true, true);
                 canClick = true;
             }
         }, animationsActive);
@@ -483,7 +483,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
     }
 
     //Call when the hands have been updated and need be redisplayed.
-    public void displayHands(int player, boolean cardsClickable) {
+    public void displayHands(int player, boolean cardsClickable, boolean cardsShadeable) {
         //Remove all old cards first
         cardViews.clear();
         if (buttonsPresent) {
@@ -532,7 +532,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
 
                     //Tint and make the card unselectable if it's not meant to be.
                     Card selectCard = manager.getPlayers()[i].hand.get(j);
-                    if (!(manager.cardSelectable(selectCard, finishedSwapping, i))) {
+                    if (!(manager.cardSelectable(selectCard, finishedSwapping, i)) && cardsShadeable) {
                         cardButton.setColorFilter(Color.parseColor("#78505050"), PorterDuff.Mode.SRC_ATOP);
                         cardButton.setClickable(false);
                     }
@@ -603,10 +603,10 @@ public class HeartsActivity extends GameActivity implements Serializable {
                                         botHandle(250);
                                     else {
                                         if (botCount != 3) {
-                                            displayHands(-1, false);
+                                            displayHands(-1, false, true);
                                             displayWaitScreen(currentPlayerInteracting);
                                         } else
-                                            displayHands(currentPlayerInteracting, true);
+                                            displayHands(currentPlayerInteracting, true, true);
                                         canClick = true;
                                     }
                                 }
@@ -615,10 +615,10 @@ public class HeartsActivity extends GameActivity implements Serializable {
                                         botHandle(250);
                                     else {
                                         if (botCount != 3) {
-                                            displayHands(-1, false);
+                                            displayHands(-1, false, true);
                                             displayWaitScreen(currentPlayerInteracting);
                                         } else
-                                            displayHands(currentPlayerInteracting, true);
+                                            displayHands(currentPlayerInteracting, true, true);
                                     }
                                     canClick = true;
                                 }

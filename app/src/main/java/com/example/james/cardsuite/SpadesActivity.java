@@ -129,7 +129,7 @@ public class SpadesActivity extends GameActivity {
             GameAnimation.placeCard(this, v, new Runnable() {
                 @Override
                 public void run() {
-                    displayHands(currentPlayerInteracting, false);
+                    displayHands(currentPlayerInteracting, false, true);
                     potClear();
                     displayPot();
                     final int currentPotSize = manager.pot.size();
@@ -146,10 +146,10 @@ public class SpadesActivity extends GameActivity {
                             botHandle(250);
                         else {
                             if (botCount != 3) {
-                                displayHands(-1, false);
+                                displayHands(-1, false, true);
                                 displayWaitScreen(currentPlayerInteracting);
                             } else
-                                displayHands(currentPlayerInteracting, true);
+                                displayHands(currentPlayerInteracting, true, true);
                             canClick = true;
                         }
                     }
@@ -184,7 +184,7 @@ public class SpadesActivity extends GameActivity {
                             potClear();
                             displayPot();
 
-                            displayHands(lastNonBot, false);
+                            displayHands(lastNonBot, false, true);
                             int chosenSound = r.nextInt(3);
                             soundPools[chosenSound].play(sounds[chosenSound], sfxVolume, sfxVolume, 0, 0, 1);
 
@@ -199,11 +199,11 @@ public class SpadesActivity extends GameActivity {
                                     botHandle(250);
                                 } else {
                                     if (botCount != 3) {
-                                        displayHands(-1, false);
+                                        displayHands(-1, false, true);
                                         displayWaitScreen(currentPlayerInteracting);
                                     }
                                     else
-                                        displayHands(currentPlayerInteracting, true);
+                                        displayHands(currentPlayerInteracting, true, true);
                                     canClick = true;
                                 }
                         }
@@ -253,11 +253,11 @@ public class SpadesActivity extends GameActivity {
                             botHandle(250);
                         else {
                             if (botCount != 3) {
-                                displayHands(-1, false);
+                                displayHands(-1, false, true);
                                 displayWaitScreen(currentPlayerInteracting);
                             }
                             else
-                                displayHands(currentPlayerInteracting, true);
+                                displayHands(currentPlayerInteracting, true, true);
                             canClick = true;
                         }
                     }
@@ -311,7 +311,7 @@ public class SpadesActivity extends GameActivity {
         alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                displayHands(currentPlayer, true);
+                displayHands(currentPlayer, true, false);
                 openGuessDialog(currentPlayer);
             }
         });
@@ -378,10 +378,10 @@ public class SpadesActivity extends GameActivity {
                                 botHandle(250);
                             else {
                                 if (botCount != 3) {
-                                    displayHands(-1, false);
+                                    displayHands(-1, false, true);
                                     displayWaitScreen(currentPlayerInteracting);
                                 } else
-                                    displayHands(currentPlayerInteracting, true);
+                                    displayHands(currentPlayerInteracting, true, true);
                                 canClick = true;
                             }
                             return;
@@ -407,10 +407,10 @@ public class SpadesActivity extends GameActivity {
                                             botHandle(250);
                                         else {
                                             if (botCount != 3) {
-                                                displayHands(-1, false);
+                                                displayHands(-1, false, true);
                                                 displayWaitScreen(currentPlayerInteracting);
                                             } else
-                                                displayHands(currentPlayerInteracting, true);
+                                                displayHands(currentPlayerInteracting, true, true);
                                             canClick = true;
                                         }
                                     }
@@ -426,7 +426,7 @@ public class SpadesActivity extends GameActivity {
                                 @Override
                                 public void run() {
                                     if (botCount != 3) {
-                                        displayHands(-1, false);
+                                        displayHands(-1, false, false);
                                         displayWaitScreenBid(finalPlayer);
                                     }
                                     else
@@ -459,7 +459,7 @@ public class SpadesActivity extends GameActivity {
     }
 
     //Call when the hands have been updated and need be redisplayed.
-    public void displayHands(int player, boolean cardsClickable) {
+    public void displayHands(int player, boolean cardsClickable, boolean cardsShadeable) {
         //Remove all old cards first
         cardViews.clear();
         if (buttonsPresent) {
@@ -508,7 +508,7 @@ public class SpadesActivity extends GameActivity {
 
                     //Tint and make the card unselectable if it's not meant to be.
                     Card selectCard = manager.getPlayers()[i].hand.get(j);
-                    if (!(manager.cardSelectable(selectCard, finishedSwapping, i))) {
+                    if (!(manager.cardSelectable(selectCard, finishedSwapping, i)) && cardsShadeable) {
                         cardButton.setColorFilter(Color.parseColor("#78505050"), PorterDuff.Mode.SRC_ATOP);
                         cardButton.setClickable(false);
                     }
@@ -579,10 +579,10 @@ public class SpadesActivity extends GameActivity {
                                             botHandle(250);
                                         else {
                                             if (botCount != 3) {
-                                                displayHands(-1, false);
+                                                displayHands(-1, false, true);
                                                 displayWaitScreen(currentPlayerInteracting);
                                             } else
-                                            displayHands(currentPlayerInteracting, true);
+                                                displayHands(currentPlayerInteracting, true, true);
                                             canClick = true;
                                         }
                                         return;
@@ -601,20 +601,20 @@ public class SpadesActivity extends GameActivity {
                                         botHandle(250);
                                     else {
                                         if (botCount != 3) {
-                                            displayHands(-1, false);
+                                            displayHands(-1, false, true);
                                             displayWaitScreen(currentPlayerInteracting);
                                         } else
-                                            displayHands(currentPlayerInteracting, true);
+                                            displayHands(currentPlayerInteracting, true, true);
                                         canClick = true;
                                     }
                                     return;
                                 }
                                 if (botCount != 3) {
-                                    displayHands(-1, false);
+                                    displayHands(-1, false, false);
                                     displayWaitScreenBid(currentPlayerInteracting);
                                 }
                                 else {
-                                    displayHands(currentPlayerInteracting, false);
+                                    displayHands(currentPlayerInteracting, false, false);
                                     openGuessDialog(currentPlayerInteracting);
                                 }
                             }

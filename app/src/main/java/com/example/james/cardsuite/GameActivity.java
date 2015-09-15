@@ -225,7 +225,7 @@ public abstract class GameActivity extends Activity implements Serializable {
         alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                displayHands(currentPlayer, true);
+                displayHands(currentPlayer, true, true);
             }
         });
         alertDialog.show();
@@ -299,7 +299,7 @@ public abstract class GameActivity extends Activity implements Serializable {
     public abstract void reset();
 
     //Call when the hands have been updated and need be redisplayed.
-    public abstract void displayHands(int player, boolean cardsClickable);
+    public abstract void displayHands(int player, boolean cardsClickable, boolean cardsShadeable);
 
     //Call when the end piles and the scores displayed on top of the piles need be redisplayed.
     public abstract void displayEndPiles(List<Integer> scores);
