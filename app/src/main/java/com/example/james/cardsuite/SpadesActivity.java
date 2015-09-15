@@ -604,7 +604,7 @@ public class SpadesActivity extends GameActivity {
                                             displayHands(-1, false);
                                             displayWaitScreen(currentPlayerInteracting);
                                         } else
-                                        displayHands(currentPlayerInteracting, true);
+                                            displayHands(currentPlayerInteracting, true);
                                         canClick = true;
                                     }
                                     return;

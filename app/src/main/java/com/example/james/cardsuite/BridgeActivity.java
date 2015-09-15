@@ -12,7 +12,6 @@ import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.Menu;
@@ -236,7 +235,6 @@ public class BridgeActivity extends GameActivity implements Serializable {
                             scores.add(player.score);
                         }
                         manager.potsFinished++;
-                        displayEndPiles(scores);
                         displayScoreTable(null);
                     } else {
                         if (isBot[currentPlayerInteracting])
@@ -340,7 +338,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
                 trumpView.setImageResource(getResources().getIdentifier(trumpCard.getAddress(), "drawable", getPackageName()));
                 trumpView.setMaxHeight(150);
                 trumpView.setAdjustViewBounds(true);
-
+                displayEndPiles(scores);
                 dealCards();
             }
         });
@@ -385,7 +383,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
 
     //Opens the guess dialog - fit for German Bridge for now.
     public void openGuessDialog(final int currentPlayer) {
-        //displayHands(currentPlayer,false);
+        displayHands(currentPlayer,false);
         AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.BidCustom));
         builder.setCancelable(false);
         HorizontalScrollView horizontalScrollView = new HorizontalScrollView(this);
@@ -442,6 +440,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
                     if (guess == (Integer) button.getTag()) {
                         manager.addedGuesses += guess;
                         ((BridgePlayer) manager.players[currentPlayer]).guess = guess;
+                        displayEndPiles(scores);
 
                         d.dismiss();
                         guessCount++;
@@ -472,6 +471,8 @@ public class BridgeActivity extends GameActivity implements Serializable {
                                 @Override
                                 public void run() {
                                     ((BridgePlayer) manager.getPlayers()[currentFinalPlayer]).guess = BridgeAI.getBid(currentFinalPlayer, (BridgeManager) manager);
+                                    displayEndPiles(scores);
+                                    ((BridgeManager) manager).addedGuesses += ((BridgePlayer) manager.getPlayers()[currentFinalPlayer]).guess;
                                     if (currentGuessCount == 4) {
                                         currentPlayerInteracting = manager.findStartPlayer();
                                         if (isBot[currentPlayerInteracting])
@@ -652,16 +653,46 @@ public class BridgeActivity extends GameActivity implements Serializable {
                             if (cardsDisplayed == manager.players[0].hand.size() - 1) {
                                 int player = manager.findStartPlayer();
                                 while (isBot[player]) {
+                                    if (guessCount == 4) {
+                                        currentPlayerInteracting = manager.findStartPlayer();
+                                        if (isBot[currentPlayerInteracting])
+                                            botHandle(250);
+                                        else {
+                                            if (botCount != 3) {
+                                                displayHands(-1, false);
+                                                displayWaitScreen(currentPlayerInteracting);
+                                            } else
+                                                displayHands(currentPlayerInteracting, true);
+                                            canClick = true;
+                                        }
+                                        return;
+                                    }
                                     ((BridgePlayer) manager.getPlayers()[player]).guess = BridgeAI.getBid(player, (BridgeManager) manager);
+                                    displayEndPiles(scores);
+                                    ((BridgeManager) manager).addedGuesses += ((BridgePlayer) manager.getPlayers()[player]).guess;
                                     guessCount++;
                                     player = (player + 1) % 4;
                                 }
+                                if (guessCount == 4) {
+                                    currentPlayerInteracting = manager.findStartPlayer();
+                                    if (isBot[currentPlayerInteracting])
+                                        botHandle(250);
+                                    else {
+                                        if (botCount != 3) {
+                                            displayHands(-1, false);
+                                            displayWaitScreen(currentPlayerInteracting);
+                                        } else
+                                            displayHands(currentPlayerInteracting, true);
+                                        canClick = true;
+                                    }
+                                    return;
+                                }
                                 if (botCount != 3) {
                                     displayHands(-1, false);
-                                    displayWaitScreenBid(currentPlayerInteracting);
+                                    displayWaitScreenBid(player);
                                 }
                                 else
-                                    openGuessDialog(currentPlayerInteracting);
+                                    openGuessDialog(player);
                             }
                         }
                     }, initialCoordinates);
