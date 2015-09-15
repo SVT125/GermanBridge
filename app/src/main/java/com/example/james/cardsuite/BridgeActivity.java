@@ -52,8 +52,8 @@ public class BridgeActivity extends GameActivity implements Serializable {
         setContentView(R.layout.activity_bridge);
 
         Intent intent = getIntent();
-        isGameLoaded = intent.getBooleanExtra("loadGame", false);
-        if (isGameLoaded) {
+        boolean loadGame = intent.getBooleanExtra("loadGame", false);
+        if (loadGame) {
             this.loadGame();
             displayPot();
         } else {
@@ -445,10 +445,8 @@ public class BridgeActivity extends GameActivity implements Serializable {
                         d.dismiss();
                         guessCount++;
                         //Finished guessing, now move to actual gameplay.
-                        if (guessCount > 3) {
-                            if (manager.pot.size() == 0) {
-                                currentPlayerInteracting = manager.findStartPlayer();
-                            }
+                        if (guessCount == 4) {
+                            currentPlayerInteracting = manager.findStartPlayer();
                             if (isBot[currentPlayerInteracting])
                                 botHandle(250);
                             else {
@@ -474,17 +472,9 @@ public class BridgeActivity extends GameActivity implements Serializable {
                                 public void run() {
                                     ((BridgePlayer) manager.getPlayers()[currentFinalPlayer]).guess = BridgeAI.getBid(currentFinalPlayer, (BridgeManager) manager);
                                     displayEndPiles(scores);
-<<<<<<< HEAD
-                                    ((BridgeManager)manager).addedGuesses += ((BridgePlayer) manager.getPlayers()[currentFinalPlayer]).guess;
-                                    if (currentGuessCount > 3) {
-                                        if (manager.pot.size() == 0) {
-                                            currentPlayerInteracting = manager.findStartPlayer();
-                                        }
-=======
                                     ((BridgeManager) manager).addedGuesses += ((BridgePlayer) manager.getPlayers()[currentFinalPlayer]).guess;
                                     if (currentGuessCount == 4) {
                                         currentPlayerInteracting = manager.findStartPlayer();
->>>>>>> parent of a7bc1e2... Merge branch 'master' of https://github.com/SVT125/GermanBridge
                                         if (isBot[currentPlayerInteracting])
                                             botHandle(250);
                                         else {
@@ -663,10 +653,8 @@ public class BridgeActivity extends GameActivity implements Serializable {
                             if (cardsDisplayed == manager.players[0].hand.size() - 1) {
                                 int player = manager.findStartPlayer();
                                 while (isBot[player]) {
-                                    if (guessCount > 3) {
-                                        if (manager.pot.size() == 0) {
-                                            currentPlayerInteracting = manager.findStartPlayer();
-                                        }
+                                    if (guessCount == 4) {
+                                        currentPlayerInteracting = manager.findStartPlayer();
                                         if (isBot[currentPlayerInteracting])
                                             botHandle(250);
                                         else {
@@ -685,10 +673,8 @@ public class BridgeActivity extends GameActivity implements Serializable {
                                     guessCount++;
                                     player = (player + 1) % 4;
                                 }
-                                if (guessCount > 3) {
-                                    if (manager.pot.size() == 0) {
-                                        currentPlayerInteracting = manager.findStartPlayer();
-                                    }
+                                if (guessCount == 4) {
+                                    currentPlayerInteracting = manager.findStartPlayer();
                                     if (isBot[currentPlayerInteracting])
                                         botHandle(250);
                                     else {
