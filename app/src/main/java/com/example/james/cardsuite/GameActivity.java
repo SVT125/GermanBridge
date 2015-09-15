@@ -87,8 +87,8 @@ public abstract class GameActivity extends Activity implements Serializable {
         //These values were obtained using a OnePlus One (xxhdpi).
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        cardWidthPX = (int)Math.ceil(35 * metrics.density);
-        cardHeightPX = (int)Math.ceil(50 * metrics.density);
+        cardWidthPX = (int)Math.ceil(40 * metrics.density);
+        cardHeightPX = (int)Math.ceil(57 * metrics.density);
         cardDeltaXPX = (int)Math.ceil(20 * metrics.density);
         bottomTopMarginPX = (int)Math.ceil(42 * metrics.density);
         rightLeftMarginPX = (int)Math.ceil(72 * metrics.density);

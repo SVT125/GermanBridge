@@ -79,8 +79,10 @@ public class BridgeActivity extends GameActivity implements Serializable {
         ImageView trumpView = (ImageView) findViewById(R.id.trumpView);
         trumpView.setVisibility(View.VISIBLE);
         Card trumpCard = ((BridgeManager) manager).trumpCard;
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)trumpView.getLayoutParams();
+        params.width = cardWidthPX;
+        params.height = cardHeightPX;
         trumpView.setImageResource(getResources().getIdentifier(trumpCard.getAddress(), "drawable", getPackageName()));
-        trumpView.setMaxHeight(cardHeightPX);
         trumpView.setAdjustViewBounds(true);
         //Display the image buttons
         displayEndPiles(scores);

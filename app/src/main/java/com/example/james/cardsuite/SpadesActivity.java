@@ -596,7 +596,8 @@ public class SpadesActivity extends GameActivity {
                                     player = (player + 1) % 4;
                                 }
                                 if (guessCount == 4) {
-                                    currentPlayerInteracting = isGameLoaded ? manager.startPlayer : manager.findStartPlayer();
+                                    if (manager.pot.size() == 0)
+                                        currentPlayerInteracting = manager.startPlayer;
                                     if (isBot[currentPlayerInteracting])
                                         botHandle(250);
                                     else {
