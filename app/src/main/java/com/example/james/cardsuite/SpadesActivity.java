@@ -572,9 +572,13 @@ public class SpadesActivity extends GameActivity {
 
                             if (cardsDisplayed == originalHandSize - 1) {
                                 //If the game is loaded, then calling findStartPlayer incorrectly mutates the st. player mid-round.
-                                int player = isGameLoaded ? manager.startPlayer : manager.findStartPlayer();                                while (isBot[player]) {
+                                int player = currentPlayerInteracting;
+                                if (manager.pot.size() == 0)
+                                    player = manager.startPlayer;
+                                while (isBot[player]) {
                                     if (guessCount == 4) {
-                                        currentPlayerInteracting = player;
+                                        if (manager.pot.size() == 0)
+                                            currentPlayerInteracting = manager.startPlayer;
                                         if (isBot[currentPlayerInteracting])
                                             botHandle(250);
                                         else {
