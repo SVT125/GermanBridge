@@ -36,23 +36,31 @@
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/new_game"
         android:id="@+id/restartGameButton"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="60dp"
         android:onClick="newGameClick"
-        android:background="@drawable/button_background" />
+        android:background="@drawable/new_game" />
 
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/new_game"
         android:id="@+id/display_scores"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="60dp"
         android:onClick="newGameClick"
         android:background="@drawable/display" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/returntomenu"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="60dp"
+        android:onClick="newGameClick"
+        android:background="@drawable/main_menu" />
 
 </RelativeLayout>
