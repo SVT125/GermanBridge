@@ -11,11 +11,11 @@ public class BridgeAI {
     // Calculated by finding the number of cards of the trump suit and subtracting by a random number [0-3].
     public static int getBid(int currentPlayer, BridgeManager manager) {
         BridgePlayer player = (BridgePlayer)manager.getPlayers()[currentPlayer];
-        if (manager.potsFinished + 1 == 1)
+        if (manager.potsFinished == 1)
             return turnOneBid(currentPlayer, player, manager);
-        if (manager.potsFinished + 1 < 5)
+        if (manager.potsFinished < 5)
             return turnTwoToFourBid(currentPlayer, player, manager);
-        if (manager.potsFinished + 1 < 9)
+        if (manager.potsFinished < 9)
             return turnFiveToEightBid(currentPlayer, player, manager);
         return turnNineToTwelveBid(player, manager, currentPlayer);
     }
@@ -24,12 +24,14 @@ public class BridgeAI {
         Card c = player.hand.get(0);
         if (c.getSuit().equals(manager.trumpSuit))
             return 1;
-        else if (currentPlayer == manager.startPlayer)
+        if (currentPlayer == manager.startPlayer)
             if (c.getCardNumber() > 10)
                 return 1;
-        else if (currentPlayer == (manager.startPlayer + 3) % 4)
-            if (manager.addedGuesses > 0)
+        if (currentPlayer == ((manager.startPlayer + 3) % 4)) {
+            if (manager.addedGuesses > 0) {
                 return 1;
+            }
+        }
         return 0;
     }
 

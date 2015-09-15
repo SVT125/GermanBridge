@@ -258,7 +258,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
     public void reset() {
         guessCount = 0;
         manager.reset();
-        manager.addedGuesses = 0;
+        ((BridgeManager)manager).addedGuesses = 0;
     }
 
     public void endGame() {
@@ -408,7 +408,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
             final RadioButton button = new RadioButton(this);
             button.setText(Integer.toString(i));
             button.setTextSize(20);
-            if (i == manager.getPlayers()[currentPlayer].hand.size() - manager.addedGuesses)
+            if (i == manager.getPlayers()[currentPlayer].hand.size() - ((BridgeManager)manager).addedGuesses)
                 button.setTextColor(getResources().getColor(R.color.spades_blue));
             else {
                 button.setTextColor(Color.RED);
@@ -438,7 +438,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
                 @Override
                 public void onClick(View v) {
                     if (guess == (Integer) button.getTag()) {
-                        manager.addedGuesses += guess;
+                        ((BridgeManager) manager).addedGuesses += guess;
                         ((BridgePlayer) manager.players[currentPlayer]).guess = guess;
                         displayEndPiles(scores);
 
@@ -446,15 +446,15 @@ public class BridgeActivity extends GameActivity implements Serializable {
                         guessCount++;
                         //Finished guessing, now move to actual gameplay.
                         if (guessCount == 4) {
-                            currentPlayerInteracting = manager.findStartPlayer();
+                            if (manager.pot.size() == 0)
+                                currentPlayerInteracting = manager.findStartPlayer();
                             if (isBot[currentPlayerInteracting])
                                 botHandle(250);
                             else {
                                 if (botCount != 3) {
                                     displayHands(-1, false, true);
                                     displayWaitScreen(currentPlayerInteracting);
-                                }
-                                else
+                                } else
                                     displayHands(currentPlayerInteracting, true, true);
                                 canClick = true;
                             }
@@ -474,21 +474,21 @@ public class BridgeActivity extends GameActivity implements Serializable {
                                     displayEndPiles(scores);
                                     ((BridgeManager) manager).addedGuesses += ((BridgePlayer) manager.getPlayers()[currentFinalPlayer]).guess;
                                     if (currentGuessCount == 4) {
-                                        currentPlayerInteracting = manager.findStartPlayer();
+                                        if (manager.pot.size() == 0)
+                                            currentPlayerInteracting = manager.findStartPlayer();
                                         if (isBot[currentPlayerInteracting])
                                             botHandle(250);
                                         else {
                                             if (botCount != 3) {
                                                 displayHands(-1, false, true);
                                                 displayWaitScreen(currentPlayerInteracting);
-                                            }
-                                            else
+                                            } else
                                                 displayHands(currentPlayerInteracting, true, true);
                                             canClick = true;
                                         }
                                     }
                                 }
-                            },currentTimeDelay);
+                            }, currentTimeDelay);
                             currentTimeDelay += 250;
                             player = (player + 1) % 4;
                         }
@@ -501,8 +501,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
                                     if (botCount != 3) {
                                         displayHands(-1, false, true);
                                         displayWaitScreenBid(finalPlayer);
-                                    }
-                                    else
+                                    } else
                                         openGuessDialog(finalPlayer);
                                 }
                             }, currentTimeDelay);
@@ -654,7 +653,8 @@ public class BridgeActivity extends GameActivity implements Serializable {
                                 int player = manager.findStartPlayer();
                                 while (isBot[player]) {
                                     if (guessCount == 4) {
-                                        currentPlayerInteracting = manager.findStartPlayer();
+                                        if (manager.pot.size() == 0)
+                                            currentPlayerInteracting = manager.findStartPlayer();
                                         if (isBot[currentPlayerInteracting])
                                             botHandle(250);
                                         else {
@@ -674,7 +674,8 @@ public class BridgeActivity extends GameActivity implements Serializable {
                                     player = (player + 1) % 4;
                                 }
                                 if (guessCount == 4) {
-                                    currentPlayerInteracting = manager.findStartPlayer();
+                                    if (manager.pot.size() == 0)
+                                        currentPlayerInteracting = manager.findStartPlayer();
                                     if (isBot[currentPlayerInteracting])
                                         botHandle(250);
                                     else {
