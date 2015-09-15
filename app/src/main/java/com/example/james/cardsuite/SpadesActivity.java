@@ -389,50 +389,35 @@ public class SpadesActivity extends GameActivity {
 
                         //Otherwise, we prompt the guess dialog for the next player.
                         int player = (currentPlayer + 1) % 4;
-                        long currentTimeDelay = 0;
                         while (isBot[player]) {
-                            final int currentFinalPlayer = player;
-                            final int currentGuessCount = ++guessCount;
-                            handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    int tempBid = SpadesAI.getBid(currentFinalPlayer, (SpadesManager) manager);
-                                    ((SpadesPlayer) manager.getPlayers()[currentFinalPlayer]).bid = tempBid;
-                                    ((SpadesPlayer) manager.players[currentFinalPlayer]).totalBid += tempBid;
-                                    ((SpadesPlayer) manager.players[currentFinalPlayer]).partner.totalBid += tempBid;
-                                    displayEndPiles(scores);
-                                    if (currentGuessCount == 4) {
-                                        currentPlayerInteracting = manager.findStartPlayer();
-                                        if (isBot[currentPlayerInteracting])
-                                            botHandle(250);
-                                        else {
-                                            if (botCount != 3) {
-                                                displayHands(-1, false, true);
-                                                displayWaitScreen(currentPlayerInteracting);
-                                            } else
-                                                displayHands(currentPlayerInteracting, true, true);
-                                            canClick = true;
-                                        }
-                                    }
+                            guessCount++;
+                            int tempBid = SpadesAI.getBid(player, (SpadesManager) manager);
+                            ((SpadesPlayer) manager.getPlayers()[player]).bid = tempBid;
+                            ((SpadesPlayer) manager.players[player]).totalBid += tempBid;
+                            ((SpadesPlayer) manager.players[player]).partner.totalBid += tempBid;
+                            displayEndPiles(scores);
+                            if (guessCount == 4) {
+                                currentPlayerInteracting = manager.findStartPlayer();
+                                if (isBot[currentPlayerInteracting])
+                                    botHandle(250);
+                                else {
+                                    if (botCount != 3) {
+                                        displayHands(-1, false, true);
+                                        displayWaitScreen(currentPlayerInteracting);
+                                    } else
+                                        displayHands(currentPlayerInteracting, true, true);
+                                    canClick = true;
                                 }
-                            }, currentTimeDelay);
-                            currentTimeDelay += 250;
+                            }
                             player = (player + 1) % 4;
                         }
 
                         if (guessCount < 4) {
-                            final int finalPlayer = player;
-                            handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (botCount != 3) {
-                                        displayHands(-1, false, false);
-                                        displayWaitScreenBid(finalPlayer);
-                                    }
-                                    else
-                                        openGuessDialog(finalPlayer);
-                                }
-                            }, currentTimeDelay);
+                            if (botCount != 3) {
+                                displayHands(-1, false, false);
+                                displayWaitScreenBid(player);
+                            } else
+                                openGuessDialog(player);
                         }
                     } else {
                         guess = (Integer) button.getTag();
