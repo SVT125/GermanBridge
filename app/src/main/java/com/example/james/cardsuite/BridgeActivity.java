@@ -445,8 +445,10 @@ public class BridgeActivity extends GameActivity implements Serializable {
                         d.dismiss();
                         guessCount++;
                         //Finished guessing, now move to actual gameplay.
-                        if (guessCount == 4) {
-                            currentPlayerInteracting = manager.findStartPlayer();
+                        if (guessCount > 3) {
+                            if (manager.pot.size() == 0) {
+                                currentPlayerInteracting = manager.findStartPlayer();
+                            }
                             if (isBot[currentPlayerInteracting])
                                 botHandle(250);
                             else {
@@ -473,8 +475,10 @@ public class BridgeActivity extends GameActivity implements Serializable {
                                     ((BridgePlayer) manager.getPlayers()[currentFinalPlayer]).guess = BridgeAI.getBid(currentFinalPlayer, (BridgeManager) manager);
                                     displayEndPiles(scores);
                                     ((BridgeManager)manager).addedGuesses += ((BridgePlayer) manager.getPlayers()[currentFinalPlayer]).guess;
-                                    if (currentGuessCount == 4) {
-                                        currentPlayerInteracting = manager.findStartPlayer();
+                                    if (currentGuessCount > 3) {
+                                        if (manager.pot.size() == 0) {
+                                            currentPlayerInteracting = manager.findStartPlayer();
+                                        }
                                         if (isBot[currentPlayerInteracting])
                                             botHandle(250);
                                         else {
@@ -653,8 +657,10 @@ public class BridgeActivity extends GameActivity implements Serializable {
                             if (cardsDisplayed == manager.players[0].hand.size() - 1) {
                                 int player = ((BridgeManager)manager).findStartPlayer();
                                 while (isBot[player]) {
-                                    if (guessCount == 4) {
-                                        currentPlayerInteracting = manager.findStartPlayer();
+                                    if (guessCount > 3) {
+                                        if (manager.pot.size() == 0) {
+                                            currentPlayerInteracting = manager.findStartPlayer();
+                                        }
                                         if (isBot[currentPlayerInteracting])
                                             botHandle(250);
                                         else {
@@ -673,8 +679,10 @@ public class BridgeActivity extends GameActivity implements Serializable {
                                     guessCount++;
                                     player = (player + 1) % 4;
                                 }
-                                if (guessCount == 4) {
-                                    currentPlayerInteracting = manager.findStartPlayer();
+                                if (guessCount > 3) {
+                                    if (manager.pot.size() == 0) {
+                                        currentPlayerInteracting = manager.findStartPlayer();
+                                    }
                                     if (isBot[currentPlayerInteracting])
                                         botHandle(250);
                                     else {
