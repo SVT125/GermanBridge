@@ -241,7 +241,8 @@ public class SpadesActivity extends GameActivity {
                             public void run() {
                                 // resets deck, hands, etc. and increments round
                                 reset();
-                                dealCards();
+                                if (!manager.isGameOver())
+                                    dealCards();
                             }
                         });
                     } else {
@@ -265,7 +266,6 @@ public class SpadesActivity extends GameActivity {
     // reshuffles deck, increments round count, resets all variables for the next round.
     public void reset() {
         manager.reset();
-        endGame();
         if (manager.isGameOver())
             endGame();
         finishedSwapping = false;

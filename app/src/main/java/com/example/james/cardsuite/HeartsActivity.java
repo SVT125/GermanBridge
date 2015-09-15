@@ -366,7 +366,8 @@ public class HeartsActivity extends GameActivity implements Serializable {
             @Override
             public void run() {
                 reset();
-                dealCards();
+                if (!manager.isGameOver())
+                    dealCards();
             }
         });
     }
@@ -451,7 +452,6 @@ public class HeartsActivity extends GameActivity implements Serializable {
     // reshuffles deck, increments round count, resets all variables for the next round.
     public void reset() {
         manager.reset();
-        endGame();
         if (manager.isGameOver()) {
             endGame();
             return;
