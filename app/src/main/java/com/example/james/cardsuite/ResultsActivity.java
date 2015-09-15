@@ -36,12 +36,7 @@ public class ResultsActivity extends Activity {
 
         Intent intent = getIntent();
         final Manager manager = (Manager)intent.getSerializableExtra("manager");
-        Player[] players = (Player[])intent.getSerializableExtra("players");
-        int[] scores = (int[])intent.getSerializableExtra("scores");
         int gameMode = (Integer)intent.getSerializableExtra("game_mode");
-        manager.players = players;
-        for(int i = 0; i < 4; i++)
-            manager.players[i].score = scores[i];
 
         TextView resultsView = (TextView)findViewById(R.id.resultsView);
         if(gameMode == 2)
