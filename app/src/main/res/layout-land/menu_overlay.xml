@@ -13,7 +13,8 @@
         android:scaleType="centerCrop"
         android:onClick="gameClick"
         android:layout_gravity="center"
-        android:layout_marginRight="50dp" />
+        android:layout_marginRight="50dp"
+        android:background="@drawable/button_background" />
 
     <ImageButton
         android:layout_width="150dp"
@@ -25,7 +26,8 @@
         android:scaleType="centerCrop"
         android:onClick="gameClick"
         android:layout_gravity="center"
-        android:layout_marginRight="50dp" />
+        android:layout_marginRight="50dp"
+        android:background="@drawable/button_background" />
 
     <ImageButton
         android:layout_width="150dp"
@@ -36,5 +38,6 @@
         android:src="@drawable/spades"
         android:scaleType="centerCrop"
         android:onClick="gameClick"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        android:background="@drawable/button_background" />
 </LinearLayout>
