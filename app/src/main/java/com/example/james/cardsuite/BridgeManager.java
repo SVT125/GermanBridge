@@ -125,7 +125,7 @@ public class BridgeManager extends Manager implements Serializable {
 	}
 
 	public boolean isGameOver() {
-		if (totalRoundCount == (52/playerCount)) return true;
+		if (potsFinished == (52/playerCount)) return true;
 		return false;
 	}
 

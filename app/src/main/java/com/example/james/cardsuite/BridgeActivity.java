@@ -255,11 +255,22 @@ public class BridgeActivity extends GameActivity implements Serializable {
 
     // reshuffles deck, increments round count, resets all variables for the next round.
     public void reset() {
-        if (manager.potsFinished == 12)
-            endGame();
-        guessCount = 0;
         manager.reset();
+        if (manager.isGameOver()) {
+            endGame();
+            return;
+        }
+        guessCount = 0;
         ((BridgeManager)manager).addedGuesses = 0;
+
+        //Redisplay the trump
+        ImageView trumpView = (ImageView) findViewById(R.id.trumpView);
+        Card trumpCard = ((BridgeManager) manager).trumpCard;
+        trumpView.setImageResource(getResources().getIdentifier(trumpCard.getAddress(), "drawable", getPackageName()));
+        trumpView.setMaxHeight(150);
+        trumpView.setAdjustViewBounds(true);
+        displayEndPiles(scores);
+        dealCards();
     }
 
     public void endGame() {
@@ -332,15 +343,6 @@ public class BridgeActivity extends GameActivity implements Serializable {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 reset();
-
-                //Redisplay the trump
-                ImageView trumpView = (ImageView) findViewById(R.id.trumpView);
-                Card trumpCard = ((BridgeManager) manager).trumpCard;
-                trumpView.setImageResource(getResources().getIdentifier(trumpCard.getAddress(), "drawable", getPackageName()));
-                trumpView.setMaxHeight(150);
-                trumpView.setAdjustViewBounds(true);
-                displayEndPiles(scores);
-                dealCards();
             }
         });
         builder.show();
