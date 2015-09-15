@@ -482,47 +482,35 @@ public class BridgeActivity extends GameActivity implements Serializable {
                                     canClick = true;
                                 }
                             }
-                            final int currentFinalPlayer = player;
-                            final int currentGuessCount = ++guessCount;
                             System.out.println("guess count: bot onguess");
-                            handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    ((BridgePlayer) manager.getPlayers()[currentFinalPlayer]).guess = BridgeAI.getBid(currentFinalPlayer, (BridgeManager) manager);
-                                    displayEndPiles(scores);
-                                    ((BridgeManager) manager).addedGuesses += ((BridgePlayer) manager.getPlayers()[currentFinalPlayer]).guess;
-                                    if (currentGuessCount == 4) {
-                                        if (manager.pot.size() == 0)
-                                            currentPlayerInteracting = manager.findStartPlayer();
-                                        if (isBot[currentPlayerInteracting])
-                                            botHandle(250);
-                                        else {
-                                            if (botCount != 3) {
-                                                displayHands(-1, false, true);
-                                                displayWaitScreen(currentPlayerInteracting);
-                                            } else
-                                                displayHands(currentPlayerInteracting, true, true);
-                                            canClick = true;
-                                        }
-                                    }
+
+                            guessCount++;
+                            ((BridgePlayer) manager.getPlayers()[player]).guess = BridgeAI.getBid(player, (BridgeManager) manager);
+                            displayEndPiles(scores);
+                            ((BridgeManager) manager).addedGuesses += ((BridgePlayer) manager.getPlayers()[player]).guess;
+                            if (guessCount == 4) {
+                                if (manager.pot.size() == 0)
+                                    currentPlayerInteracting = manager.findStartPlayer();
+                                if (isBot[currentPlayerInteracting])
+                                    botHandle(250);
+                                else {
+                                    if (botCount != 3) {
+                                        displayHands(-1, false, true);
+                                        displayWaitScreen(currentPlayerInteracting);
+                                    } else
+                                        displayHands(currentPlayerInteracting, true, true);
+                                    canClick = true;
                                 }
-                            }, currentTimeDelay);
-                            currentTimeDelay += 250;
+                            }
                             player = (player + 1) % 4;
                         }
 
                         if (guessCount < 4) {
-                            final int finalPlayer = player;
-                            handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (botCount != 3) {
-                                        displayHands(-1, false, true);
-                                        displayWaitScreenBid(finalPlayer);
-                                    } else
-                                        openGuessDialog(finalPlayer);
-                                }
-                            }, currentTimeDelay);
+                            if (botCount != 3) {
+                                displayHands(-1, false, true);
+                                displayWaitScreenBid(player);
+                            } else
+                                openGuessDialog(player);
                         }
                     } else {
                         guess = (Integer) button.getTag();
