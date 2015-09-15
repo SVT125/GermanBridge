@@ -41,6 +41,8 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_main);
 
+        SoundManager.prepare(this);
+
         Typeface font = Typeface.createFromAsset(getAssets(), "SigniaPro-Regular.ttf");
         TextView greetingView = (TextView)findViewById(R.id.newgreeting);
         greetingView.setTypeface(font);

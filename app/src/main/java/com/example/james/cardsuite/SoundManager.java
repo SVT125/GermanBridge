@@ -60,6 +60,6 @@ public class SoundManager {
     }
 
     public static void playButtonClickSound() {
-        soundPools[5].play(sounds[5], sfxVolume * 0.5f, sfxVolume * 0.5f, 0, 1, 1);
+        soundPools[6].play(sounds[6], sfxVolume * 0.5f, sfxVolume * 0.5f, 0, 0, 1);
     }
 }

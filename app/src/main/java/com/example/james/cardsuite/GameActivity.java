@@ -55,8 +55,6 @@ public abstract class GameActivity extends Activity implements Serializable {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        SoundManager.prepare(this);
-
         for (int i = 0; i < 4; i++) {
             scores.add(0);
         }
