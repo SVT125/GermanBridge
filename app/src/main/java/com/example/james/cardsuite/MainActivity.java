@@ -53,6 +53,7 @@ public class MainActivity extends Activity {
 
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     iv.setAlpha(0.5f);
+                    SoundManager.playButtonClickSound();
                     overlayClick(v);
                     return true;
                 } else if (event.getAction() == MotionEvent.ACTION_UP) {
@@ -71,6 +72,7 @@ public class MainActivity extends Activity {
 
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     settingsClick(v);
+                    SoundManager.playButtonClickSound();
                     iv.setAlpha(0.5f);
                     return true;
                 } else if (event.getAction() == MotionEvent.ACTION_UP) {
@@ -89,6 +91,7 @@ public class MainActivity extends Activity {
 
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     helpClick(v);
+                    SoundManager.playButtonClickSound();
                     iv.setAlpha(0.5f);
                     return true;
                 } else if (event.getAction() == MotionEvent.ACTION_UP) {
@@ -125,11 +128,13 @@ public class MainActivity extends Activity {
     }
 
     public void settingsClick(View v) {
+        SoundManager.playButtonClickSound();
         Intent intent = new Intent(MainActivity.this, com.example.james.cardsuite.SettingsActivity.class);
         startActivity(intent);
     }
 
     public void helpClick(View v) {
+        SoundManager.playButtonClickSound();
         startActivity(new Intent(this, PageViewActivity.class));
     }
 
@@ -143,6 +148,7 @@ public class MainActivity extends Activity {
         ImageButton heartsButton = (ImageButton) alertDialog.findViewById(R.id.hearts_button);
         heartsButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                SoundManager.playButtonClickSound();
                 alertDialog.dismiss();
                 gameClick(0);
             }
@@ -150,6 +156,7 @@ public class MainActivity extends Activity {
         ImageButton bridgeButton = (ImageButton) alertDialog.findViewById(R.id.german_button);
         bridgeButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
+                SoundManager.playButtonClickSound();
                 alertDialog.dismiss();
                 gameClick(1);
             }
@@ -157,6 +164,7 @@ public class MainActivity extends Activity {
         ImageButton spadesButton = (ImageButton) alertDialog.findViewById(R.id.spades_button);
         spadesButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
+                SoundManager.playButtonClickSound();
                 alertDialog.dismiss();
                 gameClick(2);
             }
@@ -169,6 +177,7 @@ public class MainActivity extends Activity {
         builder.setNegativeButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                SoundManager.playButtonClickSound();
                 loadGame = true;
                 runGameActivity(gameMode);
             }
@@ -176,6 +185,7 @@ public class MainActivity extends Activity {
         builder.setPositiveButton("No", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                SoundManager.playButtonClickSound();
                 loadGame = false;
                 playerSelection(gameMode);
             }
@@ -244,12 +254,14 @@ public class MainActivity extends Activity {
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                SoundManager.playButtonClickSound();
                 runGameActivity(gameMode);
             }
         });
         builder.setNeutralButton("Back", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                SoundManager.playButtonClickSound();
                 dialog.cancel();
             }
         });

@@ -437,6 +437,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    SoundManager.playButtonClickSound();
                     if ((guess != manager.getPlayers()[currentPlayer].hand.size() - ((BridgeManager)manager).addedGuesses) &&
                             (guess == (Integer) button.getTag())) {
                         ((BridgeManager) manager).addedGuesses += guess;

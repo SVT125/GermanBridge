@@ -78,6 +78,7 @@ public abstract class GameActivity extends Activity implements Serializable {
     public void menuClick(View v) {
         if (!canClick)
             return;
+        SoundManager.playButtonClickSound();
         AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.pauseScreen));
         builder.setTitle("Game Paused");
         LayoutInflater inflater = (LayoutInflater)getApplicationContext().getSystemService
@@ -94,23 +95,27 @@ public abstract class GameActivity extends Activity implements Serializable {
 
         gameReturn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                SoundManager.playButtonClickSound();
                 dlg.dismiss();
             }
         });
         displayScores.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                SoundManager.playButtonClickSound();
                 displayScoreTable(null);
                 dlg.dismiss();
             }
         });
         settings.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                SoundManager.playButtonClickSound();
                 runSettings();
             }
         });
         exitMenu.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (canClick) {
+                    SoundManager.playButtonClickSound();
                     dlg.dismiss();
                     promptExit(v);
                 }

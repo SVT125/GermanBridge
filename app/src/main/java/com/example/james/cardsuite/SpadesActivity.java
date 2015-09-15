@@ -365,6 +365,7 @@ public class SpadesActivity extends GameActivity {
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    SoundManager.playButtonClickSound();
                     if (guess == (Integer) button.getTag()) {
                         ((SpadesPlayer) manager.players[currentPlayer]).bid = guess;
                         ((SpadesPlayer) manager.players[currentPlayer]).totalBid += guess;
