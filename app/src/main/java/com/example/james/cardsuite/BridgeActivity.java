@@ -258,7 +258,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
     public void reset() {
         guessCount = 0;
         manager.reset();
-        ((BridgeManager)manager).addedGuesses = 0;
+        manager.addedGuesses = 0;
     }
 
     public void endGame() {
@@ -408,7 +408,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
             final RadioButton button = new RadioButton(this);
             button.setText(Integer.toString(i));
             button.setTextSize(20);
-            if (i == manager.getPlayers()[currentPlayer].hand.size() - ((BridgeManager)manager).addedGuesses)
+            if (i == manager.getPlayers()[currentPlayer].hand.size() - manager.addedGuesses)
                 button.setTextColor(getResources().getColor(R.color.spades_blue));
             else {
                 button.setTextColor(Color.RED);
@@ -438,7 +438,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
                 @Override
                 public void onClick(View v) {
                     if (guess == (Integer) button.getTag()) {
-                        ((BridgeManager)manager).addedGuesses += guess;
+                        manager.addedGuesses += guess;
                         ((BridgePlayer) manager.players[currentPlayer]).guess = guess;
                         displayEndPiles(scores);
 
@@ -474,11 +474,17 @@ public class BridgeActivity extends GameActivity implements Serializable {
                                 public void run() {
                                     ((BridgePlayer) manager.getPlayers()[currentFinalPlayer]).guess = BridgeAI.getBid(currentFinalPlayer, (BridgeManager) manager);
                                     displayEndPiles(scores);
+<<<<<<< HEAD
                                     ((BridgeManager)manager).addedGuesses += ((BridgePlayer) manager.getPlayers()[currentFinalPlayer]).guess;
                                     if (currentGuessCount > 3) {
                                         if (manager.pot.size() == 0) {
                                             currentPlayerInteracting = manager.findStartPlayer();
                                         }
+=======
+                                    ((BridgeManager) manager).addedGuesses += ((BridgePlayer) manager.getPlayers()[currentFinalPlayer]).guess;
+                                    if (currentGuessCount == 4) {
+                                        currentPlayerInteracting = manager.findStartPlayer();
+>>>>>>> parent of a7bc1e2... Merge branch 'master' of https://github.com/SVT125/GermanBridge
                                         if (isBot[currentPlayerInteracting])
                                             botHandle(250);
                                         else {
@@ -655,7 +661,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
                             displayIntermediateHands(cardsDisplayed);
 
                             if (cardsDisplayed == manager.players[0].hand.size() - 1) {
-                                int player = ((BridgeManager)manager).findStartPlayer();
+                                int player = manager.findStartPlayer();
                                 while (isBot[player]) {
                                     if (guessCount > 3) {
                                         if (manager.pot.size() == 0) {

@@ -109,7 +109,7 @@ public class BridgeManager extends Manager implements Serializable {
 	public Player[] getPlayers() { return this.players; }
 
 	public int findStartPlayer() {
-		startPlayer = (potsFinished - 1) % 4;
+		this.startPlayer = potsFinished == 0 ? 3 : potsFinished - 1;
 		return this.startPlayer;
 	}
 
