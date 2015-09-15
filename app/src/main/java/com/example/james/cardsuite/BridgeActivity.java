@@ -258,6 +258,8 @@ public class BridgeActivity extends GameActivity implements Serializable {
 
     // reshuffles deck, increments round count, resets all variables for the next round.
     public void reset() {
+        if (manager.potsFinished == 12)
+            endGame();
         guessCount = 0;
         manager.reset();
         ((BridgeManager)manager).addedGuesses = 0;

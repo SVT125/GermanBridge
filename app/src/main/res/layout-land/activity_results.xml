@@ -25,23 +25,22 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
         android:text="Congratulations!"
         android:textColor="@color/spades_blue"
         android:id="@+id/resultsView"
         android:typeface="serif"
-        android:textStyle="bold|italic" />
+        android:textStyle="bold|italic"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp" />
 
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/display_scores"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="60dp"
         android:onClick="newGameClick"
-        android:background="@drawable/display" />
+        android:background="@drawable/display"
+        android:layout_above="@+id/returntomenu"
+        android:layout_alignParentStart="true" />
 
     <ImageButton
         android:layout_width="wrap_content"
