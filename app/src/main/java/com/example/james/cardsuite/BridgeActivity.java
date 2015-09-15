@@ -52,8 +52,8 @@ public class BridgeActivity extends GameActivity implements Serializable {
         setContentView(R.layout.activity_bridge);
 
         Intent intent = getIntent();
-        boolean loadGame = intent.getBooleanExtra("loadGame", false);
-        if (loadGame) {
+        isGameLoaded = intent.getBooleanExtra("loadGame", false);
+        if (isGameLoaded) {
             this.loadGame();
             displayPot();
         } else {

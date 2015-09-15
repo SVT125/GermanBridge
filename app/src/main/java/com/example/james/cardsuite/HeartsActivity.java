@@ -41,8 +41,8 @@ public class HeartsActivity extends GameActivity implements Serializable {
         setContentView(R.layout.activity_hearts);
 
         Intent intent = getIntent();
-        boolean loadGame = intent.getBooleanExtra("loadGame", false);
-        if (loadGame) {
+        isGameLoaded = intent.getBooleanExtra("loadGame", false);
+        if (isGameLoaded) {
             this.loadGame();
             this.displayPot();
             displayEndPiles(roundScores);
