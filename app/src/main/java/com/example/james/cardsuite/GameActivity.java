@@ -216,6 +216,7 @@ public abstract class GameActivity extends Activity implements Serializable {
         alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         TextView text = (TextView) alertDialog.findViewById(R.id.wait_text);
         text.setText("Player " + (currentPlayer + 1) + ": Tap anywhere to continue.");
+        text.setTextColor(Color.WHITE);
         text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
