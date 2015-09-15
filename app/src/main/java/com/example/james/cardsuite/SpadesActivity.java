@@ -48,9 +48,9 @@ public class SpadesActivity extends GameActivity {
         setContentView(R.layout.activity_spades);
 
         Intent intent = getIntent();
-        boolean loadGame = intent.getBooleanExtra("loadGame", false);
+        isGameLoaded = intent.getBooleanExtra("loadGame", false);
 
-        if (loadGame) {
+        if (isGameLoaded) {
             this.loadGame();
             displayPot();
         } else {
@@ -571,10 +571,10 @@ public class SpadesActivity extends GameActivity {
                             displayIntermediateHands(cardsDisplayed);
 
                             if (cardsDisplayed == originalHandSize - 1) {
-                                int player = manager.findStartPlayer();
-                                while (isBot[player]) {
+                                //If the game is loaded, then calling findStartPlayer incorrectly mutates the st. player mid-round.
+                                int player = isGameLoaded ? manager.startPlayer : manager.findStartPlayer();                                while (isBot[player]) {
                                     if (guessCount == 4) {
-                                        currentPlayerInteracting = manager.findStartPlayer();
+                                        currentPlayerInteracting = player;
                                         if (isBot[currentPlayerInteracting])
                                             botHandle(250);
                                         else {
@@ -596,7 +596,7 @@ public class SpadesActivity extends GameActivity {
                                     player = (player + 1) % 4;
                                 }
                                 if (guessCount == 4) {
-                                    currentPlayerInteracting = manager.findStartPlayer();
+                                    currentPlayerInteracting = isGameLoaded ? manager.startPlayer : manager.findStartPlayer();
                                     if (isBot[currentPlayerInteracting])
                                         botHandle(250);
                                     else {

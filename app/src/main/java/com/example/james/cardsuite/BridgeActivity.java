@@ -52,8 +52,8 @@ public class BridgeActivity extends GameActivity implements Serializable {
         setContentView(R.layout.activity_bridge);
 
         Intent intent = getIntent();
-        boolean loadGame = intent.getBooleanExtra("loadGame", false);
-        if (loadGame) {
+        isGameLoaded = intent.getBooleanExtra("loadGame", false);
+        if (isGameLoaded) {
             this.loadGame();
             displayPot();
         } else {
@@ -650,7 +650,8 @@ public class BridgeActivity extends GameActivity implements Serializable {
                             displayIntermediateHands(cardsDisplayed);
 
                             if (cardsDisplayed == manager.players[0].hand.size() - 1) {
-                                int player = manager.findStartPlayer();
+                                //If the game is loaded, then calling findStartPlayer incorrectly mutates the st. player mid-round.
+                                int player = isGameLoaded ? manager.startPlayer : manager.findStartPlayer();
                                 while (isBot[player]) {
                                     if (guessCount == 4) {
                                         if (manager.pot.size() == 0)
@@ -675,7 +676,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
                                 }
                                 if (guessCount == 4) {
                                     if (manager.pot.size() == 0)
-                                        currentPlayerInteracting = manager.findStartPlayer();
+                                        currentPlayerInteracting = isGameLoaded ? manager.startPlayer : manager.findStartPlayer();
                                     if (isBot[currentPlayerInteracting])
                                         botHandle(250);
                                     else {
