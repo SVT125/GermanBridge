@@ -634,6 +634,7 @@ public class SpadesActivity extends GameActivity {
             ObjectInputStream is = new ObjectInputStream(fis);
             super.loadGame(is);
             this.manager = (SpadesManager) is.readObject();
+            this.displayedSpadesBroken = is.readBoolean();
             this.botCount = is.readInt();
             this.guessCount = is.readInt();
             this.guess = is.readInt();
@@ -654,6 +655,7 @@ public class SpadesActivity extends GameActivity {
             ObjectOutputStream objectStream = new ObjectOutputStream(outputStream);
             super.saveGame(objectStream);
             objectStream.writeObject(this.manager);
+            objectStream.writeBoolean(displayedSpadesBroken);
             objectStream.writeInt(botCount);
             objectStream.writeInt(guessCount);
             objectStream.writeInt(guess);
