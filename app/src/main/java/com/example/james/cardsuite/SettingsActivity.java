@@ -29,7 +29,7 @@ public class SettingsActivity extends Activity {
             musicPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    GameActivity.musicVolume = ((int) newValue) / 100f;
+                    SoundManager.musicVolume = ((int) newValue) / 100f;
                     return true;
                 }
             });
@@ -38,7 +38,7 @@ public class SettingsActivity extends Activity {
             SFXPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    GameActivity.sfxVolume = ((int) newValue) / 100f;
+                    SoundManager.sfxVolume = ((int) newValue) / 100f;
                     return true;
                 }
             });
