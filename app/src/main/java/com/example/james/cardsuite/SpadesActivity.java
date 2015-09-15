@@ -113,10 +113,8 @@ public class SpadesActivity extends GameActivity {
 
         super.gameClick(v);
         //Play sounds only if we're done swapping in hearts or are in any other game mode.
-        if (finishedLoading) {
-            int chosenSound = r.nextInt(3);
-            soundPools[chosenSound].play(sounds[chosenSound], sfxVolume, sfxVolume, 0, 0, 1);
-        }
+        if (SoundManager.isLoaded())
+            SoundManager.playPlaceCardSound();
         //Get the index of the chosen card in the current player's hand.
         int chosen = getCardIndex(v);
 
@@ -185,8 +183,7 @@ public class SpadesActivity extends GameActivity {
                             displayPot();
 
                             displayHands(lastNonBot, false, true);
-                            int chosenSound = r.nextInt(3);
-                            soundPools[chosenSound].play(sounds[chosenSound], sfxVolume, sfxVolume, 0, 0, 1);
+                            SoundManager.playPlaceCardSound();
 
                             currentPlayerInteracting = (currentPlayerInteracting + 1) % manager.playerCount;
 
@@ -283,6 +280,8 @@ public class SpadesActivity extends GameActivity {
             currentPlayerInteracting++;
         }
         findViewById(R.id.spadesBrokenView).setAlpha(1f);
+
+        dealCards();
     }
 
     //Call when the end piles and the scores displayed on top of the piles need be redisplayed.
@@ -552,7 +551,7 @@ public class SpadesActivity extends GameActivity {
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    soundPools[4].play(sounds[4], sfxVolume, sfxVolume, 0, 0, 1);
+                    SoundManager.playDealCardSound();
                     GameAnimation.dealSingleCards(SpadesActivity.this, new Runnable() {
                         @Override
                         public void run() {

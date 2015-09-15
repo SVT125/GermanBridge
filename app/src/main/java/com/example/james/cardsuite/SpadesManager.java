@@ -66,7 +66,7 @@ public class SpadesManager extends Manager implements Serializable {
 	}
 
 	public int findStartPlayer() {
-		this.startPlayer = potsFinished == 0 ? 3 : potsFinished - 1;
+		this.startPlayer = (potsFinished - 1) % 4;
 		return this.startPlayer;
 	}
 

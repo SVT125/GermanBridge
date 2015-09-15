@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
-import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
@@ -36,26 +35,19 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public abstract class GameActivity extends Activity implements Serializable {
-    public static float sfxVolume = 0.5f, musicVolume = 0.5f;
     public static final int levelsToSearch = 3; //Parameter for AI that indicates how many levels down to search.
     protected Manager manager;
     protected int currentPlayerInteracting = 0, currentPotTurn = 0, firstNonBot = 0, lastNonBot = 0;
     //DP to pixel values to use...
     protected int cardWidthPX, cardHeightPX, cardDeltaXPX, bottomTopMarginPX, rightLeftMarginPX, biddingWidthPX, biddingHeightPX;
-    private int soundsLoaded = 0;
     protected long lastClickTime = 0;
     protected boolean[] isBot = new boolean[4];
-    protected boolean foundStartPlayer = false, finishedSwapping = false, buttonsPresent = false, finishedLoading = false, canClick = true;
+    protected boolean foundStartPlayer = false, finishedSwapping = false, buttonsPresent = false, canClick = true;
     public boolean initialOutputWritten = false, isPaused = false, foundFirstNonBot = false, isGameLoaded = false;
     protected List<Integer> scores = new ArrayList<Integer>(), roundScores = new ArrayList<>();
-    protected static final SoundPool[] soundPools = new SoundPool[] {new SoundPool.Builder().build(), new SoundPool.Builder().build(),
-            new SoundPool.Builder().build(), new SoundPool.Builder().build(), new SoundPool.Builder().build(),
-            new SoundPool.Builder().build()};
-    protected int[] sounds;
-    protected static final Random r = new Random();
+
     protected List<ImageView> cardViews = new ArrayList<ImageView>();
     protected static final Handler handler = new Handler();
 
@@ -63,20 +55,7 @@ public abstract class GameActivity extends Activity implements Serializable {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //Play the sound of a card being played, unless it's hearts wherein it might be bid for swapping (different sound used).
-        sounds = new int[] {soundPools[0].load(this,R.raw.cardplace1,1), soundPools[1].load(this,R.raw.cardplace2,1),
-                soundPools[2].load(this, R.raw.cardplace3, 1), soundPools[3].load(this,R.raw.swapcardselect,1),
-                soundPools[4].load(this,R.raw.dealcards,1), soundPools[5].load(this,R.raw.swapcardsaround,1)};
-
-        SoundPool.OnLoadCompleteListener loadListener = new SoundPool.OnLoadCompleteListener() {
-            @Override
-            public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
-                soundsLoaded++;
-            }
-        };
-
-        for(SoundPool pool : soundPools)
-            pool.setOnLoadCompleteListener(loadListener);
+        SoundManager.prepare(this);
 
         for (int i = 0; i < 4; i++) {
             scores.add(0);
@@ -169,8 +148,7 @@ public abstract class GameActivity extends Activity implements Serializable {
     //Processes the state of the game manager for hearts.
     public void gameClick(final View v) {
         //If all sounds loaded, set the flag to true.
-        if(soundsLoaded == sounds.length)
-            finishedLoading = true;
+        SoundManager.isLoaded();
     }
 
     public int getCardIndex(final View v) {

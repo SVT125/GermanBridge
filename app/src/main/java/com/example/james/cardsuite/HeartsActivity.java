@@ -106,10 +106,8 @@ public class HeartsActivity extends GameActivity implements Serializable {
 
     public void playerHandle(View v) {
         //Play sounds only if we're done swapping in hearts or are in any other game mode.
-        if (finishedLoading && finishedSwapping) {
-            int chosenSound = r.nextInt(3);
-            soundPools[chosenSound].play(sounds[chosenSound], sfxVolume, sfxVolume, 0, 0, 1);
-        }
+        if (SoundManager.isLoaded() && finishedSwapping)
+            SoundManager.playPlaceCardSound();
 
         if (!(manager.isGameOver())) {
             // Handle player choosing cards
@@ -247,8 +245,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
                                 displayPot();
 
                                 displayHands(lastNonBot, false, true);
-                                int chosenSound = r.nextInt(3);
-                                soundPools[chosenSound].play(sounds[chosenSound], sfxVolume, sfxVolume, 0, 0, 1);
+                                SoundManager.playPlaceCardSound();
 
                                 if (finishedSwapping && (manager.pot.size() > 0))
                                     restOfRoundHandle();
@@ -387,7 +384,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
 
         if (!finishedSwapping) {
             //Play swapping sound.
-            soundPools[3].play(sounds[3], sfxVolume, sfxVolume, 0, 0, 1);
+            SoundManager.playSwapSelectSound();
 
             // Swap the cards between players.
             if (currentPlayerInteracting != 4) {
@@ -421,12 +418,10 @@ public class HeartsActivity extends GameActivity implements Serializable {
             manager.getPlayers()[i].organize();
         }
 
-        soundPools[5].play(sounds[5], sfxVolume, sfxVolume, 0, 1, 1);
+        SoundManager.playSwappingSound();
         GameAnimation.swapCards(this, swapRound, new Runnable() {
             @Override
             public void run() {
-                soundPools[5].stop(sounds[5]);
-
                 //This is run under the assumption the start player will be found below as the animation is run.
                 findStartPlayer();
                 if (botCount != 3) {
@@ -594,7 +589,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    soundPools[4].play(sounds[4], sfxVolume, sfxVolume, 0, 0, 1);
+                    SoundManager.playDealCardSound();
                     GameAnimation.dealSingleCards(HeartsActivity.this, new Runnable() {
                         @Override
                         public void run() {
