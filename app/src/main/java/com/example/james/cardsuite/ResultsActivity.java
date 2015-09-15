@@ -6,7 +6,10 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -32,6 +35,61 @@ public class ResultsActivity extends Activity {
             resultsView.setText("Players " +(manager.findWinner()+1) + " and " + ((manager.findWinner()+2)%4+1) + " won the game!");
         else
             resultsView.setText("Player " + (manager.findWinner()+1) + " won the game!");
+
+        final ImageButton playButton = (ImageButton) findViewById(R.id.restartGameButton);
+        playButton.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                ImageView iv = (ImageView) v;
+
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    iv.setAlpha(0.5f);
+                    newGameClick(v);
+                    return true;
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    iv.setAlpha(1f);
+                    return true;
+                }
+
+                return false;
+            }
+        });
+        final ImageButton settingsButton = (ImageButton) findViewById(R.id.display_scores);
+        settingsButton.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                ImageView iv = (ImageView) v;
+
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    newGameClick(v);
+                    iv.setAlpha(0.5f);
+                    return true;
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    iv.setAlpha(1f);
+                    return true;
+                }
+
+                return false;
+            }
+        });
+        final ImageButton helpButton = (ImageButton) findViewById(R.id.returntomenu);
+        helpButton.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                ImageView iv = (ImageView) v;
+
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    newGameClick(v);
+                    iv.setAlpha(0.5f);
+                    return true;
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    iv.setAlpha(1f);
+                    return true;
+                }
+
+                return false;
+            }
+        });
 
         AdView mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
