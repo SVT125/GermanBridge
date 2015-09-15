@@ -241,8 +241,6 @@ public class SpadesActivity extends GameActivity {
                             public void run() {
                                 // resets deck, hands, etc. and increments round
                                 reset();
-
-                                dealCards();
                             }
                         });
                     } else {
@@ -265,9 +263,13 @@ public class SpadesActivity extends GameActivity {
 
     // reshuffles deck, increments round count, resets all variables for the next round.
     public void reset() {
-        if (manager.isGameOver())
-            endGame();
         manager.reset();
+
+        if (manager.isGameOver()) {
+            endGame();
+            return;
+        }
+
         finishedSwapping = false;
         buttonsPresent = false;
         displayedSpadesBroken = false;
@@ -280,6 +282,8 @@ public class SpadesActivity extends GameActivity {
             currentPlayerInteracting++;
         }
         findViewById(R.id.spadesBrokenView).setAlpha(1f);
+
+        dealCards();
     }
 
     //Call when the end piles and the scores displayed on top of the piles need be redisplayed.
