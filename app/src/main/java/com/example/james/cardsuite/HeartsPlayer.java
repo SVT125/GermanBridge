@@ -18,14 +18,15 @@ public class HeartsPlayer extends Player implements Serializable {
 
 	// boolean returns true or false value depending on whether player has shot the moon or not
 	public boolean scoreChange() {
-		if (roundScore == 26) {
-			return true;
-		}
-		this.score += roundScore;
+		boolean shootMoon = false;
+		if (roundScore == 26)
+			shootMoon = true;
+		else
+			this.score += roundScore;
 		scoreHistory.add(this.score);
 		roundScore = 0;
 		obtainedCards = false;
-		return false;
+		return shootMoon;
 	}
 
 	public int tallyRoundScore() {

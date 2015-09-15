@@ -268,6 +268,8 @@ public class SpadesActivity extends GameActivity {
 
     // reshuffles deck, increments round count, resets all variables for the next round.
     public void reset() {
+        if (manager.isGameOver())
+            endGame();
         manager.reset();
         finishedSwapping = false;
         buttonsPresent = false;
