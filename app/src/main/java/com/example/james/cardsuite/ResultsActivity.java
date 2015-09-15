@@ -1,18 +1,31 @@
 package com.example.james.cardsuite;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.view.ContextThemeWrapper;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ResultsActivity extends Activity {
 
@@ -22,7 +35,7 @@ public class ResultsActivity extends Activity {
         setContentView(R.layout.activity_results);
 
         Intent intent = getIntent();
-        Manager manager = (Manager)intent.getSerializableExtra("manager");
+        final Manager manager = (Manager)intent.getSerializableExtra("manager");
         Player[] players = (Player[])intent.getSerializableExtra("players");
         int[] scores = (int[])intent.getSerializableExtra("scores");
         int gameMode = (Integer)intent.getSerializableExtra("game_mode");
@@ -36,7 +49,7 @@ public class ResultsActivity extends Activity {
         else
             resultsView.setText("Player " + (manager.findWinner()+1) + " won the game!");
 
-        final ImageButton playButton = (ImageButton) findViewById(R.id.restartGameButton);
+        final ImageButton playButton = (ImageButton) findViewById(R.id.returntomenu);
         playButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -54,32 +67,14 @@ public class ResultsActivity extends Activity {
                 return false;
             }
         });
-        final ImageButton settingsButton = (ImageButton) findViewById(R.id.display_scores);
-        settingsButton.setOnTouchListener(new View.OnTouchListener() {
+        final ImageButton scoresButton = (ImageButton) findViewById(R.id.display_scores);
+        scoresButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 ImageView iv = (ImageView) v;
 
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    newGameClick(v);
-                    iv.setAlpha(0.5f);
-                    return true;
-                } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    iv.setAlpha(1f);
-                    return true;
-                }
-
-                return false;
-            }
-        });
-        final ImageButton helpButton = (ImageButton) findViewById(R.id.returntomenu);
-        helpButton.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                ImageView iv = (ImageView) v;
-
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    newGameClick(v);
+                    displayScoreTable(manager);
                     iv.setAlpha(0.5f);
                     return true;
                 } else if (event.getAction() == MotionEvent.ACTION_UP) {
@@ -97,6 +92,69 @@ public class ResultsActivity extends Activity {
                 .addTestDevice("0AD1F7DBC188A1930B1462D7DDB2EF26")
                 .build();
         mAdView.loadAd(adRequest);
+    }
+
+    public void displayScoreTable(Manager manager) {
+        String[] column = { "Player 1", "Player 2", "Player 3", "Player 4" };
+        List<String> row = new ArrayList<>();
+        for (int i = 1; i <= manager.getPotsFinished() - 1; i++)
+            row.add("Round " + (i));
+
+        TableLayout tableLayout = new TableLayout(this);
+        tableLayout.setLayoutParams(new LinearLayout.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.MATCH_PARENT));
+        LinearLayout.LayoutParams rowParams = new LinearLayout.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT,
+                AbsListView.LayoutParams.MATCH_PARENT);
+        rowParams.gravity = Gravity.CENTER_VERTICAL;
+        rowParams.setMargins(10, 5, 10, 5);
+
+
+        for (int i = 0; i <= row.size(); i++) {
+            TableRow tableRow = new TableRow(this);
+            tableRow.setLayoutParams(rowParams);
+
+            for (int j = 0; j <= column.length; j++) {
+
+                TextView textView = new TextView(this);
+                if (i == 0 && j == 0)
+                    textView.setText("");
+                else if (i == 0) {
+                    textView.setText(column[j - 1]);
+                    textView.setTypeface(null, Typeface.BOLD);
+                }
+                else if (j == 0) {
+                    textView.setText(row.get(i - 1));
+                    textView.setTypeface(null, Typeface.BOLD);
+                }
+                else if (i !=0 && j != 0)
+                    textView.setText(Integer.toString(manager.getPlayers()[j - 1].scoreHistory.get(i - 1)));
+
+                textView.setGravity(Gravity.CENTER);
+                textView.setPadding(30, 5, 5, 5);
+                textView.setTextSize(15);
+                tableRow.addView(textView);
+            }
+            tableLayout.addView(tableRow);
+        }
+
+        ScrollView sv = new ScrollView(this);
+        LinearLayout.LayoutParams scrollParams = new LinearLayout.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT,
+                AbsListView.LayoutParams.MATCH_PARENT);
+        sv.setPadding(10, 20, 10, 20);
+        sv.setLayoutParams(scrollParams);
+        sv.setSmoothScrollingEnabled(true);
+        sv.addView(tableLayout);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.BidCustom));
+        builder.setCancelable(false);
+        builder.setView(sv);
+        builder.setTitle("Scoreboard");
+        builder.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder.show();
     }
 
     @Override

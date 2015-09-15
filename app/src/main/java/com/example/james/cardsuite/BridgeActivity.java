@@ -446,7 +446,6 @@ public class BridgeActivity extends GameActivity implements Serializable {
 
                         d.dismiss();
                         guessCount++;
-                        System.out.println("guess count: player onguess");
                         //Finished guessing, now move to actual gameplay.
                         if (guessCount == 4) {
                             if (manager.pot.size() == 0)
@@ -482,7 +481,6 @@ public class BridgeActivity extends GameActivity implements Serializable {
                                     canClick = true;
                                 }
                             }
-                            System.out.println("guess count: bot onguess");
 
                             guessCount++;
                             ((BridgePlayer) manager.getPlayers()[player]).guess = BridgeAI.getBid(player, (BridgeManager) manager);
@@ -501,6 +499,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
                                         displayHands(currentPlayerInteracting, true, true);
                                     canClick = true;
                                 }
+                                return;
                             }
                             player = (player + 1) % 4;
                         }
@@ -659,7 +658,6 @@ public class BridgeActivity extends GameActivity implements Serializable {
                                 //If the game is loaded, then calling findStartPlayer incorrectly mutates the st. player mid-round.
                                 int player = isGameLoaded ? manager.startPlayer : manager.findStartPlayer();
                                 while (isBot[player]) {
-                                    System.out.println("guess count: bot deal cards");
                                     if (guessCount == 4) {
                                         if (manager.pot.size() == 0)
                                             currentPlayerInteracting = manager.findStartPlayer();
