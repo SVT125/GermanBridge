@@ -92,7 +92,7 @@ public abstract class GameActivity extends Activity implements Serializable {
             d = builder.create();
         } else {
             android.support.v7.app.AlertDialog.Builder builder =
-                    new android.support.v7.app.AlertDialog.Builder(this, R.style.pauseScreen);
+                    new android.support.v7.app.AlertDialog.Builder(new ContextThemeWrapper(this, R.style.pauseScreen));
             builder.setTitle("Game Paused");
             builder.setView(view);
             builder.setCancelable(false);
@@ -164,7 +164,7 @@ public abstract class GameActivity extends Activity implements Serializable {
             builder.show();
         } else {
             android.support.v7.app.AlertDialog.Builder builder =
-                    new android.support.v7.app.AlertDialog.Builder(this, R.style.pauseScreen);
+                    new android.support.v7.app.AlertDialog.Builder(new ContextThemeWrapper(this, R.style.pauseScreen));
             builder.setTitle("Are you sure you want to exit the game?");
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
@@ -315,7 +315,7 @@ public abstract class GameActivity extends Activity implements Serializable {
             builder.show();
         } else {
             android.support.v7.app.AlertDialog.Builder builder =
-                    new android.support.v7.app.AlertDialog.Builder(this, R.style.BidCustom);
+                    new android.support.v7.app.AlertDialog.Builder(new ContextThemeWrapper(this, R.style.BidCustom));
             builder.setCancelable(false);
             builder.setView(sv);
             builder.setTitle("Scoreboard");

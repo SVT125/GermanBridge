@@ -350,7 +350,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
             builder.show();
         } else {
             android.support.v7.app.AlertDialog.Builder builder =
-                    new android.support.v7.app.AlertDialog.Builder(this, R.style.BidCustom);
+                    new android.support.v7.app.AlertDialog.Builder(new ContextThemeWrapper(this, R.style.BidCustom));
             builder.setView(sv);
             builder.setCancelable(false);
             builder.setTitle("Scoreboard");
@@ -456,7 +456,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
             d = builder.create();
         } else {
             android.support.v7.app.AlertDialog.Builder builder =
-                    new android.support.v7.app.AlertDialog.Builder(this, R.style.BidCustom);
+                    new android.support.v7.app.AlertDialog.Builder(new ContextThemeWrapper(this, R.style.BidCustom));
             builder.setCancelable(false);
             builder.setCustomTitle(text);
             builder.setView(horizontalScrollView);

@@ -19,7 +19,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -174,7 +173,6 @@ public class MainActivity extends Activity {
 
     public void savedGamePrompt(final int gameMode) {
         Dialog d;
-        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
         int currentAPILevel = android.os.Build.VERSION.SDK_INT;
         if(currentAPILevel > android.os.Build.VERSION_CODES.KITKAT) {
             android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(new ContextThemeWrapper(this, R.style.MyAppTheme));
@@ -195,15 +193,10 @@ public class MainActivity extends Activity {
                     playerSelection(gameMode);
                 }
             });
-            d = builder.create();
-            lp.copyFrom(d.getWindow().getAttributes());
-            lp.width = WindowManager.LayoutParams.WRAP_CONTENT;
-            lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-            d.show();
-            d.getWindow().setAttributes(lp);
+            builder.show();
         } else {
             android.support.v7.app.AlertDialog.Builder builder =
-                    new android.support.v7.app.AlertDialog.Builder(this, R.style.MyAppTheme);
+                    new android.support.v7.app.AlertDialog.Builder(new ContextThemeWrapper(this, R.style.MyAppTheme));
             builder.setTitle("Do you want to continue from a previous game?");
             builder.setNegativeButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
@@ -221,12 +214,7 @@ public class MainActivity extends Activity {
                     playerSelection(gameMode);
                 }
             });
-            d = builder.create();
-            lp.copyFrom(d.getWindow().getAttributes());
-            lp.width = WindowManager.LayoutParams.WRAP_CONTENT;
-            lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-            d.show();
-            d.getWindow().setAttributes(lp);
+            builder.show();
         }
         onPause();
     }
@@ -286,8 +274,6 @@ public class MainActivity extends Activity {
         ListView players = new ListView(this);
         players.setAdapter(adapter);
 
-        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-        Dialog d = null;
         int currentAPILevel = android.os.Build.VERSION.SDK_INT;
         if(currentAPILevel > android.os.Build.VERSION_CODES.KITKAT) {
             AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.MyAppTheme));
@@ -309,15 +295,10 @@ public class MainActivity extends Activity {
                 }
             });
             builder.setCancelable(false);
-            d = builder.create();
-            lp.copyFrom(d.getWindow().getAttributes());
-            lp.width = WindowManager.LayoutParams.WRAP_CONTENT;
-            lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-            d.show();
-            d.getWindow().setAttributes(lp);
+            builder.show();
         } else {
             android.support.v7.app.AlertDialog.Builder builder =
-                    new android.support.v7.app.AlertDialog.Builder(this, R.style.MyAppTheme);
+                    new android.support.v7.app.AlertDialog.Builder(new ContextThemeWrapper(this, R.style.MyAppTheme));
             builder.setView(players);
             builder.setTitle("Select players or bots");
             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -336,12 +317,7 @@ public class MainActivity extends Activity {
                 }
             });
             builder.setCancelable(false);
-            d = builder.create();
-            lp.copyFrom(d.getWindow().getAttributes());
-            lp.width = WindowManager.LayoutParams.WRAP_CONTENT;
-            lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-            d.show();
-            d.getWindow().setAttributes(lp);
+            builder.show();
         }
     }
 
