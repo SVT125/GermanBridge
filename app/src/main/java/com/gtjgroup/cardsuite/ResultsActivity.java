@@ -1,4 +1,4 @@
-package com.example.james.cardsuite;
+package com.gtjgroup.cardsuite;
 
 import android.app.Activity;
 import android.app.AlertDialog;

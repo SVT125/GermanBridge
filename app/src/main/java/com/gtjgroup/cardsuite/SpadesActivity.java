@@ -1,4 +1,4 @@
-package com.example.james.cardsuite;
+package com.gtjgroup.cardsuite;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -266,8 +266,10 @@ public class SpadesActivity extends GameActivity {
     // reshuffles deck, increments round count, resets all variables for the next round.
     public void reset() {
         manager.reset();
-        if (manager.isGameOver())
+        if (manager.isGameOver()) {
             endGame();
+            return;
+        }
         finishedSwapping = false;
         buttonsPresent = false;
         displayedSpadesBroken = false;

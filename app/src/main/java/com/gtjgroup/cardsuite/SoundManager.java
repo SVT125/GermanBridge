@@ -1,4 +1,4 @@
-package com.example.james.cardsuite;
+package com.gtjgroup.cardsuite;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;

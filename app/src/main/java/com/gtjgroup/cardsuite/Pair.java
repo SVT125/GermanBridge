@@ -1,4 +1,4 @@
-package com.example.james.cardsuite;
+package com.gtjgroup.cardsuite;
 
 public class Pair<X, Y> {
     public X move;

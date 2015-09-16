@@ -1,4 +1,4 @@
-package com.example.james.cardsuite;
+package com.gtjgroup.cardsuite;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -129,7 +129,7 @@ public class MainActivity extends Activity {
 
     public void settingsClick(View v) {
         SoundManager.playButtonClickSound();
-        Intent intent = new Intent(MainActivity.this, com.example.james.cardsuite.SettingsActivity.class);
+        Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
         startActivity(intent);
     }
 

@@ -1,4 +1,4 @@
-package com.example.james.cardsuite;
+package com.gtjgroup.cardsuite;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -124,7 +124,7 @@ public abstract class GameActivity extends Activity implements Serializable {
     }
 
     public void runSettings() {
-        Intent intent = new Intent(GameActivity.this, com.example.james.cardsuite.SettingsActivity.class);
+        Intent intent = new Intent(GameActivity.this, SettingsActivity.class);
         startActivity(intent);
     }
 

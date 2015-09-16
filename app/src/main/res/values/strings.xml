@@ -1,8 +1,8 @@
 <resources>
     <string name="credit_company_name">&#169; GTJ Group</string>
 
-    <string name="app_name">CARD SUITE</string>
-    <string name="welcome_title">Welcome to Card Suite!</string>
+    <string name="app_name">Card Suite</string>
+    <string name="welcome_title">CARD SUITE</string>
     <string name="german_bridge_title">German Bridge</string>
     <string name="hearts_title">Hearts</string>
     <string name="spades_title">Spades</string>

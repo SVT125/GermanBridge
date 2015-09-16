@@ -1,7 +1,6 @@
 package com.example.james.cardsuite;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 public class BridgePlayer extends Player {
 	
