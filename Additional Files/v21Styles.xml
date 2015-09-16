@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="MyAppTheme" parent="@android:style/Theme.Material.Light.NoActionBar">
+        <item name="android:colorPrimary">@color/background</item>
+
+        <item name="android:windowBackground">@color/background</item>
+
+        <item name="android:background">@color/background</item>
+
+        <item name="android:textAlignment">center</item>
+
+        <item name="android:textColorPrimary">@color/hearts_red</item>
+
+        <item name="android:textColor">@color/hearts_red</item>
+
+        <item name="android:colorAccent">@color/hearts_red</item>
+
+        <item name="android:textAppearanceButton">@color/hearts_red</item>
+    </style>
+    <style name="AlertDialogCustom" parent="@android:style/Theme.Material.Dialog">
+        <item name="android:colorPrimary">@color/background</item>
+
+        <!-- <item name="android:background">@color/background</item> -->
+
+        <item name="android:windowBackground">@color/background</item>
+
+        <item name="android:textColor">@color/spades_blue</item>
+
+        <item name="android:textAlignment">center</item>
+
+        <item name="android:textStyle">italic</item>
+    </style>
+    <style name="pauseScreen" parent="@android:style/Theme.Holo.Dialog.MinWidth">
+        <item name="android:colorPrimary">@color/background</item>
+
+        <item name="android:windowBackground">@color/background</item>
+
+        <item name="android:background">@color/background</item>
+
+        <item name="android:textAlignment">center</item>
+
+        <item name="android:textColorPrimary">@color/hearts_red</item>
+
+        <item name="android:textColor">@color/hearts_red</item>
+
+        <!-- <item name="android:colorAccent">@color/hearts_red</item>
+        <item name="android:textAppearanceButton">@color/hearts_red</item> -->
+    </style>
+    <style name="settings" parent="@android:style/Theme.Holo.Light.NoActionBar">
+        <item name="android:colorPrimary">@color/background</item>
+
+        <item name="android:windowBackground">@color/background</item>
+
+        <item name="android:background">@color/background</item>
+
+        <item name="android:titleTextAppearance">@color/hearts_red</item>
+
+        <item name="android:textAlignment">center</item>
+
+        <item name="android:textColorPrimary">@color/hearts_red</item>
+
+        <item name="android:textColor">@color/hearts_red</item>
+
+        <item name="android:colorAccent">@color/hearts_red</item>
+    </style>
+    <style name="BidCustom" parent="@android:style/Theme.Material.Dialog">
+        <item name="android:colorPrimary">@color/background</item>
+
+        <item name="android:background">@color/background</item>
+
+        <item name="android:windowBackground">@color/hearts_red</item>
+
+        <item name="android:textColor">@color/spades_blue</item>
+
+        <item name="android:textAlignment">center</item>
+    </style>
+</resources>
