@@ -29,6 +29,8 @@
         <item name="android:textAlignment">center</item>
 
         <item name="android:textStyle">italic</item>
+
+        <item name="android:textSize">12sp</item>
     </style>
     <style name="pauseScreen" parent="@android:style/Theme.Material.Dialog.MinWidth">
         <item name="android:colorPrimary">@color/background</item>
