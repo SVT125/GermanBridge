@@ -82,7 +82,10 @@ public class ResultsActivity extends Activity {
         });
 
         AdView mAdView = (AdView) findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .addTestDevice("75323E59FF3A690DE8299B8B05344B0C")
+                .build();
         mAdView.loadAd(adRequest);
     }
 
