@@ -1,23 +1,33 @@
 package com.example.james.cardsuite;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.media.AudioManager;
 import android.media.SoundPool;
+import android.os.Build;
 
+import java.util.Arrays;
 import java.util.Random;
 
 public class SoundManager {
     public static float sfxVolume = 0.5f, musicVolume = 0.5f;
-    protected static final SoundPool[] soundPools = new SoundPool[] {new SoundPool.Builder().build(), new SoundPool.Builder().build(),
-            new SoundPool.Builder().build(), new SoundPool.Builder().build(), new SoundPool.Builder().build(),
-            new SoundPool.Builder().build(), new SoundPool.Builder().build()};
+    protected static SoundPool[] soundPools = new SoundPool[7];
     protected static int[] sounds;
     private static int soundsLoaded = 0;
     private static boolean finishedLoading = false;
     protected static final Random r = new Random();
 
+    @SuppressLint("NewApi")
     public static void prepare(Activity activity) {
         Context context = activity.getApplicationContext();
+
+        int currentAPILevel = Build.VERSION.SDK_INT;
+        if(currentAPILevel > Build.VERSION_CODES.KITKAT)
+            Arrays.fill(soundPools, new SoundPool.Builder().build());
+        else
+            Arrays.fill(soundPools, new SoundPool(1, AudioManager.STREAM_MUSIC,0));
+
         //Play the sound of a card being played, unless it's hearts wherein it might be bid for swapping (different sound used).
         sounds = new int[] {soundPools[0].load(context,R.raw.cardplace1,1), soundPools[1].load(context,R.raw.cardplace2,1),
                 soundPools[2].load(context, R.raw.cardplace3, 1), soundPools[3].load(context,R.raw.swapcardselect,1),
