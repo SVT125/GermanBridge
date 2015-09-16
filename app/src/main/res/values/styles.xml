@@ -1,9 +1,9 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="MyAppTheme" parent="@style/Theme.AppCompat.Light">
+    <style name="MyAppTheme" parent="@android:style/Theme.Holo.Light">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/background</item>
+        <item name="android:colorPrimary">@color/background</item>
 
         <item name="android:windowBackground">@color/background</item>
 
