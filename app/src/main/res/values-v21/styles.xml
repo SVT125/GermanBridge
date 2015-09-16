@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="MyAppTheme" parent="@android:style/Theme.Material.Light.NoActionBar">
+    <style name="MyAppTheme" parent="android:style/Theme.Material.Light.NoActionBar">
         <item name="android:colorPrimary">@color/background</item>
 
         <item name="android:windowBackground">@color/background</item>
@@ -30,7 +30,7 @@
 
         <item name="android:textStyle">italic</item>
     </style>
-    <style name="pauseScreen" parent="@android:style/Theme.Holo.Dialog.MinWidth">
+    <style name="pauseScreen" parent="@android:style/Theme.Material.Dialog.MinWidth">
         <item name="android:colorPrimary">@color/background</item>
 
         <item name="android:windowBackground">@color/background</item>
@@ -44,7 +44,6 @@
         <item name="android:textColor">@color/hearts_red</item>
 
         <!-- <item name="android:colorAccent">@color/hearts_red</item>
-
         <item name="android:textAppearanceButton">@color/hearts_red</item> -->
     </style>
     <style name="settings" parent="@android:style/Theme.Holo.Light.NoActionBar">
