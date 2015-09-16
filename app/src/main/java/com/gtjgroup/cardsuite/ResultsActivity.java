@@ -1,7 +1,7 @@
 package com.gtjgroup.cardsuite;
 
 import android.app.Activity;
-import android.support.v7.app.AlertDialog;
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -139,17 +139,33 @@ public class ResultsActivity extends Activity {
         sv.setSmoothScrollingEnabled(true);
         sv.addView(tableLayout);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.BidCustom));
-        builder.setCancelable(false);
-        builder.setView(sv);
-        builder.setTitle("Scoreboard");
-        builder.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+        int currentAPILevel = android.os.Build.VERSION.SDK_INT;
+        if(currentAPILevel > android.os.Build.VERSION_CODES.KITKAT) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.BidCustom));
+            builder.setCancelable(false);
+            builder.setView(sv);
+            builder.setTitle("Scoreboard");
+            builder.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
 
-            }
-        });
-        builder.show();
+                }
+            });
+            builder.show();
+        } else {
+            android.support.v7.app.AlertDialog.Builder builder =
+                    new android.support.v7.app.AlertDialog.Builder(this, R.style.BidCustom);
+            builder.setCancelable(false);
+            builder.setView(sv);
+            builder.setTitle("Scoreboard");
+            builder.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+            builder.show();
+        }
     }
 
     @Override

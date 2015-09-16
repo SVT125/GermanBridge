@@ -1,8 +1,8 @@
 package com.gtjgroup.cardsuite;
 
 import android.app.Activity;
-import android.support.v7.app.AlertDialog;
 import android.app.Dialog;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -77,15 +77,29 @@ public abstract class GameActivity extends Activity implements Serializable {
         if (!canClick)
             return;
         SoundManager.playButtonClickSound();
-        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.pauseScreen));
-        builder.setTitle("Game Paused");
+
         LayoutInflater inflater = (LayoutInflater)getApplicationContext().getSystemService
                 (Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.pause_screen,null);
-        builder.setView(view);
-        builder.setCancelable(false);
-        final AlertDialog dlg = builder.create();
 
+        Dialog d;
+        int currentAPILevel = android.os.Build.VERSION.SDK_INT;
+        if(currentAPILevel > android.os.Build.VERSION_CODES.KITKAT) {
+            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(new ContextThemeWrapper(this, R.style.pauseScreen));
+            builder.setTitle("Game Paused");
+            builder.setView(view);
+            builder.setCancelable(false);
+            d = builder.create();
+        } else {
+            android.support.v7.app.AlertDialog.Builder builder =
+                    new android.support.v7.app.AlertDialog.Builder(this, R.style.pauseScreen);
+            builder.setTitle("Game Paused");
+            builder.setView(view);
+            builder.setCancelable(false);
+            d = builder.create();
+        }
+
+        final Dialog dlg = d;
         Button gameReturn = (Button) view.findViewById(R.id.return_game);
         Button displayScores = (Button) view.findViewById(R.id.display_scores);
         Button settings = (Button) view.findViewById(R.id.in_game_settings);
@@ -129,23 +143,45 @@ public abstract class GameActivity extends Activity implements Serializable {
     }
 
     public void promptExit(View v) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.pauseScreen));
-        builder.setTitle("Are you sure you want to exit the game?");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(GameActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        builder.show();
+        int currentAPILevel = android.os.Build.VERSION.SDK_INT;
+        if(currentAPILevel > android.os.Build.VERSION_CODES.KITKAT) {
+            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(new ContextThemeWrapper(this, R.style.pauseScreen));
+            builder.setTitle("Are you sure you want to exit the game?");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent(GameActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            builder.show();
+        } else {
+            android.support.v7.app.AlertDialog.Builder builder =
+                    new android.support.v7.app.AlertDialog.Builder(this, R.style.pauseScreen);
+            builder.setTitle("Are you sure you want to exit the game?");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent(GameActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            builder.show();
+        }
     }
 
     //Processes the state of the game manager for hearts.
@@ -263,18 +299,35 @@ public abstract class GameActivity extends Activity implements Serializable {
         sv.setSmoothScrollingEnabled(true);
         sv.addView(tableLayout);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.BidCustom));
-        builder.setCancelable(false);
-        builder.setView(sv);
-        builder.setTitle("Scoreboard");
-        builder.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (closeAction != null)
-                    handler.post(closeAction);
-            }
-        });
-        builder.show();
+        int currentAPILevel = android.os.Build.VERSION.SDK_INT;
+        if(currentAPILevel > android.os.Build.VERSION_CODES.KITKAT) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.BidCustom));
+            builder.setCancelable(false);
+            builder.setView(sv);
+            builder.setTitle("Scoreboard");
+            builder.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (closeAction != null)
+                        handler.post(closeAction);
+                }
+            });
+            builder.show();
+        } else {
+            android.support.v7.app.AlertDialog.Builder builder =
+                    new android.support.v7.app.AlertDialog.Builder(this, R.style.BidCustom);
+            builder.setCancelable(false);
+            builder.setView(sv);
+            builder.setTitle("Scoreboard");
+            builder.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (closeAction != null)
+                        handler.post(closeAction);
+                }
+            });
+            builder.show();
+        }
     }
 
     // reshuffles deck, increments round count, resets all variables for the next round.

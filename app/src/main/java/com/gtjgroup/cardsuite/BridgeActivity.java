@@ -1,6 +1,6 @@
 package com.gtjgroup.cardsuite;
 
-import android.support.v7.app.AlertDialog;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -334,18 +334,35 @@ public class BridgeActivity extends GameActivity implements Serializable {
         sv.setSmoothScrollingEnabled(true);
         sv.addView(tableLayout);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.BidCustom));
-        builder.setView(sv);
-        builder.setCancelable(false);
-        builder.setTitle("Scoreboard");
+        int currentAPILevel = android.os.Build.VERSION.SDK_INT;
+        if(currentAPILevel > android.os.Build.VERSION_CODES.KITKAT) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.BidCustom));
+            builder.setView(sv);
+            builder.setCancelable(false);
+            builder.setTitle("Scoreboard");
 
-        builder.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                reset();
-            }
-        });
-        builder.show();
+            builder.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    reset();
+                }
+            });
+            builder.show();
+        } else {
+            android.support.v7.app.AlertDialog.Builder builder =
+                    new android.support.v7.app.AlertDialog.Builder(this, R.style.BidCustom);
+            builder.setView(sv);
+            builder.setCancelable(false);
+            builder.setTitle("Scoreboard");
+
+            builder.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    reset();
+                }
+            });
+            builder.show();
+        }
     }
 
     //Call when the end piles and the scores displayed on top of the piles need be redisplayed.
@@ -387,9 +404,8 @@ public class BridgeActivity extends GameActivity implements Serializable {
 
     //Opens the guess dialog - fit for German Bridge for now.
     public void openGuessDialog(final int currentPlayer) {
-        displayHands(currentPlayer,false, false);
-        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.BidCustom));
-        builder.setCancelable(false);
+        displayHands(currentPlayer, false, false);
+
         HorizontalScrollView horizontalScrollView = new HorizontalScrollView(this);
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.HORIZONTAL);
@@ -405,7 +421,6 @@ public class BridgeActivity extends GameActivity implements Serializable {
         text.setTextSize(22);
         text.setPadding(30, 50, 30, 30);
         text.setTypeface(null, Typeface.BOLD);
-        builder.setCustomTitle(text);
         Button[] buttons = new Button[manager.potsFinished + 1];
 
         for (int i = 0; i <= manager.potsFinished; i++) {
@@ -426,12 +441,28 @@ public class BridgeActivity extends GameActivity implements Serializable {
             group.addView(button);
         }
         LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        llp.setMargins(50,0,0,0);
+        llp.setMargins(50, 0, 0, 0);
         layout.addView(group, llp);
         horizontalScrollView.addView(layout);
         horizontalScrollView.setLayoutParams(new AbsListView.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        builder.setView(horizontalScrollView);
-        final AlertDialog d = builder.create();
+
+        Dialog d = null;
+        int currentAPILevel = android.os.Build.VERSION.SDK_INT;
+        if(currentAPILevel > android.os.Build.VERSION_CODES.KITKAT) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.BidCustom));
+            builder.setCancelable(false);
+            builder.setCustomTitle(text);
+            builder.setView(horizontalScrollView);
+            d = builder.create();
+        } else {
+            android.support.v7.app.AlertDialog.Builder builder =
+                    new android.support.v7.app.AlertDialog.Builder(this, R.style.BidCustom);
+            builder.setCancelable(false);
+            builder.setCustomTitle(text);
+            builder.setView(horizontalScrollView);
+            d = builder.create();
+        }
+        final Dialog finalDialog = d;
 
         for (final Button button : buttons) {
             button.setOnClickListener(new View.OnClickListener() {
@@ -444,7 +475,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
                         ((BridgePlayer) manager.players[currentPlayer]).guess = guess;
                         displayEndPiles(scores);
 
-                        d.dismiss();
+                        finalDialog.dismiss();
                         guessCount++;
                         //Finished guessing, now move to actual gameplay.
                         if (guessCount == 4) {

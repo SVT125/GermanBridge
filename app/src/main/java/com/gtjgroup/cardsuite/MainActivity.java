@@ -1,7 +1,7 @@
 package com.gtjgroup.cardsuite;
 
 import android.app.Activity;
-import android.support.v7.app.AlertDialog;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -19,6 +19,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -172,25 +173,61 @@ public class MainActivity extends Activity {
     }
 
     public void savedGamePrompt(final int gameMode) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this,R.style.MyAppTheme));
-        builder.setTitle("Do you want to continue from a previous game?");
-        builder.setNegativeButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                SoundManager.playButtonClickSound();
-                loadGame = true;
-                runGameActivity(gameMode);
-            }
-        });
-        builder.setPositiveButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                SoundManager.playButtonClickSound();
-                loadGame = false;
-                playerSelection(gameMode);
-            }
-        });
-        builder.show();
+        Dialog d;
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        int currentAPILevel = android.os.Build.VERSION.SDK_INT;
+        if(currentAPILevel > android.os.Build.VERSION_CODES.KITKAT) {
+            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(new ContextThemeWrapper(this, R.style.MyAppTheme));
+            builder.setTitle("Do you want to continue from a previous game?");
+            builder.setNegativeButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    SoundManager.playButtonClickSound();
+                    loadGame = true;
+                    runGameActivity(gameMode);
+                }
+            });
+            builder.setPositiveButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    SoundManager.playButtonClickSound();
+                    loadGame = false;
+                    playerSelection(gameMode);
+                }
+            });
+            d = builder.create();
+            lp.copyFrom(d.getWindow().getAttributes());
+            lp.width = WindowManager.LayoutParams.WRAP_CONTENT;
+            lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+            d.show();
+            d.getWindow().setAttributes(lp);
+        } else {
+            android.support.v7.app.AlertDialog.Builder builder =
+                    new android.support.v7.app.AlertDialog.Builder(this, R.style.MyAppTheme);
+            builder.setTitle("Do you want to continue from a previous game?");
+            builder.setNegativeButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    SoundManager.playButtonClickSound();
+                    loadGame = true;
+                    runGameActivity(gameMode);
+                }
+            });
+            builder.setPositiveButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    SoundManager.playButtonClickSound();
+                    loadGame = false;
+                    playerSelection(gameMode);
+                }
+            });
+            d = builder.create();
+            lp.copyFrom(d.getWindow().getAttributes());
+            lp.width = WindowManager.LayoutParams.WRAP_CONTENT;
+            lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+            d.show();
+            d.getWindow().setAttributes(lp);
+        }
         onPause();
     }
 
@@ -248,26 +285,64 @@ public class MainActivity extends Activity {
 
         ListView players = new ListView(this);
         players.setAdapter(adapter);
-        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.MyAppTheme));
-        builder.setView(players);
-        builder.setTitle("Select players or bots");
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
 
-                SoundManager.playButtonClickSound();
-                runGameActivity(gameMode);
-            }
-        });
-        builder.setNeutralButton("Back", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                SoundManager.playButtonClickSound();
-                dialog.cancel();
-            }
-        });
-        builder.setCancelable(false);
-        builder.show();
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        Dialog d = null;
+        int currentAPILevel = android.os.Build.VERSION.SDK_INT;
+        if(currentAPILevel > android.os.Build.VERSION_CODES.KITKAT) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.MyAppTheme));
+            builder.setView(players);
+            builder.setTitle("Select players or bots");
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    SoundManager.playButtonClickSound();
+                    runGameActivity(gameMode);
+                }
+            });
+            builder.setNeutralButton("Back", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    SoundManager.playButtonClickSound();
+                    dialog.cancel();
+                }
+            });
+            builder.setCancelable(false);
+            d = builder.create();
+            lp.copyFrom(d.getWindow().getAttributes());
+            lp.width = WindowManager.LayoutParams.WRAP_CONTENT;
+            lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+            d.show();
+            d.getWindow().setAttributes(lp);
+        } else {
+            android.support.v7.app.AlertDialog.Builder builder =
+                    new android.support.v7.app.AlertDialog.Builder(this, R.style.MyAppTheme);
+            builder.setView(players);
+            builder.setTitle("Select players or bots");
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    SoundManager.playButtonClickSound();
+                    runGameActivity(gameMode);
+                }
+            });
+            builder.setNeutralButton("Back", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    SoundManager.playButtonClickSound();
+                    dialog.cancel();
+                }
+            });
+            builder.setCancelable(false);
+            d = builder.create();
+            lp.copyFrom(d.getWindow().getAttributes());
+            lp.width = WindowManager.LayoutParams.WRAP_CONTENT;
+            lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+            d.show();
+            d.getWindow().setAttributes(lp);
+        }
     }
 
     public void runGameActivity(int gameMode) {
