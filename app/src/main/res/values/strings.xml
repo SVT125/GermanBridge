@@ -1,5 +1,7 @@
 <resources>
-    <string name="app_name">Card Suite</string>
+    <string name="credit_company_name">&#169; GTJ Group</string>
+
+    <string name="app_name">CARD SUITE</string>
     <string name="welcome_title">Welcome to Card Suite!</string>
     <string name="german_bridge_title">German Bridge</string>
     <string name="hearts_title">Hearts</string>
@@ -9,7 +11,7 @@
     <string name="title_activity_results">Results</string>
     <string name="new_game">New Game</string>
     <string name="placeholder">Placeholder</string>
-    <string name="title_activity_hearts">HeartsActivit</string>
+    <string name="title_activity_hearts">HeartsActivity</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_bridge">BridgeActivity</string>
