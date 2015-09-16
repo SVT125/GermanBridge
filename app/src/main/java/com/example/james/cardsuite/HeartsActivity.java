@@ -8,7 +8,6 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -145,7 +144,6 @@ public class HeartsActivity extends GameActivity implements Serializable {
                         if (manager.pot.size() > 0)
                             restOfRoundHandle();
 
-                        Log.i("Continue?", Boolean.toString((currentPotSize != 4 && !isRoundOver)));
                         if(currentPotSize != 4 && !isRoundOver) {
                             if (manager.getPlayers()[currentPlayerInteracting].isBot)
                                 botHandle(250);

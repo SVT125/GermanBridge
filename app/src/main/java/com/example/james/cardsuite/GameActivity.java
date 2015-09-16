@@ -378,7 +378,7 @@ public abstract class GameActivity extends Activity implements Serializable {
             this.scores = (List<Integer>) is.readObject();
             this.roundScores = (List<Integer>) is.readObject();
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
     }
 

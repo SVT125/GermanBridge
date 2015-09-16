@@ -723,7 +723,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
             fis.close();
             deleteFile("save_bridge");
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
     }
 
