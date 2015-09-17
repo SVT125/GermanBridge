@@ -90,6 +90,8 @@ public class HeartsManager extends Manager implements Serializable {
 					return false;
 				}
 			}
+			if (players[currentPlayer].hand.size() == 13 && (card.getSuit().equals(Card.Suit.HEARTS) || card.compareTo(new Card(12, Card.Suit.SPADES)) == 0))
+				return false;
 		}
 		return true;
 	}
@@ -155,10 +157,10 @@ public class HeartsManager extends Manager implements Serializable {
 		int otherPlayer = 0; //default initialized
 		switch (swapRound) {
 			case 0:
-				otherPlayer = playerNum != 0 ? playerNum - 1 : 3;
+				otherPlayer = playerNum != 3 ? playerNum + 1 : 0;
 				break;
 			case 1:
-				otherPlayer = playerNum != 3 ? playerNum + 1 : 0;
+				otherPlayer = playerNum != 0 ? playerNum - 1 : 3;
 				break;
 			case 2:
 				otherPlayer = (playerNum == 0 || playerNum == 1) ? playerNum + 2 : playerNum - 2;

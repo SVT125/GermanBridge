@@ -44,7 +44,8 @@ public class HeartsActivity extends GameActivity implements Serializable {
         if (isGameLoaded) {
             this.loadGame();
             this.displayPot();
-            displayEndPiles(roundScores);
+            if (roundScores.size() != 0)
+                displayEndPiles(roundScores);
         } else {
             this.isBot = intent.getBooleanArrayExtra("isBot");
             manager = new HeartsManager(isBot);

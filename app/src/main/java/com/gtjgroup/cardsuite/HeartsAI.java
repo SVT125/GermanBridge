@@ -183,8 +183,10 @@ public class HeartsAI extends HeartsPlayer implements Serializable {
         Card.Suit playSuit = manager.startSuit;
         List<Card> placeable = findPlaceable(manager, currentPlayer);
 
-        if (this.hand.size() == 13)
+        if (this.hand.size() == 13 && placeable.size() == 0)
             return manager.getPlayers()[currentPlayer].hand.get(0);
+        else if (this.hand.size() == 13)
+            return placeable.get(placeable.size() - 1);
 
         // if bot has the suit, return the lowest of that suit
         if (this.hasSuit(placeable, playSuit) && (placeable.get(0).getCardNumber() > manager.potHighestValue()))

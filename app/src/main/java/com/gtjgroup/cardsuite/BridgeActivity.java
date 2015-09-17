@@ -427,7 +427,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
             final RadioButton button = new RadioButton(this);
             button.setText(Integer.toString(i));
             button.setTextSize(20);
-            if (i != manager.getPlayers()[currentPlayer].hand.size() - ((BridgeManager)manager).addedGuesses) {
+            if (i != manager.getPlayers()[currentPlayer].hand.size() - ((BridgeManager)manager).addedGuesses || !(currentPlayer == (manager.startPlayer + 3) % 4)) {
                 button.setTextColor(getResources().getColor(R.color.spades_blue));
                 button.setBackgroundResource(R.drawable.bid_selected);
             } else {
@@ -469,8 +469,8 @@ public class BridgeActivity extends GameActivity implements Serializable {
                 @Override
                 public void onClick(View v) {
                     SoundManager.playButtonClickSound();
-                    if ((guess != manager.getPlayers()[currentPlayer].hand.size() - ((BridgeManager)manager).addedGuesses) &&
-                            (guess == (Integer) button.getTag())) {
+                    if (((guess != manager.getPlayers()[currentPlayer].hand.size() - ((BridgeManager)manager).addedGuesses) ||
+                            currentPlayer != (manager.startPlayer + 3) % 4) && (guess == (Integer) button.getTag())) {
                         ((BridgeManager) manager).addedGuesses += guess;
                         ((BridgePlayer) manager.players[currentPlayer]).guess = guess;
                         displayEndPiles(scores);
