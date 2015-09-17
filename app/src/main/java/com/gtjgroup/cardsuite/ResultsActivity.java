@@ -21,18 +21,36 @@ import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
+import com.google.android.gms.ads.doubleclick.PublisherInterstitialAd;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ResultsActivity extends Activity {
+    PublisherInterstitialAd mPublisherInterstitialAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_results);
+
+        mPublisherInterstitialAd = new PublisherInterstitialAd(this);
+        mPublisherInterstitialAd.setAdUnitId("ca-app-pub-6563321210012380/4278786755");
+        mPublisherInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                requestNewInterstitial();
+                Intent intent = new Intent(ResultsActivity.this,MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+        requestNewInterstitial();
 
         Intent intent = getIntent();
         final Manager manager = (Manager)intent.getSerializableExtra("manager");
@@ -168,6 +186,15 @@ public class ResultsActivity extends Activity {
         }
     }
 
+    private void requestNewInterstitial() {
+        PublisherAdRequest adRequest = new PublisherAdRequest.Builder()
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .addTestDevice("75323E59FF3A690DE8299B8B05344B0C")
+                .build();
+
+        mPublisherInterstitialAd.loadAd(adRequest);
+    }
+
     @Override
     public void onConfigurationChanged(Configuration config) {
         super.onConfigurationChanged(config);
@@ -175,9 +202,13 @@ public class ResultsActivity extends Activity {
 
     // Starts a new game when clicked - goes to the main activity again.
     public void newGameClick(View v) {
-        Intent intent = new Intent(ResultsActivity.this,MainActivity.class);
-        startActivity(intent);
-        finish();
+        if (mPublisherInterstitialAd.isLoaded()) {
+            mPublisherInterstitialAd.show();
+        } else {
+            Intent intent = new Intent(ResultsActivity.this,MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
     @Override
