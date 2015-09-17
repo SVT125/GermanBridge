@@ -489,7 +489,7 @@ public class SpadesActivity extends GameActivity {
             float initialTheta = (float) -2.25 * manager.getPlayers()[i].hand.size() / 2;
             for (int j = 0; j < manager.getPlayers()[i].hand.size(); j++) {
                 float theta = (float) (initialTheta + 2.25 * j);
-                deltaY = (int) (1.2 * (17.5 - Math.pow(j - manager.getPlayers()[i].hand.size() / 2, 2))); //Truncate the result of the offset
+                deltaY = (int) (metrics.density * 0.4 * (17.5 - Math.pow(j - manager.getPlayers()[i].hand.size() / 2, 2))); //Truncate the result of the offset
 
                 if (manager.getPlayers()[i].hand.size() % 2 != 0 && j == (manager.getPlayers()[i].hand.size() - 1) / 2)
                     theta = 0;

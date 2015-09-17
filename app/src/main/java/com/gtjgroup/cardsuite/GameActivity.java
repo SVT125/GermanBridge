@@ -51,6 +51,8 @@ public abstract class GameActivity extends Activity implements Serializable {
     protected List<ImageView> cardViews = new ArrayList<ImageView>();
     protected static final Handler handler = new Handler();
 
+    public static DisplayMetrics metrics = new DisplayMetrics();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,7 +64,6 @@ public abstract class GameActivity extends Activity implements Serializable {
         //Converting the card dimensions in dp (35x50) into px; change to get dims of cards for entire app.
         //Also converting the distance between cards (60px) with dp.
         //These values were obtained using a OnePlus One (xxhdpi).
-        DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         cardWidthPX = (int)Math.ceil(40 * metrics.density);
         cardHeightPX = (int)Math.ceil(57 * metrics.density);
@@ -370,7 +371,7 @@ public abstract class GameActivity extends Activity implements Serializable {
             float initialTheta = (float) -2.25 * numCardsToDisplay / 2;
             for (int j = 0; j < numCardsToDisplay; j++) {
                 float theta = (float) (initialTheta + 2.25 * j);
-                deltaY = (int) (1.2 * (17.5 - Math.pow(j - numCardsToDisplay / 2, 2))); //Truncate the result of the offset
+                deltaY = (int) (metrics.density * 0.4 * (17.5 - Math.pow(j - numCardsToDisplay / 2, 2))); //Truncate the result of the offset
 
                 if(numCardsToDisplay % 2 != 0 && j == (numCardsToDisplay-1)/2)
                     theta = 0;
