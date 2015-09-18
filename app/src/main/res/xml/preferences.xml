@@ -12,12 +12,14 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:title="MUSIC"
+                    android:summary="Change the volume of background music."
                     android:key="master_music_settings">
                 </com.gtjgroup.cardsuite.SeekbarPreference>
                 <com.gtjgroup.cardsuite.SeekbarPreference
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:title="SFX"
+                    android:summary="Change the volume of sound effects."
                     android:key="master_sfx_settings">
                 </com.gtjgroup.cardsuite.SeekbarPreference>
             </PreferenceCategory>
@@ -31,6 +33,7 @@
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:title="GAME SPEED"
+                        android:summary="Changes the delay of bot turns and final pots kept displayed."
                         android:key="game_speed_settings">
                     </com.gtjgroup.cardsuite.SeekbarPreference>
                 </PreferenceCategory>
