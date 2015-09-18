@@ -42,8 +42,8 @@
         android:layout_marginTop="5dp" />
 
     <ImageButton
-        android:layout_width="150dp"
-        android:layout_height="70dp"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
         android:id="@+id/play"
         android:onClick="overlayClick"
         android:background="@drawable/play"
@@ -53,8 +53,8 @@
 
 
     <ImageButton
-        android:layout_width="225dp"
-        android:layout_height="70dp"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
         android:id="@+id/settings_button"
         android:onClick="settingsClick"
         android:background="@drawable/settings"
@@ -63,7 +63,7 @@
 
     <ImageButton
         android:layout_width="300dp"
-        android:layout_height="70dp"
+        android:layout_height="50dp"
         android:id="@+id/help_button"
         android:background="@drawable/help"
         android:layout_alignParentBottom="true"
