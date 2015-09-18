@@ -2,20 +2,22 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.gtjgroup.cardsuite"
     android:versionCode="1"
-    android:versionName="1.0">
+    android:versionName="1.0" >
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
         android:icon="@drawable/spade"
         android:label="@string/app_name"
         android:theme="@style/MyAppTheme" >
-        <meta-data android:name="com.google.android.gms.version"
+        <meta-data
+            android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+
         <activity
-            android:name="com.gtjgroup.cardsuite.MainActivity"
+            android:name=".MainActivity"
             android:configChanges="mcc|mnc|locale|touchscreen|navigation|fontScale|orientation|keyboard|keyboardHidden|screenLayout|uiMode|smallestScreenSize|screenSize|layoutDirection"
             android:label="@string/app_name"
             android:screenOrientation="sensorLandscape"
@@ -27,50 +29,55 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.gtjgroup.cardsuite.PageViewActivity"
+            android:name=".PageViewActivity"
             android:configChanges="mcc|mnc|locale|touchscreen|navigation|fontScale|orientation|keyboard|keyboardHidden|screenLayout|uiMode|smallestScreenSize|screenSize|layoutDirection"
             android:label="page_view"
             android:screenOrientation="sensorLandscape"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
         </activity>
         <activity
-            android:name="com.gtjgroup.cardsuite.SettingsActivity"
+            android:name=".SettingsActivity"
             android:configChanges="mcc|mnc|locale|touchscreen|navigation|fontScale|orientation|keyboard|keyboardHidden|screenLayout|uiMode|smallestScreenSize|screenSize|layoutDirection"
             android:label="setting_view"
             android:screenOrientation="sensorLandscape"
             android:theme="@style/settings" >
         </activity>
         <activity
-            android:name="com.gtjgroup.cardsuite.ResultsActivity"
+            android:name=".ResultsActivity"
             android:configChanges="mcc|mnc|locale|touchscreen|navigation|fontScale|orientation|keyboard|keyboardHidden|screenLayout|uiMode|smallestScreenSize|screenSize|layoutDirection"
             android:label="@string/title_activity_results"
             android:screenOrientation="sensorLandscape"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
         </activity>
         <activity
-            android:name="com.gtjgroup.cardsuite.HeartsActivity"
+            android:name=".HeartsActivity"
             android:configChanges="mcc|mnc|locale|touchscreen|navigation|fontScale|orientation|keyboard|keyboardHidden|screenLayout|uiMode|smallestScreenSize|screenSize|layoutDirection"
             android:label="@string/title_activity_hearts"
             android:screenOrientation="sensorLandscape"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
         </activity>
         <activity
-            android:name="com.gtjgroup.cardsuite.BridgeActivity"
+            android:name=".BridgeActivity"
             android:configChanges="mcc|mnc|locale|touchscreen|navigation|fontScale|orientation|keyboard|keyboardHidden|screenLayout|uiMode|smallestScreenSize|screenSize|layoutDirection"
             android:label="@string/title_activity_bridge"
             android:screenOrientation="sensorLandscape"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
         </activity>
         <activity
-            android:name="com.gtjgroup.cardsuite.SpadesActivity"
+            android:name=".SpadesActivity"
             android:configChanges="mcc|mnc|locale|touchscreen|navigation|fontScale|orientation|keyboard|keyboardHidden|screenLayout|uiMode|smallestScreenSize|screenSize|layoutDirection"
             android:label="@string/title_activity_spades"
             android:screenOrientation="sensorLandscape"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
         </activity>
-        <activity android:name="com.google.android.gms.ads.AdActivity"
+        <activity
+            android:name="com.google.android.gms.ads.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
             android:theme="@android:style/Theme.Translucent" />
+        <activity
+            android:name=".CreditsActivity"
+            android:label="@string/title_activity_credits" >
+        </activity>
     </application>
 
 </manifest>

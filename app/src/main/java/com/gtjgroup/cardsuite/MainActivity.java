@@ -154,7 +154,7 @@ public class MainActivity extends Activity {
             }
         });
         ImageButton bridgeButton = (ImageButton) alertDialog.findViewById(R.id.german_button);
-        bridgeButton.setOnClickListener(new View.OnClickListener(){
+        bridgeButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 SoundManager.playButtonClickSound();
                 alertDialog.dismiss();
@@ -162,13 +162,19 @@ public class MainActivity extends Activity {
             }
         });
         ImageButton spadesButton = (ImageButton) alertDialog.findViewById(R.id.spades_button);
-        spadesButton.setOnClickListener(new View.OnClickListener(){
+        spadesButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 SoundManager.playButtonClickSound();
                 alertDialog.dismiss();
                 gameClick(2);
             }
         });
+    }
+
+    public void creditsClick(View v) {
+        Intent intent = new Intent(this,CreditsActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     public void savedGamePrompt(final int gameMode) {

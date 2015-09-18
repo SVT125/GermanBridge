@@ -37,14 +37,13 @@
         android:textColor="#373d5e"
         android:layout_above="@+id/play"
         android:layout_alignEnd="@+id/settings_button"
-        android:layout_marginBottom="5dp"
         android:typeface="normal"
         android:visibility="visible"
         android:layout_marginTop="5dp" />
 
     <ImageButton
         android:layout_width="150dp"
-        android:layout_height="75dp"
+        android:layout_height="70dp"
         android:id="@+id/play"
         android:onClick="overlayClick"
         android:background="@drawable/play"
@@ -55,7 +54,7 @@
 
     <ImageButton
         android:layout_width="225dp"
-        android:layout_height="75dp"
+        android:layout_height="70dp"
         android:id="@+id/settings_button"
         android:onClick="settingsClick"
         android:background="@drawable/settings"
@@ -64,7 +63,7 @@
 
     <ImageButton
         android:layout_width="300dp"
-        android:layout_height="75dp"
+        android:layout_height="70dp"
         android:id="@+id/help_button"
         android:background="@drawable/help"
         android:layout_alignParentBottom="true"
@@ -74,12 +73,13 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/credit_company_name"
+        android:text="@string/credits_title"
         android:id="@+id/textView"
         android:layout_gravity="right"
         android:textColor="@color/spades_blue"
         android:typeface="serif"
         android:alpha=".3"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:onClick="creditsClick" />
 
 </LinearLayout>

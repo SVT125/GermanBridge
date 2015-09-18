@@ -2,42 +2,94 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:id="@+id/overlay_layout"
-    android:gravity="center_vertical|center_horizontal">
+    android:gravity="center_vertical|center_horizontal"
+    android:orientation="horizontal">
 
-    <ImageButton
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:id="@+id/german_button"
-        android:layout_alignParentStart="true"
-        android:src="@drawable/bridge"
-        android:scaleType="centerCrop"
-        android:onClick="gameClick"
-        android:layout_gravity="center"
-        android:layout_marginRight="50dp"
-        android:background="@drawable/button_background" />
+        android:layout_height="wrap_content"
+        android:layout_marginRight="30dp">
 
-    <ImageButton
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:id="@+id/hearts_button"
-        android:layout_below="@+id/german_button"
-        android:layout_toEndOf="@+id/german_button"
-        android:src="@drawable/heart"
-        android:scaleType="centerCrop"
-        android:onClick="gameClick"
-        android:layout_gravity="center"
-        android:layout_marginRight="50dp"
-        android:background="@drawable/button_background" />
+        <ImageButton
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:id="@+id/german_button"
+            android:layout_alignParentStart="true"
+            android:src="@drawable/bridge"
+            android:scaleType="centerCrop"
+            android:onClick="gameClick"
+            android:layout_gravity="center"
+            android:background="@drawable/button_background" />
 
-    <ImageButton
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="German Bridge"
+            android:id="@+id/german_text"
+            android:layout_gravity="center_horizontal"
+            android:typeface="serif"
+            android:textColor="@color/hearts_red"
+            android:textStyle="bold|italic" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:id="@+id/spades_button"
-        android:layout_below="@+id/hearts_button"
-        android:layout_toEndOf="@+id/hearts_button"
-        android:src="@drawable/spades"
-        android:scaleType="centerCrop"
-        android:onClick="gameClick"
-        android:layout_gravity="center"
-        android:background="@drawable/button_background" />
+        android:layout_height="wrap_content">
+
+        <ImageButton
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:id="@+id/hearts_button"
+            android:layout_below="@+id/german_button"
+            android:layout_toEndOf="@+id/german_button"
+            android:src="@drawable/heart"
+            android:scaleType="centerCrop"
+            android:onClick="gameClick"
+            android:layout_gravity="center"
+            android:background="@drawable/button_background" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Hearts"
+            android:id="@+id/hearts_text"
+            android:layout_gravity="center_horizontal"
+            android:textStyle="bold|italic"
+            android:typeface="serif"
+            android:textColor="@color/hearts_red" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp">
+
+        <ImageButton
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:id="@+id/spades_button"
+            android:layout_below="@+id/hearts_button"
+            android:layout_toEndOf="@+id/hearts_button"
+            android:src="@drawable/spades"
+            android:scaleType="centerCrop"
+            android:onClick="gameClick"
+            android:layout_gravity="center"
+            android:background="@drawable/button_background" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Spades"
+            android:id="@+id/spades_text"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@color/hearts_red"
+            android:textStyle="bold|italic"
+            android:typeface="serif" />
+    </LinearLayout>
 </LinearLayout>
