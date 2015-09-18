@@ -39,6 +39,13 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_main);
 
+        AdView mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .addTestDevice("75323E59FF3A690DE8299B8B05344B0C")
+                .build();
+        mAdView.loadAd(adRequest);
+
         SoundManager.prepare(this);
 
         Typeface font = Typeface.createFromAsset(getAssets(), "SigniaPro-Regular.ttf");
@@ -102,13 +109,6 @@ public class MainActivity extends Activity {
                 return false;
             }
         });
-
-        AdView mAdView = (AdView) findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                .addTestDevice("75323E59FF3A690DE8299B8B05344B0C")
-                .build();
-        mAdView.loadAd(adRequest);
     }
 
     @Override

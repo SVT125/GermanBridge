@@ -39,6 +39,13 @@ public class ResultsActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_results);
 
+        AdView mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .addTestDevice("75323E59FF3A690DE8299B8B05344B0C")
+                .build();
+        mAdView.loadAd(adRequest);
+
         mPublisherInterstitialAd = new PublisherInterstitialAd(this);
         mPublisherInterstitialAd.setAdUnitId("ca-app-pub-6563321210012380/4278786755");
         mPublisherInterstitialAd.setAdListener(new AdListener() {
@@ -98,13 +105,6 @@ public class ResultsActivity extends Activity {
                 return false;
             }
         });
-
-        AdView mAdView = (AdView) findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                .addTestDevice("75323E59FF3A690DE8299B8B05344B0C")
-                .build();
-        mAdView.loadAd(adRequest);
     }
 
     public void displayScoreTable(Manager manager) {
