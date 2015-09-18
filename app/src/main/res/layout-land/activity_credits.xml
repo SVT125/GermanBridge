@@ -28,8 +28,7 @@
         android:textStyle="bold|italic"
         android:typeface="serif"
         android:textSize="32sp"
-        android:text="@string/credit_company_name"
-        android:layout_marginTop="30dp" />
+        android:text="@string/credit_company_name" />
 
     <LinearLayout
         android:orientation="horizontal"
@@ -63,4 +62,5 @@
         android:layout_gravity="center_horizontal"
         android:onClick="mainMenuClick"
         android:background="@drawable/main_menu" />
+
 </LinearLayout>
