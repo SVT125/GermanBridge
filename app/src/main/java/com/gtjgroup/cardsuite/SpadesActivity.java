@@ -141,7 +141,7 @@ public class SpadesActivity extends GameActivity {
                     //If this is the last turn of the entire round, don't execute turns; wait for scoreboard.
                     if (currentPotSize != 4 && lastPlayerHandSize != 0) {
                         if (isBot[currentPlayerInteracting])
-                            botHandle(250);
+                            botHandle(250+GameActivity.gameSpeedRange);
                         else {
                             if (botCount != 3) {
                                 displayHands(-1, false, true);
@@ -193,7 +193,7 @@ public class SpadesActivity extends GameActivity {
                             //If this is the last turn of the entire round, don't execute turns; wait for scoreboard.
                             if (currentPotSize != 4 && lastPlayerHandSize != 0)
                                 if (isBot[currentPlayerInteracting]) {
-                                    botHandle(250);
+                                    botHandle(250+GameActivity.gameSpeedRange);
                                 } else {
                                     if (botCount != 3) {
                                         displayHands(-1, false, true);
@@ -247,7 +247,7 @@ public class SpadesActivity extends GameActivity {
                         });
                     } else {
                         if (isBot[currentPlayerInteracting])
-                            botHandle(250);
+                            botHandle(250+GameActivity.gameSpeedRange);
                         else {
                             if (botCount != 3) {
                                 displayHands(-1, false, true);
@@ -393,7 +393,7 @@ public class SpadesActivity extends GameActivity {
                         if (guessCount == 4) {
                             currentPlayerInteracting = manager.findStartPlayer();
                             if (isBot[currentPlayerInteracting])
-                                botHandle(250);
+                                botHandle(250+GameActivity.gameSpeedRange);
                             else {
                                 if (botCount != 3) {
                                     displayHands(-1, false, true);
@@ -417,7 +417,7 @@ public class SpadesActivity extends GameActivity {
                             if (guessCount == 4) {
                                 currentPlayerInteracting = manager.findStartPlayer();
                                 if (isBot[currentPlayerInteracting])
-                                    botHandle(250);
+                                    botHandle(250+GameActivity.gameSpeedRange);
                                 else {
                                     if (botCount != 3) {
                                         displayHands(-1, false, true);
@@ -583,7 +583,7 @@ public class SpadesActivity extends GameActivity {
                                         if (manager.pot.size() == 0)
                                             currentPlayerInteracting = manager.startPlayer;
                                         if (isBot[currentPlayerInteracting])
-                                            botHandle(250);
+                                            botHandle(250+GameActivity.gameSpeedRange);
                                         else {
                                             if (botCount != 3) {
                                                 displayHands(-1, false, true);
@@ -606,7 +606,7 @@ public class SpadesActivity extends GameActivity {
                                     if (manager.pot.size() == 0)
                                         currentPlayerInteracting = manager.startPlayer;
                                     if (isBot[currentPlayerInteracting])
-                                        botHandle(250);
+                                        botHandle(250+GameActivity.gameSpeedRange);
                                     else {
                                         if (botCount != 3) {
                                             displayHands(-1, false, true);

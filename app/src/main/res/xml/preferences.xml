@@ -8,19 +8,32 @@
             android:title="Volume">
             <PreferenceCategory
                 android:title="Volume" >
-            <com.gtjgroup.cardsuite.SeekbarPreference
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:title="MUSIC"
-                android:key="master_music_settings">
-            </com.gtjgroup.cardsuite.SeekbarPreference>
-            <com.gtjgroup.cardsuite.SeekbarPreference
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:title="SFX"
-                android:key="master_sfx_settings">
-            </com.gtjgroup.cardsuite.SeekbarPreference>
+                <com.gtjgroup.cardsuite.SeekbarPreference
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:title="MUSIC"
+                    android:key="master_music_settings">
+                </com.gtjgroup.cardsuite.SeekbarPreference>
+                <com.gtjgroup.cardsuite.SeekbarPreference
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:title="SFX"
+                    android:key="master_sfx_settings">
+                </com.gtjgroup.cardsuite.SeekbarPreference>
             </PreferenceCategory>
+        </PreferenceScreen>
+        <PreferenceScreen
+            android:key="game_settings"
+            android:title="Game Speed">
+                <PreferenceCategory
+                    android:title="Game Speed">
+                    <com.gtjgroup.cardsuite.SeekbarPreference
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:title="GAME SPEED"
+                        android:key="game_speed_settings">
+                    </com.gtjgroup.cardsuite.SeekbarPreference>
+                </PreferenceCategory>
         </PreferenceScreen>
     </PreferenceCategory>
 </PreferenceScreen>

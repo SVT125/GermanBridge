@@ -147,7 +147,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
 
                         if(currentPotSize != 4 && !isRoundOver) {
                             if (manager.getPlayers()[currentPlayerInteracting].isBot)
-                                botHandle(250);
+                                botHandle(250+GameActivity.gameSpeedRange);
                             else {
                                 if (botCount != 3) {
                                     displayHands(-1, false, true);
@@ -163,7 +163,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
 
             //We copy the code block above because if we're done swapping, we want to continue execution ONLY when the animation is done.
             if (!finishedSwapping && manager.getPlayers()[currentPlayerInteracting].isBot) {
-                botHandle(250);
+                botHandle(250+GameActivity.gameSpeedRange);
             } else if (!finishedSwapping && chosenCards.size() == 0) {
                 //This is only executed to display the hand of the next player during the swapping phase/end of turn in game phase.
                 if (botCount != 3) {
@@ -205,7 +205,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
                                 restOfRoundHandle();
 
                             if (manager.getPlayers()[currentPlayerInteracting].isBot)
-                                botHandle(250);
+                                botHandle(250+GameActivity.gameSpeedRange);
                             else {
                                 displayHands(-1, false, true);
                                 if (botCount != 3) {
@@ -251,7 +251,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
 
                                 if(currentPotSize != 4 && !isRoundOver) {
                                     if (manager.getPlayers()[currentPlayerInteracting].isBot)
-                                        botHandle(250);
+                                        botHandle(250+GameActivity.gameSpeedRange);
                                     else {
                                         if (botCount != 3) {
                                             displayHands(-1, false, true);
@@ -329,7 +329,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
                     finishedRound();
                 else {
                     if (manager.getPlayers()[currentPlayerInteracting].isBot)
-                        botHandle(250);
+                        botHandle(250+GameActivity.gameSpeedRange);
                     else {
                         if (botCount != 3) {
                             displayHands(-1, false, true);
@@ -600,7 +600,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
                                 if (swapRound == 3) {
                                     findStartPlayer();
                                     if (manager.getPlayers()[currentPlayerInteracting].isBot)
-                                        botHandle(250);
+                                        botHandle(250+GameActivity.gameSpeedRange);
                                     else {
                                         if (botCount != 3) {
                                             displayHands(-1, false, true);
@@ -612,7 +612,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
                                 }
                                 else {
                                     if (manager.getPlayers()[currentPlayerInteracting].isBot)
-                                        botHandle(250);
+                                        botHandle(250+GameActivity.gameSpeedRange);
                                     else {
                                         if (botCount != 3) {
                                             displayHands(-1, false, true);

@@ -33,12 +33,20 @@ public class SettingsActivity extends Activity {
                     return true;
                 }
             });
-
             SeekbarPreference SFXPreference = (SeekbarPreference)findPreference("master_sfx_settings");
             SFXPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     SoundManager.sfxVolume = ((int) newValue) / 100f;
+                    return true;
+                }
+            });
+            SeekbarPreference gameSpeedPreference = (SeekbarPreference)findPreference("game_speed_settings");
+            gameSpeedPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    //The range of game speed as represented by delays is [0-2000] ms.
+                    GameActivity.gameSpeedRange = 20*(int) newValue;
                     return true;
                 }
             });

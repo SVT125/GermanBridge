@@ -37,10 +37,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class GameActivity extends Activity implements Serializable {
-    public static final int levelsToSearch = 3; //Parameter for AI that indicates how many levels down to search.
+    public static final int levelsToSearch = 3; // Parameter for AI that indicates how many levels down to search.
+    public static int gameSpeedRange = 150; // This is to be added on the base delay.
     protected Manager manager;
     protected int currentPlayerInteracting = 0, currentPotTurn = 0, firstNonBot = 0, lastNonBot = 0;
-    //DP to pixel values to use...
     protected int cardWidthPX, cardHeightPX, cardDeltaXPX, bottomTopMarginPX, rightLeftMarginPX, biddingWidthPX, biddingHeightPX;
     protected long lastClickTime = 0;
     protected boolean[] isBot = new boolean[4];
@@ -51,7 +51,7 @@ public abstract class GameActivity extends Activity implements Serializable {
     protected List<ImageView> cardViews = new ArrayList<ImageView>();
     protected static final Handler handler = new Handler();
 
-    public static DisplayMetrics metrics = new DisplayMetrics();
+    public static final DisplayMetrics metrics = new DisplayMetrics();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -144,7 +144,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
                     //If this is the last turn of the entire round, don't execute turns; wait for scoreboard.
                     if (currentPotSize != 4 && lastPlayerHandSize != 0) {
                         if (isBot[currentPlayerInteracting])
-                            botHandle(250);
+                            botHandle(250+GameActivity.gameSpeedRange);
                         else {
                             if (botCount != 3) {
                                 displayHands(-1, false, true);
@@ -192,7 +192,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
                             //If this is the last turn of the entire round, don't execute turns; wait for scoreboard.
                             if (currentPotSize != 4 && lastPlayerHandSize != 0) {
                                 if (isBot[currentPlayerInteracting])
-                                    botHandle(250);
+                                    botHandle(250+GameActivity.gameSpeedRange);
                                 else {
                                     if (botCount != 3) {
                                         displayHands(-1, false, true);
@@ -237,7 +237,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
                         displayScoreTable(null);
                     } else {
                         if (isBot[currentPlayerInteracting])
-                            botHandle(250);
+                            botHandle(250+GameActivity.gameSpeedRange);
                         else {
                             if (botCount != 3) {
                                 displayHands(-1, false, true);
@@ -482,7 +482,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
                             if (manager.pot.size() == 0)
                                 currentPlayerInteracting = manager.findStartPlayer();
                             if (isBot[currentPlayerInteracting])
-                                botHandle(250);
+                                botHandle(250+GameActivity.gameSpeedRange);
                             else {
                                 if (botCount != 3) {
                                     displayHands(-1, false, true);
@@ -501,7 +501,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
                                 if (manager.pot.size() == 0)
                                     currentPlayerInteracting = manager.findStartPlayer();
                                 if (isBot[currentPlayerInteracting])
-                                    botHandle(250);
+                                    botHandle(250+GameActivity.gameSpeedRange);
                                 else {
                                     if (botCount != 3) {
                                         displayHands(-1, false, true);
@@ -520,7 +520,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
                                 if (manager.pot.size() == 0)
                                     currentPlayerInteracting = manager.findStartPlayer();
                                 if (isBot[currentPlayerInteracting])
-                                    botHandle(250);
+                                    botHandle(250+GameActivity.gameSpeedRange);
                                 else {
                                     if (botCount != 3) {
                                         displayHands(-1, false, true);
@@ -670,6 +670,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
 
     public void dealCards() {
         long currentTimeDelay = 0;
+        final long deltaTimeDelay = 75;
         final int[] initialCoordinates = new int[2];
         findViewById(R.id.anchor).getLocationOnScreen(initialCoordinates);
         for (int j = 0; j < manager.players[0].hand.size(); j++) {
@@ -691,7 +692,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
                                         if (manager.pot.size() == 0)
                                             currentPlayerInteracting = manager.findStartPlayer();
                                         if (isBot[currentPlayerInteracting])
-                                            botHandle(250);
+                                            botHandle(250+GameActivity.gameSpeedRange);
                                         else {
                                             if (botCount != 3) {
                                                 displayHands(-1, false, true);
@@ -712,7 +713,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
                                     if (manager.pot.size() == 0)
                                         currentPlayerInteracting = isGameLoaded ? manager.startPlayer : manager.findStartPlayer();
                                     if (isBot[currentPlayerInteracting])
-                                        botHandle(250);
+                                        botHandle(250+GameActivity.gameSpeedRange);
                                     else {
                                         if (botCount != 3) {
                                             displayHands(-1, false, true);
@@ -735,12 +736,11 @@ public class BridgeActivity extends GameActivity implements Serializable {
                 }
             }, currentTimeDelay);
 
-            currentTimeDelay += 75;
+            currentTimeDelay += deltaTimeDelay;
         }
     }
 
     public void loadGame() {
-
         try {
             FileInputStream fis = this.openFileInput("save_bridge");
             ObjectInputStream is = new ObjectInputStream(fis);

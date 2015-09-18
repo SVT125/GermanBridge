@@ -110,7 +110,7 @@ public class GameAnimation {
                     v.startAnimation(ta);
                 }
             }
-        },500);
+        },500+GameActivity.gameSpeedRange);
 
     }
 
