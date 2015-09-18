@@ -5,7 +5,7 @@ android {
         config {
             keyAlias 'Card Suite Key'
             keyPassword '6e1476e99190582a76461f30ecaa9d37'
-            storeFile file('C:/Users/James/Documents/AndroidKeystores/key.jks')
+            //storeFile file('C:/Users/James/Documents/AndroidKeystores/key.jks')
             storePassword '6e1476e99190582a76461f30ecaa9d37'
         }
     }
