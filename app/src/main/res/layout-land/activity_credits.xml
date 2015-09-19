@@ -28,17 +28,19 @@
         android:textStyle="bold|italic"
         android:typeface="serif"
         android:textSize="32sp"
-        android:text="@string/credit_company_name" />
+        android:text="@string/credit_company_name"
+        android:layout_marginTop="15dp" />
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/gameImageLayout">
+        android:id="@+id/gameImageLayout"
+        android:layout_marginTop="10dp">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:id="@+id/bridgeView"
             android:src="@drawable/bridge" />
 
@@ -55,10 +57,22 @@
             android:src="@drawable/spades" />
     </LinearLayout>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/background_credits"
+        android:id="@+id/textView3"
+        android:textSize="10sp"
+        android:alpha="0.5"
+        android:textColor="@color/spades_blue"
+        android:textStyle="bold"
+        android:typeface="serif" />
+
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/imageButton"
+        android:id="@+id/mainMenuButton"
         android:layout_gravity="center_horizontal"
         android:onClick="mainMenuClick"
         android:background="@drawable/main_menu" />

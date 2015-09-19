@@ -1,5 +1,6 @@
 <resources>
     <string name="credit_company_name">&#169; GTJ Group 2015</string>
+    <string name="background_credits">Background music courtesy of Kevin MacLeod (www.smartsound.com/royalty-free-music/incompetech)</string>
 
     <string name="app_name">Card Suite</string>
     <string name="welcome_title">CARD SUITE</string>

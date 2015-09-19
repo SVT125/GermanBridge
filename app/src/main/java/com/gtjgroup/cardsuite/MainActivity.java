@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -47,6 +48,7 @@ public class MainActivity extends Activity {
         mAdView.loadAd(adRequest);
 
         SoundManager.prepare(this);
+        SoundManager.playBackgroundMusic(this);
 
         Typeface font = Typeface.createFromAsset(getAssets(), "SigniaPro-Regular.ttf");
         TextView greetingView = (TextView)findViewById(R.id.newgreeting);
@@ -129,12 +131,14 @@ public class MainActivity extends Activity {
 
     public void settingsClick(View v) {
         SoundManager.playButtonClickSound();
+        SoundManager.stopBackgroundMusic();
         Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
         startActivity(intent);
     }
 
     public void helpClick(View v) {
         SoundManager.playButtonClickSound();
+        SoundManager.stopBackgroundMusic();
         startActivity(new Intent(this, PageViewActivity.class));
     }
 
@@ -172,6 +176,7 @@ public class MainActivity extends Activity {
     }
 
     public void creditsClick(View v) {
+        SoundManager.playButtonClickSound();
         Intent intent = new Intent(this,CreditsActivity.class);
         startActivity(intent);
         finish();
@@ -336,6 +341,7 @@ public class MainActivity extends Activity {
         else if(gameMode == 2)
             executingActivity = SpadesActivity.class;
 
+        SoundManager.stopBackgroundMusic();
         Intent intent = new Intent(MainActivity.this,executingActivity);
         intent.putExtra("isBot", isBot);
         intent.putExtra("loadGame", loadGame);
