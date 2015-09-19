@@ -47,22 +47,5 @@
         android:scaleType="centerInside"
         android:src="@drawable/spades" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Return to Main Menu"
-        android:textColor="@color/text_green"
-        android:id="@+id/menu_from_help"
-        android:layout_alignParentBottom="true"
-        android:layout_alignEnd="@+id/pager"
-        android:layout_toEndOf="@+id/helpSpades"
-        android:textStyle="bold"
-        android:textAlignment="center"
-        android:layout_alignParentEnd="false"
-        android:layout_centerHorizontal="true"
-        android:gravity="center"
-        android:onClick="helpToMenu"
-        android:layout_marginBottom="20dp"/>
 
 </RelativeLayout>

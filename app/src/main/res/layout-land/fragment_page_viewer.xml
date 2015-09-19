@@ -26,4 +26,34 @@
         android:id="@+id/help_text"
         android:layout_gravity="left|top"
         android:padding="15dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Return to Main Menu"
+        android:id="@+id/menu_from_help"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_marginBottom="20dp"
+        android:textStyle="bold"
+        android:textSize="20dp"
+        android:textColor="@color/text_green" />
+
+    <ImageButton
+        android:layout_width="65dp"
+        android:layout_height="65dp"
+        android:id="@+id/rightHelp"
+        android:layout_gravity="right|bottom"
+        android:background="@drawable/right"
+        android:layout_marginRight="20dp"
+        android:onClick="rightClick" />
+
+    <ImageButton
+        android:layout_width="62dp"
+        android:layout_height="62dp"
+        android:id="@+id/leftHelp"
+        android:layout_gravity="left|bottom"
+        android:background="@drawable/left"
+        android:layout_marginLeft="20dp"
+        android:onClick="leftClick" />
 </FrameLayout>
