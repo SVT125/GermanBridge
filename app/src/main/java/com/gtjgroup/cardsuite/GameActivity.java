@@ -251,7 +251,7 @@ public abstract class GameActivity extends Activity implements Serializable {
     }
 
     public void displayScoreTable(final Runnable closeAction) {
-        String[] column = { "Player 1", "Player 2", "Player 3", "Player 4" };
+        String[] column = { "Player 1 & Player 3", "Player 2 & Player 4" };
         List<String> row = new ArrayList<>();
         for (int i = 1; i <= manager.getPotsFinished() - 1; i++)
             row.add("Round " + (i));
