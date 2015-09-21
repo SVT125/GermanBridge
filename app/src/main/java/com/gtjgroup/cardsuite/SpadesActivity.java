@@ -100,8 +100,17 @@ public class SpadesActivity extends GameActivity {
 
     @Override
     public void onPause() {
-        saveGame();
+        this.saveGame();
+        if (SoundManager.isPlayingBGM())
+            SoundManager.stopBackgroundMusic();
         super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        if (!SoundManager.isPlayingBGM())
+            SoundManager.playBackgroundMusic(this);
+        super.onResume();
     }
 
     public void gameClick(View v) {

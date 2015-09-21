@@ -14,6 +14,13 @@ public class SettingsActivity extends Activity {
                 new SettingsPage()).commit();
     }
 
+    @Override
+    public void onPause() {
+        if (SoundManager.isPlayingBGM())
+            SoundManager.stopBackgroundMusic();
+        super.onPause();
+    }
+
     public static class SettingsPage extends PreferenceFragment {
 
         @Override

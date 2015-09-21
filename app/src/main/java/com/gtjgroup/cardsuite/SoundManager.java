@@ -15,9 +15,9 @@ public class SoundManager {
     public static float sfxVolume = 0.5f, musicVolume = 0.5f;
     protected static SoundPool[] soundPools = new SoundPool[7];
     protected static int[] sounds;
-    public static MediaPlayer player;
+    public static MediaPlayer player = null;
     private static int soundsLoaded = 0;
-    private static boolean finishedLoading = false;
+    private static boolean finishedLoading = false, playingBGM = false;
     protected static final Random r = new Random();
 
     @SuppressLint("NewApi")
@@ -48,13 +48,21 @@ public class SoundManager {
     }
 
     public static void playBackgroundMusic(Activity activity) {
-        player = MediaPlayer.create(activity,R.raw.easylemon);
-        player.setLooping(true);
+        if (player == null) {
+            player = MediaPlayer.create(activity, R.raw.easylemon);
+            player.setLooping(true);
+        }
         player.setVolume(musicVolume,musicVolume);
         player.start();
+        playingBGM = true;
     }
 
     public static void stopBackgroundMusic() {
+        player.pause();
+        playingBGM = false;
+    }
+
+    public static void endPlayer() {
         player.stop();
         player.release();
         player = null;
@@ -65,6 +73,10 @@ public class SoundManager {
             finishedLoading = true;
 
         return finishedLoading;
+    }
+
+    public static boolean isPlayingBGM() {
+        return playingBGM;
     }
 
     public static void playPlaceCardSound() {

@@ -11,7 +11,6 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -26,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.TextView;
+
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
@@ -48,7 +48,8 @@ public class MainActivity extends Activity {
         mAdView.loadAd(adRequest);
 
         SoundManager.prepare(this);
-        SoundManager.playBackgroundMusic(this);
+        if (!SoundManager.isPlayingBGM())
+            SoundManager.playBackgroundMusic(this);
 
         Typeface font = Typeface.createFromAsset(getAssets(), "SigniaPro-Regular.ttf");
         TextView greetingView = (TextView)findViewById(R.id.newgreeting);
@@ -111,6 +112,39 @@ public class MainActivity extends Activity {
                 return false;
             }
         });
+        final TextView creditsButton = (TextView) findViewById(R.id.credits);
+        creditsButton.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                TextView iv = (TextView) v;
+
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    creditsClick(v);
+                    SoundManager.playButtonClickSound();
+                    iv.setAlpha(0.5f);
+                    return true;
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    iv.setAlpha(1f);
+                    return true;
+                }
+
+                return false;
+            }
+        });
+    }
+
+    @Override
+    public void onPause() {
+        if (SoundManager.isPlayingBGM())
+            SoundManager.stopBackgroundMusic();
+        super.onStop();
+    }
+
+    @Override
+    public void onResume() {
+        if (!SoundManager.isPlayingBGM())
+            SoundManager.playBackgroundMusic(this);
+        super.onResume();
     }
 
     @Override
@@ -131,14 +165,12 @@ public class MainActivity extends Activity {
 
     public void settingsClick(View v) {
         SoundManager.playButtonClickSound();
-        SoundManager.stopBackgroundMusic();
         Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
         startActivity(intent);
     }
 
     public void helpClick(View v) {
         SoundManager.playButtonClickSound();
-        SoundManager.stopBackgroundMusic();
         startActivity(new Intent(this, PageViewActivity.class));
     }
 

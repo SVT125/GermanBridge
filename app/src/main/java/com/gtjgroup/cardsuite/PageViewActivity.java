@@ -29,6 +29,20 @@ public class PageViewActivity extends FragmentActivity {
     }
 
     @Override
+    public void onPause() {
+        if (SoundManager.isPlayingBGM())
+            SoundManager.stopBackgroundMusic();
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        if (!SoundManager.isPlayingBGM())
+            SoundManager.playBackgroundMusic(this);
+        super.onResume();
+    }
+
+    @Override
     public void onBackPressed() {
         if (mPager.getCurrentItem() == 0) {
             super.onBackPressed();

@@ -5,7 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -23,6 +26,25 @@ public class CreditsActivity extends Activity {
                 .addTestDevice("75323E59FF3A690DE8299B8B05344B0C")
                 .build();
         mAdView.loadAd(adRequest);
+        final ImageButton creditsToMenu = (ImageButton) findViewById(R.id.mainMenuButton);
+        creditsToMenu.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                ImageView iv = (ImageView) v;
+
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    mainMenuClick(v);
+                    SoundManager.playButtonClickSound();
+                    iv.setAlpha(0.5f);
+                    return true;
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    iv.setAlpha(1f);
+                    return true;
+                }
+
+                return false;
+            }
+        });
     }
 
     public void mainMenuClick(View v) {
