@@ -42,7 +42,7 @@ public class SpadesManager extends Manager implements Serializable {
 			if (player.score >= 500)
 				return true;
 			if (player.score <= -300)
-				return false;
+				return true;
 		}
 		return false;
 	}
