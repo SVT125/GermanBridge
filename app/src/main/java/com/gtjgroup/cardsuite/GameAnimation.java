@@ -72,22 +72,30 @@ public class GameAnimation {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                for(int i = 0; i < 4; i++) {
+                for (int i = 0; i < 4; i++) {
                     int[] potCoordinates = new int[2];
                     View v = null;
-                    switch(i) {
-                        case 0: v = activity.findViewById(R.id.bottomPotCard); break;
-                        case 1: v = activity.findViewById(R.id.leftPotCard); break;
-                        case 2: v = activity.findViewById(R.id.topPotCard); break;
-                        case 3: v = activity.findViewById(R.id.rightPotCard); break;
+                    switch (i) {
+                        case 0:
+                            v = activity.findViewById(R.id.bottomPotCard);
+                            break;
+                        case 1:
+                            v = activity.findViewById(R.id.leftPotCard);
+                            break;
+                        case 2:
+                            v = activity.findViewById(R.id.topPotCard);
+                            break;
+                        case 3:
+                            v = activity.findViewById(R.id.rightPotCard);
+                            break;
                     }
 
-                    if(v.getTag() == (Integer)0)
+                    if (v.getTag() == (Integer) 0)
                         continue;
                     v.getLocationOnScreen(potCoordinates);
 
                     v.setAlpha(0.25f);
-                    TranslateAnimation ta = new TranslateAnimation(0,pileCoordinates[0]-potCoordinates[0],0,pileCoordinates[1]-potCoordinates[1]);
+                    TranslateAnimation ta = new TranslateAnimation(0, pileCoordinates[0] - potCoordinates[0], 0, pileCoordinates[1] - potCoordinates[1]);
                     ta.setDuration(250);
 
                     //Condition (i == 3) is arbitrary; enforce that the Runnable is only run once of the 4 animations.
@@ -95,22 +103,24 @@ public class GameAnimation {
                     final View view = v;
                     ta.setAnimationListener(new Animation.AnimationListener() {
                         @Override
-                        public void onAnimationStart(Animation animation) {}
+                        public void onAnimationStart(Animation animation) {
+                        }
 
                         @Override
                         public void onAnimationEnd(Animation animation) {
                             view.setAlpha(1f);
-                            if(endAction != null && index == 3)
+                            if (endAction != null && index == 3)
                                 handler.post(endAction);
                         }
 
                         @Override
-                        public void onAnimationRepeat(Animation animation) {}
+                        public void onAnimationRepeat(Animation animation) {
+                        }
                     });
                     v.startAnimation(ta);
                 }
             }
-        },500+GameActivity.gameSpeedRange);
+        }, 500 + GameActivity.gameSpeedRange);
 
     }
 
@@ -164,6 +174,25 @@ public class GameAnimation {
                 params.height = 0;
             }
         }).start();
+    }
+
+    public static void showShootMoon(final HeartsActivity activity) {
+        /*
+        final ImageView shootMoonView = (ImageView)activity.findViewById(R.id.shootMoonView);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(activity.shootMoonPX,activity.shootMoonPX);
+        params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+        shootMoonView.setLayoutParams(params);
+
+        shootMoonView.animate().yBy(-350).setDuration(1500).alpha(0f).withEndAction(new Runnable() {
+            @Override
+            public void run() {
+                //Hide the view once animation is done
+                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)shootMoonView.getLayoutParams();
+                params.width = 0;
+                params.height = 0;
+            }
+        }).start();
+        */
     }
 
     public static void swapCards(HeartsActivity activity, int swapRound, Runnable endAction, Map<View, Integer> animations) {
