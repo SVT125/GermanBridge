@@ -74,4 +74,18 @@ public class CreditsActivity extends Activity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onPause() {
+        if (SoundManager.isPlayingBGM())
+            SoundManager.stopBackgroundMusic();
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        if (!SoundManager.isPlayingBGM())
+            SoundManager.playBackgroundMusic(this);
+        super.onResume();
+    }
 }

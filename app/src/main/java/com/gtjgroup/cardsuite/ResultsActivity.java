@@ -138,7 +138,7 @@ public class ResultsActivity extends Activity {
                     textView.setText(row.get(i - 1));
                     textView.setTypeface(null, Typeface.BOLD);
                 }
-                else if (i !=0 && j != 0)
+                else if (i != 0 && j != 0)
                     textView.setText(Integer.toString(manager.getPlayers()[j - 1].scoreHistory.get(i - 1)));
 
                 textView.setGravity(Gravity.CENTER);
@@ -231,5 +231,18 @@ public class ResultsActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+    @Override
+    public void onPause() {
+        if (SoundManager.isPlayingBGM())
+            SoundManager.stopBackgroundMusic();
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        if (!SoundManager.isPlayingBGM())
+            SoundManager.playBackgroundMusic(this);
+        super.onResume();
     }
 }
