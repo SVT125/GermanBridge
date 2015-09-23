@@ -71,7 +71,7 @@ public class SpadesManager extends Manager implements Serializable {
 	}
 
 	public int findWinner() {
-		int max = 0, winner = -1;
+		int max = -700, winner = -1;
 		for (int i = 0; i < 4; i++) {
 			if (players[i].score > max) {
 				winner = i;
