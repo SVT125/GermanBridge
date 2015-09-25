@@ -250,8 +250,6 @@ public class SpadesActivity extends GameActivity {
                             public void run() {
                                 // resets deck, hands, etc. and increments round
                                 reset();
-                                if (!manager.isGameOver())
-                                    dealCards();
                             }
                         });
                     } else {
