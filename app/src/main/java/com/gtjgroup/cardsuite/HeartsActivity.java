@@ -32,7 +32,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
     private List<List<Card>> chosenLists = new ArrayList<List<Card>>();
     private List<Card> chosenCards = new ArrayList<Card>();
     private Map<View, Integer> animationsActive = new HashMap<View, Integer>();
-    public int heartsBrokenPX, botCount;
+    public int heartsBrokenPX, botCount, shootMoonPX;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +67,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         heartsBrokenPX = (int)Math.ceil(150 * metrics.density);
+        shootMoonPX = (int)Math.ceil(150 * metrics.density);
 
         View[] potViews = new View[] {findViewById(R.id.leftPotCard),findViewById(R.id.topPotCard),
                 findViewById(R.id.rightPotCard),findViewById(R.id.bottomPotCard)};
@@ -358,6 +359,7 @@ public class HeartsActivity extends GameActivity implements Serializable {
         for (Player player : manager.getPlayers()) {
             shootMoon = ((HeartsPlayer) player).scoreChange();
             if (shootMoon) {
+                GameAnimation.showShootMoon(this);
                 for (Player otherPlayers : manager.getPlayers()) {
                     if (!otherPlayers.equals(player)) {
                         otherPlayers.score += 26;

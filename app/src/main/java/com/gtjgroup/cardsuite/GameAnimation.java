@@ -177,7 +177,6 @@ public class GameAnimation {
     }
 
     public static void showShootMoon(final HeartsActivity activity) {
-        /*
         final ImageView shootMoonView = (ImageView)activity.findViewById(R.id.shootMoonView);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(activity.shootMoonPX,activity.shootMoonPX);
         params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
@@ -192,7 +191,6 @@ public class GameAnimation {
                 params.height = 0;
             }
         }).start();
-        */
     }
 
     public static void swapCards(HeartsActivity activity, int swapRound, Runnable endAction, Map<View, Integer> animations) {
