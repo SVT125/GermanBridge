@@ -1,5 +1,8 @@
 package com.gtjgroup.cardsuite;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.os.Build;
 import android.os.Handler;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,13 +39,22 @@ public class GameAnimation {
         }
 
 
-        ViewPropertyAnimator animation = v.animate().translationXBy(potCoordinates[0] - cardCoordinates[0]).
+        ViewPropertyAnimator animator = v.animate().translationXBy(potCoordinates[0] - cardCoordinates[0]).
                 translationYBy(potCoordinates[1]-cardCoordinates[1]).rotation(resetRotation).setDuration(150);
 
-        if(endAction != null)
-            animation.withEndAction(endAction);
-
-        animation.start();
+        if(endAction != null) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+                animator.setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator a) {
+                        endAction.run();
+                    }
+                });
+            } else {
+                animator.withEndAction(endAction);
+            }
+        }
+        animator.start();
     }
 
     //TODO - Replace manually setting alpha with actual ViewPropertyAnimator usage, noting that VPA moves the actual view's location.
@@ -148,15 +160,27 @@ public class GameAnimation {
         params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
         heartsBrokenView.setLayoutParams(params);
 
-        heartsBrokenView.animate().yBy(-350).setDuration(1500).alpha(0f).withEndAction(new Runnable() {
-            @Override
-            public void run() {
-                //Hide the view once animation is done
-                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)heartsBrokenView.getLayoutParams();
-                params.width = 0;
-                params.height = 0;
-            }
-        }).start();
+        ViewPropertyAnimator animator = heartsBrokenView.animate().yBy(-350).setDuration(1500).alpha(0f);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+            animator.setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator a) {
+                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) heartsBrokenView.getLayoutParams();
+                    params.width = 0;
+                    params.height = 0;
+                }
+            });
+        } else {
+            animator.withEndAction(new Runnable() {
+                @Override
+                public void run() {
+                    //Hide the view once animation is done
+                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) heartsBrokenView.getLayoutParams();
+                    params.width = 0;
+                    params.height = 0;
+                }
+            });
+        }
     }
 
     public static void showSpadesBroken(final SpadesActivity activity) {
@@ -165,15 +189,27 @@ public class GameAnimation {
         params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
         spadesBrokenView.setLayoutParams(params);
 
-        spadesBrokenView.animate().yBy(-350).setDuration(1500).alpha(0f).withEndAction(new Runnable() {
-            @Override
-            public void run() {
-                //Hide the view once animation is done
-                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)spadesBrokenView.getLayoutParams();
-                params.width = 0;
-                params.height = 0;
-            }
-        }).start();
+        ViewPropertyAnimator animator = spadesBrokenView.animate().yBy(-350).setDuration(1500).alpha(0f);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+            animator.setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator a) {
+                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) spadesBrokenView.getLayoutParams();
+                    params.width = 0;
+                    params.height = 0;
+                }
+            });
+        } else {
+            animator.withEndAction(new Runnable() {
+                @Override
+                public void run() {
+                    //Hide the view once animation is done
+                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) spadesBrokenView.getLayoutParams();
+                    params.width = 0;
+                    params.height = 0;
+                }
+            });
+        }
     }
 
     public static void showShootMoon(final HeartsActivity activity) {
@@ -182,18 +218,33 @@ public class GameAnimation {
         params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
         shootMoonView.setLayoutParams(params);
 
-        shootMoonView.animate().yBy(-350).setDuration(1500).alpha(0f).withEndAction(new Runnable() {
-            @Override
-            public void run() {
-                //Hide the view once animation is done
-                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)shootMoonView.getLayoutParams();
-                params.width = 0;
-                params.height = 0;
-            }
-        }).start();
+        ViewPropertyAnimator animator = shootMoonView.animate().yBy(-350).setDuration(1500).alpha(0f);
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+            animator.setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator a) {
+                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)shootMoonView.getLayoutParams();
+                    params.width = 0;
+                    params.height = 0;
+                }
+            });
+        } else {
+            animator.withEndAction(new Runnable() {
+                @Override
+                public void run() {
+                    //Hide the view once animation is done
+                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)shootMoonView.getLayoutParams();
+                    params.width = 0;
+                    params.height = 0;
+                }
+            });
+        }
+
+        animator.start();
     }
 
-    public static void swapCards(HeartsActivity activity, int swapRound, Runnable endAction, Map<View, Integer> animations) {
+    public static void swapCards(HeartsActivity activity, int swapRound, final Runnable endAction, Map<View, Integer> animations) {
         Set<View> keySet = animations.keySet();
         Iterator<View> iter = keySet.iterator();
         while(iter.hasNext()) {
@@ -226,8 +277,19 @@ public class GameAnimation {
 
             ViewPropertyAnimator animator = key.animate().setDuration(400).translationXBy(finalCoordinates[0] - initialCoordinates[0])
                     .translationYBy(finalCoordinates[1] - initialCoordinates[1]).alpha(0f);
-            if(!iter.hasNext() && endAction != null)
-                animator.withEndAction(endAction);
+
+            if(!iter.hasNext() && endAction != null) {
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+                    animator.setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator a) {
+                            endAction.run();
+                        }
+                    });
+                } else {
+                    animator.withEndAction(endAction);
+                }
+            }
             animator.start();
         }
     }
@@ -262,19 +324,36 @@ public class GameAnimation {
             imageView.setAdjustViewBounds(true);
             ((RelativeLayout) activity.findViewById(R.id.potLayout)).addView(imageView);
 
-            imageView.animate().setDuration(75).translationXBy(finalCoordinatesArray[i][0] - initialCoordinates[0])
-                    .translationYBy(finalCoordinatesArray[i][1] - initialCoordinates[1])
-                    .withEndAction(new Runnable() {
-                        @Override
-                        public void run() {
-                            ((ViewGroup) imageView.getParent()).removeView(imageView);
+            ViewPropertyAnimator animator = imageView.animate().setDuration(75).translationXBy(finalCoordinatesArray[i][0] - initialCoordinates[0])
+                    .translationYBy(finalCoordinatesArray[i][1] - initialCoordinates[1]);
 
-                            //If there isn't a runnable specified or this is the "last of the animations", run the end action.
-                            //The choice of index was arbitrary, used only to enforce that 1 of the 4 animations would run the action.
-                            if(endAction != null && currentIndex == 3)
-                                handler.post(endAction);
-                        }
-                    }).start();
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+                animator.setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator a) {
+                    ((ViewGroup) imageView.getParent()).removeView(imageView);
+
+                    //If there isn't a runnable specified or this is the "last of the animations", run the end action.
+                    //The choice of index was arbitrary, used only to enforce that 1 of the 4 animations would run the action.
+                    if (endAction != null && currentIndex == 3)
+                        handler.post(endAction);
+                    }
+                });
+            } else {
+                animator.withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((ViewGroup) imageView.getParent()).removeView(imageView);
+
+                        //If there isn't a runnable specified or this is the "last of the animations", run the end action.
+                        //The choice of index was arbitrary, used only to enforce that 1 of the 4 animations would run the action.
+                        if (endAction != null && currentIndex == 3)
+                            handler.post(endAction);
+                    }
+                });
+            }
+
+            animator.start();
         }
     }
 }
