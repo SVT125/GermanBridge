@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.DisplayMetrics;
 import android.view.ContextThemeWrapper;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,12 +29,16 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -202,13 +207,12 @@ public class SpadesActivity extends GameActivity {
                             //If this is the last turn of the entire round, don't execute turns; wait for scoreboard.
                             if (currentPotSize != 4 && lastPlayerHandSize != 0)
                                 if (isBot[currentPlayerInteracting]) {
-                                    botHandle(250+GameActivity.gameSpeedRange);
+                                    botHandle(250 + GameActivity.gameSpeedRange);
                                 } else {
                                     if (botCount != 3) {
                                         displayHands(-1, false, true);
                                         displayWaitScreen(currentPlayerInteracting);
-                                    }
-                                    else
+                                    } else
                                         displayHands(currentPlayerInteracting, true, true);
                                     canClick = true;
                                 }
@@ -639,6 +643,88 @@ public class SpadesActivity extends GameActivity {
             }, currentTimeDelay);
 
             currentTimeDelay += 75;
+        }
+    }
+
+    public void displayScoreTable(final Runnable closeAction) {
+        String[] column = { "Player 1 & Player 3", "Player 2 & Player 4" };
+        List<String> row = new ArrayList<>();
+        for (int i = 1; i <= manager.getPotsFinished() - 1; i++)
+            row.add("Round " + (i));
+
+        TableLayout tableLayout = new TableLayout(this);
+        tableLayout.setLayoutParams(new LinearLayout.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.MATCH_PARENT));
+        LinearLayout.LayoutParams rowParams = new LinearLayout.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT,
+                AbsListView.LayoutParams.MATCH_PARENT);
+        rowParams.gravity = Gravity.CENTER_VERTICAL;
+        rowParams.setMargins(10, 5, 10, 5);
+
+
+        for (int i = 0; i <= row.size(); i++) {
+            TableRow tableRow = new TableRow(this);
+            tableRow.setLayoutParams(rowParams);
+
+            for (int j = 0; j <= column.length; j++) {
+
+                TextView textView = new TextView(this);
+                if (i == 0 && j == 0)
+                    textView.setText("");
+                else if (i == 0) {
+                    textView.setText(column[j - 1]);
+                    textView.setTypeface(null, Typeface.BOLD);
+                }
+                else if (j == 0) {
+                    textView.setText(row.get(i - 1));
+                    textView.setTypeface(null, Typeface.BOLD);
+                }
+                else if (i !=0 && j != 0)
+                    textView.setText(Integer.toString(manager.getPlayers()[j - 1].scoreHistory.get(i - 1)));
+
+                textView.setGravity(Gravity.CENTER);
+                textView.setPadding(30, 5, 5, 5);
+                textView.setTextSize(15);
+                tableRow.addView(textView);
+            }
+            tableLayout.addView(tableRow);
+        }
+
+        ScrollView sv = new ScrollView(this);
+        LinearLayout.LayoutParams scrollParams = new LinearLayout.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT,
+                AbsListView.LayoutParams.MATCH_PARENT);
+        sv.setPadding(10, 20, 10, 20);
+        sv.setLayoutParams(scrollParams);
+        sv.setSmoothScrollingEnabled(true);
+        sv.addView(tableLayout);
+        sv.fullScroll(View.FOCUS_DOWN);
+
+        int currentAPILevel = android.os.Build.VERSION.SDK_INT;
+        if(currentAPILevel > android.os.Build.VERSION_CODES.KITKAT) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.BidCustom));
+            builder.setCancelable(false);
+            builder.setView(sv);
+            builder.setTitle("Scoreboard");
+            builder.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (closeAction != null)
+                        handler.post(closeAction);
+                }
+            });
+            builder.show();
+        } else {
+            android.support.v7.app.AlertDialog.Builder builder =
+                    new android.support.v7.app.AlertDialog.Builder(new ContextThemeWrapper(this, R.style.BidCustom));
+            builder.setCancelable(false);
+            builder.setView(sv);
+            builder.setTitle("Scoreboard");
+            builder.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (closeAction != null)
+                        handler.post(closeAction);
+                }
+            });
+            builder.show();
         }
     }
 
