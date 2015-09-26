@@ -68,8 +68,8 @@ public abstract class GameActivity extends Activity implements Serializable {
         cardWidthPX = (int)Math.ceil(40 * metrics.density);
         cardHeightPX = (int)Math.ceil(57 * metrics.density);
         cardDeltaXPX = (int)Math.ceil(20 * metrics.density);
-        bottomTopMarginPX = (int)Math.ceil(42 * metrics.density);
-        rightLeftMarginPX = (int)Math.ceil(72 * metrics.density);
+        bottomTopMarginPX = (int)Math.ceil(20 * metrics.density);
+        rightLeftMarginPX = (int)Math.ceil(40 * metrics.density);
         biddingWidthPX = (int)Math.ceil(300 * metrics.density);
         biddingHeightPX = (int)Math.ceil(125 * metrics.density);
     }
