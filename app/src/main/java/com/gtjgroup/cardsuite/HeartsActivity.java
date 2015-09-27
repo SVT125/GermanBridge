@@ -592,6 +592,8 @@ public class HeartsActivity extends GameActivity implements Serializable {
     }
 
     public void dealCards() {
+        TextView roundText = (TextView) findViewById(R.id.round_text);
+        roundText.setText("Round: " + Integer.toString(manager.potsFinished));
         long currentTimeDelay = 0;
         final int[] initialCoordinates = new int[2];
         findViewById(R.id.anchor).getLocationOnScreen(initialCoordinates);

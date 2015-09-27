@@ -313,7 +313,7 @@
         android:clipChildren="false"
         android:clipToPadding="false">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/optionsLayout"
@@ -321,6 +321,21 @@
             android:gravity="center_vertical|right"
             android:clipChildren="false"
             android:clipToPadding="false">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:id="@+id/round_text"
+                android:layout_alignParentBottom="false"
+                android:layout_alignParentStart="false"
+                android:layout_alignParentEnd="false"
+                android:layout_alignParentLeft="false"
+                android:textColor="@color/tan"
+                android:textSize="17sp"
+                android:alpha="0.5"
+                android:textStyle="bold"
+                android:layout_marginRight="5dp" />
 
             <ImageButton
                 style="?android:attr/buttonStyleSmall"
@@ -332,7 +347,7 @@
                 android:background="@drawable/pause"
                 android:textSize="10dp"
                 android:onClick="menuClick" />
-        </RelativeLayout>
+        </LinearLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"

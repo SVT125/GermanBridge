@@ -1,0 +1,71 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.gtjgroup.PageViewerFragment">
+
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/help_title"
+        android:textColor="@color/spades_blue"
+        android:textAlignment="center"
+        android:layout_gravity="center_horizontal"
+        android:textStyle="bold|italic"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="20dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Return to Main Menu"
+        android:id="@+id/menu_from_help"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_marginBottom="20dp"
+        android:textStyle="bold"
+        android:textSize="20dp"
+        android:textColor="@color/text_green" />
+
+    <ImageButton
+        android:layout_width="65dp"
+        android:layout_height="65dp"
+        android:id="@+id/rightHelp"
+        android:layout_gravity="right|bottom"
+        android:background="@drawable/right"
+        android:layout_marginRight="20dp"
+        android:onClick="rightClick" />
+
+    <ImageButton
+        android:layout_width="62dp"
+        android:layout_height="62dp"
+        android:id="@+id/leftHelp"
+        android:layout_gravity="left|bottom"
+        android:background="@drawable/left"
+        android:layout_marginLeft="20dp"
+        android:onClick="leftClick" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="604dp"
+        android:layout_height="242dp"
+        android:layout_gravity="center"
+        android:weightSum="1">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:id="@+id/textView"
+            android:layout_weight="0.51" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/imageView"
+            android:layout_weight="0.48" />
+    </LinearLayout>
+
+</FrameLayout>

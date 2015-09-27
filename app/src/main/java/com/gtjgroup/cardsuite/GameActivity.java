@@ -292,14 +292,20 @@ public abstract class GameActivity extends Activity implements Serializable {
             tableLayout.addView(tableRow);
         }
 
-        ScrollView sv = new ScrollView(this);
+        final ScrollView sv = new ScrollView(this);
         LinearLayout.LayoutParams scrollParams = new LinearLayout.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT,
                 AbsListView.LayoutParams.MATCH_PARENT);
         sv.setPadding(10, 20, 10, 20);
         sv.setLayoutParams(scrollParams);
         sv.setSmoothScrollingEnabled(true);
         sv.addView(tableLayout);
-        sv.fullScroll(View.FOCUS_DOWN);
+        sv.post(new Runnable() {
+
+            @Override
+            public void run() {
+                sv.fullScroll(ScrollView.FOCUS_DOWN);
+            }
+        });
 
         int currentAPILevel = android.os.Build.VERSION.SDK_INT;
         if(currentAPILevel > android.os.Build.VERSION_CODES.KITKAT) {

@@ -43,6 +43,9 @@ public class PageViewerFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         ViewGroup rootView = null;
+        if (page == 1) {
+
+        }
         if (page < 6) {
             rootView = (ViewGroup) inflater.inflate(
                     R.layout.fragment_page_viewer, container, false);

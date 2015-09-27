@@ -600,6 +600,8 @@ public class BridgeActivity extends GameActivity implements Serializable {
     }
 
     public void dealCards() {
+        TextView roundText = (TextView) findViewById(R.id.round_text);
+        roundText.setText("Round: " + Integer.toString(manager.potsFinished));
         long currentTimeDelay = 0;
         final long deltaTimeDelay = 75;
         final int[] initialCoordinates = new int[2];
