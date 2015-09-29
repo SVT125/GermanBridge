@@ -69,6 +69,8 @@ public class BridgeManager extends Manager implements Serializable {
 
 	//Returns true if the given card should be selectable to the player
 	public boolean cardSelectable(Card card, boolean finishedSwapping, int currentPlayer) {
+		if (currentPlayer == startPlayer)
+			return true;
 		if (players[currentPlayer].hasSuit(startSuit) && card.getSuit() == startSuit)
 			return true;
 		else if (!(players[currentPlayer].hasSuit(startSuit)))
@@ -125,7 +127,7 @@ public class BridgeManager extends Manager implements Serializable {
 	}
 
 	public boolean isGameOver() {
-		if (potsFinished == (52/playerCount)) return true;
+		if (potsFinished == 13) return true;
 		return false;
 	}
 
