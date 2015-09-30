@@ -138,19 +138,19 @@ public class GameAnimation {
 
     public static void selectSwappedCard(View v, int currentPlayer) {
         switch(currentPlayer){
-            case 0: v.animate().yBy(-75).setDuration(100).start(); break;
-            case 1: v.animate().xBy(75).setDuration(100).start(); break;
-            case 2: v.animate().yBy(75).setDuration(100).start(); break;
-            case 3: v.animate().xBy(-75).setDuration(100).start(); break;
+            case 0: v.animate().yBy(-75).scaleXBy(0.2f).scaleYBy(0.2f).setDuration(100).start(); break;
+            case 1: v.animate().xBy(75).scaleXBy(0.2f).scaleYBy(0.2f).setDuration(100).start(); break;
+            case 2: v.animate().yBy(75).scaleXBy(0.2f).scaleYBy(0.2f).setDuration(100).start(); break;
+            case 3: v.animate().xBy(-75).scaleXBy(0.2f).scaleYBy(0.2f).setDuration(100).start(); break;
         }
     }
 
     public static void unselectSwappedCard(View v, int currentPlayer) {
         switch(currentPlayer){
-            case 0: v.animate().yBy(75).setDuration(100).start(); break;
-            case 1: v.animate().xBy(-75).setDuration(100).start(); break;
-            case 2: v.animate().yBy(75).setDuration(100).start(); break;
-            case 3: v.animate().xBy(75).setDuration(100).start(); break;
+            case 0: v.animate().yBy(75).scaleXBy(-0.2f).scaleY(-0.2f).setDuration(100).start(); break;
+            case 1: v.animate().xBy(-75).scaleXBy(-0.2f).scaleY(-0.2f).setDuration(100).start(); break;
+            case 2: v.animate().yBy(-75).scaleXBy(-0.2f).scaleY(-0.2f).setDuration(100).start(); break;
+            case 3: v.animate().xBy(75).scaleXBy(-0.2f).scaleY(-0.2f).setDuration(100).start(); break;
         }
     }
 
