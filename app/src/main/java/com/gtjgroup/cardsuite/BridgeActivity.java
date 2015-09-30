@@ -45,6 +45,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bridge);
+        updateNames();
 
         Intent intent = getIntent();
         isGameLoaded = intent.getBooleanExtra("loadGame", false);
@@ -109,6 +110,7 @@ public class BridgeActivity extends GameActivity implements Serializable {
 
     @Override
     public void onResume() {
+        updateNames();
         if (!SoundManager.isPlayingBGM())
             SoundManager.playBackgroundMusic(this);
         super.onResume();

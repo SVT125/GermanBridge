@@ -37,5 +37,29 @@
                     </com.gtjgroup.cardsuite.SeekbarPreference>
                 </PreferenceCategory>
         </PreferenceScreen>
+        <PreferenceScreen
+            android:key="name_settings"
+            android:title="Name Customization"
+            android:summary="Changes the names of each of the players">
+            <PreferenceCategory
+                android:title="Name Customization">
+                <com.gtjgroup.cardsuite.TextPreference
+                    android:title="Player One"
+                    android:key="player_one_text">
+                </com.gtjgroup.cardsuite.TextPreference>
+                <com.gtjgroup.cardsuite.TextPreference
+                    android:title="Player Two"
+                    android:key="player_two_text">
+                </com.gtjgroup.cardsuite.TextPreference>
+                <com.gtjgroup.cardsuite.TextPreference
+                    android:title="Player Three"
+                    android:key="player_three_text">
+                </com.gtjgroup.cardsuite.TextPreference>
+                <com.gtjgroup.cardsuite.TextPreference
+                    android:title="Player Four"
+                    android:key="player_four_text">
+                </com.gtjgroup.cardsuite.TextPreference>
+            </PreferenceCategory>
+        </PreferenceScreen>
     </PreferenceCategory>
 </PreferenceScreen>

@@ -39,6 +39,7 @@ import java.util.List;
 public abstract class GameActivity extends Activity implements Serializable {
     public static final int levelsToSearch = 3; // Parameter for AI that indicates how many levels down to search.
     public static int gameSpeedRange = 150; // This is to be added on the base delay.
+    public static String[] playerNames = {"player one", "player two", "player three", "player four"};
     protected Manager manager;
     protected int currentPlayerInteracting = 0, currentPotTurn = 0, firstNonBot = 0, lastNonBot = 0;
     protected int cardWidthPX, cardHeightPX, cardDeltaXPX, bottomTopMarginPX, rightLeftMarginPX, biddingWidthPX, biddingHeightPX;
@@ -423,6 +424,17 @@ public abstract class GameActivity extends Activity implements Serializable {
             }
         }
         buttonsPresent = true;
+    }
+
+    public void updateNames() {
+        TextView txt1 = (TextView) findViewById(R.id.bottomText);
+        TextView txt2 = (TextView) findViewById(R.id.leftText);
+        TextView txt3 = (TextView) findViewById(R.id.topText);
+        TextView txt4 = (TextView) findViewById(R.id.rightText);
+        txt1.setText(playerNames[0]);
+        txt2.setText(playerNames[1]);
+        txt3.setText(playerNames[2]);
+        txt4.setText(playerNames[3]);
     }
 
     public void loadGame(ObjectInputStream is) {

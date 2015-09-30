@@ -57,6 +57,38 @@ public class SettingsActivity extends Activity {
                     return true;
                 }
             });
+            TextPreference nameOne = (TextPreference)findPreference("player_one_text");
+            TextPreference nameTwo = (TextPreference)findPreference("player_two_text");
+            TextPreference nameThree = (TextPreference)findPreference("player_three_text");
+            TextPreference nameFour = (TextPreference)findPreference("player_four_text");
+            nameOne.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    GameActivity.playerNames[0] = (String)newValue;
+                    return true;
+                }
+            });
+            nameTwo.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    GameActivity.playerNames[1] = (String)newValue;
+                    return true;
+                }
+            });
+            nameThree.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    GameActivity.playerNames[2] = (String)newValue;
+                    return true;
+                }
+            });
+            nameFour.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    GameActivity.playerNames[3] = (String)newValue;
+                    return true;
+                }
+            });
         }
 
     }

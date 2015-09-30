@@ -47,7 +47,7 @@ public class SeekbarPreference extends Preference
         LinearLayout layout = new LinearLayout(getContext());
 
         LinearLayout.LayoutParams textParams = new LinearLayout.LayoutParams(
-                300, LinearLayout.LayoutParams.WRAP_CONTENT);
+                400, LinearLayout.LayoutParams.WRAP_CONTENT);
         textParams.setMargins(0, 40, 0, 40);
 
         LinearLayout.LayoutParams barParams = new LinearLayout.LayoutParams(
@@ -155,7 +155,6 @@ public class SeekbarPreference extends Preference
             value = 0;
         else if(value % interval != 0)
             value = Math.round(((float)value)/interval)*interval;
-
 
         return value;
     }
