@@ -644,7 +644,7 @@ public class SpadesActivity extends GameActivity {
                 }
             }, currentTimeDelay);
 
-            currentTimeDelay += 75;
+            currentTimeDelay += 75 + GameActivity.gameSpeedRange/4;
         }
     }
 
