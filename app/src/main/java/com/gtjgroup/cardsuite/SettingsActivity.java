@@ -53,7 +53,7 @@ public class SettingsActivity extends Activity {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     //The range of game speed as represented by delays is [0-2000] ms.
-                    GameActivity.gameSpeedRange = 20*(int) newValue;
+                    GameActivity.gameSpeedRange = 20*(Math.abs((int)newValue-100));
                     return true;
                 }
             });
