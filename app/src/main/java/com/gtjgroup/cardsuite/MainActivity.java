@@ -32,6 +32,8 @@ import com.google.android.gms.ads.AdView;
 import java.io.File;
 
 public class MainActivity extends Activity {
+    static final String FONT_TYPE = "SigniaPro-Regular.ttf";
+    static final float BUTTON_DOWN_OPACITY = 0.5f, BUTTON_OPACITY = 1f;
     boolean[] isBot = new boolean[4];
     boolean loadGame = false;
 
@@ -40,41 +42,49 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_main);
 
+        //Load the ad first.
         AdView mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                .addTestDevice("75323E59FF3A690DE8299B8B05344B0C")
+                .addTestDevice(ApplicationID.AD_ID)
                 .build();
         mAdView.loadAd(adRequest);
 
+        //Set the background music.
         SoundManager.prepare(this);
         if (!SoundManager.isPlayingBGM())
             SoundManager.playBackgroundMusic(this);
 
-        Typeface font = Typeface.createFromAsset(getAssets(), "SigniaPro-Regular.ttf");
+        Typeface font = Typeface.createFromAsset(getAssets(), FONT_TYPE);
         TextView greetingView = (TextView)findViewById(R.id.newgreeting);
         greetingView.setTypeface(font);
 
+        //Initialize the buttons with their touch listeners.
+        //Play brings up an overlay of games to choose from.
+        //TODO - If we decide to support API level 24, we can replace the below 4 listeners with lambda exprs/functors to save lines.
         final ImageButton playButton = (ImageButton) findViewById(R.id.play);
+        final ImageButton settingsButton = (ImageButton) findViewById(R.id.settings_button);
+        final ImageButton helpButton = (ImageButton) findViewById(R.id.help_button);
+        final TextView creditsButton = (TextView) findViewById(R.id.credits);
+
         playButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 ImageView iv = (ImageView) v;
 
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    iv.setAlpha(0.5f);
-                    SoundManager.playButtonClickSound();
                     overlayClick(v);
-                    return true;
-                } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    iv.setAlpha(1f);
-                    return true;
-                }
+                    SoundManager.playButtonClickSound();
+                    iv.setAlpha(BUTTON_DOWN_OPACITY);
+                } else if (event.getAction() == MotionEvent.ACTION_UP)
+                    iv.setAlpha(BUTTON_OPACITY);
+                else
+                    return false;
 
-                return false;
+                return true;
             }
         });
-        final ImageButton settingsButton = (ImageButton) findViewById(R.id.settings_button);
+
         settingsButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -83,17 +93,16 @@ public class MainActivity extends Activity {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     settingsClick(v);
                     SoundManager.playButtonClickSound();
-                    iv.setAlpha(0.5f);
-                    return true;
-                } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    iv.setAlpha(1f);
-                    return true;
-                }
+                    iv.setAlpha(BUTTON_DOWN_OPACITY);
+                } else if (event.getAction() == MotionEvent.ACTION_UP)
+                    iv.setAlpha(BUTTON_OPACITY);
+                else
+                    return false;
 
-                return false;
+                return true;
             }
         });
-        final ImageButton helpButton = (ImageButton) findViewById(R.id.help_button);
+
         helpButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -102,17 +111,16 @@ public class MainActivity extends Activity {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     helpClick(v);
                     SoundManager.playButtonClickSound();
-                    iv.setAlpha(0.5f);
-                    return true;
-                } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    iv.setAlpha(1f);
-                    return true;
-                }
+                    iv.setAlpha(BUTTON_DOWN_OPACITY);
+                } else if (event.getAction() == MotionEvent.ACTION_UP)
+                    iv.setAlpha(BUTTON_OPACITY);
+                else
+                    return false;
 
-                return false;
+                return true;
             }
         });
-        final TextView creditsButton = (TextView) findViewById(R.id.credits);
+
         creditsButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -121,14 +129,13 @@ public class MainActivity extends Activity {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     creditsClick(v);
                     SoundManager.playButtonClickSound();
-                    iv.setAlpha(0.5f);
-                    return true;
-                } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    iv.setAlpha(1f);
-                    return true;
-                }
+                    iv.setAlpha(BUTTON_DOWN_OPACITY);
+                } else if (event.getAction() == MotionEvent.ACTION_UP)
+                    iv.setAlpha(BUTTON_OPACITY);
+                else
+                    return false;
 
-                return false;
+                return true;
             }
         });
     }
@@ -152,13 +159,12 @@ public class MainActivity extends Activity {
         super.onConfigurationChanged(config);
     }
 
+    //Given the game mode selected, load a previous game if its corresponding file exists or star
     public void gameClick(int gameMode) {
-        if (gameMode == 0 && (fileExists(this, "save_hearts")))
-            savedGamePrompt(0);
-        else if (gameMode == 1 && (fileExists(this, "save_bridge")))
-            savedGamePrompt(1);
-        else if (gameMode == 2 && (fileExists(this, "save_spades")))
-            savedGamePrompt(2);
+        if((gameMode == 0 && (fileExists(this, "save_hearts"))) ||
+                (gameMode == 1 && (fileExists(this, "save_bridge"))) ||
+                (gameMode == 2 && (fileExists(this, "save_spades"))))
+            savedGamePrompt(gameMode);
         else
             playerSelection(gameMode);
     }
@@ -173,6 +179,7 @@ public class MainActivity extends Activity {
         SoundManager.playButtonClickSound();
         startActivity(new Intent(this, PageViewActivity.class));
     }
+
 
     public void overlayClick(View v) {
         final Dialog alertDialog = new Dialog(this);
@@ -215,12 +222,12 @@ public class MainActivity extends Activity {
     }
 
     public void savedGamePrompt(final int gameMode) {
-        Dialog d;
         int currentAPILevel = android.os.Build.VERSION.SDK_INT;
+        //Note, these are 2 distinct classes and share no common base class besides Object, so it looks redundant.
         if(currentAPILevel > android.os.Build.VERSION_CODES.KITKAT) {
             android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(new ContextThemeWrapper(this, R.style.MyAppTheme));
-            builder.setTitle("Do you want to continue from a previous game?");
-            builder.setNegativeButton("Yes", new DialogInterface.OnClickListener() {
+            builder.setTitle(R.string.continue_from_previous_prompt);
+            builder.setNegativeButton(R.string.yes, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     SoundManager.playButtonClickSound();
@@ -228,7 +235,7 @@ public class MainActivity extends Activity {
                     runGameActivity(gameMode);
                 }
             });
-            builder.setPositiveButton("No", new DialogInterface.OnClickListener() {
+            builder.setPositiveButton(R.string.no, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     SoundManager.playButtonClickSound();
@@ -240,8 +247,8 @@ public class MainActivity extends Activity {
         } else {
             android.support.v7.app.AlertDialog.Builder builder =
                     new android.support.v7.app.AlertDialog.Builder(new ContextThemeWrapper(this, R.style.MyAppTheme));
-            builder.setTitle("Do you want to continue from a previous game?");
-            builder.setNegativeButton("Yes", new DialogInterface.OnClickListener() {
+            builder.setTitle(R.string.continue_from_previous_prompt);
+            builder.setNegativeButton(R.string.yes, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     SoundManager.playButtonClickSound();
@@ -249,7 +256,7 @@ public class MainActivity extends Activity {
                     runGameActivity(gameMode);
                 }
             });
-            builder.setPositiveButton("No", new DialogInterface.OnClickListener() {
+            builder.setPositiveButton(R.string.no, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     SoundManager.playButtonClickSound();
@@ -263,19 +270,18 @@ public class MainActivity extends Activity {
     }
 
     public void playerSelection(final int gameMode) {
-        final String[] choices = new String[3];
-
-        choices[0] = "PLAYER 2";
-        choices[1] = "PLAYER 3";
-        choices[2] = "PLAYER 4";
+        //In case we wish to implement player names, we can change them from this array.
+        final String[] choices = {"PLAYER 2", "PLAYER 3", "PLAYER 4", "PLAYER 1"};
+        ListView players = new ListView(this);
+        int currentAPILevel = android.os.Build.VERSION.SDK_INT;
 
         isBot[0] = false;
         isBot[1] = isBot[2] = isBot[3] = true;
 
-        ArrayAdapter adapter = new ArrayAdapter(this, R.layout.row, choices) {
-
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.row, choices) {
             int selectedPosition = -1;
 
+            //Select which players should be bots.
             @Override
             public View getView(final int position, View convertView, ViewGroup parent) {
                 View v = convertView;
@@ -297,9 +303,8 @@ public class MainActivity extends Activity {
                     }
                 });
 
-                if(position != 0) {
+                if(position != 0)
                     botButton.setChecked(true);
-                }
 
                 botButton.setTag(position);
                 botButton.setOnClickListener(new View.OnClickListener() {
@@ -313,52 +318,39 @@ public class MainActivity extends Activity {
             }
         };
 
-
-        ListView players = new ListView(this);
         players.setAdapter(adapter);
 
-        int currentAPILevel = android.os.Build.VERSION.SDK_INT;
+        DialogInterface.OnClickListener okClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                SoundManager.playButtonClickSound();
+                runGameActivity(gameMode);
+            }
+        }, backClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                SoundManager.playButtonClickSound();
+                dialog.cancel();
+            }
+        };
+
+        //To maintain the dialog look when possible, use a different builder depending on OS version.
+        //Similar to above, the builders share no feasible common base class; I feel this form is less convoluted.
         if(currentAPILevel > android.os.Build.VERSION_CODES.KITKAT) {
             AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.MyAppTheme));
             builder.setView(players);
-            builder.setTitle("Select players or bots");
-            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-
-                    SoundManager.playButtonClickSound();
-                    runGameActivity(gameMode);
-                }
-            });
-            builder.setNeutralButton("Back", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    SoundManager.playButtonClickSound();
-                    dialog.cancel();
-                }
-            });
+            builder.setTitle(R.string.select_players);
+            builder.setPositiveButton(R.string.ok, okClickListener);
+            builder.setNeutralButton(R.string.back, backClickListener);
             builder.setCancelable(false);
             builder.show();
         } else {
             android.support.v7.app.AlertDialog.Builder builder =
                     new android.support.v7.app.AlertDialog.Builder(new ContextThemeWrapper(this, R.style.MyAppTheme));
             builder.setView(players);
-            builder.setTitle("Select players or bots");
-            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-
-                    SoundManager.playButtonClickSound();
-                    runGameActivity(gameMode);
-                }
-            });
-            builder.setNeutralButton("Back", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    SoundManager.playButtonClickSound();
-                    dialog.cancel();
-                }
-            });
+            builder.setTitle(R.string.select_players);
+            builder.setPositiveButton(R.string.ok, okClickListener);
+            builder.setNeutralButton(R.string.back, backClickListener);
             builder.setCancelable(false);
             builder.show();
         }
@@ -366,12 +358,11 @@ public class MainActivity extends Activity {
 
     public void runGameActivity(int gameMode) {
         Class<? extends GameActivity> executingActivity = null;
-        if(gameMode == 0)
-            executingActivity = HeartsActivity.class;
-        else if(gameMode == 1)
-            executingActivity = BridgeActivity.class;
-        else if(gameMode == 2)
-            executingActivity = SpadesActivity.class;
+        switch(gameMode) {
+            case 0: executingActivity = HeartsActivity.class; break;
+            case 1: executingActivity = BridgeActivity.class; break;
+            case 2: executingActivity = SpadesActivity.class; break;
+        }
 
         SoundManager.stopBackgroundMusic();
         Intent intent = new Intent(MainActivity.this,executingActivity);
@@ -383,10 +374,7 @@ public class MainActivity extends Activity {
 
     public boolean fileExists(Context context, String filename) {
         File file = context.getFileStreamPath(filename);
-        if(file == null || !file.exists()) {
-            return false;
-        }
-        return true;
+        return file != null && file.exists();
     }
 
     @Override

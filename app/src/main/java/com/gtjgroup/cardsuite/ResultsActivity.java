@@ -42,12 +42,12 @@ public class ResultsActivity extends Activity {
         AdView mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                .addTestDevice("75323E59FF3A690DE8299B8B05344B0C")
+                .addTestDevice(ApplicationID.AD_ID)
                 .build();
         mAdView.loadAd(adRequest);
 
         mPublisherInterstitialAd = new PublisherInterstitialAd(this);
-        mPublisherInterstitialAd.setAdUnitId("ca-app-pub-6563321210012380/4278786755");
+        mPublisherInterstitialAd.setAdUnitId(ApplicationID.AD_INTERSTITIAL_ID);
         mPublisherInterstitialAd.setAdListener(new AdListener() {
             @Override
             public void onAdClosed() {
@@ -189,7 +189,7 @@ public class ResultsActivity extends Activity {
     private void requestNewInterstitial() {
         PublisherAdRequest adRequest = new PublisherAdRequest.Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                .addTestDevice("75323E59FF3A690DE8299B8B05344B0C")
+                .addTestDevice(ApplicationID.AD_ID)
                 .build();
 
         mPublisherInterstitialAd.loadAd(adRequest);

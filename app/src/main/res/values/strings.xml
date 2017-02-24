@@ -52,4 +52,15 @@
     <string name="results_banner_ad_unit_id">ca-app-pub-6563321210012380/8011629150</string>
     <string name="credits_banner_ad_unit_id">ca-app-pub-6563321210012380/2283689558</string>
     <string name="title_activity_credits">CreditsActivity</string>
+
+    <string name="ok">OK</string>
+    <string name="back">Back</string>
+    <string name="select_players">Select players or bots</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="continue_from_previous_prompt">"Do you want to continue from a previous game?"</string>
+    <string name="player_one">PLAYER 1</string>
+    <string name="player_two">PLAYER 2</string>
+    <string name="player_three">PLAYER 3</string>
+    <string name="player_four">PLAYER 4</string>
 </resources>
