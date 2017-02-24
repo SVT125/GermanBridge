@@ -61,15 +61,15 @@ public class BridgeAI {
             if (card.getSuit().equals(manager.trumpSuit))
                 trumpNums.add(card.getCardNumber());
         if (trumpNums.contains(14)) {
-            trumpNums.remove(new Integer(14));
+            trumpNums.remove(Integer.valueOf(14));
             bid++;
         }
         if (trumpNums.contains(13)) {
-            trumpNums.remove(new Integer(13));
+            trumpNums.remove(Integer.valueOf(13));
             bid++;
         }
         if (trumpNums.contains(12) && trumpNums.size() > 1) {
-            trumpNums.remove(new Integer(12));
+            trumpNums.remove(Integer.valueOf(12));
             bid++;
         }
         if (trumpNums.size() > 2) {
@@ -172,7 +172,6 @@ public class BridgeAI {
             }
         }
 
-        //TODO - bestCard should be null. This temp fix simply negates any problem with cardSelectable/AI for the time being so nothing crashes!
         if(bestCard == null) {
             bestCard = manager.players[currentPlayer].hand.get(new Random().nextInt(manager.players[currentPlayer].hand.size()));
             while(!manager.cardSelectable(bestCard,false,currentPlayer)) {
@@ -206,7 +205,7 @@ public class BridgeAI {
         // Otherwise, evaluate maxN for all child nodes and return the max possible vector and its corresponding move.
         double[] maxVector = new double[] {Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY};
         for(int i = 0; i < manager.players[currentPlayer].hand.size(); i++) {
-            if(manager.cardSelectable(manager.players[currentPlayer].hand.get(i),true,currentPlayer)) {
+            if(manager.cardSelectable(manager.players[currentPlayer].hand.get(i), true, currentPlayer)) {
                 Card chosenCard = manager.players[currentPlayer].hand.remove(i);
                 Pair<Card, double[]> result = maxN((currentPlayer + 1) % 4, manager, level - 1, chosenCard);
                 if (result.values[(currentPlayer)] > maxVector[(currentPlayer)])
@@ -249,9 +248,9 @@ public class BridgeAI {
             double partialTricksRemaining = player.guess - player.obtained - 0.75 * findLikelyWinners(i, manager), tricksRemaining;
 
             if(partialTricksRemaining > 0)
-                tricksRemaining = partialTricksRemaining - 0.25 * findNeutrals(i,manager);
+                tricksRemaining = partialTricksRemaining - 0.25 * findNeutrals(i, manager);
             else
-                tricksRemaining = partialTricksRemaining - 0.1 * findNeutrals(i,manager);
+                tricksRemaining = partialTricksRemaining - 0.1 * findNeutrals(i, manager);
 
             if(tricksRemaining < -2)
                 missedBids++;
