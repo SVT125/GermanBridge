@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map.Entry;
 
 public class BridgeManager extends Manager implements Serializable {
-
 	public int addedGuesses = 0;
 	public Card.Suit trumpSuit;
 	public Card trumpCard; //Variable included in case want to display the trump card
@@ -67,15 +66,12 @@ public class BridgeManager extends Manager implements Serializable {
 		players[currentPlayer].hand.remove(chosen);
 	}
 
-	//Returns true if the given card should be selectable to the player
+	//Returns true if the given card should be selectable to the player.
 	public boolean cardSelectable(Card card, boolean finishedSwapping, int currentPlayer) {
-		if (currentPlayer == startPlayer)
-			return true;
-		if (players[currentPlayer].hasSuit(startSuit) && card.getSuit() == startSuit)
-			return true;
-		else if (!(players[currentPlayer].hasSuit(startSuit)))
-			return true;
-		return false;
+		return players[currentPlayer].hasSuit(startSuit) && card.getSuit() == startSuit ||
+				currentPlayer == startPlayer ||
+                !players[currentPlayer].hasSuit(startSuit);
+
 	}
 
 	//Analyzes the pot and updates the pile count for the winning player of the pot.
@@ -105,8 +101,7 @@ public class BridgeManager extends Manager implements Serializable {
 		((BridgePlayer)players[startPlayer]).handsWon++;
 	}
 
-	public List<Card> chooseCards(int playerNum, List<Integer> chosenIndices) {return null;};
-	public void swapCards(Collection<?> chosen, int playerNum, int swapRound) {return;};
+	public void swapCards(Collection<?> chosen, int playerNum, int swapRound) {};
 
 	public Player[] getPlayers() { return this.players; }
 
@@ -127,8 +122,7 @@ public class BridgeManager extends Manager implements Serializable {
 	}
 
 	public boolean isGameOver() {
-		if (potsFinished == 13) return true;
-		return false;
+        return potsFinished == 13;
 	}
 
 }
