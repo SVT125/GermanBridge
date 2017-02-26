@@ -1,3 +1,5 @@
+![](http://gchan5.github.io/img/feature2.png)
+
 # GermanBridge
 
 From the infamous game of Hearts, to the team-based game of Spades, to the strategically challenging variation of the 
